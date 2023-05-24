@@ -1,0 +1,84 @@
+"use client";
+
+import { theme } from "@/style/theme";
+import { css, styled } from "styled-components";
+
+type TextVariant = "h1" | "body1" | "body2";
+type TextAlign = "left" | "center" | "right";
+
+const variants: Record<TextVariant, any> = {
+  h1: css`
+    font-size: 48px;
+    font-weight: 700;
+  `,
+  body1: css`
+    font-size: 16px;
+    font-weight: 400;
+  `,
+  body2: css`
+    font-size: 14px;
+    font-weight: 400;
+  `,
+};
+
+type TextProps = {
+  children: React.ReactNode;
+  variant?: TextVariant;
+  color?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  align?: TextAlign;
+};
+
+export const Text = ({
+  children,
+  color = theme.grey.A800,
+  variant = "body1",
+  fontSize,
+  fontWeight,
+  align,
+}: TextProps) => {
+  return (
+    <TextStyled
+      $variant={variant}
+      $color={color}
+      $fontSize={fontSize}
+      $fontWeight={fontWeight}
+      $align={align}
+    >
+      {children}
+    </TextStyled>
+  );
+};
+
+type TextStyledProps = {
+  $variant: TextVariant;
+  $color: string;
+  $fontSize?: string;
+  $fontWeight?: string;
+  $align?: TextAlign;
+};
+
+const TextStyled = styled.span<TextStyledProps>`
+  ${({ $variant }) => variants[$variant]}
+  ${({ $color }) => css`
+    color: ${$color};
+  `}
+  ${({ $fontSize }) =>
+    $fontSize &&
+    css`
+      font-size: ${$fontSize};
+    `}
+
+  ${({ $fontWeight }) =>
+    $fontWeight &&
+    css`
+      font-weight: ${$fontWeight};
+    `}
+
+  ${({ $align }) =>
+    $align &&
+    css`
+      text-align: ${$align};
+    `}
+`;
