@@ -3,12 +3,22 @@
 import { css, styled } from "styled-components";
 import { ThemeColors, theme } from "@styles/theme";
 
-export type TextVariant = "h1" | "body1" | "body1Bold" | "body2" | "body2Bold";
+export type TextVariant =
+  | "h1"
+  | "h3"
+  | "body1"
+  | "body1Bold"
+  | "body2"
+  | "body2Bold";
 type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
   h1: css`
     font-size: 48px;
+    font-weight: 700;
+  `,
+  h3: css`
+    font-size: 24px;
     font-weight: 700;
   `,
   body1: css`
@@ -36,6 +46,7 @@ type TextProps = {
   fontSize?: string;
   fontWeight?: string;
   align?: TextAlign;
+  opacity?: number;
 };
 
 export const Text = ({
@@ -45,6 +56,7 @@ export const Text = ({
   fontSize,
   fontWeight,
   align,
+  opacity,
 }: TextProps) => {
   return (
     <TextStyled
@@ -53,6 +65,7 @@ export const Text = ({
       $fontSize={fontSize}
       $fontWeight={fontWeight}
       $align={align}
+      $opacity={opacity}
     >
       {children}
     </TextStyled>
@@ -65,6 +78,7 @@ type TextStyledProps = {
   $fontSize?: string;
   $fontWeight?: string;
   $align?: TextAlign;
+  $opacity?: number;
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -89,5 +103,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $align &&
     css`
       text-align: ${$align};
+    `}
+
+    ${({ $opacity }) =>
+    $opacity &&
+    css`
+      opacity: ${$opacity};
     `}
 `;
