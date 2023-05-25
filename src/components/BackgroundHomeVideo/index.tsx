@@ -16,16 +16,18 @@ export const BackgroundVideo = () => {
           variant="h1"
           fontSize="80px"
           fontWeight="400"
-          color={theme.grey.A50}
+          color={"pure_white"}
         >
           Pain<b>Track</b>
         </Text>
-        <Text color={theme.grey.A50} align="center">
+        <Text color={"pure_white"} align="center" variant="body1Bold">
           A scientific tool for the description and analysis of
           <br />
           the pain experience
         </Text>
-        <Button>Register a pain episode</Button>
+        <Button color="cta" width="400px">
+          Register a pain episode
+        </Button>
       </Apresentation>
     </Container>
   );

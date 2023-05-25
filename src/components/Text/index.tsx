@@ -1,9 +1,9 @@
 "use client";
 
-import { theme } from "@/style/theme";
+import { ThemeColors, theme } from "@/style/theme";
 import { css, styled } from "styled-components";
 
-type TextVariant = "h1" | "body1" | "body2";
+type TextVariant = "h1" | "body1" | "body1Bold" | "body2" | "body2Bold";
 type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
@@ -15,16 +15,24 @@ const variants: Record<TextVariant, any> = {
     font-size: 16px;
     font-weight: 400;
   `,
+  body1Bold: css`
+    font-size: 16px;
+    font-weight: 700;
+  `,
   body2: css`
     font-size: 14px;
     font-weight: 400;
+  `,
+  body2Bold: css`
+    font-size: 14px;
+    font-weight: 700;
   `,
 };
 
 type TextProps = {
   children: React.ReactNode;
   variant?: TextVariant;
-  color?: string;
+  color?: ThemeColors;
   fontSize?: string;
   fontWeight?: string;
   align?: TextAlign;
@@ -32,7 +40,7 @@ type TextProps = {
 
 export const Text = ({
   children,
-  color = theme.grey.A800,
+  color = "font_color",
   variant = "body1",
   fontSize,
   fontWeight,
@@ -41,7 +49,7 @@ export const Text = ({
   return (
     <TextStyled
       $variant={variant}
-      $color={color}
+      $color={theme.colors[color]}
       $fontSize={fontSize}
       $fontWeight={fontWeight}
       $align={align}
