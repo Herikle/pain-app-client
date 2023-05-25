@@ -38,7 +38,7 @@ const Container = styled.div`
   width: 100%;
   height: 84px;
   background-color: ${theme.colors.primary};
-  padding-inline: 120px;
+  padding-inline: 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
