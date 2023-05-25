@@ -5,20 +5,25 @@ import { styled } from "styled-components";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
+import { RoutesPath } from "utils/routes";
 
 const raleway = Raleway({ subsets: ["latin"] });
+
+export const TOP_BAR_HEIGHT = "84px";
 
 export const TopBar = () => {
   return (
     <Container>
-      <Image
-        src="/icons/pain-track.svg"
-        alt="PainTrack"
-        width="56"
-        height="37"
-      />
+      <Link href={RoutesPath.home}>
+        <Image
+          src="/icons/pain-track.svg"
+          alt="PainTrack"
+          width="56"
+          height="37"
+        />
+      </Link>
       <TopBarLinks>
-        <StyledLink href="#how-to-use">
+        <StyledLink href={`${RoutesPath.home}#how-to-use`}>
           <Text color="pure_white">How to use</Text>
         </StyledLink>
         <StyledLink href="#user-guide">
@@ -31,7 +36,7 @@ export const TopBar = () => {
           <Text color="pure_white">Contact</Text>
         </StyledLink>
       </TopBarLinks>
-      <Link href="/login">
+      <Link href={RoutesPath.login}>
         <Button variant="outlined" font={raleway} textVariant="body1Bold">
           Log in/Sign up
         </Button>
@@ -60,7 +65,7 @@ const TopBarLinks = styled.div`
 const Container = styled.div`
   position: fixed;
   top: 0;
-  height: 84px;
+  height: ${TOP_BAR_HEIGHT};
   width: 100%;
   background-color: ${theme.colors.primary};
   z-index: 100;

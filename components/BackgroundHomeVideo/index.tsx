@@ -4,6 +4,7 @@ import { transparentize } from "polished";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
+import { TOP_BAR_HEIGHT } from "@components/TopBar";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -61,9 +62,8 @@ const Video = styled.video`
 
 const Container = styled.div`
   width: 100%;
-  top: 84px;
-  height: calc(100vh - 84px);
-  max-height: calc(100vh - 84px);
+  height: calc(100vh - ${TOP_BAR_HEIGHT});
+  max-height: calc(100vh - ${TOP_BAR_HEIGHT});
   overflow: hidden;
   position: relative;
 `;

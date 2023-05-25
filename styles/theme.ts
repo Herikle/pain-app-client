@@ -2,7 +2,7 @@ const LightThemeColors = {
   primary: "#005697",
   hover_state: "#D9D9D9",
   cta: "#FFA644",
-  cta_secondary: "#FFC172",
+  cta_secondary: "#CF8839",
   disabled_color: "#ABC6DB",
   font_color: "#1E1E1E",
   secondary_color: "#007EDD",
