@@ -1,14 +1,17 @@
 "use client";
 
 import { styled } from "styled-components";
+import { Raleway } from "next/font/google";
 import { transparentize } from "polished";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 
+const raleway = Raleway({ subsets: ["latin"] });
+
 export const BackgroundVideo = () => {
   return (
-    <Container>
+    <Container className={raleway.className}>
       <Video src="/video/video-background.mp4" autoPlay muted loop />
       <Overlay />
       <Apresentation>

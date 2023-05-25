@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Raleway } from "next/font/google";
 import { styled } from "styled-components";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
+
+const raleway = Raleway({ subsets: ["latin"] });
 
 export const TopBar = () => {
   return (
@@ -31,7 +34,9 @@ export const TopBar = () => {
         </Link>
       </TopBarLinks>
       <Link href="/login">
-        <Button variant="outlined">Log in/Sign up</Button>
+        <Button variant="outlined" font={raleway} textVariant="body1Bold">
+          Log in/Sign up
+        </Button>
       </Link>
     </Container>
   );

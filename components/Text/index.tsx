@@ -3,7 +3,7 @@
 import { css, styled } from "styled-components";
 import { ThemeColors, theme } from "@styles/theme";
 
-type TextVariant = "h1" | "body1" | "body1Bold" | "body2" | "body2Bold";
+export type TextVariant = "h1" | "body1" | "body1Bold" | "body2" | "body2Bold";
 type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
@@ -68,6 +68,7 @@ type TextStyledProps = {
 };
 
 const TextStyled = styled.span<TextStyledProps>`
+  font-family: inherit;
   ${({ $variant }) => variants[$variant]}
   ${({ $color }) => css`
     color: ${$color};

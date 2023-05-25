@@ -1,8 +1,9 @@
 "use client";
 
 import { css, styled } from "styled-components";
-import { Text } from "../Text";
+import { Text, TextVariant } from "../Text";
 import { ButtonColors, theme } from "@styles/theme";
+import { NextFont } from "next/dist/compiled/@next/font";
 
 export type ButtonVariants = "contained" | "outlined";
 
@@ -15,6 +16,8 @@ type ButtonProps = {
   disabled?: boolean;
   fullWidth?: boolean;
   width?: string;
+  font?: NextFont;
+  textVariant?: TextVariant;
 };
 
 const variants: Record<ButtonVariants, any> = {
@@ -34,9 +37,12 @@ export const Button = ({
   loading,
   fullWidth = false,
   width,
+  font,
+  textVariant = "body2Bold",
 }: ButtonProps) => {
   return (
     <ButtonContainer
+      className={font?.className}
       onClick={onClick}
       $color={theme.colors[color]}
       $variant={variant}
@@ -44,7 +50,7 @@ export const Button = ({
       $fullWidth={fullWidth}
       $width={width}
     >
-      <Text color="pure_white" variant="body2Bold">
+      <Text color="pure_white" variant={textVariant}>
         {children}
       </Text>
     </ButtonContainer>
@@ -62,6 +68,8 @@ type ButtonContainerProps = {
 const ButtonContainer = styled.button<ButtonContainerProps>`
   padding: 10px;
   border-radius: 4px;
+
+  font-family: inherit;
 
   ${({ $variant }) => variants[$variant]};
 
