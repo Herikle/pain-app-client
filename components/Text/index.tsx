@@ -1,7 +1,7 @@
 "use client";
 
-import { ThemeColors, theme } from "@/style/theme";
 import { css, styled } from "styled-components";
+import { ThemeColors, theme } from "@styles/theme";
 
 type TextVariant = "h1" | "body1" | "body1Bold" | "body2" | "body2Bold";
 type TextAlign = "left" | "center" | "right";

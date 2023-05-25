@@ -2,10 +2,13 @@
 
 import { css, styled } from "styled-components";
 import { Text } from "../Text";
-import { ButtonColors, ThemeColors, theme } from "@/style/theme";
+import { ButtonColors, theme } from "@styles/theme";
+
+export type ButtonVariants = "contained" | "outlined";
 
 type ButtonProps = {
   children: React.ReactNode;
+  variant?: ButtonVariants;
   color?: ButtonColors;
   onClick?: () => void;
   loading?: boolean;
@@ -14,11 +17,21 @@ type ButtonProps = {
   width?: string;
 };
 
+const variants: Record<ButtonVariants, any> = {
+  contained: css`
+    border: none;
+  `,
+  outlined: css`
+    border: 1px solid ${theme.colors.pure_white};
+  `,
+};
+
 export const Button = ({
   children,
-  loading,
+  variant = "contained",
   onClick,
   color = "primary",
+  loading,
   fullWidth = false,
   width,
 }: ButtonProps) => {
@@ -26,6 +39,7 @@ export const Button = ({
     <ButtonContainer
       onClick={onClick}
       $color={theme.colors[color]}
+      $variant={variant}
       $hoverColor={theme.hover_state[color]}
       $fullWidth={fullWidth}
       $width={width}
@@ -39,6 +53,7 @@ export const Button = ({
 
 type ButtonContainerProps = {
   $color: string;
+  $variant: ButtonVariants;
   $hoverColor?: string;
   $fullWidth: boolean;
   $width?: string;
@@ -46,8 +61,10 @@ type ButtonContainerProps = {
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
   padding: 10px;
-  border: none;
   border-radius: 4px;
+
+  ${({ $variant }) => variants[$variant]};
+
   ${({ $color }) => css`
     background-color: ${$color};
   `}

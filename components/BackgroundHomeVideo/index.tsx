@@ -2,9 +2,9 @@
 
 import { styled } from "styled-components";
 import { transparentize } from "polished";
-import { Text } from "@/components/Text";
-import { Button } from "@/components/Button";
-import { theme } from "@/style/theme";
+import { Text } from "@components/Text";
+import { Button } from "@components/Button";
+import { theme } from "@styles/theme";
 
 export const BackgroundVideo = () => {
   return (
