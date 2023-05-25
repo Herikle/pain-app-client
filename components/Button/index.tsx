@@ -1,5 +1,3 @@
-"use client";
-
 import { css, styled } from "styled-components";
 import { Text, TextVariant } from "../Text";
 import { ButtonColors, theme } from "@styles/theme";

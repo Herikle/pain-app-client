@@ -1,5 +1,3 @@
-"use client";
-
 import { styled } from "styled-components";
 import { Raleway } from "next/font/google";
 import { transparentize } from "polished";

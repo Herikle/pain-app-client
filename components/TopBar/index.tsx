@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Raleway } from "next/font/google";
@@ -20,18 +18,18 @@ export const TopBar = () => {
         height="37"
       />
       <TopBarLinks>
-        <Link href="#how-to-use">
+        <StyledLink href="#how-to-use">
           <Text color="pure_white">How to use</Text>
-        </Link>
-        <Link href="#user-guide">
+        </StyledLink>
+        <StyledLink href="#user-guide">
           <Text color="pure_white">User guide</Text>
-        </Link>
-        <Link href="#scientific-paper">
+        </StyledLink>
+        <StyledLink href="#scientific-paper">
           <Text color="pure_white">Scientific paper</Text>
-        </Link>
-        <Link href="#contact">
+        </StyledLink>
+        <StyledLink href="#contact">
           <Text color="pure_white">Contact</Text>
-        </Link>
+        </StyledLink>
       </TopBarLinks>
       <Link href="/login">
         <Button variant="outlined" font={raleway} textVariant="body1Bold">
@@ -42,10 +40,21 @@ export const TopBar = () => {
   );
 };
 
+const StyledLink = styled(Link)`
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
 const TopBarLinks = styled.div`
   display: flex;
   align-items: center;
   gap: 80px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  height: 100%;
 `;
 
 const Container = styled.div`
