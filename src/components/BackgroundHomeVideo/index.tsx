@@ -60,6 +60,7 @@ const Video = styled.video`
 
 const Container = styled.div`
   width: 100%;
+  top: 84px;
   height: calc(100vh - 84px);
   max-height: calc(100vh - 84px);
   overflow: hidden;

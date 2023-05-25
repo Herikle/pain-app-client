@@ -7,9 +7,10 @@ export const TopBar = () => {
 };
 
 const Container = styled.div`
+  position: fixed;
   top: 0;
-  position: sticky;
   height: 84px;
   width: 100%;
   background-color: #005697;
+  z-index: 100;
 `;
