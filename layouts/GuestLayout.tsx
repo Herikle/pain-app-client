@@ -1,5 +1,5 @@
 import { Footer } from "@components/Footer";
-import { TOP_BAR_HEIGHT, TopBar } from "@components/TopBar";
+import { TOP_BAR_HEIGHT_PIXELS, TopBar } from "@components/TopBar";
 import { styled } from "styled-components";
 
 export const GuestLayout = ({ children }) => {
@@ -13,5 +13,5 @@ export const GuestLayout = ({ children }) => {
 };
 
 const Content = styled.div`
-  margin-top: ${TOP_BAR_HEIGHT};
+  margin-top: ${TOP_BAR_HEIGHT_PIXELS}px;
 `;

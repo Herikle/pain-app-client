@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import { Inter } from "next/font/google";
 import { Text } from "@components/Text";
 import Link from "next/link";
+import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +37,7 @@ const FooterLinks = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  height: 84px;
+  height: ${TOP_BAR_HEIGHT_PIXELS}px;
   background-color: ${theme.colors.primary};
   padding-inline: 36px;
   display: flex;

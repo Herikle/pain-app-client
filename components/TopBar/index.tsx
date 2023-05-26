@@ -9,7 +9,7 @@ import { RoutesPath } from "utils/routes";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
-export const TOP_BAR_HEIGHT = "84px";
+export const TOP_BAR_HEIGHT_PIXELS = 84;
 
 export const TopBar = () => {
   return (
@@ -65,7 +65,7 @@ const TopBarLinks = styled.div`
 const Container = styled.div`
   position: fixed;
   top: 0;
-  height: ${TOP_BAR_HEIGHT};
+  height: ${TOP_BAR_HEIGHT_PIXELS}px;
   width: 100%;
   background-color: ${theme.colors.primary};
   z-index: 100;

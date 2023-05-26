@@ -12,7 +12,7 @@ type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
   h1: css`
-    font-size: 48px;
+    font-size: 20px;
     font-weight: 700;
   `,
   h3: css`

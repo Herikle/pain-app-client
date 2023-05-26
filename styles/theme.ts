@@ -14,6 +14,7 @@ const LightThemeColors = {
 const LightThemeHover = {
   primary: LightThemeColors.secondary_color,
   cta: LightThemeColors.cta_secondary,
+  font_color: LightThemeColors.text_switched,
 };
 
 export const theme = {
@@ -23,4 +24,4 @@ export const theme = {
 
 export type ThemeColors = keyof typeof LightThemeColors;
 
-export type ButtonColors = "primary" | "cta";
+export type ButtonColors = "primary" | "cta" | "font_color";
