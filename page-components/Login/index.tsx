@@ -2,6 +2,8 @@ import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
+import { GoogleLogo } from "@phosphor-icons/react";
+import { FlexRow } from "design-components/Flex";
 import { styled } from "styled-components";
 
 export const Login = () => {
@@ -19,7 +21,10 @@ export const Login = () => {
           or
         </Text>
         <Button fullWidth color="font_color">
-          Continue with Google
+          <FlexRow>
+            <GoogleLogo size={22} weight="bold" />
+            Continue with Google
+          </FlexRow>
         </Button>
       </Buttons>
     </Container>
