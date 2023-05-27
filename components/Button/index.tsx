@@ -1,4 +1,4 @@
-import { css, styled } from "styled-components";
+import styled, { css } from "styled-components";
 import { Text, TextVariant } from "../Text";
 import { ButtonColors, theme } from "@styles/theme";
 import { NextFont } from "next/dist/compiled/@next/font";

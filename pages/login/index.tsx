@@ -3,7 +3,7 @@ import { Login } from "@page-components/Login";
 import { Register } from "@page-components/Register";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "layouts/GuestLayout";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export default function LoginPage() {
   return (

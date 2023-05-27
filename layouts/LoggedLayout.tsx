@@ -1,5 +1,5 @@
 import { SideMenu } from "@components/SideMenu";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export const LoggedLayout = ({ children }) => {
   return (

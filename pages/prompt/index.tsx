@@ -5,7 +5,7 @@ import { LightScrollBar, theme } from "@styles/theme";
 import { FlexColumn, FlexRow } from "design-components/Flex";
 import { LoggedLayout } from "layouts/LoggedLayout";
 import Image from "next/image";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { IconsPath } from "utils/icons";
 
 export default function PromptPage() {

@@ -1,6 +1,6 @@
 import { Footer } from "@components/Footer";
 import { TOP_BAR_HEIGHT_PIXELS, TopBar } from "@components/TopBar";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export const GuestLayout = ({ children }) => {
   return (

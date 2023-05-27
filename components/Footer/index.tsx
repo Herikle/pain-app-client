@@ -1,5 +1,5 @@
 import { theme } from "@styles/theme";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { Inter } from "next/font/google";
 import { Text } from "@components/Text";
 import Link from "next/link";

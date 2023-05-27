@@ -4,7 +4,7 @@ import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { FlexRow } from "design-components/Flex";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export const Login = () => {
   return (

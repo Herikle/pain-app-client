@@ -1,6 +1,6 @@
 import { PaperPlaneRight } from "@phosphor-icons/react";
 import { LightScrollBar, theme } from "@styles/theme";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
 
 type Props = {

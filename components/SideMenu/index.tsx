@@ -1,6 +1,6 @@
 import { theme } from "@styles/theme";
 import Image from "next/image";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { SideMenuLink } from "./components/SideMenuLink";
 import Link from "next/link";
 import { RoutesPath } from "utils/routes";

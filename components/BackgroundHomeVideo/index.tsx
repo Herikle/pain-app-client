@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { Raleway } from "next/font/google";
 import { transparentize } from "polished";
 import { Text } from "@components/Text";

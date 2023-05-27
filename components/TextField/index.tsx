@@ -1,7 +1,7 @@
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
 import { HTMLInputTypeAttribute } from "react";
-import { css, styled } from "styled-components";
+import styled, { css } from "styled-components";
 
 type Props = {
   label?: string;

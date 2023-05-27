@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Raleway } from "next/font/google";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
