@@ -33,6 +33,7 @@ export const Button = ({
   onClick,
   color = "primary",
   loading,
+  disabled,
   fullWidth = false,
   width,
   font,
@@ -47,8 +48,12 @@ export const Button = ({
       $hoverColor={theme.hover_state[color]}
       $fullWidth={fullWidth}
       $width={width}
+      $disabled={disabled}
     >
-      <Text color="pure_white" variant={textVariant}>
+      <Text
+        color={disabled ? "secondary_font" : "pure_white"}
+        variant={textVariant}
+      >
         {children}
       </Text>
     </ButtonContainer>
@@ -61,6 +66,7 @@ type ButtonContainerProps = {
   $hoverColor?: string;
   $fullWidth: boolean;
   $width?: string;
+  $disabled?: boolean;
 };
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
@@ -71,8 +77,8 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
 
   ${({ $variant }) => variants[$variant]};
 
-  ${({ $color }) => css`
-    background-color: ${$color};
+  ${({ $color, $disabled }) => css`
+    background-color: ${$disabled ? theme.colors.disabled_color : $color};
   `}
   ${({ $width }) =>
     $width &&
@@ -87,10 +93,15 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
     `}
 
   transition: background-color 0.2s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    ${({ $hoverColor }) => css`
-      background-color: ${$hoverColor};
-    `}
-  }
+  ${({ $disabled, $hoverColor }) =>
+    !$disabled
+      ? css`
+          cursor: pointer;
+          &:hover {
+            background-color: ${$hoverColor};
+          }
+        `
+      : css`
+          cursor: not-allowed;
+        `}
 `;

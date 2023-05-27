@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.9",
-    "@types/node": "20.2.4",
+    "@types/node": "20.2.5",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
@@ -19,7 +19,7 @@
     "polished": "^4.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^6.0.0-rc.2",
+    "styled-components": "^6.0.0-rc.2-4007",
     "typescript": "5.0.4"
   },
   "devDependencies": {

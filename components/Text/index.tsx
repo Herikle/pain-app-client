@@ -45,6 +45,8 @@ type TextProps = {
   fontWeight?: string;
   align?: TextAlign;
   opacity?: number;
+  mt?: number;
+  px?: number;
 };
 
 export const Text = ({
@@ -55,9 +57,15 @@ export const Text = ({
   fontWeight,
   align,
   opacity,
+  mt,
+  px,
 }: TextProps) => {
   return (
     <TextStyled
+      style={{
+        marginTop: mt ? `${mt}rem` : "0px",
+        paddingInline: px ? `${px}rem` : "0px",
+      }}
       $variant={variant}
       $color={theme.colors[color]}
       $fontSize={fontSize}

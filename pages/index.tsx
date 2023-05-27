@@ -8,11 +8,6 @@ export default function Home() {
   return (
     <GuestLayout>
       <BackgroundVideo />
-      <div
-        style={{
-          height: "100vh",
-        }}
-      />
     </GuestLayout>
   );
 }

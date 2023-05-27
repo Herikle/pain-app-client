@@ -4,7 +4,7 @@ import { HTMLInputTypeAttribute } from "react";
 import { css, styled } from "styled-components";
 
 type Props = {
-  label: string;
+  label?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
@@ -13,6 +13,7 @@ type Props = {
   width?: string;
   name?: string;
   id?: string;
+  multiline?: boolean;
 };
 
 export const TextField = ({
@@ -25,13 +26,27 @@ export const TextField = ({
   width,
   name,
   id,
+  multiline,
 }: Props) => {
   return (
     <Container $fullWidth={fullWidth} $width={width}>
-      <Label htmlFor={id ?? name}>
-        <Text variant="body2Bold">{label}</Text>
-      </Label>
-      <Input id={id ?? name} name={name} />
+      {label && (
+        <Label htmlFor={id ?? name}>
+          <Text variant="body2Bold">{label}</Text>
+        </Label>
+      )}
+      {multiline ? (
+        <TextArea />
+      ) : (
+        <Input
+          id={id ?? name}
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
+      )}
     </Container>
   );
 };
@@ -45,6 +60,16 @@ const Input = styled.input`
   width: 100%;
   outline: none;
   padding: 0 12px;
+`;
+
+const TextArea = styled.textarea`
+  border-radius: 2px;
+  border: 1px solid ${theme.colors.secondary_font};
+  height: 136px;
+  width: 100%;
+  outline: none;
+  padding: 12px;
+  resize: none;
 `;
 
 type ContainerProps = {

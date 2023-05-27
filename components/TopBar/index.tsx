@@ -6,6 +6,7 @@ import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 import { RoutesPath } from "utils/routes";
+import { IconsPath } from "utils/icons";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -16,7 +17,7 @@ export const TopBar = () => {
     <Container>
       <Link href={RoutesPath.home}>
         <Image
-          src="/icons/pain-track.svg"
+          src={IconsPath.PainTrack}
           alt="PainTrack"
           width="56"
           height="37"
