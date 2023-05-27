@@ -8,13 +8,14 @@ const LightThemeColors = {
   secondary_color: "#007EDD",
   secondary_font: "#80A7C5",
   pure_white: "#FFFFFF",
+  pure_black: "#000000",
   text_switched: "#949494",
 };
 
 const LightThemeHover = {
   primary: LightThemeColors.secondary_color,
   cta: LightThemeColors.cta_secondary,
-  font_color: LightThemeColors.text_switched,
+  font_color: LightThemeColors.pure_black,
 };
 
 export const theme = {
