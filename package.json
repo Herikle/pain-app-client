@@ -19,6 +19,7 @@
     "polished": "^4.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
     "react-textarea-autosize": "^8.4.1",
     "styled-components": "^6.0.0-rc.2-4007",
     "typescript": "5.0.4"

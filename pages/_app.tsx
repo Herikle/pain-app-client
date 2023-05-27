@@ -1,9 +1,15 @@
 import "@styles/global.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import { useState } from "react";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 const inter = Inter({ subsets: ["latin"] });
 
-function MyApp({ Component, pageProps }) {
+type ApplicationProps = {
+  children: React.ReactNode;
+};
+
+const Application = ({ children }) => {
   return (
     <main className={inter.className}>
       <Head>
@@ -13,8 +19,24 @@ function MyApp({ Component, pageProps }) {
           content="A scientific tool for the description and analysis of the pain experience"
         />
       </Head>
-      <Component {...pageProps} />
+      {children}
     </main>
+  );
+};
+
+function MyApp({ Component, pageProps }) {
+  const [queryClient] = useState(() => new QueryClient());
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <Application>
+          {/* <RecoilRoot> */}
+          <Component {...pageProps} />
+          {/* </RecoilRoot> */}
+        </Application>
+      </Hydrate>
+    </QueryClientProvider>
   );
 }
 
