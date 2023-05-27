@@ -1,7 +1,7 @@
 import { Text } from "@components/Text";
 import { CheckFat } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
-import { styled } from "styled-components";
+import { keyframes, styled } from "styled-components";
 
 type Props = {
   label: string;
@@ -21,12 +21,19 @@ export const Checkbox = ({ label }: Props) => {
   );
 };
 
+const BounceAnimation = keyframes`
+  0% { transform: scale(0.1) translate(-50%, -50%);; }
+  50% { transform: scale(1.2) translate(-50%, -50%);; }
+  100% { transform: scale(1) translate(-50%, -50%);; }
+`;
+
 const CheckMarkChecked = styled.span`
   position: absolute;
   display: none;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation: ${BounceAnimation} 0.3s ease-in-out;
 `;
 
 const CheckMark = styled.span`
