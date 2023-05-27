@@ -36,8 +36,6 @@ const SendCircle = styled.div`
 `;
 
 const TextArea = styled(TextareaAutosize)`
-  resize: none;
-  outline: none;
   border: none;
   width: 100%;
   min-height: 24px;
