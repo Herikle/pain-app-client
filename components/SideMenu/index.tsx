@@ -17,7 +17,12 @@ export const SideMenu = () => {
           height="55"
         />
       </Link>
-      <SideMenuLink />
+      <SideMenuLink
+        label="Doctor"
+        description="John Doe"
+        iconPath={IconsPath.Doctor}
+      />
+      <SideMenuLink label="ChatGPT AI" iconPath={IconsPath.GPT} />
     </Container>
   );
 };
