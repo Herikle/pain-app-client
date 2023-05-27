@@ -23,12 +23,14 @@ export const Register = () => {
         name="password"
         id="register-password"
       />
-      <RememberMe>
-        <Checkbox />
-        <Text variant="body2">I agree to all Terms and Privacy Policy</Text>
-      </RememberMe>
+      <TextField
+        label="Confirm your password"
+        type="password"
+        name="password-confirm"
+      />
+      <Checkbox label="I agree to all Terms and Privacy Policy" />
       <Buttons>
-        <Button fullWidth>Log in</Button>
+        <Button fullWidth>Register</Button>
         <Text variant="body2Bold" color="font_color">
           or
         </Text>
@@ -45,12 +47,6 @@ const Buttons = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`;
-
-const RememberMe = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
 `;
 
 const Container = styled.div`

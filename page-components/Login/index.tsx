@@ -12,10 +12,7 @@ export const Login = () => {
       </Text>
       <TextField label="Your e-mail" type="email" name="email" />
       <TextField label="Your password" type="password" name="password" />
-      <RememberMe>
-        <Checkbox />
-        <Text variant="body2">Remember your info</Text>
-      </RememberMe>
+      <Checkbox label="Remember your info" />
       <Buttons>
         <Button fullWidth>Log in</Button>
         <Text variant="body2Bold" color="font_color">
@@ -34,12 +31,6 @@ const Buttons = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`;
-
-const RememberMe = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
 `;
 
 const Container = styled.div`
