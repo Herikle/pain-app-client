@@ -13,6 +13,7 @@ export const LoggedLayout = ({ children }) => {
 const Content = styled.div`
   padding: 5rem;
   width: 100%;
+  height: 100vh;
 `;
 const Container = styled.div`
   display: flex;

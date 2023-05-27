@@ -1,7 +1,7 @@
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
-import { TextField } from "@components/TextField";
-import { theme } from "@styles/theme";
+import { TextAreaWithSend } from "@components/TextAreaWithSend";
+import { LightScrollBar, theme } from "@styles/theme";
 import { FlexColumn, FlexRow } from "design-components/Flex";
 import { LoggedLayout } from "layouts/LoggedLayout";
 import Image from "next/image";
@@ -14,8 +14,12 @@ export default function PromptPage() {
       <Container>
         <UserInteractionContainer>
           <Text variant="body2Bold">ChatGPT AI</Text>
-          <GptResponse></GptResponse>
-          <TextField multiline />
+          <GptResponse>
+            <Text color="secondary_font">
+              GPT response will be shown here. You can also edit the prompt.
+            </Text>
+          </GptResponse>
+          <TextAreaWithSend placeholder="Start writing a prompt..." />
         </UserInteractionContainer>
         <StatsContainer>
           <TextItens>
@@ -81,17 +85,20 @@ const StatsContainer = styled(FlexColumn)`
 
 const GptResponse = styled.div`
   border: 1px solid ${theme.colors.secondary_font};
-  height: 300px;
+  height: 100%;
   width: 100%;
+  padding: 1rem;
+  ${LightScrollBar};
 `;
 
 const UserInteractionContainer = styled(FlexColumn)`
-  width: 100%;
+  width: 70%;
+  height: 100%;
 `;
 
 const Container = styled(FlexRow)`
   gap: 4rem;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 60vh;
+  height: 100%;
 `;

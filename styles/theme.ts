@@ -1,3 +1,5 @@
+import { css } from "styled-components";
+
 const LightThemeColors = {
   primary: "#005697",
   hover_state: "#D9D9D9",
@@ -10,6 +12,8 @@ const LightThemeColors = {
   pure_white: "#FFFFFF",
   pure_black: "#000000",
   text_switched: "#949494",
+  light_grey: "#B7B7B7",
+  medium_grey: "#838383",
 };
 
 const LightThemeHover = {
@@ -22,6 +26,23 @@ export const theme = {
   colors: LightThemeColors,
   hover_state: LightThemeHover,
 };
+
+export const LightScrollBar = css`
+  &::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 0.25rem;
+    background-color: ${theme.colors.light_grey};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${theme.colors.medium_grey};
+    border-radius: 0.25rem;
+  }
+`;
 
 export type ThemeColors = keyof typeof LightThemeColors;
 
