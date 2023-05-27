@@ -10,13 +10,9 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.9",
-    "@types/node": "20.2.5",
-    "@types/react": "18.2.7",
-    "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "next": "13.4.4",
-    "polished": "^4.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.3",
@@ -25,6 +21,11 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26"
+    "@next/bundle-analyzer": "^13.4.4",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "@types/styled-components": "^5.1.26",
+    "cross-env": "^7.0.3"
   }
 }

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Raleway } from "next/font/google";
-import { transparentize } from "polished";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
@@ -51,7 +50,8 @@ const Overlay = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${transparentize(0.5, theme.colors.primary)};
+  background-color: ${theme.colors.primary};
+  opacity: 0.5;
 `;
 
 const Video = styled.video`
