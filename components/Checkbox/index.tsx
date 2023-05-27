@@ -22,9 +22,9 @@ export const Checkbox = ({ label }: Props) => {
 };
 
 const BounceAnimation = keyframes`
-  0% { transform: scale(0.1) translate(-50%, -50%);; }
-  50% { transform: scale(1.2) translate(-50%, -50%);; }
-  100% { transform: scale(1) translate(-50%, -50%);; }
+  0% { transform: scale(0.1) translate(-50%, -50%); }
+  50% { transform: scale(1.2) translate(-50%, -50%); }
+  100% { transform: scale(1) translate(-50%, -50%); }
 `;
 
 const CheckMarkChecked = styled.span`
