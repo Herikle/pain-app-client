@@ -1,11 +1,20 @@
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
 import { Login } from "@page-components/Login";
-import { Register } from "@page-components/Register";
+import { Register, RegisterPayload } from "@page-components/Register";
+import { useSignUp } from "@queries/auth/useAuth";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "layouts/GuestLayout";
 import styled from "styled-components";
 
 export default function LoginPage() {
+  const signUp = useSignUp();
+
+  const onSubmitRegister = (payload: RegisterPayload) => {
+    signUp.mutateAsync({
+      body: payload,
+    });
+  };
+
   return (
     <GuestLayout>
       <Container>
@@ -14,7 +23,7 @@ export default function LoginPage() {
         </FormContainer>
         <Divisor />
         <FormContainer>
-          <Register />
+          <Register onSubmit={onSubmitRegister} />
         </FormContainer>
       </Container>
     </GuestLayout>

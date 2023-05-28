@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import { Text, TextVariant } from "../Text";
 import { ButtonColors, theme } from "@styles/theme";
 import { NextFont } from "next/dist/compiled/@next/font";
+import { ButtonHTMLAttributes } from "react";
 
 export type ButtonVariants = "contained" | "outlined";
 
@@ -16,6 +17,7 @@ type ButtonProps = {
   width?: string;
   font?: NextFont;
   textVariant?: TextVariant;
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 };
 
 const variants: Record<ButtonVariants, any> = {
@@ -38,11 +40,13 @@ export const Button = ({
   width,
   font,
   textVariant = "body2Bold",
+  type,
 }: ButtonProps) => {
   return (
     <ButtonContainer
       className={font?.className}
       onClick={onClick}
+      type={type}
       $color={theme.colors[color]}
       $variant={variant}
       $hoverColor={theme.hover_state[color]}

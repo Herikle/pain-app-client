@@ -5,13 +5,15 @@ import styled, { keyframes } from "styled-components";
 
 type Props = {
   label: string;
+  name?: string;
+  required?: boolean;
 };
 
-export const Checkbox = ({ label }: Props) => {
+export const Checkbox = ({ label, name, required }: Props) => {
   return (
     <Label>
       <Text variant="body2">{label}</Text>
-      <Input type="checkbox" />
+      <Input type="checkbox" name={name} required={required} />
       <CheckMark>
         <CheckMarkChecked>
           <CheckFat size={12} color={theme.colors.hover_state} weight="fill" />
@@ -44,8 +46,8 @@ const CheckMarkChecked = styled.span`
 
 const CheckMark = styled.span`
   position: absolute;
-  top: 50%;
   left: 0;
+  top: 50%;
   transform: translateY(-50%);
   height: 1rem;
   width: 1rem;
@@ -55,10 +57,14 @@ const CheckMark = styled.span`
 
 const Input = styled.input`
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
   opacity: 0;
   cursor: pointer;
-  height: 0;
-  width: 0;
+  height: 1rem;
+  width: 1rem;
+  z-index: -99;
 `;
 
 const Label = styled.label`

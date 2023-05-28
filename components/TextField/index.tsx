@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 type Props = {
   label?: string;
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<any>) => void;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
   fullWidth?: boolean;
@@ -14,6 +14,7 @@ type Props = {
   name?: string;
   id?: string;
   multiline?: boolean;
+  required?: boolean;
 };
 
 export const TextField = ({
@@ -27,6 +28,7 @@ export const TextField = ({
   name,
   id,
   multiline,
+  required,
 }: Props) => {
   return (
     <Container $fullWidth={fullWidth} $width={width}>
@@ -36,7 +38,14 @@ export const TextField = ({
         </Label>
       )}
       {multiline ? (
-        <TextArea />
+        <TextArea
+          id={id ?? name}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required={required}
+        />
       ) : (
         <Input
           id={id ?? name}
@@ -45,6 +54,7 @@ export const TextField = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          required={required}
         />
       )}
     </Container>
