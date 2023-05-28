@@ -1,5 +1,13 @@
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { request } from "@queries/request";
+import { IMe } from "types";
+import { QueryKeys } from "@queries/keys";
+import { storeToken } from "utils/localStorage/token";
+
+type SignUpResponse = {
+  user: IMe;
+  token: string;
+};
 
 type SignUpPayload = {
   body: {
@@ -17,9 +25,15 @@ const signUp = async ({ body }: SignUpPayload) => {
     data: body,
   });
 
-  return data;
+  return data as SignUpResponse;
 };
 
 export const useSignUp = () => {
-  return useMutation(signUp);
+  const queryClient = useQueryClient();
+  return useMutation(signUp, {
+    onSuccess: (data) => {
+      storeToken(data.token);
+      queryClient.invalidateQueries([QueryKeys.Auth.Me]);
+    },
+  });
 };

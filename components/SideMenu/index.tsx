@@ -1,10 +1,10 @@
 import { theme } from "@styles/theme";
 import Image from "next/image";
 import styled from "styled-components";
-import { SideMenuLink } from "./components/SideMenuLink";
 import Link from "next/link";
 import { RoutesPath } from "utils/routes";
 import { IconsPath } from "utils/icons";
+import { MenuLink } from "@components/MenuLink";
 
 export const SideMenu = () => {
   return (
@@ -17,12 +17,13 @@ export const SideMenu = () => {
           height="55"
         />
       </Link>
-      <SideMenuLink
+      <MenuLink
         label="Doctor"
         description="John Doe"
         iconPath={IconsPath.Doctor}
+        fullWidth
       />
-      <SideMenuLink label="ChatGPT AI" iconPath={IconsPath.GPT} />
+      <MenuLink label="ChatGPT AI" iconPath={IconsPath.GPT} fullWidth />
     </Container>
   );
 };

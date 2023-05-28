@@ -23,7 +23,7 @@ export default function LoginPage() {
         </FormContainer>
         <Divisor />
         <FormContainer>
-          <Register onSubmit={onSubmitRegister} />
+          <Register onSubmit={onSubmitRegister} loading={signUp.isLoading} />
         </FormContainer>
       </Container>
     </GuestLayout>

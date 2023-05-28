@@ -1,4 +1,5 @@
 import axios, { Method, ResponseType } from "axios";
+import { getToken } from "utils/localStorage/token";
 
 type service = "auth";
 
@@ -11,9 +12,13 @@ type IRequest = {
   responseType?: ResponseType;
 };
 
-export const setToken = (token: string) => {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-};
+axios.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const request = ({
   url = "",

@@ -25,9 +25,10 @@ type SubmitFormPayload = {
 
 type Props = {
   onSubmit: (payload: RegisterPayload) => void;
+  loading?: boolean;
 };
 
-export const Register = ({ onSubmit }: Props) => {
+export const Register = ({ onSubmit, loading }: Props) => {
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const payload = getPayloadFromSubmitForm<SubmitFormPayload>(e);
@@ -74,7 +75,9 @@ export const Register = ({ onSubmit }: Props) => {
           required
         />
         <Buttons>
-          <Button fullWidth>Register</Button>
+          <Button loading={loading} fullWidth>
+            Register
+          </Button>
           {/* <Text variant="body2Bold" color="font_color">
             or
           </Text>

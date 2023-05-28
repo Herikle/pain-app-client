@@ -10,11 +10,22 @@ type Props = {
   label: string;
   iconPath: string;
   description?: string;
+  fullWidth?: boolean;
 };
 
-export const SideMenuLink = ({ label, iconPath, description }: Props) => {
+export const MenuLink = ({
+  label,
+  iconPath,
+  description,
+  fullWidth,
+}: Props) => {
   return (
-    <LinkContainer href={RoutesPath.prompt}>
+    <Link
+      href={RoutesPath.prompt}
+      style={{
+        width: fullWidth ? "100%" : "auto",
+      }}
+    >
       <Container>
         <Image src={iconPath} alt="Chat GPT icon" width="36" height="36" />
         <DescriptionContainer>
@@ -24,7 +35,7 @@ export const SideMenuLink = ({ label, iconPath, description }: Props) => {
           </Text>
         </DescriptionContainer>
       </Container>
-    </LinkContainer>
+    </Link>
   );
 };
 
@@ -36,8 +47,4 @@ const Container = styled(FlexRow)`
   width: 100%;
   justify-content: flex-start;
   padding-left: 1.5rem;
-`;
-
-const LinkContainer = styled(Link)`
-  width: 100%;
 `;

@@ -7,12 +7,19 @@ import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 import { RoutesPath } from "utils/routes";
 import { IconsPath } from "utils/icons";
+import { useGetMe } from "@queries/auth/useGetAuth";
+import { useMemo } from "react";
+import { MenuLink } from "@components/MenuLink";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
 export const TOP_BAR_HEIGHT_PIXELS = 84;
 
 export const TopBar = () => {
+  const me = useGetMe();
+
+  const user = useMemo(() => me.data, [me.data]);
+
   return (
     <Container>
       <Link href={RoutesPath.home}>
@@ -37,11 +44,15 @@ export const TopBar = () => {
           <Text color="pure_white">Contact</Text>
         </StyledLink>
       </TopBarLinks>
-      <Link href={RoutesPath.login}>
-        <Button variant="outlined" font={raleway} textVariant="body1Bold">
-          Log in/Sign up
-        </Button>
-      </Link>
+      {user ? (
+        <MenuLink iconPath={IconsPath.Doctor} label={user?.name} />
+      ) : (
+        <Link href={RoutesPath.login}>
+          <Button variant="outlined" font={raleway} textVariant="body1Bold">
+            Log in/Sign up
+          </Button>
+        </Link>
+      )}
     </Container>
   );
 };

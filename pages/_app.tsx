@@ -1,8 +1,9 @@
 import "@styles/global.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
+import { getToken } from "utils/localStorage/token";
 const inter = Inter({ subsets: ["latin"] });
 
 type ApplicationProps = {
