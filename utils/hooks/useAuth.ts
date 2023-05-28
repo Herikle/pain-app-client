@@ -40,3 +40,15 @@ export const useAuth = (options?: UseAuthOptions) => {
     isLogged: !!user,
   };
 };
+
+export const useGuest = () => {
+  const loggedUser = useGetLoggedUser();
+
+  const user = useMemo(() => loggedUser.data, [loggedUser.data]);
+
+  useEffect(() => {
+    if (user) {
+      Router.push(RoutesPath.prompt);
+    }
+  }, [user]);
+};

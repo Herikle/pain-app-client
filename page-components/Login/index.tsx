@@ -7,16 +7,37 @@ import { FlexRow } from "design-components/Flex";
 import styled from "styled-components";
 import { getPayloadFromSubmitForm } from "utils/helpers/data";
 
-export const Login = () => {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const payload = getPayloadFromSubmitForm(e);
+export type LoginPayload = {
+  email: string;
+  password: string;
+  remember: boolean;
+};
 
-    console.log(payload);
+type SubmitFormPayload = {
+  email: string;
+  password: string;
+  remember: string;
+};
+
+type Props = {
+  onSubmit: (payload: LoginPayload) => void;
+  loading?: boolean;
+};
+
+export const Login = ({ onSubmit, loading }: Props) => {
+  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const payload = getPayloadFromSubmitForm<SubmitFormPayload>(e);
+
+    onSubmit({
+      email: payload.email,
+      password: payload.password,
+      remember: payload.remember === "on",
+    });
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmitForm}>
       <Container>
         <Text variant="h1" align="center">
           Welcome back!
@@ -30,7 +51,7 @@ export const Login = () => {
         />
         <Checkbox label="Remember your info" name="remember" />
         <Buttons>
-          <Button fullWidth type="submit">
+          <Button fullWidth type="submit" loading={loading}>
             Log in
           </Button>
           {/* <Text variant="body2Bold" color="font_color">

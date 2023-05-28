@@ -4,7 +4,7 @@ import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
 import { storeToken } from "utils/localStorage/token";
 
-type SignUpResponse = {
+type AuthenticatedResponse = {
   user: IMe;
   token: string;
 };
@@ -25,12 +25,40 @@ const signUp = async ({ body }: SignUpPayload) => {
     data: body,
   });
 
-  return data as SignUpResponse;
+  return data as AuthenticatedResponse;
 };
 
 export const useSignUp = () => {
   const queryClient = useQueryClient();
   return useMutation(signUp, {
+    onSuccess: (data) => {
+      storeToken(data.token);
+      queryClient.invalidateQueries([QueryKeys.Auth.Me]);
+    },
+  });
+};
+
+type LogInPayload = {
+  body: {
+    email: string;
+    password: string;
+  };
+};
+
+const logIn = async ({ body }: LogInPayload) => {
+  const { data } = await request({
+    method: "POST",
+    service: "auth",
+    url: "/login",
+    data: body,
+  });
+
+  return data as AuthenticatedResponse;
+};
+
+export const useLogIn = () => {
+  const queryClient = useQueryClient();
+  return useMutation(logIn, {
     onSuccess: (data) => {
       storeToken(data.token);
       queryClient.invalidateQueries([QueryKeys.Auth.Me]);
