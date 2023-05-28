@@ -7,18 +7,15 @@ import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 import { RoutesPath } from "utils/routes";
 import { IconsPath } from "utils/icons";
-import { useGetMe } from "@queries/auth/useGetAuth";
-import { useMemo } from "react";
 import { MenuLink } from "@components/MenuLink";
+import { useAuth } from "utils/hooks/useAuth";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
 export const TOP_BAR_HEIGHT_PIXELS = 84;
 
 export const TopBar = () => {
-  const me = useGetMe();
-
-  const user = useMemo(() => me.data, [me.data]);
+  const { user } = useAuth();
 
   return (
     <Container>

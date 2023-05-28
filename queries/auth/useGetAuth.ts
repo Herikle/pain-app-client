@@ -14,7 +14,7 @@ const getAuthenticatedUser = async () => {
   return data as IMe;
 };
 
-export const useGetMe = () => {
+export const useGetLoggedUser = () => {
   return useQuery(QueryKeys.Auth.Me, getAuthenticatedUser, {
     staleTime: minutes(60),
     refetchOnWindowFocus: false,

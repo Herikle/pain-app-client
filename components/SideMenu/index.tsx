@@ -5,8 +5,11 @@ import Link from "next/link";
 import { RoutesPath } from "utils/routes";
 import { IconsPath } from "utils/icons";
 import { MenuLink } from "@components/MenuLink";
+import { useAuth } from "utils/hooks/useAuth";
 
 export const SideMenu = () => {
+  const { user } = useAuth();
+
   return (
     <Container>
       <Link href={RoutesPath.home}>
@@ -19,7 +22,7 @@ export const SideMenu = () => {
       </Link>
       <MenuLink
         label="Doctor"
-        description="John Doe"
+        description={user?.name}
         iconPath={IconsPath.Doctor}
         fullWidth
       />
