@@ -2,7 +2,11 @@ import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextAreaWithSend } from "@components/TextAreaWithSend";
 import { TextField } from "@components/TextField";
-import { useGenerateCompletion } from "@queries/prompt/useGenerate";
+import { useGetPrompt } from "@queries/prompt/useGetPrompt";
+import {
+  useGenerateCompletion,
+  useSavePrompt,
+} from "@queries/prompt/usePrompt";
 import { LightScrollBar, theme } from "@styles/theme";
 import { FlexColumn, FlexRow } from "design-components/Flex";
 import { LoggedLayout } from "layouts/LoggedLayout";
@@ -12,52 +16,6 @@ import styled from "styled-components";
 import { getAllAttributesFromPrompt } from "utils/helpers/prompt";
 import { useDebounce } from "utils/hooks/useDebounce";
 import { IconsPath } from "utils/icons";
-
-const lorem = `Classification: Physical pain.
-
-Justification: The pain is caused by the physical act of touching the feet on the ground. There is no indication of any psychological factors contributing to the pain.
-
-JSON representation:
-
-{
-"duration_interval": [0.5, 1, 2],
-"intensity_probabilities": {
-"i. immediately after touching feet to ground": {
-"Excruciating": 0,
-"Disabling": 0,
-"Hurtful": 80,
-"Annoying": 20,
-"No Pain": 0
-},
-"ii. after walking for a few minutes": {
-"Excruciating": 0,
-"Disabling": 0,
-"Hurtful": 40,
-"Annoying": 60,
-"No Pain": 0
-},
-"iii. after resting for a period of time": {
-"Excruciating": 0,
-"Disabling": 0,
-"Hurtful": 20,
-"Annoying": 80,
-"No Pain": 0
-}
-},
-"pain_source": "Pain when touching feet to ground",
-"classification": "Physical Pain"
-}
-
-Justification for the estimates:
-
-Temporal Segment i - immediately after touching feet to ground (0.5 hours)
-Based on the subject's description of the pain causing them to scream and cry, it can be inferred that the pain is relatively intense. However, it is unlikely to be considered excruciating as the subject did not report passing out or losing consciousness. The pain is also likely to be disabling, making it difficult for the subject to walk or move. Therefore, there is a high probability of the pain being described as hurtful. There is a minor possibility of no pain being experienced due to the suddenness and unexpectedness of the pain.
-
-Temporal Segment ii - after walking for a few minutes (1 hour)
-As the subject continues to walk on their feet, the pain is likely to decrease in intensity. However, the pain is unlikely to disappear completely within an hour. It is possible that the pain could be described as annoying or hurtful, but there is a lower probability of it being disabling or excruciating.
-
-Temporal Segment iii - after resting for a period of time (2 hours)
-Resting the feet for a period of time is likely to reduce the pain further. There is a low probability of the pain being disabling or excruciating, as the subject would have likely relieved the pressure on their feet. The pain is likely to be described as annoying or hurtful, but there is a higher probability of no pain being experienced at this stage.`;
 
 type tokensUsage = {
   prompt_tokens: number;
@@ -72,13 +30,17 @@ export default function PromptPage() {
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
 
-  const [gptResponse, setGptResponse] = useState(lorem);
+  const [gptResponse, setGptResponse] = useState(null);
 
   const [tokensUsage, setTokensUsage] = useState<tokensUsage>(null);
 
   const noAttributes = Object.keys(attributes).length === 0;
 
+  const promptSaved = useGetPrompt();
+
   const generateResponse = useGenerateCompletion();
+
+  const savePrompt = useSavePrompt();
 
   const handlePromptChange = (value: string) => {
     setPrompt(value);
@@ -119,6 +81,13 @@ export default function PromptPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [promptDebouced]);
 
+  useEffect(() => {
+    if (promptSaved.data) {
+      setPrompt(promptSaved.data.prompt);
+      setAttributes(promptSaved.data.attributes);
+    }
+  }, [promptSaved.data]);
+
   const updateAttributeValue = (attribute: string, value: string) => {
     setAttributes((prev) => ({
       ...prev,
@@ -146,6 +115,15 @@ export default function PromptPage() {
       total: response.total,
     });
     setGptResponse(response.response);
+  };
+
+  const onSavePrompt = async () => {
+    await savePrompt.mutateAsync({
+      body: {
+        prompt: prompt,
+        attributes: attributes,
+      },
+    });
   };
 
   const getResponseText = () => {
@@ -256,7 +234,11 @@ export default function PromptPage() {
               )}
             </Attributes>
           </TextItens>
-          <Button disabled fullWidth>
+          <Button
+            onClick={onSavePrompt}
+            loading={savePrompt.isLoading}
+            fullWidth
+          >
             Save this prompt
           </Button>
         </StatsContainer>

@@ -28,3 +28,24 @@ const generateCompletion = async ({ body }: GeneratePromptPayload) => {
 export const useGenerateCompletion = () => {
   return useMutation(generateCompletion);
 };
+
+type SavePromptPayload = {
+  body: {
+    prompt: string;
+    attributes: any;
+  };
+};
+
+const savePrompt = async ({ body }: SavePromptPayload) => {
+  const { data } = await request({
+    method: "POST",
+    service: "prompt",
+    data: body,
+  });
+
+  return data;
+};
+
+export const useSavePrompt = () => {
+  return useMutation(savePrompt);
+};

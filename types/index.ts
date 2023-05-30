@@ -3,3 +3,8 @@ export type IMe = {
   name: string;
   email: string;
 };
+
+export type IPrompt = {
+  prompt: string;
+  attributes: any;
+};
