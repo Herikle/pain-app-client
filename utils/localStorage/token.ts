@@ -7,3 +7,7 @@ export const getToken = () => {
 export const storeToken = (token: string) => {
   localStorage.setItem(tokenKey, token);
 };
+
+export const clearToken = () => {
+  localStorage.removeItem(tokenKey);
+};

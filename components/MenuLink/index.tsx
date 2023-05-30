@@ -3,39 +3,59 @@ import { FlexColumn, FlexRow } from "design-components/Flex";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { IconsPath } from "utils/icons";
-import { RoutesPath } from "utils/routes";
+import { Icon } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
 
 type Props = {
   label: string;
-  iconPath: string;
+  PhosphorIcon?: Icon;
+  iconPath?: string;
   description?: string;
   fullWidth?: boolean;
+  href?: string;
+  onClick?: () => void;
 };
 
 export const MenuLink = ({
   label,
+  PhosphorIcon,
   iconPath,
   description,
   fullWidth,
+  href,
+  onClick,
 }: Props) => {
-  return (
-    <Link
-      href={RoutesPath.prompt}
-      style={{
-        width: fullWidth ? "100%" : "auto",
-      }}
-    >
-      <Container>
+  const render = (children) => {
+    if (href) {
+      return (
+        <Link
+          href={href}
+          style={{
+            width: fullWidth ? "100%" : "auto",
+          }}
+        >
+          {children}
+        </Link>
+      );
+    }
+
+    return children;
+  };
+
+  return render(
+    <Container onClick={onClick}>
+      {PhosphorIcon ? (
+        <PhosphorIcon size={36} color={theme.colors.pure_white} />
+      ) : (
         <Image src={iconPath} alt="Chat GPT icon" width="36" height="36" />
-        <DescriptionContainer>
-          {description && <Text color="pure_white">{description}</Text>}
-          <Text variant="body2Bold" color="pure_white">
-            {label}
-          </Text>
-        </DescriptionContainer>
-      </Container>
-    </Link>
+      )}
+      <DescriptionContainer>
+        {description && <Text color="pure_white">{description}</Text>}
+        <Text variant="body2Bold" color="pure_white">
+          {label}
+        </Text>
+      </DescriptionContainer>
+    </Container>
   );
 };
 
@@ -46,5 +66,5 @@ const DescriptionContainer = styled(FlexColumn)`
 const Container = styled(FlexRow)`
   width: 100%;
   justify-content: flex-start;
-  padding-left: 1.5rem;
+  cursor: pointer;
 `;

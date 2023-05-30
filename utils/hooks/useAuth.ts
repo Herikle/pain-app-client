@@ -1,7 +1,8 @@
 import { useGetLoggedUser } from "@queries/auth/useGetAuth";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo } from "react";
-import { getToken } from "utils/localStorage/token";
+import { useQueryClient } from "react-query";
+import { clearToken, getToken } from "utils/localStorage/token";
 import { RoutesPath } from "utils/routes";
 
 type UseAuthOptions = {
@@ -12,11 +13,19 @@ type UseAuthOptions = {
 export const useAuth = (options?: UseAuthOptions) => {
   const loggedUser = useGetLoggedUser();
 
+  const queryClient = useQueryClient();
+
   const user = useMemo(() => loggedUser.data, [loggedUser.data]);
 
   const redirect = useCallback(() => {
     Router.push(options?.redirectTo || RoutesPath.login);
   }, [options?.redirectTo]);
+
+  const logOut = () => {
+    clearToken();
+    queryClient.clear();
+    Router.push(RoutesPath.home);
+  };
 
   useEffect(() => {
     if (!options) return;
@@ -38,6 +47,7 @@ export const useAuth = (options?: UseAuthOptions) => {
   return {
     user: user,
     isLogged: !!user,
+    logOut,
   };
 };
 
