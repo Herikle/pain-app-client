@@ -64,7 +64,7 @@ const TopItens = styled.div`
 `;
 
 const Container = styled.div`
-  width: 200px;
+  width: 250px;
   height: 100vh;
   background-color: ${theme.colors.primary};
   display: flex;

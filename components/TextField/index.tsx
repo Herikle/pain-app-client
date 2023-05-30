@@ -1,7 +1,8 @@
 import { Text } from "@components/Text";
-import { theme } from "@styles/theme";
+import { LightScrollBar, theme } from "@styles/theme";
 import { HTMLInputTypeAttribute } from "react";
 import styled, { css } from "styled-components";
+import TextareaAutosize from "react-textarea-autosize";
 
 type Props = {
   label?: string;
@@ -45,6 +46,7 @@ export const TextField = ({
           value={value}
           onChange={onChange}
           required={required}
+          maxRows={8}
         />
       ) : (
         <Input
@@ -72,7 +74,7 @@ const Input = styled.input`
   padding: 0 12px;
 `;
 
-const TextArea = styled.textarea`
+const TextArea = styled(TextareaAutosize)`
   border-radius: 2px;
   border: 1px solid ${theme.colors.secondary_font};
   height: 136px;
@@ -80,6 +82,7 @@ const TextArea = styled.textarea`
   outline: none;
   padding: 12px;
   resize: none;
+  ${LightScrollBar};
 `;
 
 type ContainerProps = {

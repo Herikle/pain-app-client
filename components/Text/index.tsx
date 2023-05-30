@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { CSSProperties, css } from "styled-components";
 import { ThemeColors, theme } from "@styles/theme";
 
 export type TextVariant =
@@ -47,6 +47,7 @@ type TextProps = {
   opacity?: number;
   mt?: number;
   px?: number;
+  whiteSpace?: CSSProperties["whiteSpace"];
 };
 
 export const Text = ({
@@ -59,6 +60,7 @@ export const Text = ({
   opacity,
   mt,
   px,
+  whiteSpace,
 }: TextProps) => {
   return (
     <TextStyled
@@ -72,6 +74,7 @@ export const Text = ({
       $fontWeight={fontWeight}
       $align={align}
       $opacity={opacity}
+      $whiteSpace={whiteSpace}
     >
       {children}
     </TextStyled>
@@ -85,6 +88,7 @@ type TextStyledProps = {
   $fontWeight?: string;
   $align?: TextAlign;
   $opacity?: number;
+  $whiteSpace?: string;
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -115,5 +119,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $opacity &&
     css`
       opacity: ${$opacity};
+    `}
+
+    ${({ $whiteSpace }) =>
+    $whiteSpace &&
+    css`
+      white-space: ${$whiteSpace};
     `}
 `;

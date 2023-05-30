@@ -1,7 +1,7 @@
 import axios, { Method, ResponseType } from "axios";
 import { getToken } from "utils/localStorage/token";
 
-type service = "auth";
+type service = "auth" | "prompt";
 
 type IRequest = {
   method: Method;
