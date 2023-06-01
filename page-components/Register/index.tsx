@@ -7,6 +7,8 @@ import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
+import Link from "next/link";
+import { RoutesPath } from "utils/routes";
 // import { GoogleLogo } from "@phosphor-icons/react";
 // import { FlexRow } from "design-components/Flex";
 
@@ -50,6 +52,12 @@ export const Register = ({ onSubmit, loading }: Props) => {
       <Container>
         <Text variant="h1" align="center">
           Create an account
+        </Text>
+        <Text align="center">
+          If you already have an account,
+          <Link href={RoutesPath.login}>
+            <Text decoration="underline"> login here.</Text>
+          </Link>
         </Text>
         <TextField label="Your name" required {...register("name")} />
         <TextField

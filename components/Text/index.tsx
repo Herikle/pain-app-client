@@ -53,6 +53,7 @@ type TextProps = {
   mt?: number;
   px?: number;
   whiteSpace?: CSSProperties["whiteSpace"];
+  decoration?: CSSProperties["textDecoration"];
 };
 
 export const Text = ({
@@ -66,6 +67,7 @@ export const Text = ({
   mt,
   px,
   whiteSpace,
+  decoration,
 }: TextProps) => {
   return (
     <TextStyled
@@ -80,6 +82,7 @@ export const Text = ({
       $align={align}
       $opacity={opacity}
       $whiteSpace={whiteSpace}
+      $decoration={decoration}
     >
       {children}
     </TextStyled>
@@ -94,6 +97,7 @@ type TextStyledProps = {
   $align?: TextAlign;
   $opacity?: number;
   $whiteSpace?: string;
+  $decoration?: CSSProperties["textDecoration"];
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -130,5 +134,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $whiteSpace &&
     css`
       white-space: ${$whiteSpace};
+    `}
+
+    ${({ $decoration }) =>
+    $decoration &&
+    css`
+      text-decoration: ${$decoration};
     `}
 `;

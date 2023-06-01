@@ -6,6 +6,8 @@ import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
+import { RoutesPath } from "utils/routes";
+import Link from "next/link";
 // import { GoogleLogo } from "@phosphor-icons/react";
 // import { FlexRow } from "design-components/Flex";
 
@@ -40,6 +42,12 @@ export const Login = ({ onSubmit, loading }: Props) => {
       <Container>
         <Text variant="h1" align="center">
           Welcome back!
+        </Text>
+        <Text align="center">
+          Don&apos;t have an account yet?{" "}
+          <Link href={RoutesPath.register}>
+            <Text decoration="underline">Register here </Text>
+          </Link>
         </Text>
         <TextField
           type="email"

@@ -50,7 +50,7 @@ export const TopBar = () => {
       ) : (
         <Link href={RoutesPath.login}>
           <Button variant="outlined" font={raleway} textVariant="body1Bold">
-            Log in/Sign up
+            Log in
           </Button>
         </Link>
       )}
