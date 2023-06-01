@@ -2,7 +2,6 @@ import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { TextAreaWithSend } from "@components/TextAreaWithSend";
-import { TextField } from "@components/TextField";
 import { useGetPrompt } from "@queries/prompt/useGetPrompt";
 import {
   useGenerateCompletion,

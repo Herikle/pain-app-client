@@ -14,13 +14,13 @@ export default function LoginPage() {
 
   const logIn = useLogIn();
 
-  const onSubmitRegister = async (payload: RegisterPayload) => {
+  const onSubmitRegister = async (payload: any) => {
     await signUp.mutateAsync({
       body: payload,
     });
   };
 
-  const onSubmitLogin = async (payload: LoginPayload) => {
+  const onSubmitLogin = async (payload: any) => {
     await logIn.mutateAsync({
       body: payload,
     });

@@ -43,7 +43,7 @@ export const TopBar = () => {
       </TopBarLinks>
       {user ? (
         <MenuLink
-          href={RoutesPath.prompt}
+          href={RoutesPath.profile}
           iconPath={IconsPath.Doctor}
           label={user?.name}
         />

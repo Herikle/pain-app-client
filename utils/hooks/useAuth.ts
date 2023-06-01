@@ -58,7 +58,7 @@ export const useGuest = () => {
 
   useEffect(() => {
     if (user) {
-      Router.push(RoutesPath.prompt);
+      Router.push(RoutesPath.profile);
     }
   }, [user]);
 };
