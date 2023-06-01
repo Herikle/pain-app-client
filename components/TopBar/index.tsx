@@ -42,7 +42,11 @@ export const TopBar = () => {
         </StyledLink>
       </TopBarLinks>
       {user ? (
-        <MenuLink iconPath={IconsPath.Doctor} label={user?.name} />
+        <MenuLink
+          href={RoutesPath.prompt}
+          iconPath={IconsPath.Doctor}
+          label={user?.name}
+        />
       ) : (
         <Link href={RoutesPath.login}>
           <Button variant="outlined" font={raleway} textVariant="body1Bold">
