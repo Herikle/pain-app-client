@@ -24,7 +24,7 @@ export const SideMenu = () => {
         </Link>
         <MenuLink
           label="Doctor"
-          href={RoutesPath.prompt}
+          href={RoutesPath.profile}
           description={user?.name}
           iconPath={IconsPath.Doctor}
           fullWidth
