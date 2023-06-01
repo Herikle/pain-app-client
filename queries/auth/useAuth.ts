@@ -3,6 +3,8 @@ import { request } from "@queries/request";
 import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
 import { storeToken } from "utils/localStorage/token";
+import { AxiosError } from "axios";
+import { ToastError } from "utils/toats";
 
 type AuthenticatedResponse = {
   user: IMe;
@@ -35,6 +37,9 @@ export const useSignUp = () => {
       storeToken(data.token);
       queryClient.invalidateQueries([QueryKeys.Auth.Me]);
     },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
   });
 };
 
@@ -62,6 +67,9 @@ export const useLogIn = () => {
     onSuccess: (data) => {
       storeToken(data.token);
       queryClient.invalidateQueries([QueryKeys.Auth.Me]);
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
     },
   });
 };

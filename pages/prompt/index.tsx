@@ -1,5 +1,6 @@
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
+import { TextArea } from "@components/TextArea";
 import { TextAreaWithSend } from "@components/TextAreaWithSend";
 import { TextField } from "@components/TextField";
 import { useGetPrompt } from "@queries/prompt/useGetPrompt";
@@ -163,7 +164,7 @@ export default function PromptPage() {
   };
 
   return (
-    <LoggedLayout>
+    <LoggedLayout onlySuper>
       <Container>
         <UserInteractionContainer>
           <Text variant="body2Bold">ChatGPT AI</Text>
@@ -218,7 +219,7 @@ export default function PromptPage() {
               ) : (
                 <>
                   {Object.keys(attributes).map((attribute) => (
-                    <TextField
+                    <TextArea
                       key={attribute}
                       label={attribute}
                       fullWidth
@@ -227,7 +228,6 @@ export default function PromptPage() {
                         updateAttributeValue(attribute, e.target.value)
                       }
                       placeholder="Enter a value for this attribute"
-                      multiline
                     />
                   ))}
                 </>

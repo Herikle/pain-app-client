@@ -41,7 +41,9 @@ export const Register = ({ onSubmit, loading }: Props) => {
     resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmitForm = (payload: RegisterPayload) => {};
+  const onSubmitForm = (payload: RegisterPayload) => {
+    onSubmit(payload);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>

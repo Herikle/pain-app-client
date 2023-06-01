@@ -2,9 +2,27 @@ import { SideMenu } from "@components/SideMenu";
 import styled from "styled-components";
 import { useAuth } from "utils/hooks/useAuth";
 import { LoadingPage } from "./Loading";
+import { useEffect } from "react";
+import Router from "next/router";
+import { RoutesPath } from "utils/routes";
 
-export const LoggedLayout = ({ children }) => {
-  const { isLogged } = useAuth({ redirect: true });
+type Props = {
+  children: React.ReactNode;
+  onlySuper?: boolean;
+};
+
+export const LoggedLayout = ({ children, onlySuper }: Props) => {
+  const { isLogged, user } = useAuth({ redirect: true });
+
+  useEffect(() => {
+    if (user) {
+      if (onlySuper) {
+        if (!user.super) {
+          Router.replace(RoutesPath.home);
+        }
+      }
+    }
+  }, [user, onlySuper]);
 
   return (
     <Container>

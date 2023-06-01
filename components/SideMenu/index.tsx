@@ -29,12 +29,14 @@ export const SideMenu = () => {
           iconPath={IconsPath.Doctor}
           fullWidth
         />
-        <MenuLink
-          label="ChatGPT AI"
-          href={RoutesPath.prompt}
-          iconPath={IconsPath.GPT}
-          fullWidth
-        />
+        {user.super && (
+          <MenuLink
+            label="ChatGPT AI"
+            href={RoutesPath.prompt}
+            iconPath={IconsPath.GPT}
+            fullWidth
+          />
+        )}
       </TopItens>
       <BottomItens>
         <LogOutContainer>

@@ -1,9 +1,11 @@
 import "@styles/global.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
-import { getToken } from "utils/localStorage/token";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 type ApplicationProps = {
@@ -35,6 +37,7 @@ function MyApp({ Component, pageProps }) {
           {/* <RecoilRoot> */}
           <Component {...pageProps} />
           {/* </RecoilRoot> */}
+          <ToastContainer />
         </Application>
       </Hydrate>
     </QueryClientProvider>
