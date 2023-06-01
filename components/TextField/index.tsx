@@ -1,67 +1,37 @@
 import { Text } from "@components/Text";
 import { LightScrollBar, theme } from "@styles/theme";
-import { HTMLInputTypeAttribute } from "react";
+import React, { HTMLInputTypeAttribute } from "react";
 import styled, { css } from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
 
-type Props = {
+interface Props extends React.ComponentPropsWithoutRef<"input"> {
   label?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<any>) => void;
-  placeholder?: string;
-  type?: HTMLInputTypeAttribute;
   fullWidth?: boolean;
   width?: string;
-  name?: string;
-  id?: string;
-  multiline?: boolean;
-  required?: boolean;
-};
+  error?: string;
+}
 
-export const TextField = ({
-  label,
-  value,
-  fullWidth,
-  onChange,
-  placeholder,
-  type,
-  width,
-  name,
-  id,
-  multiline,
-  required,
-}: Props) => {
-  return (
-    <Container $fullWidth={fullWidth} $width={width}>
-      {label && (
-        <Label htmlFor={id ?? name}>
-          <Text variant="body2Bold">{label}</Text>
-        </Label>
-      )}
-      {multiline ? (
-        <TextArea
-          id={id ?? name}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          required={required}
-          maxRows={8}
-        />
-      ) : (
-        <Input
-          id={id ?? name}
-          name={name}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          required={required}
-        />
-      )}
-    </Container>
-  );
-};
+export const TextField = React.forwardRef(
+  ({ label, fullWidth, width, error, ...rest }: Props, ref: any) => {
+    return (
+      <Container $fullWidth={fullWidth} $width={width}>
+        {label && (
+          <Label htmlFor={rest?.id}>
+            <Text variant="body2Bold">{label}</Text>
+          </Label>
+        )}
+        <Input ref={ref} {...rest} />
+        {error && (
+          <Text variant="caption" color="cta">
+            {error}
+          </Text>
+        )}
+      </Container>
+    );
+  }
+);
+
+TextField.displayName = "TextField";
 
 const Label = styled.label``;
 

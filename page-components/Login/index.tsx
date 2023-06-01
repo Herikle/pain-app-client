@@ -1,23 +1,21 @@
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
-import { GoogleLogo } from "@phosphor-icons/react";
-import { FlexRow } from "design-components/Flex";
-import styled from "styled-components";
-import { getPayloadFromSubmitForm } from "utils/helpers/data";
+// import { GoogleLogo } from "@phosphor-icons/react";
+// import { FlexRow } from "design-components/Flex";
 
-export type LoginPayload = {
-  email: string;
-  password: string;
-  remember: boolean;
-};
+const LoginSchema = z.object({
+  email: z.string().email().nonempty(),
+  password: z.string(),
+  remember: z.boolean(),
+});
 
-type SubmitFormPayload = {
-  email: string;
-  password: string;
-  remember: string;
-};
+export type LoginPayload = z.infer<typeof LoginSchema>;
 
 type Props = {
   onSubmit: (payload: LoginPayload) => void;
@@ -25,31 +23,40 @@ type Props = {
 };
 
 export const Login = ({ onSubmit, loading }: Props) => {
-  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const payload = getPayloadFromSubmitForm<SubmitFormPayload>(e);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginPayload>({
+    resolver: zodResolver(LoginSchema),
+  });
 
-    onSubmit({
-      email: payload.email,
-      password: payload.password,
-      remember: payload.remember === "on",
-    });
+  const onSubmitForm = (payload: LoginPayload) => {
+    onSubmit(payload);
   };
 
   return (
-    <form onSubmit={onSubmitForm}>
+    <form onSubmit={handleSubmit(onSubmitForm)}>
       <Container>
         <Text variant="h1" align="center">
           Welcome back!
         </Text>
-        <TextField label="Your e-mail" type="email" name="email" required />
+        <TextField
+          type="email"
+          label="Your e-mail"
+          required
+          {...register("email")}
+          error={errors.email?.message}
+        />
         <TextField
           label="Your password"
-          type="password"
           name="password"
+          type="password"
           required
+          {...register("password")}
+          error={errors.password?.message}
         />
-        <Checkbox label="Remember your info" name="remember" />
+        <Checkbox label="Remember your info" {...register("remember")} />
         <Buttons>
           <Button fullWidth type="submit" loading={loading}>
             Log in

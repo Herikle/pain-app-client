@@ -7,7 +7,8 @@ export type TextVariant =
   | "body1"
   | "body1Bold"
   | "body2"
-  | "body2Bold";
+  | "body2Bold"
+  | "caption";
 type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
@@ -34,6 +35,10 @@ const variants: Record<TextVariant, any> = {
   body2Bold: css`
     font-size: 14px;
     font-weight: 700;
+  `,
+  caption: css`
+    font-size: 12px;
+    font-weight: 400;
   `,
 };
 

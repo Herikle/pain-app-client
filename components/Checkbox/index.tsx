@@ -1,27 +1,34 @@
+import React from "react";
 import { Text } from "@components/Text";
 import { CheckFat } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import styled, { keyframes } from "styled-components";
 
-type Props = {
+interface Props extends React.ComponentPropsWithoutRef<"input"> {
   label: string;
-  name?: string;
-  required?: boolean;
-};
+}
 
-export const Checkbox = ({ label, name, required }: Props) => {
-  return (
-    <Label>
-      <Text variant="body2">{label}</Text>
-      <Input type="checkbox" name={name} required={required} />
-      <CheckMark>
-        <CheckMarkChecked>
-          <CheckFat size={12} color={theme.colors.hover_state} weight="fill" />
-        </CheckMarkChecked>
-      </CheckMark>
-    </Label>
-  );
-};
+export const Checkbox = React.forwardRef(
+  ({ label, ...rest }: Props, ref: any) => {
+    return (
+      <Label>
+        <Text variant="body2">{label}</Text>
+        <Input type="checkbox" ref={ref} {...rest} />
+        <CheckMark>
+          <CheckMarkChecked>
+            <CheckFat
+              size={12}
+              color={theme.colors.hover_state}
+              weight="fill"
+            />
+          </CheckMarkChecked>
+        </CheckMark>
+      </Label>
+    );
+  }
+);
+
+Checkbox.displayName = "Checkbox";
 
 const bounceAnimation = keyframes`
   0% { 

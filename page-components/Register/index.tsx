@@ -1,27 +1,31 @@
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 // import { GoogleLogo } from "@phosphor-icons/react";
 // import { FlexRow } from "design-components/Flex";
-import styled from "styled-components";
-import { getPayloadFromSubmitForm } from "utils/helpers/data";
 
-export type RegisterPayload = {
-  name: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-  terms: boolean;
-};
+const RegisterSchema = z
+  .object({
+    name: z.string(),
+    email: z.string().email(),
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+    password_confirm: z
+      .string()
+      .min(6, "Password must be at least 6 characters long"),
+    terms: z.boolean(),
+  })
+  .refine((data) => data.password === data.password_confirm, {
+    message: "Passwords don't match",
+    path: ["password_confirm"],
+  });
 
-type SubmitFormPayload = {
-  name: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-  terms: string;
-};
+export type RegisterPayload = z.infer<typeof RegisterSchema>;
 
 type Props = {
   onSubmit: (payload: RegisterPayload) => void;
@@ -29,50 +33,48 @@ type Props = {
 };
 
 export const Register = ({ onSubmit, loading }: Props) => {
-  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const payload = getPayloadFromSubmitForm<SubmitFormPayload>(e);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterPayload>({
+    resolver: zodResolver(RegisterSchema),
+  });
 
-    onSubmit({
-      name: payload.name,
-      email: payload.email,
-      password: payload.password,
-      password_confirm: payload.password_confirm,
-      terms: payload.terms === "on",
-    });
-  };
+  const onSubmitForm = (payload: RegisterPayload) => {};
 
   return (
-    <form onSubmit={onSubmitForm}>
+    <form onSubmit={handleSubmit(onSubmitForm)}>
       <Container>
         <Text variant="h1" align="center">
           Create an account
         </Text>
-        <TextField label="Your name" name="name" id="register-name" required />
+        <TextField label="Your name" required {...register("name")} />
         <TextField
           label="Your e-mail"
           type="email"
-          name="email"
-          id="register-email"
           required
+          {...register("email")}
+          error={errors.email?.message}
         />
         <TextField
           label="Your password"
           type="password"
-          name="password"
-          id="register-password"
           required
+          {...register("password")}
+          error={errors.password?.message}
         />
         <TextField
           label="Confirm your password"
           type="password"
-          name="password_confirm"
           required
+          {...register("password_confirm")}
+          error={errors.password_confirm?.message}
         />
         <Checkbox
           label="I agree to all Terms and Privacy Policy"
-          name="terms"
           required
+          {...register("terms")}
         />
         <Buttons>
           <Button loading={loading} fullWidth>
