@@ -1,10 +1,13 @@
 import "@styles/global.css";
+import { Modals } from "@components/Modals";
+import { VerifyUser } from "logic-components/VerifyUser";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RecoilRoot } from "recoil";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,18 +15,28 @@ type ApplicationProps = {
   children: React.ReactNode;
 };
 
-const Application = ({ children }) => {
+const Application = ({ children }: ApplicationProps) => {
   return (
-    <main className={inter.className}>
-      <Head>
-        <title>PainTrack</title>
-        <meta
-          name="description"
-          content="A scientific tool for the description and analysis of the pain experience"
-        />
-      </Head>
-      {children}
-    </main>
+    <>
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
+      <main>
+        <Head>
+          <title>PainTrack</title>
+          <meta
+            name="description"
+            content="A scientific tool for the description and analysis of the pain experience"
+          />
+        </Head>
+        {children}
+        <Modals />
+        <ToastContainer />
+        <VerifyUser />
+      </main>
+    </>
   );
 };
 
@@ -33,12 +46,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Application>
-          {/* <RecoilRoot> */}
-          <Component {...pageProps} />
-          {/* </RecoilRoot> */}
-          <ToastContainer />
-        </Application>
+        <RecoilRoot>
+          <Application>
+            <Component {...pageProps} />
+          </Application>
+        </RecoilRoot>
       </Hydrate>
     </QueryClientProvider>
   );

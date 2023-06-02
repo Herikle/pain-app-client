@@ -14,6 +14,7 @@ const LightThemeColors = {
   text_switched: "#949494",
   light_grey: "#B7B7B7",
   medium_grey: "#838383",
+  pastel_green: "#92E3A9",
 };
 
 const LightThemeHover = {

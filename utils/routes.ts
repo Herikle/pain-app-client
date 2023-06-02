@@ -5,3 +5,5 @@ export const RoutesPath = {
   prompt: "/prompt",
   profile: "/profile",
 };
+
+export const ProtectedRoutesPath = [RoutesPath.profile, RoutesPath.prompt];
