@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import Image from "next/image";
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
@@ -8,14 +11,11 @@ import {
   useSavePrompt,
 } from "@queries/prompt/usePrompt";
 import { LightScrollBar, theme } from "@styles/theme";
-import { FlexColumn, FlexRow } from "design-components/Flex";
-import { LoggedLayout } from "layouts/LoggedLayout";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { getAllAttributesFromPrompt } from "utils/helpers/prompt";
-import { useDebounce } from "utils/hooks/useDebounce";
-import { IconsPath } from "utils/icons";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { LoggedLayout } from "@layouts/LoggedLayout";
+import { getAllAttributesFromPrompt } from "@utils/helpers/prompt";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { IconsPath } from "@utils/icons";
 
 type tokensUsage = {
   prompt_tokens: number;

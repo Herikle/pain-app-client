@@ -1,4 +1,4 @@
-import { LoggedLayout } from "layouts/LoggedLayout";
+import { LoggedLayout } from "@layouts/LoggedLayout";
 
 export default function ProfilePage() {
   return (

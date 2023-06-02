@@ -1,8 +1,5 @@
 import { BackgroundVideo } from "@components/BackgroundHomeVideo";
-import { Footer } from "@components/Footer";
-import { TopBar } from "@components/TopBar";
-import { GuestLayout } from "layouts/GuestLayout";
-import Head from "next/head";
+import { GuestLayout } from "@layouts/GuestLayout";
 
 export default function Home() {
   return (

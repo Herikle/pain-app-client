@@ -1,12 +1,12 @@
+import Router from "next/router";
+import styled from "styled-components";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
 import { Login } from "@page-components/Login";
 import { useLogIn } from "@queries/auth/useAuth";
 import { theme } from "@styles/theme";
-import { GuestLayout } from "layouts/GuestLayout";
-import Router from "next/router";
-import styled from "styled-components";
-import { useGuest } from "utils/hooks/useAuth";
-import { RoutesPath } from "utils/routes";
+import { GuestLayout } from "@layouts/GuestLayout";
+import { useGuest } from "@utils/hooks/useAuth";
+import { RoutesPath } from "@utils/routes";
 
 export default function LoginPage() {
   useGuest();

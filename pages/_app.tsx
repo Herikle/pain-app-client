@@ -1,13 +1,13 @@
-import "@styles/global.css";
-import { Modals } from "@components/Modals";
-import { VerifyUser } from "logic-components/VerifyUser";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { RecoilRoot } from "recoil";
+import "react-toastify/dist/ReactToastify.css";
+import "@styles/global.css";
+import { Modals } from "@components/Modals";
+import { VerifyUser } from "@logic-components/VerifyUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
