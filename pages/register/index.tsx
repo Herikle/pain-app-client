@@ -2,8 +2,10 @@ import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
 import { Register } from "@page-components/Register";
 import { useSignUp } from "@queries/auth/useAuth";
 import { GuestLayout } from "layouts/GuestLayout";
+import Router from "next/router";
 import styled from "styled-components";
 import { useGuest } from "utils/hooks/useAuth";
+import { RoutesPath } from "utils/routes";
 
 export default function RegisterPage() {
   useGuest();
@@ -14,6 +16,7 @@ export default function RegisterPage() {
     await signUp.mutateAsync({
       body: payload,
     });
+    Router.push(RoutesPath.profile);
   };
 
   return (

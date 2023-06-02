@@ -3,8 +3,10 @@ import { Login } from "@page-components/Login";
 import { useLogIn } from "@queries/auth/useAuth";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "layouts/GuestLayout";
+import Router from "next/router";
 import styled from "styled-components";
 import { useGuest } from "utils/hooks/useAuth";
+import { RoutesPath } from "utils/routes";
 
 export default function LoginPage() {
   useGuest();
@@ -15,6 +17,7 @@ export default function LoginPage() {
     await logIn.mutateAsync({
       body: payload,
     });
+    Router.push(RoutesPath.profile);
   };
 
   return (
