@@ -1,9 +1,10 @@
+import { Text } from "@components/Text";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 
 export default function ProfilePage() {
   return (
     <LoggedLayout>
-      <h1>Profile</h1>
+      <Text variant="h1">Your profile</Text>
     </LoggedLayout>
   );
 }

@@ -2,7 +2,7 @@ import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "design-components/Flex";
 import Image from "next/image";
 import Link from "next/link";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Icon } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 
@@ -14,6 +14,8 @@ type Props = {
   fullWidth?: boolean;
   href?: string;
   onClick?: () => void;
+  disabled?: boolean;
+  notAllowed?: boolean;
 };
 
 export const MenuLink = ({
@@ -24,9 +26,11 @@ export const MenuLink = ({
   fullWidth,
   href,
   onClick,
+  disabled = false,
+  notAllowed = false,
 }: Props) => {
   const render = (children) => {
-    if (href) {
+    if (href && !notAllowed) {
       return (
         <Link
           href={href}
@@ -43,7 +47,7 @@ export const MenuLink = ({
   };
 
   return render(
-    <Container onClick={onClick}>
+    <Container onClick={onClick} $disabled={disabled} $notAllowed={notAllowed}>
       {PhosphorIcon ? (
         <PhosphorIcon size={36} color={theme.colors.pure_white} />
       ) : (
@@ -63,8 +67,24 @@ const DescriptionContainer = styled(FlexColumn)`
   gap: 0;
 `;
 
-const Container = styled(FlexRow)`
+type ContainerProps = {
+  $disabled: boolean;
+  $notAllowed: boolean;
+};
+
+const Container = styled(FlexRow)<ContainerProps>`
   width: 100%;
   justify-content: flex-start;
   cursor: pointer;
+  ${({ $disabled }) =>
+    $disabled &&
+    css`
+      opacity: 0.5;
+    `}
+
+  ${({ $notAllowed }) =>
+    $notAllowed &&
+    css`
+      cursor: not-allowed;
+    `}
 `;

@@ -8,9 +8,12 @@ import { MenuLink } from "@components/MenuLink";
 import { useAuth } from "utils/hooks/useAuth";
 import { SignOut } from "@phosphor-icons/react";
 import { capitalize } from "utils/helpers/string";
+import { useRouter } from "next/router";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
+
+  const { pathname } = useRouter();
 
   return (
     <Container>
@@ -28,6 +31,7 @@ export const SideMenu = () => {
           href={RoutesPath.profile}
           description={user?.name}
           iconPath={IconsPath.Doctor}
+          disabled={pathname !== RoutesPath.profile}
           fullWidth
         />
         {user.super && (
@@ -35,6 +39,7 @@ export const SideMenu = () => {
             label="ChatGPT AI"
             href={RoutesPath.prompt}
             iconPath={IconsPath.GPT}
+            disabled={pathname !== RoutesPath.prompt}
             fullWidth
           />
         )}
