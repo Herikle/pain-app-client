@@ -4,17 +4,21 @@ import styled from "styled-components";
 
 type Props = {
   children: React.ReactNode;
-  open: boolean;
-  onClose: () => void;
+  open?: boolean;
+  onClose?: () => void;
 };
 
 export const Modal = ({ children, onClose, open }: Props) => {
+  const isOpen = open ?? true;
+
   return (
     <Portal>
-      <>
-        <ModalOverlay />
-        <Container>{children}</Container>
-      </>
+      {isOpen && (
+        <>
+          <ModalOverlay onClick={onClose} />
+          <Container>{children}</Container>
+        </>
+      )}
     </Portal>
   );
 };
@@ -35,7 +39,7 @@ const Container = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001;
+  z-index: 1100;
   background-color: ${theme.colors.pure_white};
   padding: 2rem;
 `;
