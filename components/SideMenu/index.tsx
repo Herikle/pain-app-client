@@ -7,6 +7,7 @@ import { IconsPath } from "utils/icons";
 import { MenuLink } from "@components/MenuLink";
 import { useAuth } from "utils/hooks/useAuth";
 import { SignOut } from "@phosphor-icons/react";
+import { capitalize } from "utils/helpers/string";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
@@ -23,7 +24,7 @@ export const SideMenu = () => {
           />
         </Link>
         <MenuLink
-          label="Doctor"
+          label={capitalize(user?.role) ?? "Doctor"}
           href={RoutesPath.profile}
           description={user?.name}
           iconPath={IconsPath.Doctor}
