@@ -16,6 +16,8 @@ export const VerifyUser = () => {
       if (ProtectedRoutesPath.includes(pathname)) {
         if (!user.role) {
           openWelcomeModal(true);
+        } else {
+          openWelcomeModal(false);
         }
       }
     }

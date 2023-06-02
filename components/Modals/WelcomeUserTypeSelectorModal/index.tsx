@@ -9,6 +9,7 @@ import { transparentize } from "polished";
 import { Button } from "@components/Button";
 import { useState } from "react";
 import { IRole } from "types";
+import { useSetUserRole } from "@queries/account/useAccount";
 
 type ChildProps = {
   onClose: () => void;
@@ -16,6 +17,17 @@ type ChildProps = {
 
 const Child = ({ onClose }: ChildProps) => {
   const [selected, setSelected] = useState<IRole>(null);
+
+  const setUserRole = useSetUserRole();
+
+  const onSubmit = async () => {
+    await setUserRole.mutateAsync({
+      body: {
+        role: selected,
+      },
+    });
+    onClose();
+  };
 
   return (
     <Modal open={true} onClose={onClose}>
@@ -59,6 +71,8 @@ const Child = ({ onClose }: ChildProps) => {
           color="primary"
           width="340px"
           disabled={!selected}
+          onClick={onSubmit}
+          loading={setUserRole.isLoading}
         >
           Proceed
         </Button>
