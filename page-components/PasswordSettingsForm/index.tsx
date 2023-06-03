@@ -37,11 +37,17 @@ export const PasswordSettingsForm = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    watch,
   } = useForm<PasswordSettingsFormType>({
     resolver: zodResolver(PasswordSettingsSchema),
   });
 
   const updatePassword = useUpdatePasswordAccount();
+
+  const isAllEmpty =
+    !watch("current_password") ||
+    !watch("new_password") ||
+    !watch("confirm_password");
 
   const onSubmit = async (data: PasswordSettingsFormType) => {
     await updatePassword.mutateAsync({
@@ -83,7 +89,11 @@ export const PasswordSettingsForm = () => {
             />
           </Grid>
         </Grid>
-        <Button loading={updatePassword.isLoading} width="340px">
+        <Button
+          disabled={isAllEmpty}
+          loading={updatePassword.isLoading}
+          width="340px"
+        >
           Save changes
         </Button>
       </Container>
