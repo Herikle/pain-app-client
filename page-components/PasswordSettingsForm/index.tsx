@@ -24,8 +24,8 @@ const PasswordSettingsSchema = z
       return data.new_password === data.confirm_password;
     },
     {
-      message: "Passwords don't match",
-      path: ["confirm_new_password"],
+      message: "Your passwords doesn't coincide.",
+      path: ["confirm_password"],
     }
   );
 

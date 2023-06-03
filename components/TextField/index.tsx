@@ -22,7 +22,7 @@ export const TextField = React.forwardRef(
         )}
         <Input ref={ref} {...rest} />
         {error && (
-          <Text variant="caption" color="cta">
+          <Text variant="body2" color="red_danger">
             {error}
           </Text>
         )}

@@ -15,6 +15,7 @@ const LightThemeColors = {
   light_grey: "#B7B7B7",
   medium_grey: "#838383",
   pastel_green: "#92E3A9",
+  red_danger: "#FF0000",
 };
 
 const LightThemeHover = {
