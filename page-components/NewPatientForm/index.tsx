@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
-  date_of_birth: z.string().nonempty("Date of birth is required"),
+  birth_date: z.string().nonempty("Date of birth is required"),
   about: z.string().optional(),
 });
 
@@ -47,8 +47,8 @@ export const NewPatientForm = () => {
               label="Date of birth"
               placeholder="DD/MM/YYYY"
               required
-              {...register("date_of_birth")}
-              error={errors.date_of_birth?.message}
+              {...register("birth_date")}
+              error={errors.birth_date?.message}
             />
           </Grid>
           <Grid xs={12}>
