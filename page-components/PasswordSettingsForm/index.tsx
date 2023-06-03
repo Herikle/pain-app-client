@@ -36,8 +36,7 @@ export const PasswordSettingsForm = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
-    getValues,
+    formState: { errors },
   } = useForm<PasswordSettingsFormType>({
     resolver: zodResolver(PasswordSettingsSchema),
   });
