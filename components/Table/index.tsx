@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { SortCaret } from "./components/SortCaret";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { PlusCircle } from "@phosphor-icons/react";
+import { AddButton } from "@components/AddButton";
 
 type RenderType = <V = any, T = any>(value: V, item: T) => JSX.Element;
 
@@ -20,6 +21,7 @@ type Props = {
   header?: {
     title: string;
     onPlusClick?: () => void;
+    plusHref?: string;
   };
 };
 
@@ -28,18 +30,15 @@ export const Table = ({ columns, data, CallToAction, header }: Props) => {
 
   const showCallToAction = thereIsNoData && CallToAction;
 
+  const showHeader = !!header.onPlusClick || !!header.plusHref;
+
   return (
     <Wrapper>
       {header && (
         <Header>
           <Text variant="h1">{header.title}</Text>
-          {header.onPlusClick && (
-            <PlusCircle
-              cursor="pointer"
-              size={32}
-              weight="fill"
-              color={theme.colors.primary}
-            />
+          {showHeader && (
+            <AddButton onClick={header.onPlusClick} href={header.plusHref} />
           )}
         </Header>
       )}

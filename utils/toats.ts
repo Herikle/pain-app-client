@@ -21,3 +21,7 @@ export const ToastError = (error: AxiosError<any>) => {
     toast.error("Something went wrong!");
   }
 };
+
+export const ToastSuccess = (message: string) => {
+  toast.success(message);
+};
