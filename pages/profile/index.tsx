@@ -4,6 +4,8 @@ import { Table } from "@components/Table";
 import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
+import { AccountForm } from "@page-components/AccountForm";
+import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
 import { PlusCircle } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { useAuth } from "@utils/hooks/useAuth";
@@ -62,10 +64,20 @@ export default function ProfilePage() {
           }}
           CallToAction={<CallToAction />}
         />
+        <FormContainer>
+          <AccountForm />
+        </FormContainer>
+        <FormContainer>
+          <PasswordSettingsForm />
+        </FormContainer>
       </Container>
     </LoggedLayout>
   );
 }
+
+const FormContainer = styled.div`
+  margin-top: 2rem;
+`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

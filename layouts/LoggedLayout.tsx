@@ -42,6 +42,7 @@ const Content = styled.div`
   padding: 5rem;
   width: 100%;
   height: 100vh;
+  overflow-y: auto;
 `;
 const Container = styled.div`
   display: flex;
