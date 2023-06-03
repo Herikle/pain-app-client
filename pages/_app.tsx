@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Raleway } from "next/font/google";
 import Head from "next/head";
 import { useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
@@ -9,7 +9,7 @@ import "@styles/global.css";
 import { Modals } from "@components/Modals";
 import { VerifyUser } from "@logic-components/VerifyUser";
 
-const inter = Inter({ subsets: ["latin"] });
+const raleway = Raleway({ subsets: ["latin"] });
 
 type ApplicationProps = {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ const Application = ({ children }: ApplicationProps) => {
     <>
       <style jsx global>{`
         html {
-          font-family: ${inter.style.fontFamily};
+          font-family: ${raleway.style.fontFamily};
         }
       `}</style>
       <main>

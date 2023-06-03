@@ -1,15 +1,12 @@
 import styled from "styled-components";
-import { Raleway } from "next/font/google";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
 
-const raleway = Raleway({ subsets: ["latin"] });
-
 export const BackgroundVideo = () => {
   return (
-    <Container className={raleway.className}>
+    <Container>
       <Video src="/video/video-background.mp4" autoPlay muted loop />
       <Overlay />
       <Apresentation>

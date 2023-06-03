@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Raleway } from "next/font/google";
 import styled from "styled-components";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
@@ -9,8 +8,6 @@ import { RoutesPath } from "utils/routes";
 import { IconsPath } from "utils/icons";
 import { MenuLink } from "@components/MenuLink";
 import { useAuth } from "utils/hooks/useAuth";
-
-const raleway = Raleway({ subsets: ["latin"] });
 
 export const TOP_BAR_HEIGHT_PIXELS = 84;
 
@@ -49,7 +46,7 @@ export const TopBar = () => {
         />
       ) : (
         <Link href={RoutesPath.login}>
-          <Button variant="outlined" font={raleway} textVariant="body1Bold">
+          <Button variant="outlined" textVariant="body1Bold">
             Log in
           </Button>
         </Link>
