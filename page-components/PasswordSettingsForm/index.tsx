@@ -7,9 +7,9 @@ import { Button } from "@components/Button";
 
 export const PasswordSettingsForm = () => {
   return (
-    <Container>
-      <Text variant="h1">Password settings</Text>
-      <form>
+    <form>
+      <Container>
+        <Text variant="h1">Password settings</Text>
         <Grid container spacing={4}>
           <Grid xs={4}>
             <TextField type="password" label="Type your current password" />
@@ -21,9 +21,9 @@ export const PasswordSettingsForm = () => {
             <TextField type="password" label="Confirm your new password" />
           </Grid>
         </Grid>
-      </form>
-      <Button width="340px">Save changes</Button>
-    </Container>
+        <Button width="340px">Save changes</Button>
+      </Container>
+    </form>
   );
 };
 

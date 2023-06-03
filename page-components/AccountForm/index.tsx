@@ -7,9 +7,9 @@ import { Button } from "@components/Button";
 
 export const AccountForm = () => {
   return (
-    <Container>
-      <Text variant="h1">Account info</Text>
-      <form>
+    <form>
+      <Container>
+        <Text variant="h1">Account info</Text>
         <Grid container spacing={4}>
           <Grid xs={6}>
             <TextField label="Display name" />
@@ -21,9 +21,9 @@ export const AccountForm = () => {
             <TextField label="E-mail" />
           </Grid>
         </Grid>
-      </form>
-      <Button width="340px">Save changes</Button>
-    </Container>
+        <Button width="340px">Save changes</Button>
+      </Container>
+    </form>
   );
 };
 
