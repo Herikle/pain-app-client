@@ -11,10 +11,15 @@ interface Props extends TextareaAutosizeProps {
   fullWidth?: boolean;
   width?: string;
   error?: string;
+  minRows?: number;
+  maxRows?: number;
 }
 
 export const TextArea = React.forwardRef(
-  ({ label, fullWidth, width, error, ...rest }: Props, ref: any) => {
+  (
+    { label, fullWidth, width, error, rows, minRows, maxRows, ...rest }: Props,
+    ref: any
+  ) => {
     return (
       <Container $fullWidth={fullWidth} $width={width}>
         {label && (
@@ -22,7 +27,12 @@ export const TextArea = React.forwardRef(
             <Text variant="body2Bold">{label}</Text>
           </Label>
         )}
-        <TextAreaStyled ref={ref} {...rest} />
+        <TextAreaStyled
+          ref={ref}
+          {...rest}
+          minRows={minRows}
+          maxRows={maxRows}
+        />
         {error && (
           <Text variant="caption" color="cta">
             {error}
