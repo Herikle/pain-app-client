@@ -4,4 +4,5 @@ export const IconsPath = {
   GPTBlack: "/icons/gpt-black.svg",
   DoctorBlack: "/icons/doctor-black.svg",
   Doctor: "/icons/doctor.svg",
+  Patient: "/icons/patient.svg",
 };

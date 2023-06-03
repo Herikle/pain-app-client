@@ -8,6 +8,7 @@ import { AccountForm } from "@page-components/AccountForm";
 import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
+import { RoutesPath } from "@utils/routes";
 import styled from "styled-components";
 
 const FakeTableData = [
@@ -58,7 +59,7 @@ export default function ProfilePage() {
           data={FakeTableData}
           header={{
             title: "Patient List",
-            onPlusClick: () => console.log("Add Patient Clicked"),
+            plusHref: RoutesPath.new_patient,
           }}
           CallToAction={<CallToAction />}
         />

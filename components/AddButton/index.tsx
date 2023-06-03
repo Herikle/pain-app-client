@@ -1,4 +1,3 @@
-import { Text } from "@components/Text";
 import { PlusCircle } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import Link from "next/link";
@@ -12,7 +11,7 @@ type AddButtonProps = {
 export const AddButton = ({ onClick, href }: AddButtonProps) => {
   const render = (children) => {
     if (href) {
-      <Link href={href}>{children}</Link>;
+      return <Link href={href}>{children}</Link>;
     }
 
     return children;
@@ -20,6 +19,7 @@ export const AddButton = ({ onClick, href }: AddButtonProps) => {
 
   return render(
     <PlusCircle
+      onClick={onClick}
       cursor="pointer"
       size={32}
       weight="fill"

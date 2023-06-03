@@ -1,9 +1,18 @@
-export const RoutesPath = {
+const ProtectedRoutes = {
+  prompt: "/prompt",
+  profile: "/profile",
+  new_patient: "/patient",
+};
+
+const PublicRoutes = {
   home: "/",
   login: "/login",
   register: "/register",
-  prompt: "/prompt",
-  profile: "/profile",
 };
 
-export const ProtectedRoutesPath = [RoutesPath.profile, RoutesPath.prompt];
+export const RoutesPath = {
+  ...ProtectedRoutes,
+  ...PublicRoutes,
+};
+
+export const ProtectedRoutesPath = Object.values(ProtectedRoutes);
