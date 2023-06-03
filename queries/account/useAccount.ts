@@ -65,3 +65,33 @@ export const useUpdateAccount = () => {
     },
   });
 };
+
+type UpdatePasswordAccountPaylod = {
+  body: {
+    current_password: string;
+    new_password: string;
+    confirm_password: string;
+  };
+};
+
+const updatePasswordAccount = async ({ body }: UpdatePasswordAccountPaylod) => {
+  await request({
+    service: "account",
+    url: "/password",
+    method: "PATCH",
+    data: body,
+  });
+
+  return true;
+};
+
+export const useUpdatePasswordAccount = () => {
+  return useMutation(updatePasswordAccount, {
+    onSuccess: () => {
+      ToastSuccess("Password updated!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};

@@ -5,8 +5,8 @@ import Image from "next/image";
 import styled from "styled-components";
 
 type Props = {
-  label: string;
   iconPath: string;
+  label?: string;
   description?: string;
 };
 

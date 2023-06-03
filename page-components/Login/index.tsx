@@ -58,7 +58,6 @@ export const Login = ({ onSubmit, loading }: Props) => {
         />
         <TextField
           label="Your password"
-          name="password"
           type="password"
           required
           {...register("password")}

@@ -51,7 +51,9 @@ export const MenuLink = ({
       {PhosphorIcon ? (
         <PhosphorIcon size={36} color={theme.colors.pure_white} />
       ) : (
-        <Image src={iconPath} alt="Chat GPT icon" width="36" height="36" />
+        iconPath && (
+          <Image src={iconPath} alt="Chat GPT icon" width="36" height="36" />
+        )
       )}
       <DescriptionContainer>
         {description && <Text color="pure_white">{description}</Text>}

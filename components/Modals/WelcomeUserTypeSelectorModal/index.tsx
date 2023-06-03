@@ -18,7 +18,7 @@ type ChildProps = {
 };
 
 const Child = ({ onClose }: ChildProps) => {
-  const [selected, setSelected] = useState<IRole>(null);
+  const [selected, setSelected] = useState<IRole | null>(null);
 
   const [done, setDone] = useState(false);
 
@@ -27,7 +27,7 @@ const Child = ({ onClose }: ChildProps) => {
   const onSubmit = async () => {
     await setUserRole.mutateAsync({
       body: {
-        role: selected,
+        role: selected as IRole,
       },
     });
     setDone(true);

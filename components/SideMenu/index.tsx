@@ -34,7 +34,7 @@ export const SideMenu = () => {
           disabled={pathname !== RoutesPath.profile}
           fullWidth
         />
-        {user.super && (
+        {user?.super && (
           <MenuLink
             label="ChatGPT AI"
             href={RoutesPath.prompt}

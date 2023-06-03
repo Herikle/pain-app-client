@@ -30,9 +30,9 @@ export default function PromptPage() {
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
 
-  const [gptResponse, setGptResponse] = useState(null);
+  const [gptResponse, setGptResponse] = useState<string | null>(null);
 
-  const [tokensUsage, setTokensUsage] = useState<tokensUsage>(null);
+  const [tokensUsage, setTokensUsage] = useState<tokensUsage | null>(null);
 
   const noAttributes = Object.keys(attributes).length === 0;
 

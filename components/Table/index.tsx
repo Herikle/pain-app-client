@@ -30,7 +30,7 @@ export const Table = ({ columns, data, CallToAction, header }: Props) => {
 
   const showCallToAction = thereIsNoData && CallToAction;
 
-  const showHeader = !!header.onPlusClick || !!header.plusHref;
+  const showHeader = !!header?.onPlusClick || !!header?.plusHref;
 
   return (
     <Wrapper>
