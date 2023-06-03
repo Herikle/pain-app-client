@@ -67,8 +67,6 @@ export default function ProfilePage() {
   );
 }
 
-const TableContainer = styled.div``;
-
 const Container = styled(FlexColumn)`
   align-items: flex-start;
   gap: 2rem;
