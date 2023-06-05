@@ -5,9 +5,17 @@ import { LoggedLayout } from "@layouts/LoggedLayout";
 import { NewPatientForm } from "@page-components/NewPatientForm";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
+import { useEffect } from "react";
+import { useSetSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
 
 export default function CreatePatient() {
+  const setSelectedPatient = useSetSelectedPatient();
+
+  useEffect(() => {
+    setSelectedPatient(null);
+  }, [setSelectedPatient]);
+
   return (
     <LoggedLayout>
       <Container>
