@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
+import { useCreatePatient } from "@queries/patient/usePatient";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -25,8 +26,12 @@ export const NewPatientForm = () => {
     resolver: zodResolver(newPatientSchema),
   });
 
+  const createPatient = useCreatePatient();
+
   const onSubmit = (data: PatientSchema) => {
-    console.log(data);
+    createPatient.mutate({
+      body: data,
+    });
   };
 
   return (
@@ -46,6 +51,7 @@ export const NewPatientForm = () => {
             <TextField
               label="Date of birth"
               placeholder="DD/MM/YYYY"
+              type="date"
               required
               {...register("birth_date")}
               error={errors.birth_date?.message}
@@ -62,7 +68,9 @@ export const NewPatientForm = () => {
             />
           </Grid>
         </Grid>
-        <Button width="160px">Add patient</Button>
+        <Button width="160px" loading={createPatient.isLoading}>
+          Add patient
+        </Button>
       </Container>
     </form>
   );

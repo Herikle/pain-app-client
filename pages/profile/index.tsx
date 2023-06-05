@@ -6,31 +6,34 @@ import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import { AccountForm } from "@page-components/AccountForm";
 import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
+import { useGetPatients } from "@queries/patient/useGetPatients";
+import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
+import { useMemo } from "react";
 import styled from "styled-components";
-
-const FakeTableData = [
-  {
-    name: "John Doe",
-    age: 30,
-    episodes_count: 5,
-  },
-  {
-    name: "Julia Smith",
-    age: 37,
-    episodes_count: 12,
-  },
-  {
-    name: "Mary Jane",
-    age: 27,
-    episodes_count: 8,
-  },
-];
+import { IPatient } from "types";
 
 export default function ProfilePage() {
   const { user } = useAuth();
+
+  const getPatients = useGetPatients({ page: 0, limit: 5 });
+
+  const patients = useMemo(
+    () => getPatients.data?.results ?? [],
+    [getPatients.data]
+  );
+
+  const renderAge = (birth_date: string) => {
+    const age = getAgeByBirthDate(birth_date);
+
+    return age;
+  };
+
+  const mountPatientHref = (patient: IPatient) => {
+    return RoutesPath.patient.replace(":id", patient._id);
+  };
 
   return (
     <LoggedLayout>
@@ -48,20 +51,23 @@ export default function ProfilePage() {
               label: "Name",
             },
             {
-              accessor: "age",
+              accessor: "birth_date",
               label: "Age",
+              render: renderAge,
             },
             {
               accessor: "episodes_count",
               label: "Pain Episodes",
+              render: (value) => value ?? 0,
             },
           ]}
-          data={FakeTableData}
+          data={patients}
           header={{
             title: "Patient List",
             plusHref: RoutesPath.new_patient,
           }}
           CallToAction={<CallToAction />}
+          mountHref={mountPatientHref}
         />
         <FormContainer>
           <AccountForm />

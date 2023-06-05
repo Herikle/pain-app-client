@@ -5,4 +5,8 @@ export const QueryKeys = {
   Prompt: {
     GetPrompt: "prompt/getPrompt",
   },
+  Patients: {
+    List: "patients/list",
+    ByID: "patients/byId",
+  },
 };
