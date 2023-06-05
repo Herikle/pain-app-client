@@ -3,13 +3,17 @@ import { PlusCircle } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import Link from "next/link";
 import styled from "styled-components";
+import { RoutesPath } from "@utils/routes";
 
 type CallToActionProps = {
   onClick?: () => void;
   href?: string;
 };
 
-export const CallToAction = ({ onClick, href }: CallToActionProps) => {
+export const CallToAction = ({
+  onClick,
+  href = RoutesPath.new_patient,
+}: CallToActionProps) => {
   const renderActionButton = (children) => {
     if (href) {
       return <Link href={href}>{children}</Link>;
