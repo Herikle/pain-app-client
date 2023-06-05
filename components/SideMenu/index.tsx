@@ -9,11 +9,25 @@ import { useAuth } from "utils/hooks/useAuth";
 import { SignOut } from "@phosphor-icons/react";
 import { capitalize } from "utils/helpers/string";
 import { useRouter } from "next/router";
+import { useSelectedPatientValue } from "state/useSelectedPatient";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
 
   const { pathname } = useRouter();
+
+  const selectedPatient = useSelectedPatientValue();
+
+  const patientLinkIsNotAllowed =
+    pathname !== RoutesPath.new_patient && !selectedPatient;
+
+  const patientLinkHref = () => {
+    if (selectedPatient) {
+      return RoutesPath.patient.replace(":id", selectedPatient._id);
+    }
+
+    return RoutesPath.new_patient;
+  };
 
   return (
     <Container>
@@ -36,10 +50,11 @@ export const SideMenu = () => {
         />
         <MenuLink
           label="Patient"
-          href={RoutesPath.new_patient}
+          description={selectedPatient?.name}
+          href={patientLinkHref()}
           iconPath={IconsPath.Patient}
-          disabled={pathname !== RoutesPath.new_patient}
-          notAllowed={pathname !== RoutesPath.new_patient}
+          disabled={!pathname.includes(RoutesPath.new_patient)}
+          notAllowed={patientLinkIsNotAllowed}
           fullWidth
         />
         {user?.super && (

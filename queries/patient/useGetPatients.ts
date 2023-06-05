@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { request } from "@queries/request";
 import { IPatient, Meta } from "types";
 import { QueryKeys } from "@queries/keys";
+import { useReactQueryCache } from "@queries/getByIdFromCache";
 
 type GetPatientsPayload = {
   query: {
@@ -61,11 +62,16 @@ export const useGetPatientById = (
   params: GetPatientByIdPayload["params"],
   enabled = true
 ) => {
+  const { getByIdFromCache } = useReactQueryCache();
+
   return useQuery(
     [QueryKeys.Patients.ByID, params],
     () => getPatientById({ params }),
     {
       enabled,
+      placeholderData: () => {
+        return getByIdFromCache(params.id, QueryKeys.Patients.List);
+      },
     }
   );
 };

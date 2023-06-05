@@ -21,7 +21,7 @@ export const AccountForm = () => {
 
   const updateAccount = useUpdateAccount();
 
-  const { register, handleSubmit, watch, reset } = useForm<AccountFormType>({
+  const { register, handleSubmit, watch } = useForm<AccountFormType>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
       name: user?.name,
