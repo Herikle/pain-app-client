@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "@styles/global.css";
 import { Modals } from "@components/Modals";
 import { VerifyUser } from "@logic-components/VerifyUser";
+import { FiltersController } from "@logic-components/FiltersController";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ const Application = ({ children }: ApplicationProps) => {
         <Modals />
         <ToastContainer />
         <VerifyUser />
+        {/* <FiltersController /> */}
       </main>
     </>
   );
