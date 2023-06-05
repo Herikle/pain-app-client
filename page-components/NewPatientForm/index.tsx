@@ -18,13 +18,11 @@ const newPatientSchema = z.object({
 type PatientSchema = z.infer<typeof newPatientSchema>;
 
 export const NewPatientForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PatientSchema>({
+  const { register, handleSubmit, formState } = useForm<PatientSchema>({
     resolver: zodResolver(newPatientSchema),
   });
+
+  const { errors } = formState;
 
   const createPatient = useCreatePatient();
 

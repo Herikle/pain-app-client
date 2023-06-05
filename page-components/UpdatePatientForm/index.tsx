@@ -23,11 +23,7 @@ type UpdatePatientFormProps = {
 };
 
 export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PatientSchema>({
+  const { register, handleSubmit, formState } = useForm<PatientSchema>({
     resolver: zodResolver(newPatientSchema),
     defaultValues: {
       name: patient.name,
@@ -35,6 +31,8 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       about: patient.about,
     },
   });
+
+  const { errors, isDirty } = formState;
 
   const onSubmit = (data: PatientSchema) => {
     console.log(data);
@@ -74,7 +72,9 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
             />
           </Grid>
         </Grid>
-        <Button width="160px">Save changes</Button>
+        <Button width="160px" disabled={!isDirty}>
+          Save changes
+        </Button>
       </Container>
     </form>
   );

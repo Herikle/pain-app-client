@@ -21,17 +21,22 @@ export const AccountForm = () => {
 
   const updateAccount = useUpdateAccount();
 
-  const { register, handleSubmit, watch } = useForm<AccountFormType>({
-    resolver: zodResolver(accountFormSchema),
-    defaultValues: {
-      name: user?.name,
-    },
-  });
+  const { register, handleSubmit, reset, formState } = useForm<AccountFormType>(
+    {
+      resolver: zodResolver(accountFormSchema),
+      defaultValues: {
+        name: user?.name,
+      },
+    }
+  );
+
+  const { isDirty } = formState;
 
   const onSubmit = async (data: AccountFormType) => {
     await updateAccount.mutateAsync({
       body: data,
     });
+    reset(data);
   };
 
   return (
@@ -46,7 +51,7 @@ export const AccountForm = () => {
         <Button
           width="340px"
           loading={updateAccount.isLoading}
-          disabled={user?.name === watch("name")}
+          disabled={!isDirty}
         >
           Save changes
         </Button>
