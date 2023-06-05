@@ -39,7 +39,7 @@ export default function Patient() {
           <Table
             header={{
               title: "Episodes list",
-              onPlusClick: () => console.log("plus"),
+              onPlusClick: () => alert("Not implemented yet"),
             }}
             columns={[
               {

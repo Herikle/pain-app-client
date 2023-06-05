@@ -36,6 +36,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   const onSubmit = (data: PatientSchema) => {
     console.log(data);
+    alert("Not implemented yet");
   };
 
   return (
