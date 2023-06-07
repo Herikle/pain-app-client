@@ -13,9 +13,14 @@ import {
 import { LightScrollBar, theme } from "@styles/theme";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
-import { getAllAttributesFromPrompt } from "@utils/helpers/prompt";
+import {
+  getAllAttributesFromPrompt,
+  promptHasAttributes,
+} from "@utils/helpers/prompt";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { IconsPath } from "@utils/icons";
+import { Star, Trash } from "@phosphor-icons/react";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 type tokensUsage = {
   prompt_tokens: number;
@@ -25,8 +30,6 @@ type tokensUsage = {
 
 export default function PromptPage() {
   const [prompt, setPrompt] = useState("");
-
-  const promptDebouced = useDebounce<string>(prompt, 1000);
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
 
@@ -42,44 +45,35 @@ export default function PromptPage() {
 
   const savePrompt = useSavePrompt();
 
-  const handlePromptChange = (value: string) => {
-    setPrompt(value);
-  };
+  const generateAttributes = () => {
+    const attributesDetected = getAllAttributesFromPrompt(prompt);
+    if (attributesDetected) {
+      const allAttributesKeys = attributesDetected;
 
-  useEffect(() => {
-    if (promptDebouced) {
-      const attributesDetected = getAllAttributesFromPrompt(promptDebouced);
-      if (attributesDetected) {
-        const allAttributesKeys = attributesDetected;
+      const newAttributes = {};
 
-        const newAttributes = {};
+      allAttributesKeys.forEach((key) => {
+        if (!attributes[key]) {
+          newAttributes[key] = "";
+        }
+      });
 
-        allAttributesKeys.forEach((key) => {
-          if (!attributes[key]) {
-            newAttributes[key] = "";
-          }
-        });
+      const currentAttibutes = { ...attributes };
 
-        const currentAttibutes = { ...attributes };
+      Object.keys(currentAttibutes).forEach((key) => {
+        if (!attributesDetected.includes(key)) {
+          delete currentAttibutes[key];
+        }
+      });
 
-        Object.keys(currentAttibutes).forEach((key) => {
-          if (!attributesDetected.includes(key)) {
-            delete currentAttibutes[key];
-          }
-        });
-
-        setAttributes({
-          ...currentAttibutes,
-          ...newAttributes,
-        });
-      } else {
-        setAttributes({});
-      }
+      setAttributes({
+        ...currentAttibutes,
+        ...newAttributes,
+      });
     } else {
       setAttributes({});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promptDebouced]);
+  };
 
   useEffect(() => {
     if (promptSaved.data) {
@@ -135,6 +129,10 @@ export default function PromptPage() {
       return gptResponse;
     }
 
+    if (noAttributes) {
+      return "No input inserted. First, write a prompt on the step 1 field.";
+    }
+
     return "GPT response will be shown here. You can also edit the prompt.";
   };
 
@@ -165,27 +163,102 @@ export default function PromptPage() {
   return (
     <LoggedLayout onlySuper>
       <Container>
-        <UserInteractionContainer>
-          <Text variant="body2Bold">ChatGPT AI</Text>
-          <GptResponse>
-            <Text
-              variant="body2"
-              whiteSpace="pre-line"
-              color={!!gptResponse ? "font_color" : "secondary_font"}
-            >
-              {getResponseText()}
-            </Text>
-          </GptResponse>
-          <TextAreaWithSend
-            value={prompt}
-            onChange={handlePromptChange}
-            placeholder="Start writing a prompt..."
-            onClickSend={sendPrompt}
-            loading={generateResponse.isLoading}
-          />
+        <UserInteractionContainer opacity={1}>
+          <WritePromptContainer gap={1}>
+            <Text variant="body2Bold">Step 1: Input your prompt</Text>
+            <TextArea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Write your prompt..."
+              minRows={15}
+            />
+            <WritePromptBottom>
+              <Button
+                width="300px"
+                disabled={!promptHasAttributes(prompt)}
+                onClick={generateAttributes}
+              >
+                Generate attribute form
+              </Button>
+              <FlexRow gap={1.5}>
+                <Trash
+                  size={22}
+                  cursor="pointer"
+                  color={theme.colors.text_switched}
+                />
+                <Star
+                  size={22}
+                  cursor="pointer "
+                  color={theme.colors.text_switched}
+                />
+              </FlexRow>
+            </WritePromptBottom>
+          </WritePromptContainer>
+          <LoadSavedPromptContainer>
+            <Text variant="body2Bold">Load a saved prompt</Text>
+            <SavedPromptList>
+              <Text align="center">
+                {"You don't have any saved prompts. Press"}{" "}
+                <Star
+                  size={16}
+                  cursor="pointer "
+                  color={theme.colors.text_switched}
+                />{" "}
+                {"to save a prompt you write."}
+              </Text>
+            </SavedPromptList>
+          </LoadSavedPromptContainer>
         </UserInteractionContainer>
-        <StatsContainer>
-          <TextItens>
+        <Attributes opacity={noAttributes ? 0.5 : 1}>
+          <Text variant="body2Bold">Step 2: Edit your attributes</Text>
+          {noAttributes ? (
+            <Text mt={1} px={0.5}>
+              {
+                "You haven't generated any attribute form. Start writing a prompt with some attributes."
+              }
+            </Text>
+          ) : (
+            <FlexColumn gap={1}>
+              <Grid container spacing={4}>
+                {Object.keys(attributes).map((attribute) => (
+                  <Grid xs={4} key={attribute}>
+                    <TextArea
+                      label={attribute}
+                      fullWidth
+                      value={attributes[attribute]}
+                      onChange={(e) =>
+                        updateAttributeValue(attribute, e.target.value)
+                      }
+                      placeholder="Enter a value for this attribute"
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Button
+                width="300px"
+                onClick={sendPrompt}
+                loading={generateResponse.isLoading}
+              >
+                Run prompt with those attributes
+              </Button>
+            </FlexColumn>
+          )}
+        </Attributes>
+        <PromptResponse opacity={noAttributes ? 0.5 : 1}>
+          <PromptContainer gap={1}>
+            <Text variant="body2Bold">Check your input</Text>
+            <GptResponse>
+              <Text
+                variant="body2"
+                whiteSpace="pre-line"
+                color={!!gptResponse ? "font_color" : "medium_grey"}
+              >
+                {getResponseText()}
+              </Text>
+            </GptResponse>
+            <Button width="300px">Start over</Button>
+          </PromptContainer>
+          <LoadSavedPromptContainer>
             <Text variant="body2Bold">Stats</Text>
             <TokensInfo>
               <FlexRow>
@@ -208,67 +281,27 @@ export default function PromptPage() {
               </FlexRow>
               <Text>{totalUsageText()}</Text>
             </TokensInfo>
-            <Attributes>
-              <Text variant="body2Bold">Attributes</Text>
-              {noAttributes ? (
-                <Text align="center" mt={1} px={1}>
-                  You haven&apos;t entered any {"{{"}attribute{"}}"}. Attributes
-                  you enter will show here.
-                </Text>
-              ) : (
-                <>
-                  {Object.keys(attributes).map((attribute) => (
-                    <TextArea
-                      key={attribute}
-                      label={attribute}
-                      fullWidth
-                      value={attributes[attribute]}
-                      onChange={(e) =>
-                        updateAttributeValue(attribute, e.target.value)
-                      }
-                      placeholder="Enter a value for this attribute"
-                    />
-                  ))}
-                </>
-              )}
-            </Attributes>
-          </TextItens>
-          <Button
-            onClick={onSavePrompt}
-            loading={savePrompt.isLoading}
-            fullWidth
-          >
-            Save this prompt
-          </Button>
-        </StatsContainer>
+          </LoadSavedPromptContainer>
+        </PromptResponse>
       </Container>
     </LoggedLayout>
   );
 }
 
-const Attributes = styled(FlexColumn)`
+type CommonOpacityProps = {
+  opacity: number;
+};
+
+const Attributes = styled(FlexColumn)<CommonOpacityProps>`
   margin-top: 2rem;
   width: 100%;
-  max-height: 50vh;
-  overflow-y: auto;
+  opacity: ${(props) => props.opacity};
 `;
 
 const TokensInfo = styled(FlexColumn)`
   margin-top: 2rem;
   align-items: flex-start;
   gap: 1rem;
-`;
-
-const TextItens = styled(FlexColumn)`
-  align-items: flex-start;
-  width: 100%;
-`;
-
-const StatsContainer = styled(FlexColumn)`
-  align-items: flex-start;
-  width: 30%;
-  height: 100%;
-  justify-content: space-between;
 `;
 
 const GptResponse = styled.div`
@@ -280,14 +313,47 @@ const GptResponse = styled.div`
   ${LightScrollBar};
 `;
 
-const UserInteractionContainer = styled(FlexColumn)`
-  width: 70%;
-  height: 100%;
+const WritePromptBottom = styled(FlexRow)`
+  justify-content: space-between;
 `;
 
-const Container = styled(FlexRow)`
+const SavedPromptList = styled(FlexColumn)`
+  height: 265px;
+  justify-content: center;
+  overflow: auto;
+`;
+
+const LoadSavedPromptContainer = styled(FlexColumn)`
+  width: 30%;
+`;
+
+const WritePromptContainer = styled(FlexColumn)`
+  width: 70%;
+`;
+
+const PromptContainer = styled(FlexColumn)`
+  height: 100%;
+  width: 70%;
+`;
+
+const UserInteractionContainer = styled(FlexRow)<CommonOpacityProps>`
+  align-items: flex-start;
+  width: 100%;
+  gap: 2rem;
+  opacity: ${(props) => props.opacity};
+`;
+
+const PromptResponse = styled(FlexRow)<CommonOpacityProps>`
+  align-items: flex-start;
+  width: 100%;
+  gap: 2rem;
+  opacity: ${(props) => props.opacity};
+  min-height: 20rem;
+  height: 20rem;
+`;
+
+const Container = styled(FlexColumn)`
   gap: 4rem;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 100%;
 `;
