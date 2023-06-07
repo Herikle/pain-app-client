@@ -12,6 +12,7 @@ import {
   getPureSortValue,
   toggleAscDescSortByValue,
 } from "@utils/helpers/sortByQuery";
+import { LoadingWrapper } from "@components/LoadingWrapper";
 
 type RenderType = (value: any, item: any) => React.ReactNode;
 
@@ -31,6 +32,7 @@ type Props = {
     onPlusClick?: () => void;
     plusHref?: string;
   };
+  isLoading?: boolean;
 };
 
 export const Table = ({
@@ -39,10 +41,11 @@ export const Table = ({
   mountHref,
   CallToAction,
   header,
+  isLoading,
 }: Props) => {
   const thereIsNoData = !(data?.length > 0);
 
-  const showCallToAction = thereIsNoData && CallToAction;
+  const showCallToAction = thereIsNoData && CallToAction && !isLoading;
 
   const showHeader = !!header?.onPlusClick || !!header?.plusHref;
 
@@ -132,9 +135,11 @@ export const Table = ({
             ))}
           </tbody>
         </TableStyled>
-        {showCallToAction && (
-          <CallToActionContainer>{CallToAction}</CallToActionContainer>
-        )}
+        <LoadingWrapper overContainer loading={!!isLoading}>
+          {showCallToAction && (
+            <CallToActionContainer>{CallToAction}</CallToActionContainer>
+          )}
+        </LoadingWrapper>
       </Container>
     </Wrapper>
   );
@@ -192,6 +197,8 @@ const TableStyled = styled.table`
 const Container = styled.div`
   border: 1px solid ${theme.colors.primary};
   border-radius: 4px;
+  position: relative;
+  min-height: 15rem;
 `;
 
 const Wrapper = styled(FlexColumn)`

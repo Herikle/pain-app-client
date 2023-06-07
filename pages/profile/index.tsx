@@ -71,6 +71,7 @@ export default function ProfilePage() {
           }}
           CallToAction={<CallToAction />}
           mountHref={mountPatientHref}
+          isLoading={getPatients.isLoading || getPatients.isPreviousData}
         />
         <FormContainer>
           <AccountForm />

@@ -37,6 +37,7 @@ export const useGetPatients = (
     () => getPatients({ query: params }),
     {
       enabled,
+      keepPreviousData: true,
     }
   );
 };
