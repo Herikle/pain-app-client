@@ -244,7 +244,7 @@ export default function PromptPage() {
         </Attributes>
         <PromptResponse opacity={noAttributes ? 0.5 : 1}>
           <PromptContainer gap={1}>
-            <Text variant="body2Bold">Check your input</Text>
+            <Text variant="body2Bold">Check your output</Text>
             <GptResponse>
               <Text
                 variant="body2"
