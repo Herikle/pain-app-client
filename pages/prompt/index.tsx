@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
-import { TextAreaWithSend } from "@components/TextAreaWithSend";
 import { useGetPrompt } from "@queries/prompt/useGetPrompt";
 import {
   useGenerateCompletion,
@@ -17,10 +16,9 @@ import {
   getAllAttributesFromPrompt,
   promptHasAttributes,
 } from "@utils/helpers/prompt";
-import { useDebounce } from "@utils/hooks/useDebounce";
 import { IconsPath } from "@utils/icons";
 import { Star, Trash } from "@phosphor-icons/react";
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Unstable_Grid2";
 
 type tokensUsage = {
   prompt_tokens: number;
