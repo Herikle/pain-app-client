@@ -6,6 +6,12 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { PlusCircle } from "@phosphor-icons/react";
 import { AddButton } from "@components/AddButton";
 import Link from "next/link";
+import { useFilters } from "state/useFilters";
+import {
+  SORT_BY_KEY,
+  getPureSortValue,
+  toggleAscDescSortByValue,
+} from "@utils/helpers/sortByQuery";
 
 type RenderType = (value: any, item: any) => React.ReactNode;
 
@@ -40,12 +46,42 @@ export const Table = ({
 
   const showHeader = !!header?.onPlusClick || !!header?.plusHref;
 
+  const { apply, getValue } = useFilters();
+
   const renderRowItem = (item: any, children) => {
     if (mountHref) {
       return <Link href={mountHref(item)}>{children}</Link>;
     }
 
     return children;
+  };
+
+  const onSortClick = (accessor: string) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const value = getValue(SORT_BY_KEY);
+    if (value) {
+      const pureValue = getPureSortValue(value);
+      if (pureValue === accessor) {
+        apply(SORT_BY_KEY, toggleAscDescSortByValue(value));
+      } else {
+        apply(SORT_BY_KEY, `${accessor}`);
+      }
+      return;
+    }
+    apply(SORT_BY_KEY, accessor);
+  };
+
+  const isSortedBy = (accessor: string) => {
+    const value = getValue(SORT_BY_KEY);
+    if (value) {
+      const pureValue = getPureSortValue(value);
+      const isSorted = pureValue === accessor;
+      const isDesc = value.startsWith("-");
+
+      return { isSorted, isDesc };
+    }
+    return {};
   };
 
   return (
@@ -64,9 +100,12 @@ export const Table = ({
             <tr>
               {columns.map((column) => (
                 <Th key={column.accessor}>
-                  <FlexRow>
+                  <FlexRow
+                    style={{ cursor: "pointer" }}
+                    onClick={onSortClick(column.accessor)}
+                  >
                     <Text color="medium_grey">{column.label}</Text>
-                    <SortCaret />
+                    <SortCaret {...isSortedBy(column.accessor)} />
                   </FlexRow>
                 </Th>
               ))}
