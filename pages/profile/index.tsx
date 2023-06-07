@@ -12,13 +12,16 @@ import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
 import { useMemo } from "react";
+import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
 
 export default function ProfilePage() {
   const { user } = useAuth();
 
-  const getPatients = useGetPatients({ page: 0, limit: 5 });
+  const filters = useFiltersValue();
+
+  const getPatients = useGetPatients({ page: 0, limit: 5, ...filters });
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
