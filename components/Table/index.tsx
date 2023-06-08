@@ -1,11 +1,8 @@
-import { Text } from "@components/Text";
-import { theme } from "@styles/theme";
-import styled, { css } from "styled-components";
-import { SortCaret } from "./components/SortCaret";
-import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { PlusCircle } from "@phosphor-icons/react";
-import { AddButton } from "@components/AddButton";
 import Link from "next/link";
+import { Text } from "@components/Text";
+import { SortCaret } from "./components/SortCaret";
+import { FlexRow } from "@design-components/Flex";
+import { AddButton } from "@components/AddButton";
 import { useFilters } from "state/useFilters";
 import {
   SORT_BY_KEY,
@@ -13,6 +10,20 @@ import {
   toggleAscDescSortByValue,
 } from "@utils/helpers/sortByQuery";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import {
+  CallToActionContainer,
+  Container,
+  Header,
+  ItemContainer,
+  TableStyled,
+  Td,
+  Th,
+  ThHeader,
+  Thead,
+  Tr,
+  Wrapper,
+} from "./styled";
+import { TablePagination } from "./components/TablePaginator";
 
 type RenderType = (value: any, item: any) => React.ReactNode;
 
@@ -33,6 +44,10 @@ type Props = {
     plusHref?: string;
   };
   isLoading?: boolean;
+  pagination?: {
+    pages: number;
+    onChangePage: (page: number) => void;
+  };
 };
 
 export const Table = ({
@@ -42,6 +57,7 @@ export const Table = ({
   CallToAction,
   header,
   isLoading,
+  pagination,
 }: Props) => {
   const thereIsNoData = !(data?.length > 0);
 
@@ -103,13 +119,10 @@ export const Table = ({
             <tr>
               {columns.map((column) => (
                 <Th key={column.accessor}>
-                  <FlexRow
-                    style={{ cursor: "pointer" }}
-                    onClick={onSortClick(column.accessor)}
-                  >
+                  <ThHeader onClick={onSortClick(column.accessor)}>
                     <Text color="medium_grey">{column.label}</Text>
                     <SortCaret {...isSortedBy(column.accessor)} />
-                  </FlexRow>
+                  </ThHeader>
                 </Th>
               ))}
             </tr>
@@ -141,66 +154,12 @@ export const Table = ({
           )}
         </LoadingWrapper>
       </Container>
+      {pagination?.pages && (
+        <TablePagination
+          pages={pagination?.pages}
+          onChangePage={pagination?.onChangePage}
+        />
+      )}
     </Wrapper>
   );
 };
-
-const Th = styled.th`
-  padding: 1rem;
-`;
-
-const ItemContainer = styled.div`
-  padding: 1rem;
-  padding-inline: 2rem;
-`;
-
-const Td = styled.td`
-  text-align: center;
-`;
-
-type TrProps = {
-  $hasLink: boolean;
-};
-
-const Tr = styled.tr<TrProps>`
-  ${({ $hasLink }) =>
-    $hasLink &&
-    css`
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
-      &:hover {
-        background-color: ${theme.colors.hover_state};
-      }
-    `}
-`;
-
-const Header = styled(FlexRow)`
-  gap: 0;
-  justify-content: space-between;
-`;
-
-const CallToActionContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-`;
-
-const Thead = styled.thead``;
-
-const TableStyled = styled.table`
-  border-spacing: 4rem 2rem;
-  border-collapse: collapse;
-  width: 100%;
-`;
-
-const Container = styled.div`
-  border: 1px solid ${theme.colors.primary};
-  border-radius: 4px;
-  position: relative;
-  min-height: 15rem;
-`;
-
-const Wrapper = styled(FlexColumn)`
-  gap: 1rem;
-`;

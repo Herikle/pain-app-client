@@ -8,6 +8,8 @@ import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
 import { useCreatePatient } from "@queries/patient/usePatient";
+import Router from "next/router";
+import { RoutesPath } from "@utils/routes";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -26,10 +28,11 @@ export const NewPatientForm = () => {
 
   const createPatient = useCreatePatient();
 
-  const onSubmit = (data: PatientSchema) => {
-    createPatient.mutate({
+  const onSubmit = async (data: PatientSchema) => {
+    const created_patient = await createPatient.mutateAsync({
       body: data,
     });
+    Router.push(RoutesPath.patient.replace(":id", created_patient._id));
   };
 
   return (
@@ -38,16 +41,17 @@ export const NewPatientForm = () => {
         <Grid container spacing={4}>
           <Grid xs={6}>
             <TextField
-              label="Name"
+              label="Name *"
               placeholder="Choose a name"
               required
+              autoFocus
               {...register("name")}
               error={errors.name?.message}
             />
           </Grid>
           <Grid xs={6}>
             <TextField
-              label="Date of birth"
+              label="Date of birth *"
               placeholder="DD/MM/YYYY"
               type="date"
               required

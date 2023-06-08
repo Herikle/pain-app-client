@@ -11,7 +11,7 @@ import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
@@ -21,7 +21,13 @@ export default function ProfilePage() {
 
   const filters = useFiltersValue();
 
-  const getPatients = useGetPatients({ page: 0, limit: 5, ...filters });
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const getPatients = useGetPatients({
+    page: currentPage,
+    limit: 5,
+    ...filters,
+  });
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
@@ -72,6 +78,12 @@ export default function ProfilePage() {
           CallToAction={<CallToAction />}
           mountHref={mountPatientHref}
           isLoading={getPatients.isLoading || getPatients.isPreviousData}
+          pagination={{
+            pages: getPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setCurrentPage(page - 1);
+            },
+          }}
         />
         <FormContainer>
           <AccountForm />
