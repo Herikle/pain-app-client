@@ -13,7 +13,7 @@ type GenericListData = {
 export const useReactQueryCache = () => {
   const useQuery = useQueryClient();
 
-  const getByIdFromCache = (_id: string, queryKey: any) => {
+  const getByIdFromCache = <T>(_id: string, queryKey: any) => {
     try {
       const datas = useQuery.getQueriesData([queryKey]) as any[];
       if (datas && datas.length > 0) {
@@ -23,7 +23,7 @@ export const useReactQueryCache = () => {
           if (results) {
             const item = results.find((item) => item._id === _id);
             if (item) {
-              return item;
+              return item as T;
             }
           }
         }

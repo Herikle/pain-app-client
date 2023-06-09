@@ -72,7 +72,7 @@ export const useGetPatientById = (
     {
       enabled,
       placeholderData: () => {
-        return getByIdFromCache(params.id, QueryKeys.Patients.List);
+        return getByIdFromCache<IPatient>(params.id, QueryKeys.Patients.List);
       },
     }
   );
