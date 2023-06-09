@@ -31,6 +31,9 @@ type ColumProps = {
   accessor: string;
   label: string;
   render?: RenderType;
+  options?: {
+    withOverflow?: boolean;
+  };
 };
 
 type Props = {
@@ -134,8 +137,10 @@ export const Table = ({
                   <Td key={column.accessor}>
                     {renderRowItem(
                       item,
-                      <ItemContainer>
-                        <Text variant="body2Bold">
+                      <ItemContainer
+                        $withOverflow={column?.options?.withOverflow}
+                      >
+                        <Text variant="body2Bold" whiteSpace="nowrap">
                           {column.render
                             ? column.render(item[column.accessor], item)
                             : item[column.accessor]}

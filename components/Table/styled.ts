@@ -11,9 +11,21 @@ export const Th = styled.th`
   padding: 1rem;
 `;
 
-export const ItemContainer = styled.div`
+type ItemContainerProps = {
+  $withOverflow?: boolean;
+};
+
+export const ItemContainer = styled.div<ItemContainerProps>`
   padding: 1rem;
   padding-inline: 1.5rem;
+  ${({ $withOverflow }) =>
+    $withOverflow &&
+    css`
+      max-width: 200px;
+      min-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `}
 `;
 
 export const Td = styled.td`
@@ -46,6 +58,7 @@ export const CallToActionContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  height: 100%;
 `;
 
 export const Thead = styled.thead``;
@@ -60,9 +73,12 @@ export const Container = styled.div`
   border: 1px solid ${theme.colors.primary};
   border-radius: 4px;
   position: relative;
-  min-height: 15rem;
+  min-height: 20rem;
+  height: 20rem;
   min-width: 500px;
   max-width: 500px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Wrapper = styled(FlexColumn)`

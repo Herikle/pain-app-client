@@ -58,6 +58,9 @@ export default function ProfilePage() {
             {
               accessor: "name",
               label: "Name",
+              options: {
+                withOverflow: true,
+              },
             },
             {
               accessor: "birth_date",
