@@ -56,7 +56,11 @@ export const MenuLink = ({
         )
       )}
       <DescriptionContainer>
-        {description && <Text color="pure_white">{description}</Text>}
+        {description && (
+          <Text color="pure_white" textElipsis maxWidth="140px">
+            {description}
+          </Text>
+        )}
         <Text variant="body2Bold" color="pure_white">
           {label}
         </Text>
