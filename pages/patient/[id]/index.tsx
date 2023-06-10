@@ -5,12 +5,16 @@ import { LoggedLayout } from "@layouts/LoggedLayout";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useGetPatientById } from "@queries/patient/useGetPatients";
 import { useEffect, useMemo } from "react";
 import { UpdatePatientForm } from "@page-components/UpdatePatientForm";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import { Table } from "@components/Table";
+import { CallToAction } from "@components/CallToAction";
+import { useCreateEpisode } from "@queries/episode/useEpisode";
+import { useGetEpisodesList } from "@queries/episode/useGetEpisode";
+import { IEpisode } from "types";
 
 export default function Patient() {
   const router = useRouter();
@@ -21,13 +25,39 @@ export default function Patient() {
 
   const getPatientById = useGetPatientById({ id }, !!id);
 
+  const getPatientEpisodes = useGetEpisodesList(
+    {
+      patient_id: id,
+      page: 0,
+      limit: 5,
+    },
+    !!id
+  );
+
+  const createEpisode = useCreateEpisode();
+
   const patient = useMemo(() => getPatientById.data, [getPatientById.data]);
+
+  const episodes = useMemo(
+    () => getPatientEpisodes.data?.results ?? [],
+    [getPatientEpisodes.data]
+  );
 
   useEffect(() => {
     if (patient) {
       setSelectedPatient(patient);
     }
   }, [patient, setSelectedPatient]);
+
+  const createEpisodeHandler = async () => {
+    const episode_created = await createEpisode.mutateAsync({
+      body: {
+        patient_id: id,
+      },
+    });
+
+    Router.push(RoutesPath.episode.replace("[id]", episode_created._id));
+  };
 
   return (
     <LoggedLayout>
@@ -39,7 +69,8 @@ export default function Patient() {
           <Table
             header={{
               title: "Episodes list",
-              onPlusClick: () => alert("Not implemented yet"),
+              onPlusClick: createEpisodeHandler,
+              loading: createEpisode.isLoading,
             }}
             columns={[
               {
@@ -47,31 +78,27 @@ export default function Patient() {
                 label: "Name",
               },
               {
-                accessor: "date",
+                accessor: "createdAt",
                 label: "Date",
               },
               {
                 accessor: "tracks",
                 label: "N° of tracks",
+                render: () => 0,
               },
             ]}
-            data={[
-              {
-                name: "Pain episode 1",
-                date: "16.03.23",
-                tracks: 3,
-              },
-              {
-                name: "Pain episode 2",
-                date: "16.03.23",
-                tracks: 3,
-              },
-              {
-                name: "Pain episode 3",
-                date: "16.03.23",
-                tracks: 3,
-              },
-            ]}
+            mountHref={(episode: IEpisode) =>
+              RoutesPath.episode.replace("[id]", episode._id)
+            }
+            data={episodes}
+            CallToAction={
+              <CallToAction
+                text1="There are no episodes registered yet."
+                text2="to create an episode."
+                onClick={createEpisodeHandler}
+                loading={createEpisode.isLoading}
+              />
+            }
           />
         </Wrapper>
       </Container>

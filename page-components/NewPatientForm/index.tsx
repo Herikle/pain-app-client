@@ -32,7 +32,7 @@ export const NewPatientForm = () => {
     const created_patient = await createPatient.mutateAsync({
       body: data,
     });
-    Router.push(RoutesPath.patient.replace(":id", created_patient._id));
+    Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
   };
 
   return (

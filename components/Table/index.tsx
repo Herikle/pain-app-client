@@ -45,6 +45,7 @@ type Props = {
     title: string;
     onPlusClick?: () => void;
     plusHref?: string;
+    loading?: boolean;
   };
   isLoading?: boolean;
   pagination?: {
@@ -112,7 +113,11 @@ export const Table = ({
         <Header>
           <Text variant="h1">{header.title}</Text>
           {showHeader && (
-            <AddButton onClick={header.onPlusClick} href={header.plusHref} />
+            <AddButton
+              onClick={header.onPlusClick}
+              href={header.plusHref}
+              loading={header.loading}
+            />
           )}
         </Header>
       )}
@@ -159,7 +164,7 @@ export const Table = ({
           )}
         </LoadingWrapper>
       </Container>
-      {pagination?.pages && (
+      {!!pagination?.pages && pagination?.pages > 1 && (
         <TablePagination
           pages={pagination?.pages}
           onChangePage={pagination?.onChangePage}

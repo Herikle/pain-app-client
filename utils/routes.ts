@@ -2,7 +2,8 @@ const ProtectedRoutes = {
   prompt: "/prompt",
   profile: "/profile",
   new_patient: "/patient",
-  patient: "/patient/:id",
+  patient: "/patient/[id]",
+  episode: "/episode/[id]",
 };
 
 const PublicRoutes = {

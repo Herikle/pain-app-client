@@ -41,7 +41,7 @@ export default function ProfilePage() {
   };
 
   const mountPatientHref = (patient: IPatient) => {
-    return RoutesPath.patient.replace(":id", patient._id);
+    return RoutesPath.patient.replace("[id]", patient._id);
   };
 
   return (
@@ -78,7 +78,13 @@ export default function ProfilePage() {
             title: "Patient List",
             plusHref: RoutesPath.new_patient,
           }}
-          CallToAction={<CallToAction />}
+          CallToAction={
+            <CallToAction
+              text1="There are no patients registered yet."
+              text2="to create a patient."
+              href={RoutesPath.new_patient}
+            />
+          }
           mountHref={mountPatientHref}
           isLoading={getPatients.isLoading || getPatients.isPreviousData}
           pagination={{
