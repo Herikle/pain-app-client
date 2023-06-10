@@ -90,6 +90,7 @@ export default function Patient() {
             mountHref={(episode: IEpisode) =>
               RoutesPath.episode.replace("[id]", episode._id)
             }
+            isLoading={getPatientEpisodes.isLoading}
             data={episodes}
             CallToAction={
               <CallToAction
