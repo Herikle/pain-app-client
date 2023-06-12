@@ -8,6 +8,7 @@ type GetPatientsPayload = {
   query: {
     page: number;
     limit: number;
+    [key: string]: any;
   };
 };
 
@@ -36,6 +37,7 @@ export const useGetPatients = (
     () => getPatients({ query: params }),
     {
       enabled,
+      keepPreviousData: true,
     }
   );
 };
@@ -70,7 +72,7 @@ export const useGetPatientById = (
     {
       enabled,
       placeholderData: () => {
-        return getByIdFromCache(params.id, QueryKeys.Patients.List);
+        return getByIdFromCache<IPatient>(params.id, QueryKeys.Patients.List);
       },
     }
   );

@@ -36,7 +36,7 @@ const Application = ({ children }: ApplicationProps) => {
         <Modals />
         <ToastContainer />
         <VerifyUser />
-        {/* <FiltersController /> */}
+        <FiltersController />
       </main>
     </>
   );

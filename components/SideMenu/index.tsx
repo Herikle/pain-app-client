@@ -10,23 +10,36 @@ import { SignOut } from "@phosphor-icons/react";
 import { capitalize } from "utils/helpers/string";
 import { useRouter } from "next/router";
 import { useSelectedPatientValue } from "state/useSelectedPatient";
+import { useSelectedEpisodeValue } from "state/useSelectedEpisode";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
 
   const { pathname } = useRouter();
-
+  console.log(pathname);
   const selectedPatient = useSelectedPatientValue();
+
+  const selectedEpisode = useSelectedEpisodeValue();
 
   const patientLinkIsNotAllowed =
     pathname !== RoutesPath.new_patient && !selectedPatient;
 
   const patientLinkHref = () => {
     if (selectedPatient) {
-      return RoutesPath.patient.replace(":id", selectedPatient._id);
+      return RoutesPath.patient.replace("[id]", selectedPatient._id);
     }
 
     return RoutesPath.new_patient;
+  };
+
+  const episodeLinkIsNotAllowed = !selectedEpisode;
+
+  const episodeLinkHref = () => {
+    if (selectedEpisode) {
+      return RoutesPath.episode.replace("[id]", selectedEpisode._id);
+    }
+
+    return "#";
   };
 
   return (
@@ -55,6 +68,15 @@ export const SideMenu = () => {
           iconPath={IconsPath.Patient}
           disabled={!pathname.includes(RoutesPath.new_patient)}
           notAllowed={patientLinkIsNotAllowed}
+          fullWidth
+        />
+        <MenuLink
+          label="Pain Episode"
+          description={selectedEpisode?.name}
+          href={episodeLinkHref()}
+          iconPath={IconsPath.Episode}
+          disabled={!pathname.includes(RoutesPath.episode)}
+          notAllowed={episodeLinkIsNotAllowed}
           fullWidth
         />
         {user?.super && (

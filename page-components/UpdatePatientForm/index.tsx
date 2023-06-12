@@ -9,6 +9,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
 import { IPatient } from "types";
 import { getOnlyDateFromIsoDate } from "@utils/helpers/date";
+import { useUpdatePatient } from "@queries/patient/usePatient";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -23,7 +24,7 @@ type UpdatePatientFormProps = {
 };
 
 export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
-  const { register, handleSubmit, formState } = useForm<PatientSchema>({
+  const { register, handleSubmit, formState, reset } = useForm<PatientSchema>({
     resolver: zodResolver(newPatientSchema),
     defaultValues: {
       name: patient.name,
@@ -32,11 +33,18 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
     },
   });
 
+  const updatePatient = useUpdatePatient();
+
   const { errors, isDirty } = formState;
 
-  const onSubmit = (data: PatientSchema) => {
-    console.log(data);
-    alert("Not implemented yet");
+  const onSubmit = async (data: PatientSchema) => {
+    await updatePatient.mutateAsync({
+      params: {
+        patient_id: patient._id,
+      },
+      body: data,
+    });
+    reset(data);
   };
 
   return (
@@ -73,7 +81,11 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
             />
           </Grid>
         </Grid>
-        <Button width="160px" disabled={!isDirty}>
+        <Button
+          width="160px"
+          loading={updatePatient.isLoading}
+          disabled={!isDirty}
+        >
           Save changes
         </Button>
       </Container>

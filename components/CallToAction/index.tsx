@@ -1,3 +1,4 @@
+import { AddButton } from "@components/AddButton";
 import { Text } from "@components/Text";
 import { PlusCircle } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
@@ -5,11 +6,20 @@ import Link from "next/link";
 import styled from "styled-components";
 
 type CallToActionProps = {
-  onClick?: () => void;
+  text1: string;
+  text2: string;
   href?: string;
+  onClick?: () => void;
+  loading?: boolean;
 };
 
-export const CallToAction = ({ onClick, href }: CallToActionProps) => {
+export const CallToAction = ({
+  text1,
+  text2,
+  onClick,
+  href,
+  loading,
+}: CallToActionProps) => {
   const renderActionButton = (children) => {
     if (href) {
       return <Link href={href}>{children}</Link>;
@@ -21,16 +31,16 @@ export const CallToAction = ({ onClick, href }: CallToActionProps) => {
   return (
     <Container>
       <Row>
-        <Text>There are no patients registered yet.</Text>
+        <Text>{text1}</Text>
       </Row>
       <Row>
         <Text>Click</Text>{" "}
         {renderActionButton(
           <PlusContainer onClick={onClick}>
-            <PlusCircle size={32} weight="fill" color={theme.colors.primary} />
+            <AddButton loading={loading} />
           </PlusContainer>
         )}
-        <Text>to create a patient.</Text>
+        <Text>{text2}</Text>
       </Row>
     </Container>
   );

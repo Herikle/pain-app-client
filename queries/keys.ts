@@ -9,4 +9,8 @@ export const QueryKeys = {
     List: "patients/list",
     ByID: "patients/byId",
   },
+  Episode: {
+    List: "episode/list",
+    ByID: "episode/byId",
+  },
 };

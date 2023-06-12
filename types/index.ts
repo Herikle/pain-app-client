@@ -18,6 +18,13 @@ export type IMe = {
   role?: IRole;
 };
 
+export type IPrompt = {
+  prompt: string;
+  attributes: any;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type IPatient = {
   _id: string;
   name: string;
@@ -29,9 +36,16 @@ export type IPatient = {
   about?: string;
 };
 
-export type IPrompt = {
-  prompt: string;
-  attributes: any;
+export type IEpisode = {
+  _id: string;
+  name: string;
+  patient_id: string;
+  creator_id: string;
   createdAt: string;
   updatedAt: string;
+  location?: string;
+  diagnosis?: string;
+  comment?: string;
+  start_date?: string;
+  patient?: IPatient;
 };

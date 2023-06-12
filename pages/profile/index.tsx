@@ -11,14 +11,23 @@ import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
 
 export default function ProfilePage() {
   const { user } = useAuth();
 
-  const getPatients = useGetPatients({ page: 0, limit: 5 });
+  const filters = useFiltersValue();
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const getPatients = useGetPatients({
+    page: currentPage,
+    limit: 5,
+    ...filters,
+  });
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
@@ -32,7 +41,7 @@ export default function ProfilePage() {
   };
 
   const mountPatientHref = (patient: IPatient) => {
-    return RoutesPath.patient.replace(":id", patient._id);
+    return RoutesPath.patient.replace("[id]", patient._id);
   };
 
   return (
@@ -49,6 +58,9 @@ export default function ProfilePage() {
             {
               accessor: "name",
               label: "Name",
+              options: {
+                withOverflow: true,
+              },
             },
             {
               accessor: "birth_date",
@@ -66,8 +78,21 @@ export default function ProfilePage() {
             title: "Patient List",
             plusHref: RoutesPath.new_patient,
           }}
-          CallToAction={<CallToAction />}
+          CallToAction={
+            <CallToAction
+              text1="There are no patients registered yet."
+              text2="to create a patient."
+              href={RoutesPath.new_patient}
+            />
+          }
           mountHref={mountPatientHref}
+          isLoading={getPatients.isLoading || getPatients.isPreviousData}
+          pagination={{
+            pages: getPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setCurrentPage(page - 1);
+            },
+          }}
         />
         <FormContainer>
           <AccountForm />

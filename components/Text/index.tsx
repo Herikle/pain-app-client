@@ -54,6 +54,8 @@ type TextProps = {
   px?: number;
   whiteSpace?: CSSProperties["whiteSpace"];
   decoration?: CSSProperties["textDecoration"];
+  textElipsis?: boolean;
+  maxWidth?: string;
 };
 
 export const Text = ({
@@ -68,6 +70,8 @@ export const Text = ({
   px,
   whiteSpace,
   decoration,
+  textElipsis,
+  maxWidth,
 }: TextProps) => {
   return (
     <TextStyled
@@ -83,6 +87,8 @@ export const Text = ({
       $opacity={opacity}
       $whiteSpace={whiteSpace}
       $decoration={decoration}
+      $textElipsis={textElipsis}
+      $maxWidth={maxWidth}
     >
       {children}
     </TextStyled>
@@ -98,6 +104,8 @@ type TextStyledProps = {
   $opacity?: number;
   $whiteSpace?: string;
   $decoration?: CSSProperties["textDecoration"];
+  $maxWidth?: string;
+  $textElipsis?: boolean;
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -140,5 +148,20 @@ const TextStyled = styled.span<TextStyledProps>`
     $decoration &&
     css`
       text-decoration: ${$decoration};
+    `}
+
+    ${({ $textElipsis }) =>
+    $textElipsis &&
+    css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    `}
+
+    ${({ $maxWidth }) =>
+    $maxWidth &&
+    css`
+      max-width: ${$maxWidth};
     `}
 `;

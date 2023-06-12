@@ -3,21 +3,30 @@ import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import styled from "styled-components";
 
-export const SortCaret = () => {
+type SortCaretPropt = {
+  isSorted?: boolean;
+  isDesc?: boolean;
+};
+
+export const SortCaret = ({ isSorted, isDesc }: SortCaretPropt) => {
+  const _isAsc = isSorted && !isDesc;
+
+  const _isDesc = isSorted && isDesc;
+
   return (
     <Container>
       <CaretUpContainer>
         <CaretUp
           weight="fill"
           cursor="pointer"
-          color={theme.colors.hover_state}
+          color={_isAsc ? theme.colors.font_color : theme.colors.hover_state}
         />
       </CaretUpContainer>
       <CaretDownContainer>
         <CaretDown
           weight="fill"
           cursor="pointer"
-          color={theme.colors.hover_state}
+          color={_isDesc ? theme.colors.font_color : theme.colors.hover_state}
         />
       </CaretDownContainer>
     </Container>

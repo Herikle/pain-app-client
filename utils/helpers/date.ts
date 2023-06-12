@@ -6,7 +6,10 @@ export const getAgeByBirthDate = (date: string) => {
   return differenceInYears(today, new Date(date));
 };
 
-export const getOnlyDateFromIsoDate = (date: string) => {
+export const getOnlyDateFromIsoDate = (date: string | undefined) => {
+  if (!date) {
+    return "";
+  }
   const dateObject = new Date(date);
 
   const year = dateObject.getFullYear();

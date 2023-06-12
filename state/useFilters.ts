@@ -1,6 +1,6 @@
 import { atom, useRecoilState, useRecoilValue } from "recoil";
 
-const recoilFilters = atom<any>({
+const recoilFilters = atom<{ [key: string]: string }>({
   key: "recoilFilters",
   default: {},
 });
@@ -28,9 +28,13 @@ export const useFilters = () => {
     setFilters({});
   };
 
+  const getValue = (key: string) => filters[key];
+
   return {
     filters,
     apply,
     reset,
+    setFilters,
+    getValue,
   };
 };

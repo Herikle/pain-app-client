@@ -2,11 +2,12 @@ import { Text } from "@components/Text";
 import { CaretLeft } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import Link from "next/link";
+import React from "react";
 import styled from "styled-components";
 
 type BackButtonProps = {
   href: string;
-  text: string;
+  text: React.ReactNode;
 };
 
 export const BackButton = ({ href, text }: BackButtonProps) => {
@@ -14,11 +15,7 @@ export const BackButton = ({ href, text }: BackButtonProps) => {
     <Link href={href}>
       <BackButtonStyled>
         <BackIcon>
-          <CaretLeft
-            size={12}
-            weight="bold"
-            color={theme.colors.text_switched}
-          />
+          <CaretLeft size={12} weight="bold" color={theme.colors.font_color} />
         </BackIcon>
         <Text color="text_switched">{text}</Text>
       </BackButtonStyled>

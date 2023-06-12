@@ -1,32 +1,35 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useFiltersState, useFiltersValue } from "state/useFilters";
 
 export const FiltersController = () => {
   const [filters, setFilters] = useFiltersState();
 
-  const queryParamsToObject: any = () => {
-    return window.location.search
-      .slice(1)
-      .split("&")
-      .map((p) => p.split("="))
-      .reduce((obj, pair) => {
-        const [key, value] = pair.map(decodeURIComponent);
-        if (key === "page") {
-          let parsedValue = parseInt(value);
+  const { pathname } = useRouter();
 
-          obj[key] = parsedValue < 0 || parsedValue === 0 ? 0 : parsedValue - 1;
-        } else {
-          obj[key] = value;
-        }
-        return obj;
-      }, {});
+  const queryParamsToObject: any = () => {
+    const searchString = window.location.search;
+
+    const query = new URLSearchParams(searchString);
+
+    const obj = Object.fromEntries(query.entries());
+    return obj;
   };
 
   useEffect(() => {
+    setFilters({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    const obj = queryParamsToObject();
+    setFilters(obj);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (filters) {
-      console.log(filters);
       const isNotEmpty = Object.keys(filters).length > 0;
-      console.log(isNotEmpty);
       if (isNotEmpty) {
         const query = new URLSearchParams();
         Object.keys(filters)?.forEach((filterKey) => {
