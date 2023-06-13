@@ -11,12 +11,18 @@ import { capitalize } from "utils/helpers/string";
 import { useRouter } from "next/router";
 import { useSelectedPatientValue } from "state/useSelectedPatient";
 import { useSelectedEpisodeValue } from "state/useSelectedEpisode";
+import { useGetLastPrompt } from "@queries/prompt/useGetPrompt";
+import { useMemo } from "react";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
 
   const { pathname } = useRouter();
-  console.log(pathname);
+
+  const getLastPrompt = useGetLastPrompt();
+
+  const lastPrompt = useMemo(() => getLastPrompt.data, [getLastPrompt.data]);
+
   const selectedPatient = useSelectedPatientValue();
 
   const selectedEpisode = useSelectedEpisodeValue();
@@ -40,6 +46,13 @@ export const SideMenu = () => {
     }
 
     return "#";
+  };
+
+  const promptHref = () => {
+    if (lastPrompt) {
+      return RoutesPath.prompt.replace("[id]", lastPrompt._id);
+    }
+    return RoutesPath.new_prompt;
   };
 
   return (
@@ -82,9 +95,10 @@ export const SideMenu = () => {
         {user?.super && (
           <MenuLink
             label="ChatGPT AI"
-            href={RoutesPath.prompt}
+            description={lastPrompt?.title}
+            href={promptHref()}
             iconPath={IconsPath.GPT}
-            disabled={pathname !== RoutesPath.prompt}
+            disabled={!pathname.includes(RoutesPath.new_prompt)}
             fullWidth
           />
         )}

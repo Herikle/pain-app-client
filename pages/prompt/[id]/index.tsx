@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { useGetPrompts } from "@queries/prompt/useGetPrompt";
+import { useGetPrompt, useGetPrompts } from "@queries/prompt/useGetPrompt";
 import { useGenerateCompletion } from "@queries/prompt/usePrompt";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
@@ -10,8 +10,14 @@ import {
   PromptResponse,
   TokensUsageType,
 } from "@page-components/PromptResponse";
+import { useRouter } from "next/router";
+import { LoadingWrapper } from "@components/LoadingWrapper";
 
 export default function PromptPage() {
+  const router = useRouter();
+
+  const { id } = router.query as { id: string };
+
   const [prompt, setPrompt] = useState("");
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
@@ -26,7 +32,18 @@ export default function PromptPage() {
 
   const prompts = useMemo(() => getPrompts.data, [getPrompts.data]);
 
+  const getPromptById = useGetPrompt(id);
+
+  const promptById = useMemo(() => getPromptById.data, [getPromptById.data]);
+
   const generateResponse = useGenerateCompletion();
+
+  useEffect(() => {
+    if (promptById) {
+      setPrompt(promptById.prompt);
+      setAttributes(promptById.attributes);
+    }
+  }, [promptById]);
 
   const sendPrompt = async () => {
     const promptWithAttributes = prompt.replace(
@@ -52,8 +69,14 @@ export default function PromptPage() {
 
   return (
     <LoggedLayout onlySuper>
+      <LoadingWrapper
+        loading={getPromptById.isLoading}
+        overContainer
+        size={64}
+      />
       <Container>
         <WriteAndListPrompts
+          prompt_id={id}
           prompt={prompt}
           onChangePrompt={setPrompt}
           attributes={attributes}

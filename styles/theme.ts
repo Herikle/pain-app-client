@@ -22,6 +22,7 @@ const LightThemeHover = {
   primary: LightThemeColors.secondary_color,
   cta: LightThemeColors.cta_secondary,
   font_color: LightThemeColors.pure_black,
+  pure_white: LightThemeColors.pure_white,
 };
 
 export const theme = {
@@ -48,4 +49,4 @@ export const LightScrollBar = css`
 
 export type ThemeColors = keyof typeof LightThemeColors;
 
-export type ButtonColors = "primary" | "cta" | "font_color";
+export type ButtonColors = "primary" | "cta" | "font_color" | "pure_white";

@@ -1,5 +1,9 @@
+import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { useMutation } from "react-query";
+import { ToastError } from "@utils/toats";
+import { AxiosError } from "axios";
+import { useMutation, useQueryClient } from "react-query";
+import { IPrompt } from "types";
 
 type GeneratePromptPayload = {
   body: {
@@ -43,9 +47,83 @@ const savePrompt = async ({ body }: SavePromptPayload) => {
     data: body,
   });
 
-  return data;
+  return data as IPrompt;
 };
 
 export const useSavePrompt = () => {
-  return useMutation(savePrompt);
+  const queryClient = useQueryClient();
+
+  return useMutation(savePrompt, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Prompt.List]);
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type DeleteModalProps = {
+  params: {
+    prompt_id: string;
+  };
+};
+
+const deletePrompt = async ({ params }: DeleteModalProps) => {
+  const { data } = await request({
+    method: "DELETE",
+    service: "prompt",
+    url: `/${params.prompt_id}`,
+  });
+
+  return data;
+};
+
+export const useDeletePrompt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deletePrompt, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Prompt.List]);
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type UpdatePromptPayload = {
+  params: {
+    prompt_id: string;
+  };
+  body: {
+    prompt?: string;
+    attributes?: any;
+    title?: string;
+  };
+};
+
+const updatePrompt = async ({ body, params }: UpdatePromptPayload) => {
+  const { data } = await request({
+    method: "PATCH",
+    service: "prompt",
+    url: `/${params.prompt_id}`,
+    data: body,
+  });
+
+  return data as IPrompt;
+};
+
+export const useUpdatePrompt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updatePrompt, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Prompt.List]);
+      queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
 };

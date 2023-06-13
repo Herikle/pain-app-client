@@ -8,6 +8,10 @@ export type Meta = {
 
 export type IRole = "doctor" | "veterinarian";
 
+export type CommonKeyStringPair = {
+  [key: string]: string;
+};
+
 export type IMe = {
   _id: string;
   name: string;
@@ -19,6 +23,8 @@ export type IMe = {
 };
 
 export type IPrompt = {
+  _id: string;
+  title: string;
   prompt: string;
   attributes: any;
   createdAt: string;

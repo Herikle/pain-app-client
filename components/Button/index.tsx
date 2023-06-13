@@ -1,11 +1,11 @@
 import styled, { css } from "styled-components";
 import { Text, TextVariant } from "../Text";
-import { ButtonColors, theme } from "@styles/theme";
+import { ButtonColors, ThemeColors, theme } from "@styles/theme";
 import { NextFont } from "next/dist/compiled/@next/font";
 import { ButtonHTMLAttributes } from "react";
 import { Oval } from "react-loader-spinner";
 
-export type ButtonVariants = "contained" | "outlined";
+export type ButtonVariants = "contained" | "outlined" | "text";
 
 type ButtonProps = {
   children: React.ReactNode;
@@ -19,6 +19,7 @@ type ButtonProps = {
   font?: NextFont;
   textVariant?: TextVariant;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  textColor?: ThemeColors;
 };
 
 const variants: Record<ButtonVariants, any> = {
@@ -27,6 +28,10 @@ const variants: Record<ButtonVariants, any> = {
   `,
   outlined: css`
     border: 1px solid ${theme.colors.pure_white};
+  `,
+  text: css`
+    border: none;
+    background-color: transparent;
   `,
 };
 
@@ -42,7 +47,20 @@ export const Button = ({
   font,
   textVariant = "body2Bold",
   type,
+  textColor,
 }: ButtonProps) => {
+  const getTextColors = () => {
+    if (textColor) {
+      return textColor;
+    }
+
+    if (disabled) {
+      return "secondary_font";
+    }
+
+    return "pure_white";
+  };
+
   return (
     <ButtonContainer
       className={font?.className}
@@ -65,10 +83,7 @@ export const Button = ({
           />
         </LoadingWrapper>
       ) : (
-        <Text
-          color={disabled ? "secondary_font" : "pure_white"}
-          variant={textVariant}
-        >
+        <Text color={getTextColors()} variant={textVariant}>
           {children}
         </Text>
       )}
@@ -98,7 +113,6 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
   position: relative;
   font-family: inherit;
   min-height: 37px;
-  ${({ $variant }) => variants[$variant]};
 
   ${({ $color, $disabled }) => css`
     background-color: ${$disabled ? theme.colors.disabled_color : $color};
@@ -127,4 +141,6 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
       : css`
           cursor: not-allowed;
         `}
+
+  ${({ $variant }) => variants[$variant]};
 `;
