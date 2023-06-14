@@ -1,6 +1,6 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { ToastError } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IPrompt } from "types";
@@ -56,6 +56,7 @@ export const useSavePrompt = () => {
   return useMutation(savePrompt, {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Prompt.List]);
+      ToastSuccess("Prompt saved successfully");
     },
     onError: (error: AxiosError) => {
       ToastError(error);
@@ -121,6 +122,7 @@ export const useUpdatePrompt = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Prompt.List]);
       queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
+      ToastSuccess("Prompt updated successfully");
     },
     onError: (error: AxiosError) => {
       ToastError(error);

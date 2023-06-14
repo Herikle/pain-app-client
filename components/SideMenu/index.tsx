@@ -13,6 +13,7 @@ import { useSelectedPatientValue } from "state/useSelectedPatient";
 import { useSelectedEpisodeValue } from "state/useSelectedEpisode";
 import { useGetLastPrompt } from "@queries/prompt/useGetPrompt";
 import { useMemo } from "react";
+import { useSelectedPromptValue } from "state/useSelectedPrompt";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
@@ -27,8 +28,18 @@ export const SideMenu = () => {
 
   const selectedEpisode = useSelectedEpisodeValue();
 
+  const selectedPrompt = useSelectedPromptValue();
+
   const patientLinkIsNotAllowed =
     pathname !== RoutesPath.new_patient && !selectedPatient;
+
+  const focusedPrompt = useMemo(() => {
+    if (pathname === RoutesPath.new_prompt) {
+      return null;
+    }
+
+    return selectedPrompt ?? lastPrompt;
+  }, [selectedPrompt, lastPrompt, pathname]);
 
   const patientLinkHref = () => {
     if (selectedPatient) {
@@ -49,8 +60,8 @@ export const SideMenu = () => {
   };
 
   const promptHref = () => {
-    if (lastPrompt) {
-      return RoutesPath.prompt.replace("[id]", lastPrompt._id);
+    if (focusedPrompt) {
+      return RoutesPath.prompt.replace("[id]", focusedPrompt._id);
     }
     return RoutesPath.new_prompt;
   };
@@ -95,7 +106,7 @@ export const SideMenu = () => {
         {user?.super && (
           <MenuLink
             label="ChatGPT AI"
-            description={lastPrompt?.title}
+            description={focusedPrompt?.title}
             href={promptHref()}
             iconPath={IconsPath.GPT}
             disabled={!pathname.includes(RoutesPath.new_prompt)}

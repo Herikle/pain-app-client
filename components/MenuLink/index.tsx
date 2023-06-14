@@ -57,7 +57,12 @@ export const MenuLink = ({
       )}
       <DescriptionContainer>
         {description && (
-          <Text color="pure_white" textElipsis maxWidth="140px">
+          <Text
+            color="pure_white"
+            textElipsis
+            maxWidth="140px"
+            minWidth="140px"
+          >
             {description}
           </Text>
         )}

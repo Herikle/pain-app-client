@@ -10,8 +10,11 @@ import {
   PromptResponse,
   TokensUsageType,
 } from "@page-components/PromptResponse";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import { useSetSelectedPrompt } from "state/useSelectedPrompt";
+import { useSetChangedPromptWarningModal } from "@components/Modals/ChangedPromptWarningModal/hook";
+import { RoutesPath } from "@utils/routes";
 
 export default function PromptPage() {
   const router = useRouter();
@@ -38,12 +41,17 @@ export default function PromptPage() {
 
   const generateResponse = useGenerateCompletion();
 
+  const setSelectedPrompt = useSetSelectedPrompt();
+
+  const setChangedPromptModal = useSetChangedPromptWarningModal();
+
   useEffect(() => {
     if (promptById) {
       setPrompt(promptById.prompt);
       setAttributes(promptById.attributes);
+      setSelectedPrompt(promptById);
     }
-  }, [promptById]);
+  }, [promptById, setSelectedPrompt]);
 
   const sendPrompt = async () => {
     const promptWithAttributes = prompt.replace(
@@ -67,6 +75,26 @@ export default function PromptPage() {
     setGptResponse(response.response);
   };
 
+  const hasChanged = () => {
+    if (prompt !== promptById?.prompt) return true;
+  };
+
+  const onClickStartNewPrompt = () => {
+    setChangedPromptModal({
+      prompt_id: id,
+      dataNotSaved: {
+        prompt,
+        attributes,
+      },
+      afterSave: () => {
+        Router.push(RoutesPath.new_prompt);
+      },
+      onCancel: () => {
+        Router.push(RoutesPath.new_prompt);
+      },
+    });
+  };
+
   return (
     <LoggedLayout onlySuper>
       <LoadingWrapper
@@ -82,6 +110,7 @@ export default function PromptPage() {
           attributes={attributes}
           onChangeAttributes={setAttributes}
           prompts={prompts ?? []}
+          promptHasChanged={hasChanged()}
         />
         <PromptAttributes
           attributes={attributes}
@@ -94,6 +123,9 @@ export default function PromptPage() {
           isLoading={generateResponse.isLoading}
           noAttributes={noAttributes}
           tokensUsage={tokensUsage}
+          onClickStartNewPrompt={
+            hasChanged() ? onClickStartNewPrompt : undefined
+          }
         />
       </Container>
     </LoggedLayout>

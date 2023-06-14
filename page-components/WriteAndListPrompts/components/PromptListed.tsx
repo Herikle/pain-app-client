@@ -1,18 +1,50 @@
 import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/hook";
 import { Text } from "@components/Text";
+import { TextField } from "@components/TextField";
 import { FlexRow } from "@design-components/Flex";
 import { PencilSimpleLine, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { RoutesPath } from "@utils/routes";
 import Link from "next/link";
+import { useState } from "react";
 import styled from "styled-components";
 import { IPrompt } from "types";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useUpdatePrompt } from "@queries/prompt/usePrompt";
+import { LoadingWrapper } from "@components/LoadingWrapper";
+
+const schema = z.object({
+  title: z.string().nonempty("Title is required"),
+});
+
+type PromptFormType = z.infer<typeof schema>;
 
 type PromptListedProps = {
   prompt: IPrompt;
+  selected: boolean;
 };
 
-export const PromptListed = ({ prompt }: PromptListedProps) => {
+export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
+  const { handleSubmit, register, reset } = useForm<PromptFormType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      title: prompt.title,
+    },
+  });
+
+  const [editMode, setEditMode] = useState(false);
+
+  const updatePrompt = useUpdatePrompt();
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+    if (!editMode) {
+      reset();
+    }
+  };
+
   const setDeleteModal = useSetDeletePromptModal();
 
   const onDelete = () => {
@@ -21,20 +53,44 @@ export const PromptListed = ({ prompt }: PromptListedProps) => {
     });
   };
 
+  const submit = async (data: PromptFormType) => {
+    await updatePrompt.mutateAsync({
+      params: {
+        prompt_id: prompt._id,
+      },
+      body: data,
+    });
+    setEditMode(false);
+    reset(data);
+  };
+
+  const color = selected ? "font_color" : "text_switched";
+
   return (
     <Container>
-      <Link href={RoutesPath.prompt.replace("[id]", prompt._id)}>
-        <Text color="text_switched">{prompt.title}</Text>
-      </Link>
+      {editMode ? (
+        <form onSubmit={handleSubmit(submit)}>
+          <TextField required autoFocus {...register("title")} />
+          <LoadingWrapper
+            loading={updatePrompt.isLoading}
+            overContainer
+            size={16}
+          />
+        </form>
+      ) : (
+        <Link href={RoutesPath.prompt.replace("[id]", prompt._id)}>
+          <Text color={color}>{prompt.title}</Text>
+        </Link>
+      )}
       <FlexRow gap={1.5}>
         <PencilSimpleLine
-          color={theme.colors.text_switched}
+          color={theme.colors[color]}
           size={16}
           cursor="pointer"
-          onClick={() => alert("Not implemented yet.")}
+          onClick={toggleEditMode}
         />
         <Trash
-          color={theme.colors.text_switched}
+          color={theme.colors[color]}
           size={16}
           cursor="pointer"
           onClick={onDelete}
@@ -48,4 +104,5 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 `;

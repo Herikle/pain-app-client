@@ -5,19 +5,28 @@ import { LightScrollBar, theme } from "@styles/theme";
 import styled from "styled-components";
 import { IPrompt } from "types";
 import { PromptListed } from "./PromptListed";
+import { useRouter } from "next/router";
 
 type ListPromptsProps = {
   prompts: IPrompt[];
 };
 
 export const ListPrompts = ({ prompts }: ListPromptsProps) => {
+  const router = useRouter();
+
+  const { id } = router.query as { id: string };
+
   return (
     <LoadSavedPromptContainer>
       <Text variant="body2Bold">Load a saved prompt</Text>
       <SavedPromptList $hasPrompt={prompts.length > 0}>
         {prompts.length > 0 ? (
           prompts.map((prompt) => (
-            <PromptListed key={prompt._id} prompt={prompt} />
+            <PromptListed
+              key={prompt._id}
+              prompt={prompt}
+              selected={prompt._id === id}
+            />
           ))
         ) : (
           <Text align="center">

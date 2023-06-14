@@ -19,6 +19,7 @@ type PromptResponseProps = {
   gptResponse: string | null;
   isLoading: boolean;
   tokensUsage: TokensUsageType | null;
+  onClickStartNewPrompt?: () => void;
 };
 
 export const PromptResponse = ({
@@ -26,6 +27,7 @@ export const PromptResponse = ({
   isLoading,
   noAttributes,
   tokensUsage,
+  onClickStartNewPrompt,
 }: PromptResponseProps) => {
   const promptTokensText = () => {
     if (!!tokensUsage) {
@@ -80,9 +82,15 @@ export const PromptResponse = ({
             {getResponseText()}
           </Text>
         </GptResponse>
-        <Link href={RoutesPath.new_prompt}>
-          <Button width="300px">Start new prompt</Button>
-        </Link>
+        {!!onClickStartNewPrompt ? (
+          <Button width="300px" onClick={onClickStartNewPrompt}>
+            Start new prompt
+          </Button>
+        ) : (
+          <Link href={RoutesPath.new_prompt}>
+            <Button width="300px">Start new prompt</Button>
+          </Link>
+        )}
       </PromptContainer>
       <LoadSavedPromptContainer>
         <Text variant="body2Bold">Stats</Text>

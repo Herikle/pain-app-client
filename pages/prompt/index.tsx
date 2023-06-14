@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useGetPrompts } from "@queries/prompt/useGetPrompt";
 import { useGenerateCompletion } from "@queries/prompt/usePrompt";
@@ -10,6 +10,7 @@ import {
   PromptResponse,
   TokensUsageType,
 } from "@page-components/PromptResponse";
+import { useSetSelectedPrompt } from "state/useSelectedPrompt";
 
 export default function PromptPage() {
   const [prompt, setPrompt] = useState("");
@@ -19,6 +20,8 @@ export default function PromptPage() {
   const [gptResponse, setGptResponse] = useState<string | null>(null);
 
   const [tokensUsage, setTokensUsage] = useState<TokensUsageType | null>(null);
+
+  const setSelectedPrompt = useSetSelectedPrompt();
 
   const noAttributes = Object.keys(attributes).length === 0;
 
@@ -49,6 +52,10 @@ export default function PromptPage() {
     });
     setGptResponse(response.response);
   };
+
+  useEffect(() => {
+    setSelectedPrompt(null);
+  }, [setSelectedPrompt]);
 
   return (
     <LoggedLayout onlySuper>

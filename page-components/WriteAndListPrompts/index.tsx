@@ -24,6 +24,7 @@ type WriteAndListPromptsProps = {
   attributes: { [key: string]: string };
   onChangeAttributes: (attributes: { [key: string]: string }) => void;
   prompt_id?: string;
+  promptHasChanged?: boolean;
 };
 
 export const WriteAndListPrompts = ({
@@ -33,6 +34,7 @@ export const WriteAndListPrompts = ({
   attributes,
   onChangeAttributes,
   prompt_id,
+  promptHasChanged,
 }: WriteAndListPromptsProps) => {
   const savePrompt = useSavePrompt();
 
@@ -131,7 +133,17 @@ export const WriteAndListPrompts = ({
               size={22}
               loading={savePrompt.isLoading || updatePrompt.isLoading}
               onClick={onSavePrompt}
-              icon={<FloppyDisk size={22} color={theme.colors.text_switched} />}
+              icon={
+                promptHasChanged ? (
+                  <FloppyDisk
+                    size={22}
+                    color={theme.colors.primary}
+                    weight="fill"
+                  />
+                ) : (
+                  <FloppyDisk size={22} color={theme.colors.text_switched} />
+                )
+              }
             />
           </FlexRow>
         </WritePromptBottom>
