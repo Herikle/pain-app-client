@@ -3,7 +3,9 @@ export const QueryKeys = {
     Me: "auth/me",
   },
   Prompt: {
-    GetPrompt: "prompt/getPrompt",
+    Last: "prompt/last",
+    List: "prompt/list",
+    ByID: "prompt/getPrompt",
   },
   Patients: {
     List: "patients/list",

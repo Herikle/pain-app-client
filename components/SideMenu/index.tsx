@@ -11,18 +11,35 @@ import { capitalize } from "utils/helpers/string";
 import { useRouter } from "next/router";
 import { useSelectedPatientValue } from "state/useSelectedPatient";
 import { useSelectedEpisodeValue } from "state/useSelectedEpisode";
+import { useGetLastPrompt } from "@queries/prompt/useGetPrompt";
+import { useMemo } from "react";
+import { useSelectedPromptValue } from "state/useSelectedPrompt";
 
 export const SideMenu = () => {
   const { user, logOut } = useAuth();
 
   const { pathname } = useRouter();
-  console.log(pathname);
+
+  const getLastPrompt = useGetLastPrompt();
+
+  const lastPrompt = useMemo(() => getLastPrompt.data, [getLastPrompt.data]);
+
   const selectedPatient = useSelectedPatientValue();
 
   const selectedEpisode = useSelectedEpisodeValue();
 
+  const selectedPrompt = useSelectedPromptValue();
+
   const patientLinkIsNotAllowed =
     pathname !== RoutesPath.new_patient && !selectedPatient;
+
+  const focusedPrompt = useMemo(() => {
+    if (pathname === RoutesPath.new_prompt) {
+      return null;
+    }
+
+    return selectedPrompt ?? lastPrompt;
+  }, [selectedPrompt, lastPrompt, pathname]);
 
   const patientLinkHref = () => {
     if (selectedPatient) {
@@ -40,6 +57,13 @@ export const SideMenu = () => {
     }
 
     return "#";
+  };
+
+  const promptHref = () => {
+    if (focusedPrompt) {
+      return RoutesPath.prompt.replace("[id]", focusedPrompt._id);
+    }
+    return RoutesPath.new_prompt;
   };
 
   return (
@@ -82,9 +106,10 @@ export const SideMenu = () => {
         {user?.super && (
           <MenuLink
             label="ChatGPT AI"
-            href={RoutesPath.prompt}
+            description={focusedPrompt?.title}
+            href={promptHref()}
             iconPath={IconsPath.GPT}
-            disabled={pathname !== RoutesPath.prompt}
+            disabled={!pathname.includes(RoutesPath.new_prompt)}
             fullWidth
           />
         )}

@@ -56,6 +56,7 @@ type TextProps = {
   decoration?: CSSProperties["textDecoration"];
   textElipsis?: boolean;
   maxWidth?: string;
+  minWidth?: string;
 };
 
 export const Text = ({
@@ -72,6 +73,7 @@ export const Text = ({
   decoration,
   textElipsis,
   maxWidth,
+  minWidth,
 }: TextProps) => {
   return (
     <TextStyled
@@ -89,6 +91,7 @@ export const Text = ({
       $decoration={decoration}
       $textElipsis={textElipsis}
       $maxWidth={maxWidth}
+      $minWidth={minWidth}
     >
       {children}
     </TextStyled>
@@ -106,6 +109,7 @@ type TextStyledProps = {
   $decoration?: CSSProperties["textDecoration"];
   $maxWidth?: string;
   $textElipsis?: boolean;
+  $minWidth?: string;
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -163,5 +167,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $maxWidth &&
     css`
       max-width: ${$maxWidth};
+    `}
+
+    ${({ $minWidth }) =>
+    $minWidth &&
+    css`
+      min-width: ${$minWidth};
     `}
 `;
