@@ -67,7 +67,7 @@ export const PromptResponse = ({
             </FlexRow>
           </TokensInfo>
         ) : (
-          <Text>
+          <Text mt={0.5} px={1}>
             No output generated yet. Your answer and statistics will appear
             here.
           </Text>
