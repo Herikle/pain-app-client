@@ -15,6 +15,7 @@ import { LoadingWrapper } from "@components/LoadingWrapper";
 import { useSetSelectedPrompt } from "state/useSelectedPrompt";
 import { useSetChangedPromptWarningModal } from "@components/Modals/ChangedPromptWarningModal/hook";
 import { RoutesPath } from "@utils/routes";
+import { IPromptOptions } from "types";
 
 export default function PromptPage() {
   const router = useRouter();
@@ -24,6 +25,8 @@ export default function PromptPage() {
   const [prompt, setPrompt] = useState("");
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
+
+  const [options, setOptions] = useState<IPromptOptions>({});
 
   const [gptResponse, setGptResponse] = useState<string | null>(null);
 
@@ -50,6 +53,7 @@ export default function PromptPage() {
       setPrompt(promptById.prompt);
       setAttributes(promptById.attributes);
       setSelectedPrompt(promptById);
+      setOptions(promptById.options ?? {});
     }
   }, [promptById, setSelectedPrompt]);
 
@@ -64,6 +68,7 @@ export default function PromptPage() {
     const response = await generateResponse.mutateAsync({
       body: {
         prompt: promptWithAttributes,
+        options,
       },
     });
 
@@ -111,6 +116,7 @@ export default function PromptPage() {
           onChangeAttributes={setAttributes}
           tokensUsage={tokensUsage}
           prompts={prompts ?? []}
+          options={options}
           promptHasChanged={hasChanged()}
           onClickNewPrompt={hasChanged() ? onClickStartNewPrompt : undefined}
         />
@@ -119,6 +125,9 @@ export default function PromptPage() {
           onUpdateAttributes={setAttributes}
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
+          options={options}
+          onUpdateOptions={setOptions}
+          prompt_id={id}
         />
         <PromptResponse
           gptResponse={gptResponse}

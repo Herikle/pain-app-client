@@ -3,11 +3,12 @@ import { request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { IPrompt } from "types";
+import { IPrompt, IPromptOptions } from "types";
 
 type GeneratePromptPayload = {
   body: {
     prompt: string;
+    options: IPromptOptions;
   };
 };
 
@@ -37,6 +38,7 @@ type SavePromptPayload = {
   body: {
     prompt: string;
     attributes: any;
+    options: IPromptOptions;
   };
 };
 
@@ -101,6 +103,7 @@ type UpdatePromptPayload = {
     prompt?: string;
     attributes?: any;
     title?: string;
+    options?: IPromptOptions;
   };
 };
 
@@ -115,13 +118,15 @@ const updatePrompt = async ({ body, params }: UpdatePromptPayload) => {
   return data as IPrompt;
 };
 
-export const useUpdatePrompt = () => {
+export const useUpdatePrompt = (invalidate = true) => {
   const queryClient = useQueryClient();
 
   return useMutation(updatePrompt, {
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Prompt.List]);
-      queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
+      if (invalidate) {
+        queryClient.invalidateQueries([QueryKeys.Prompt.List]);
+        queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
+      }
       ToastSuccess("Prompt updated successfully");
     },
     onError: (error: AxiosError) => {

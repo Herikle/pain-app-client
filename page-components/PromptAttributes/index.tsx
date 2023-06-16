@@ -5,7 +5,8 @@ import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn } from "@design-components/Flex";
 import { SetStateAction } from "react";
-import { CommonKeyStringPair } from "types";
+import { CommonKeyStringPair, IPromptOptions } from "types";
+import { useSetPromptOptionsModal } from "@components/Modals/PromptOptionsModal/hook";
 
 type PromptAttributesProps = {
   attributes: CommonKeyStringPair;
@@ -16,6 +17,9 @@ type PromptAttributesProps = {
   ) => void;
   sendPrompt: () => void;
   isLoading: boolean;
+  options: IPromptOptions;
+  onUpdateOptions: (value: SetStateAction<IPromptOptions>) => void;
+  prompt_id?: string;
 };
 
 export const PromptAttributes = ({
@@ -23,6 +27,9 @@ export const PromptAttributes = ({
   onUpdateAttributes,
   sendPrompt,
   isLoading,
+  options,
+  onUpdateOptions,
+  prompt_id,
 }: PromptAttributesProps) => {
   const noAttributes = Object.keys(attributes).length === 0;
 
@@ -31,6 +38,16 @@ export const PromptAttributes = ({
       ...prev,
       [attribute]: value,
     }));
+  };
+
+  const openPromptModal = useSetPromptOptionsModal();
+
+  const openPromptOptionsModal = () => {
+    openPromptModal({
+      options,
+      onUpdateOptions,
+      prompt_id,
+    });
   };
 
   return (
@@ -59,6 +76,9 @@ export const PromptAttributes = ({
               </Grid>
             ))}
           </Grid>
+          <Button width="200px" color="cta" onClick={openPromptOptionsModal}>
+            Prompt Configuration
+          </Button>
           <Button width="300px" onClick={sendPrompt} loading={isLoading}>
             Run prompt with those attributes
           </Button>

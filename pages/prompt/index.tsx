@@ -11,11 +11,14 @@ import {
   TokensUsageType,
 } from "@page-components/PromptResponse";
 import { useSetSelectedPrompt } from "state/useSelectedPrompt";
+import { IPromptOptions } from "types";
 
 export default function PromptPage() {
   const [prompt, setPrompt] = useState("");
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
+
+  const [options, setOptions] = useState<IPromptOptions>({});
 
   const [gptResponse, setGptResponse] = useState<string | null>(null);
 
@@ -42,6 +45,7 @@ export default function PromptPage() {
     const response = await generateResponse.mutateAsync({
       body: {
         prompt: promptWithAttributes,
+        options,
       },
     });
 
@@ -65,6 +69,7 @@ export default function PromptPage() {
           onChangePrompt={setPrompt}
           attributes={attributes}
           onChangeAttributes={setAttributes}
+          options={options}
           tokensUsage={tokensUsage}
           prompts={prompts ?? []}
         />
@@ -73,6 +78,8 @@ export default function PromptPage() {
           onUpdateAttributes={setAttributes}
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
+          options={options}
+          onUpdateOptions={setOptions}
         />
         <PromptResponse
           gptResponse={gptResponse}

@@ -22,10 +22,18 @@ export type IMe = {
   role?: IRole;
 };
 
+export type IPromptOptions = {
+  frequency_penalty?: number;
+  presence_penalty?: number;
+  temperature?: number;
+  top_p?: number;
+};
+
 export type IPrompt = {
   _id: string;
   title: string;
   prompt: string;
+  options: IPromptOptions;
   attributes: any;
   createdAt: string;
   updatedAt: string;

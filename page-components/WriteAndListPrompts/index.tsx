@@ -11,7 +11,7 @@ import {
   promptHasAttributes,
 } from "@utils/helpers/prompt";
 import styled from "styled-components";
-import { IPrompt } from "types";
+import { IPrompt, IPromptOptions } from "types";
 import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
 import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/hook";
@@ -30,6 +30,7 @@ type WriteAndListPromptsProps = {
   attributes: { [key: string]: string };
   onChangeAttributes: (attributes: { [key: string]: string }) => void;
   tokensUsage: TokensUsageType | null;
+  options: IPromptOptions;
   prompt_id?: string;
   promptHasChanged?: boolean;
   onClickNewPrompt?: () => void;
@@ -42,6 +43,7 @@ export const WriteAndListPrompts = ({
   attributes,
   onChangeAttributes,
   tokensUsage,
+  options,
   prompt_id,
   promptHasChanged,
   onClickNewPrompt,
@@ -61,6 +63,7 @@ export const WriteAndListPrompts = ({
         body: {
           attributes,
           prompt,
+          options,
         },
       });
     } else {
@@ -68,6 +71,7 @@ export const WriteAndListPrompts = ({
         body: {
           prompt: prompt,
           attributes: attributes,
+          options,
         },
       });
       Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));
