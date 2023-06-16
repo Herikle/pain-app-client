@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { useDeletePrompt } from "@queries/prompt/usePrompt";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { RoutesPath } from "@utils/routes";
 
 type ChildProps = {
@@ -16,6 +16,7 @@ type ChildProps = {
 const Child = ({ onClose, prompt_id }: ChildProps) => {
   const deletePrompt = useDeletePrompt();
 
+  const { pathname, query } = useRouter();
   const onConfirm = async () => {
     await deletePrompt.mutateAsync({
       params: {
@@ -23,7 +24,10 @@ const Child = ({ onClose, prompt_id }: ChildProps) => {
       },
     });
     onClose();
-    Router.replace(RoutesPath.profile);
+    const id = query.id;
+    if (id === prompt_id) {
+      Router.replace(RoutesPath.new_prompt);
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 import styled, { CSSProperties, css } from "styled-components";
 import { ThemeColors, theme } from "@styles/theme";
+import { NextFont } from "next/dist/compiled/@next/font";
 
 export type TextVariant =
   | "h1"
@@ -57,6 +58,7 @@ type TextProps = {
   textElipsis?: boolean;
   maxWidth?: string;
   minWidth?: string;
+  fontFamily?: NextFont;
 };
 
 export const Text = ({
@@ -74,9 +76,11 @@ export const Text = ({
   textElipsis,
   maxWidth,
   minWidth,
+  fontFamily,
 }: TextProps) => {
   return (
     <TextStyled
+      className={fontFamily?.className}
       style={{
         marginTop: mt ? `${mt}rem` : "0px",
         paddingInline: px ? `${px}rem` : "0px",
@@ -113,7 +117,6 @@ type TextStyledProps = {
 };
 
 const TextStyled = styled.span<TextStyledProps>`
-  font-family: inherit;
   ${({ $variant }) => variants[$variant]}
   ${({ $color }) => css`
     color: ${$color};

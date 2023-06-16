@@ -65,6 +65,7 @@ export default function PromptPage() {
           onChangePrompt={setPrompt}
           attributes={attributes}
           onChangeAttributes={setAttributes}
+          tokensUsage={tokensUsage}
           prompts={prompts ?? []}
         />
         <PromptAttributes

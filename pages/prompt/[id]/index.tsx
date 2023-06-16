@@ -109,8 +109,10 @@ export default function PromptPage() {
           onChangePrompt={setPrompt}
           attributes={attributes}
           onChangeAttributes={setAttributes}
+          tokensUsage={tokensUsage}
           prompts={prompts ?? []}
           promptHasChanged={hasChanged()}
+          onClickNewPrompt={hasChanged() ? onClickStartNewPrompt : undefined}
         />
         <PromptAttributes
           attributes={attributes}
@@ -123,9 +125,6 @@ export default function PromptPage() {
           isLoading={generateResponse.isLoading}
           noAttributes={noAttributes}
           tokensUsage={tokensUsage}
-          onClickStartNewPrompt={
-            hasChanged() ? onClickStartNewPrompt : undefined
-          }
         />
       </Container>
     </LoggedLayout>

@@ -3,7 +3,8 @@ import { CustomLoadingButton } from "@components/CustomLoadingButton";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { FloppyDisk, Trash } from "@phosphor-icons/react";
+import { FloppyDisk } from "@phosphor-icons/react";
+import { Inconsolata } from "next/font/google";
 import { theme } from "@styles/theme";
 import {
   getAllAttributesFromPrompt,
@@ -16,6 +17,11 @@ import { ListPrompts } from "./components/ListPrompts";
 import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/hook";
 import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
+import { TokensUsageType } from "@page-components/PromptResponse";
+import Image from "next/image";
+import { IconsPath } from "@utils/icons";
+
+const inconsolata = Inconsolata({ subsets: ["latin"] });
 
 type WriteAndListPromptsProps = {
   prompt: string;
@@ -23,8 +29,10 @@ type WriteAndListPromptsProps = {
   prompts: IPrompt[];
   attributes: { [key: string]: string };
   onChangeAttributes: (attributes: { [key: string]: string }) => void;
+  tokensUsage: TokensUsageType | null;
   prompt_id?: string;
   promptHasChanged?: boolean;
+  onClickNewPrompt?: () => void;
 };
 
 export const WriteAndListPrompts = ({
@@ -33,8 +41,10 @@ export const WriteAndListPrompts = ({
   prompts,
   attributes,
   onChangeAttributes,
+  tokensUsage,
   prompt_id,
   promptHasChanged,
+  onClickNewPrompt,
 }: WriteAndListPromptsProps) => {
   const savePrompt = useSavePrompt();
 
@@ -94,14 +104,6 @@ export const WriteAndListPrompts = ({
     }
   };
 
-  const onDeleteClick = () => {
-    if (prompt_id) {
-      openDeletePrompt({
-        prompt_id,
-      });
-    }
-  };
-
   return (
     <UserInteractionContainer>
       <WritePromptContainer gap={1}>
@@ -121,14 +123,17 @@ export const WriteAndListPrompts = ({
             Generate attribute form
           </Button>
           <FlexRow gap={1.5}>
-            {!!prompt_id && (
-              <Trash
-                size={22}
-                cursor="pointer"
-                color={theme.colors.text_switched}
-                onClick={onDeleteClick}
+            <FlexRow>
+              <Image
+                src={IconsPath.GPTBlack}
+                alt="ChatGPT Icon"
+                width="22"
+                height="22"
               />
-            )}
+              <Text fontFamily={inconsolata}>
+                Tokens used on this input: {tokensUsage?.prompt_tokens ?? 0}
+              </Text>
+            </FlexRow>
             <CustomLoadingButton
               size={22}
               loading={savePrompt.isLoading || updatePrompt.isLoading}
@@ -148,7 +153,7 @@ export const WriteAndListPrompts = ({
           </FlexRow>
         </WritePromptBottom>
       </WritePromptContainer>
-      <ListPrompts prompts={prompts} />
+      <ListPrompts prompts={prompts} onClickNewPrompt={onClickNewPrompt} />
     </UserInteractionContainer>
   );
 };

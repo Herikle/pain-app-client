@@ -1,12 +1,16 @@
-import { Button } from "@components/Button";
+import styled from "styled-components";
+import { Inconsolata } from "next/font/google";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { LightScrollBar, theme } from "@styles/theme";
+import { theme } from "@styles/theme";
 import { IconsPath } from "@utils/icons";
-import { RoutesPath } from "@utils/routes";
 import Image from "next/image";
-import Link from "next/link";
-import styled from "styled-components";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+
+const inconsolata = Inconsolata({ subsets: ["latin"] });
 
 export type TokensUsageType = {
   prompt_tokens: number;
@@ -19,7 +23,6 @@ type PromptResponseProps = {
   gptResponse: string | null;
   isLoading: boolean;
   tokensUsage: TokensUsageType | null;
-  onClickStartNewPrompt?: () => void;
 };
 
 export const PromptResponse = ({
@@ -27,55 +30,66 @@ export const PromptResponse = ({
   isLoading,
   noAttributes,
   tokensUsage,
-  onClickStartNewPrompt,
 }: PromptResponseProps) => {
-  const promptTokensText = () => {
-    if (!!tokensUsage) {
-      return `Tokens used on last input: ${tokensUsage.prompt_tokens}`;
-    }
-
-    return "No inputs sent.";
-  };
-
-  const responseTokensText = () => {
-    if (!!tokensUsage) {
-      return `Tokens used on last response: ${tokensUsage.response_tokens}`;
-    }
-
-    return "No answer received.";
-  };
-
-  const totalUsageText = () => {
-    if (!!tokensUsage) {
-      return `Total tokens used: ${tokensUsage.total}`;
-    }
-
-    return "You haven't made a query yet.";
-  };
-
-  const getResponseText = () => {
+  const getLoadingText = () => {
     if (isLoading) {
       return "GPT is thinking... Please don't close the page until it finishes.";
     }
-
-    if (gptResponse) {
-      return gptResponse;
-    }
-
-    if (noAttributes) {
-      return "No input inserted. First, write a prompt on the step 1 field.";
-    }
-
-    return "GPT response will be shown here. You can also edit the prompt.";
   };
 
   return (
     <Container opacity={noAttributes ? 0.5 : 1}>
-      <PromptContainer gap={1}>
+      <StatsContainer>
+        <Text variant="body2Bold">Output</Text>
+        {!!tokensUsage ? (
+          <TokensInfo>
+            <FlexRow>
+              <Image
+                src={IconsPath.GPTBlack}
+                alt="ChatGPT Icon"
+                width="22"
+                height="22"
+              />
+              <Text fontFamily={inconsolata}>
+                Tokens used in this answer: {tokensUsage.response_tokens}
+              </Text>
+            </FlexRow>
+            <FlexRow>
+              <Image
+                src={IconsPath.GPTBlack}
+                alt="ChatGPT Icon"
+                width="22"
+                height="22"
+              />
+              <Text fontFamily={inconsolata}>
+                Total (input + answer): {tokensUsage.total}
+              </Text>
+            </FlexRow>
+          </TokensInfo>
+        ) : (
+          <Text>
+            No output generated yet. Your answer and statistics will appear
+            here.
+          </Text>
+        )}
+      </StatsContainer>
+      <GptResponse>
+        {gptResponse ? (
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, rehypeSanitize]}
+          >
+            {gptResponse}
+          </ReactMarkdown>
+        ) : (
+          <Text>{getLoadingText()}</Text>
+        )}
+      </GptResponse>
+      {/* <PromptContainer gap={1}>
         <Text variant="body2Bold">Check your output</Text>
         <GptResponse>
           <Text
-            variant="body2"
+            variant="body2" 
             whiteSpace="pre-line"
             color={!!gptResponse ? "font_color" : "medium_grey"}
           >
@@ -91,31 +105,7 @@ export const PromptResponse = ({
             <Button width="300px">Start new prompt</Button>
           </Link>
         )}
-      </PromptContainer>
-      <LoadSavedPromptContainer>
-        <Text variant="body2Bold">Stats</Text>
-        <TokensInfo>
-          <FlexRow>
-            <Image
-              src={IconsPath.DoctorBlack}
-              alt="Pain Track Icon"
-              width="22"
-              height="22"
-            />
-            <Text>{promptTokensText()}</Text>
-          </FlexRow>
-          <FlexRow>
-            <Image
-              src={IconsPath.GPTBlack}
-              alt="ChatGPT Icon"
-              width="22"
-              height="22"
-            />
-            <Text>{responseTokensText()}</Text>
-          </FlexRow>
-          <Text>{totalUsageText()}</Text>
-        </TokensInfo>
-      </LoadSavedPromptContainer>
+      </PromptContainer> */}
     </Container>
   );
 };
@@ -126,17 +116,33 @@ const TokensInfo = styled(FlexColumn)`
   gap: 1rem;
 `;
 
-const LoadSavedPromptContainer = styled(FlexColumn)`
-  width: 30%;
+const StatsContainer = styled(FlexColumn)`
+  width: 100%;
 `;
 
 const GptResponse = styled.div`
-  border: 1px solid ${theme.colors.secondary_font};
-  height: 100%;
-  overflow: auto;
+  /* border: 1px solid ${theme.colors.secondary_font}; */
   width: 100%;
+  max-width: 100%;
   padding: 1rem;
-  ${LightScrollBar};
+  > * {
+    all: revert;
+  }
+  table,
+  tr,
+  td,
+  th {
+    border: 1px solid ${theme.colors.medium_grey};
+    border-collapse: collapse;
+  }
+  table th,
+  table td {
+    padding: 0.5rem;
+  }
+
+  h2 {
+    color: ${theme.colors.primary};
+  }
 `;
 
 const PromptContainer = styled(FlexColumn)`
@@ -148,11 +154,9 @@ type CommonOpacityProps = {
   opacity: number;
 };
 
-const Container = styled(FlexRow)<CommonOpacityProps>`
+const Container = styled(FlexColumn)<CommonOpacityProps>`
   align-items: flex-start;
-  width: 100%;
+  width: fit-content;
   gap: 2rem;
   opacity: ${(props) => props.opacity};
-  min-height: 20rem;
-  height: 20rem;
 `;

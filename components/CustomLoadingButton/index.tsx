@@ -28,7 +28,11 @@ export const CustomLoadingButton = ({
   };
 
   return render(
-    <Container onClick={onClick} $size={size}>
+    <Container
+      onClick={!!loading ? undefined : onClick}
+      $size={size}
+      $isLoading={!!loading}
+    >
       <LoadingWrapper loading={!!loading} overContainer size={16} />
       {icon}
     </Container>
@@ -37,6 +41,7 @@ export const CustomLoadingButton = ({
 
 type ContainerProps = {
   $size: number;
+  $isLoading: boolean;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -46,4 +51,10 @@ const Container = styled.div<ContainerProps>`
   `}
   cursor: pointer;
   position: relative;
+  ${({ $isLoading }) =>
+    $isLoading &&
+    css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
 `;
