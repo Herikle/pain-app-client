@@ -99,7 +99,6 @@ export default function PromptPage() {
       },
     });
   };
-
   return (
     <LoggedLayout onlySuper>
       <LoadingWrapper

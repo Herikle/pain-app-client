@@ -117,6 +117,7 @@ export const WriteAndListPrompts = ({
           onChange={(e) => onChangePrompt(e.target.value)}
           placeholder="Write your prompt..."
           minRows={15}
+          maxRows={30}
         />
         <WritePromptBottom>
           <Button
