@@ -10,6 +10,7 @@ import { useSetPromptOptionsModal } from "@components/Modals/PromptOptionsModal/
 import { Copy } from "@phosphor-icons/react";
 import { Box } from "@mui/material";
 import { Tooltip } from "react-tooltip";
+import { theme } from "@styles/theme";
 
 type PromptAttributesProps = {
   attributes: CommonKeyStringPair;
@@ -98,7 +99,7 @@ export const PromptAttributes = ({
             <Copy
               cursor="pointer"
               size={32}
-              color="#2f3237"
+              color={theme.colors.primary}
               weight="fill"
               onClick={copyPrompt}
               id="copy-prompt"
