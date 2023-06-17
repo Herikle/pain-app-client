@@ -64,7 +64,7 @@ export default function PromptPage() {
     }
   }, [promptById, setSelectedPrompt]);
 
-  const sendPrompt = async () => {
+  const getPromptWithAttributes = () => {
     const promptWithAttributes = prompt.replace(
       /{{\s*([a-zA-Z0-9_]+)\s*}}/g,
       (_, attribute) => {
@@ -72,6 +72,11 @@ export default function PromptPage() {
       }
     );
 
+    return promptWithAttributes;
+  };
+
+  const sendPrompt = async () => {
+    const promptWithAttributes = getPromptWithAttributes();
     const response = await generateResponse.mutateAsync({
       body: {
         prompt: promptWithAttributes,
@@ -132,6 +137,7 @@ export default function PromptPage() {
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
           options={options}
+          getPromptWithAttributes={getPromptWithAttributes}
           onUpdateOptions={setOptions}
           prompt_id={id}
         />

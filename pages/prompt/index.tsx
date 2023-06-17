@@ -34,13 +34,19 @@ export default function PromptPage() {
 
   const generateResponse = useGenerateCompletion();
 
-  const sendPrompt = async () => {
+  const getPromptWithAttributes = () => {
     const promptWithAttributes = prompt.replace(
       /{{\s*([a-zA-Z0-9_]+)\s*}}/g,
       (_, attribute) => {
         return attributes[attribute];
       }
     );
+
+    return promptWithAttributes;
+  };
+
+  const sendPrompt = async () => {
+    const promptWithAttributes = getPromptWithAttributes();
 
     const response = await generateResponse.mutateAsync({
       body: {
@@ -78,6 +84,7 @@ export default function PromptPage() {
           onUpdateAttributes={setAttributes}
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
+          getPromptWithAttributes={getPromptWithAttributes}
           options={options}
           onUpdateOptions={setOptions}
         />

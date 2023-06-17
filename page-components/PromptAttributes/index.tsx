@@ -3,10 +3,13 @@ import styled from "styled-components";
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
-import { FlexColumn } from "@design-components/Flex";
-import { SetStateAction } from "react";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { SetStateAction, useState } from "react";
 import { CommonKeyStringPair, IPromptOptions } from "types";
 import { useSetPromptOptionsModal } from "@components/Modals/PromptOptionsModal/hook";
+import { Copy } from "@phosphor-icons/react";
+import { Box } from "@mui/material";
+import { Tooltip } from "react-tooltip";
 
 type PromptAttributesProps = {
   attributes: CommonKeyStringPair;
@@ -18,6 +21,7 @@ type PromptAttributesProps = {
   sendPrompt: () => void;
   isLoading: boolean;
   options: IPromptOptions;
+  getPromptWithAttributes: () => string;
   onUpdateOptions: (value: SetStateAction<IPromptOptions>) => void;
   prompt_id?: string;
 };
@@ -28,10 +32,13 @@ export const PromptAttributes = ({
   sendPrompt,
   isLoading,
   options,
+  getPromptWithAttributes,
   onUpdateOptions,
   prompt_id,
 }: PromptAttributesProps) => {
   const noAttributes = Object.keys(attributes).length === 0;
+
+  const [copied, setCopied] = useState(false);
 
   const updateAttributeValue = (attribute: string, value: string) => {
     onUpdateAttributes((prev) => ({
@@ -48,6 +55,14 @@ export const PromptAttributes = ({
       onUpdateOptions,
       prompt_id,
     });
+  };
+
+  const copyPrompt = () => {
+    navigator.clipboard.writeText(getPromptWithAttributes());
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   return (
@@ -76,9 +91,27 @@ export const PromptAttributes = ({
               </Grid>
             ))}
           </Grid>
-          <Button width="200px" color="cta" onClick={openPromptOptionsModal}>
-            Prompt Configuration
-          </Button>
+          <FlexRow gap={1} justify="flex-start">
+            <Button width="200px" color="cta" onClick={openPromptOptionsModal}>
+              Prompt Configuration
+            </Button>
+            <Copy
+              cursor="pointer"
+              size={32}
+              color="#2f3237"
+              weight="fill"
+              onClick={copyPrompt}
+              id="copy-prompt"
+            />
+            {!copied && (
+              <Tooltip anchorSelect="#copy-prompt">
+                Copy prompt with attributes
+              </Tooltip>
+            )}
+            <Tooltip isOpen={copied} anchorSelect="#copy-prompt">
+              Copied!
+            </Tooltip>
+          </FlexRow>
           <Button width="300px" onClick={sendPrompt} loading={isLoading}>
             Run prompt with those attributes
           </Button>

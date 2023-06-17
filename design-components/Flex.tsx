@@ -1,19 +1,21 @@
-import styled from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 
 type FlexProps = {
   gap?: number;
+  align?: CSSProperties["alignItems"];
+  justify?: CSSProperties["justifyContent"];
 };
 
 export const FlexRow = styled.div<FlexProps>`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: ${(props) => props.align ?? "center"};
+  justify-content: ${(props) => props.justify ?? "center"};
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
 `;
 
 export const FlexColumn = styled.div<FlexProps>`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: ${(props) => props.justify ?? "flex-start"};
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
 `;
