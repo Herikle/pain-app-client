@@ -14,7 +14,6 @@ import styled from "styled-components";
 import { IPrompt, IPromptOptions } from "types";
 import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
-import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/hook";
 import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
 import { TokensUsageType } from "@page-components/PromptResponse";
@@ -51,8 +50,6 @@ export const WriteAndListPrompts = ({
   const savePrompt = useSavePrompt();
 
   const updatePrompt = useUpdatePrompt();
-
-  const openDeletePrompt = useSetDeletePromptModal();
 
   const onSavePrompt = async () => {
     if (prompt_id) {

@@ -49,6 +49,13 @@ export default function PromptPage() {
   const setChangedPromptModal = useSetChangedPromptWarningModal();
 
   useEffect(() => {
+    if (id) {
+      setTokensUsage(null);
+      setGptResponse(null);
+    }
+  }, [id]);
+
+  useEffect(() => {
     if (promptById) {
       setPrompt(promptById.prompt);
       setAttributes(promptById.attributes);
