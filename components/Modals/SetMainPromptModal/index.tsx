@@ -45,7 +45,7 @@ const Child = ({ onClose, prompt_id }: SetMainPromptChildProps) => {
             The current main prompt was created by{" "}
             <strong>{creator?.name}</strong>. If you set this prompt as main,
             the current main prompt will be replaced. This will affect the
-            public page form
+            public page form.
           </Text>
           <Text variant="body2">
             Type &quot;<strong>I understand</strong>&quot; to continue.
