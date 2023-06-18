@@ -163,6 +163,7 @@ const TextStyled = styled.span<TextStyledProps>`
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      width: 100%;
       max-width: 200px;
     `}
 

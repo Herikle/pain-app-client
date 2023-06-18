@@ -69,9 +69,6 @@ const TooltipWrapper = styled.div`
 
 const TooltipContainer = styled.div`
   max-width: 300px;
-  /* background-color: ${theme.colors.pure_white}; */
-  /* border: 1px solid ${theme.colors.font_color};
-  padding: 0.5rem; */
 `;
 
 type InputProps = {
