@@ -37,7 +37,7 @@ export const PromptAttributes = ({
   onUpdateOptions,
   prompt_id,
 }: PromptAttributesProps) => {
-  const noAttributes = Object.keys(attributes).length === 0;
+  const noAttributes = Object.keys(attributes ?? {}).length === 0;
 
   const [copied, setCopied] = useState(false);
 

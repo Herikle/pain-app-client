@@ -26,7 +26,7 @@ export default function PromptPage() {
 
   const setSelectedPrompt = useSetSelectedPrompt();
 
-  const noAttributes = Object.keys(attributes).length === 0;
+  const noAttributes = Object.keys(attributes ?? {}).length === 0;
 
   const getPrompts = useGetPrompts();
 

@@ -10,6 +10,7 @@ type CustomLoadingButtonProps = {
   onClick?: () => void;
   href?: string;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 export const CustomLoadingButton = ({
@@ -18,6 +19,7 @@ export const CustomLoadingButton = ({
   onClick,
   href,
   loading,
+  disabled,
 }: CustomLoadingButtonProps) => {
   const render = (children) => {
     if (href) {
@@ -32,6 +34,7 @@ export const CustomLoadingButton = ({
       onClick={!!loading ? undefined : onClick}
       $size={size}
       $isLoading={!!loading}
+      $disabled={disabled}
     >
       <LoadingWrapper loading={!!loading} overContainer size={16} />
       {icon}
@@ -42,6 +45,7 @@ export const CustomLoadingButton = ({
 type ContainerProps = {
   $size: number;
   $isLoading: boolean;
+  $disabled?: boolean;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -53,6 +57,13 @@ const Container = styled.div<ContainerProps>`
   position: relative;
   ${({ $isLoading }) =>
     $isLoading &&
+    css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
+
+  ${({ $disabled }) =>
+    $disabled &&
     css`
       pointer-events: none;
       opacity: 0.5;

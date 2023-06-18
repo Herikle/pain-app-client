@@ -104,7 +104,6 @@ export const WriteAndListPrompts = ({
       onChangeAttributes({});
     }
   };
-
   return (
     <UserInteractionContainer>
       <WritePromptContainer gap={1}>
@@ -140,6 +139,7 @@ export const WriteAndListPrompts = ({
               size={22}
               loading={savePrompt.isLoading || updatePrompt.isLoading}
               onClick={onSavePrompt}
+              disabled={!prompt}
               icon={
                 promptHasChanged ? (
                   <FloppyDisk

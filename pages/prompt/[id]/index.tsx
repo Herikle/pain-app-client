@@ -32,7 +32,7 @@ export default function PromptPage() {
 
   const [tokensUsage, setTokensUsage] = useState<TokensUsageType | null>(null);
 
-  const noAttributes = Object.keys(attributes).length === 0;
+  const noAttributes = Object.keys(attributes ?? {}).length === 0;
 
   const getPrompts = useGetPrompts();
 
@@ -58,7 +58,7 @@ export default function PromptPage() {
   useEffect(() => {
     if (promptById) {
       setPrompt(promptById.prompt);
-      setAttributes(promptById.attributes);
+      setAttributes(promptById.attributes ?? {});
       setSelectedPrompt(promptById);
       setOptions(promptById.options ?? {});
     }
