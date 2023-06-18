@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { request } from "@queries/request";
-import { IPrompt } from "types";
+import { IMe, IPrompt } from "types";
 import { QueryKeys } from "@queries/keys";
 
 const getPromptById = async (id: string) => {
@@ -49,5 +49,22 @@ const getLastPrompt = async () => {
 export const useGetLastPrompt = () => {
   return useQuery(QueryKeys.Prompt.Last, getLastPrompt, {
     refetchOnWindowFocus: false,
+  });
+};
+
+const getMainPromptCreator = async () => {
+  const { data } = await request({
+    method: "GET",
+    service: "prompt",
+    url: "/main/creator",
+  });
+
+  return data as { name: string };
+};
+
+export const useGetMainPromptCreator = () => {
+  return useQuery(QueryKeys.Prompt.MainCreator, getMainPromptCreator, {
+    refetchOnWindowFocus: false,
+    cacheTime: 0,
   });
 };

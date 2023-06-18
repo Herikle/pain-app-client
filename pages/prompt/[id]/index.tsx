@@ -128,6 +128,7 @@ export default function PromptPage() {
           tokensUsage={tokensUsage}
           prompts={prompts ?? []}
           options={options}
+          isMain={promptById?.isMain}
           promptHasChanged={hasChanged()}
           onClickNewPrompt={hasChanged() ? onClickStartNewPrompt : undefined}
         />

@@ -3,7 +3,7 @@ import { CustomLoadingButton } from "@components/CustomLoadingButton";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { FloppyDisk } from "@phosphor-icons/react";
+import { FloppyDisk, Star } from "@phosphor-icons/react";
 import { Inconsolata } from "next/font/google";
 import { theme } from "@styles/theme";
 import {
@@ -12,13 +12,18 @@ import {
 } from "@utils/helpers/prompt";
 import styled from "styled-components";
 import { IPrompt, IPromptOptions } from "types";
-import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
+import {
+  useSavePrompt,
+  useSetMainPrompt,
+  useUpdatePrompt,
+} from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
 import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
 import { TokensUsageType } from "@page-components/PromptResponse";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
+import { useSetSetMainPrompt } from "@components/Modals/SetMainPromptModal/hook";
 
 const inconsolata = Inconsolata({ subsets: ["latin"] });
 
@@ -31,6 +36,7 @@ type WriteAndListPromptsProps = {
   tokensUsage: TokensUsageType | null;
   options: IPromptOptions;
   prompt_id?: string;
+  isMain?: boolean;
   promptHasChanged?: boolean;
   onClickNewPrompt?: () => void;
 };
@@ -44,12 +50,15 @@ export const WriteAndListPrompts = ({
   tokensUsage,
   options,
   prompt_id,
+  isMain,
   promptHasChanged,
   onClickNewPrompt,
 }: WriteAndListPromptsProps) => {
   const savePrompt = useSavePrompt();
 
   const updatePrompt = useUpdatePrompt();
+
+  const setMainPromptModal = useSetSetMainPrompt();
 
   const onSavePrompt = async () => {
     if (prompt_id) {
@@ -104,6 +113,15 @@ export const WriteAndListPrompts = ({
       onChangeAttributes({});
     }
   };
+
+  const updateAsMainPrompt = () => {
+    if (prompt_id) {
+      setMainPromptModal({
+        prompt_id,
+      });
+    }
+  };
+
   return (
     <UserInteractionContainer>
       <WritePromptContainer gap={1}>
@@ -137,6 +155,10 @@ export const WriteAndListPrompts = ({
             </FlexRow>
             <CustomLoadingButton
               size={22}
+              tooltip={{
+                text: "Save",
+                id: "save-prompt",
+              }}
               loading={savePrompt.isLoading || updatePrompt.isLoading}
               onClick={onSavePrompt}
               disabled={!prompt}
@@ -152,6 +174,30 @@ export const WriteAndListPrompts = ({
                 )
               }
             />
+            {!!prompt_id && (
+              <CustomLoadingButton
+                size={22}
+                tooltip={
+                  !!isMain
+                    ? {
+                        text: "This is the main prompt. To unset this, select another prompt as main prompt",
+                        id: "main-prompt",
+                      }
+                    : {
+                        text: "Set this prompt as the main prompt",
+                        id: "set-main-prompt",
+                      }
+                }
+                onClick={!!isMain ? undefined : updateAsMainPrompt}
+                icon={
+                  !!isMain ? (
+                    <Star size={22} weight="fill" color={theme.colors.cta} />
+                  ) : (
+                    <Star size={22} color={theme.colors.text_switched} />
+                  )
+                }
+              />
+            )}
           </FlexRow>
         </WritePromptBottom>
       </WritePromptContainer>

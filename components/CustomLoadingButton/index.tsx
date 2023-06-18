@@ -2,6 +2,7 @@ import { LoadingWrapper } from "@components/LoadingWrapper";
 import { PlusCircle } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import Link from "next/link";
+import { Tooltip } from "react-tooltip";
 import styled, { css } from "styled-components";
 
 type CustomLoadingButtonProps = {
@@ -11,6 +12,10 @@ type CustomLoadingButtonProps = {
   href?: string;
   loading?: boolean;
   disabled?: boolean;
+  tooltip?: {
+    text: string;
+    id: string;
+  };
 };
 
 export const CustomLoadingButton = ({
@@ -20,6 +25,7 @@ export const CustomLoadingButton = ({
   href,
   loading,
   disabled,
+  tooltip,
 }: CustomLoadingButtonProps) => {
   const render = (children) => {
     if (href) {
@@ -30,21 +36,29 @@ export const CustomLoadingButton = ({
   };
 
   return render(
-    <Container
-      onClick={!!loading ? undefined : onClick}
-      $size={size}
-      $isLoading={!!loading}
-      $disabled={disabled}
-    >
-      <LoadingWrapper loading={!!loading} overContainer size={16} />
-      {icon}
-    </Container>
+    <>
+      <Container
+        onClick={!!loading ? undefined : onClick}
+        id={tooltip?.id}
+        $size={size}
+        $isLoading={!!loading}
+        $disabled={disabled}
+        $hasOnClick={!!onClick}
+      >
+        <LoadingWrapper loading={!!loading} overContainer size={16} />
+        {icon}
+      </Container>
+      {tooltip && (
+        <Tooltip anchorSelect={`#${tooltip.id}`}>{tooltip.text}</Tooltip>
+      )}
+    </>
   );
 };
 
 type ContainerProps = {
   $size: number;
   $isLoading: boolean;
+  $hasOnClick?: boolean;
   $disabled?: boolean;
 };
 
@@ -53,7 +67,13 @@ const Container = styled.div<ContainerProps>`
     width: ${$size}px;
     height: ${$size}px;
   `}
-  cursor: pointer;
+
+  ${({ $hasOnClick }) =>
+    $hasOnClick &&
+    css`
+      cursor: pointer;
+    `}
+
   position: relative;
   ${({ $isLoading }) =>
     $isLoading &&

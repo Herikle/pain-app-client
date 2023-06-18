@@ -1,6 +1,7 @@
 import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { PromptOptionsModal } from "./PromptOptionsModal";
+import { SetMainPromptModal } from "./SetMainPromptModal";
 import { WelcomeUserTypeSelectorModal } from "./WelcomeUserTypeSelectorModal";
 
 export const Modals = () => {
@@ -10,6 +11,7 @@ export const Modals = () => {
       <DeletePromptModal />
       <ChangedPromptWarningModal />
       <PromptOptionsModal />
+      <SetMainPromptModal />
     </>
   );
 };

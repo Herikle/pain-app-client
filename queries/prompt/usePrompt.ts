@@ -134,3 +134,33 @@ export const useUpdatePrompt = (invalidate = true) => {
     },
   });
 };
+
+type SetMainPromptPayload = {
+  params: {
+    prompt_id: string;
+  };
+};
+
+const setMainPrompt = async ({ params }: SetMainPromptPayload) => {
+  const { data } = await request({
+    method: "PATCH",
+    service: "prompt",
+    url: `${params.prompt_id}/main`,
+  });
+
+  return data as IPrompt;
+};
+
+export const useSetMainPrompt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(setMainPrompt, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
+      ToastSuccess("This prompt is now the main prompt");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};

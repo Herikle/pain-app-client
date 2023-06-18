@@ -37,6 +37,7 @@ export type IPrompt = {
   attributes: any;
   createdAt: string;
   updatedAt: string;
+  isMain?: boolean;
 };
 
 export type IPatient = {

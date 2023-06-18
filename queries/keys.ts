@@ -6,6 +6,7 @@ export const QueryKeys = {
     Last: "prompt/last",
     List: "prompt/list",
     ByID: "prompt/getPrompt",
+    MainCreator: "prompt/main/creator",
   },
   Patients: {
     List: "patients/list",
