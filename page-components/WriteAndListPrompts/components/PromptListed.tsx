@@ -2,7 +2,7 @@ import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/ho
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { FlexRow } from "@design-components/Flex";
-import { PencilSimpleLine, Trash } from "@phosphor-icons/react";
+import { Check, PencilSimpleLine, Trash, X } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { RoutesPath } from "@utils/routes";
 import Link from "next/link";
@@ -70,7 +70,13 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
     <Container>
       {editMode ? (
         <form onSubmit={handleSubmit(submit)}>
-          <TextField required autoFocus {...register("title")} />
+          <TextField
+            noPadding
+            fullWidth
+            required
+            autoFocus
+            {...register("title")}
+          />
           <LoadingWrapper
             loading={updatePrompt.isLoading}
             overContainer
@@ -83,18 +89,37 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
         </Link>
       )}
       <FlexRow gap={1.5}>
-        <PencilSimpleLine
-          color={theme.colors[color]}
-          size={16}
-          cursor="pointer"
-          onClick={toggleEditMode}
-        />
-        <Trash
-          color={theme.colors[color]}
-          size={16}
-          cursor="pointer"
-          onClick={onDelete}
-        />
+        {editMode ? (
+          <>
+            <Check
+              size={16}
+              color={theme.colors.text_switched}
+              cursor="pointer"
+              onClick={handleSubmit(submit)}
+            />
+            <X
+              size={16}
+              color={theme.colors.text_switched}
+              cursor="pointer"
+              onClick={toggleEditMode}
+            />
+          </>
+        ) : (
+          <>
+            <PencilSimpleLine
+              color={theme.colors[color]}
+              size={16}
+              cursor="pointer"
+              onClick={toggleEditMode}
+            />
+            <Trash
+              color={theme.colors[color]}
+              size={16}
+              cursor="pointer"
+              onClick={onDelete}
+            />
+          </>
+        )}
       </FlexRow>
     </Container>
   );
@@ -105,4 +130,8 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  form {
+    width: 100%;
+    padding-right: 1rem;
+  }
 `;

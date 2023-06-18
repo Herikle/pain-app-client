@@ -11,11 +11,12 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   width?: string;
   error?: string;
   helperText?: string;
+  noPadding?: boolean;
 }
 
 export const TextField = React.forwardRef(
   (
-    { label, fullWidth, width, error, helperText, ...rest }: Props,
+    { label, fullWidth, width, error, helperText, noPadding, ...rest }: Props,
     ref: any
   ) => {
     return (
@@ -39,7 +40,7 @@ export const TextField = React.forwardRef(
             )}
           </Label>
         )}
-        <Input ref={ref} {...rest} />
+        <Input $noPadding={noPadding} ref={ref} {...rest} />
         {error && (
           <Text variant="body2" color="red_danger">
             {error}
@@ -73,13 +74,24 @@ const TooltipContainer = styled.div`
   padding: 0.5rem; */
 `;
 
-const Input = styled.input`
+type InputProps = {
+  $noPadding?: boolean;
+};
+
+const Input = styled.input<InputProps>`
   border-radius: 2px;
   border: 1px solid ${theme.colors.secondary_font};
-  height: 36px;
   width: 100%;
   outline: none;
-  padding: 0 12px;
+  ${({ $noPadding }) =>
+    !$noPadding
+      ? css`
+          height: 36px;
+          padding: 0 12px;
+        `
+      : css`
+          padding-block: 0.1rem;
+        `}
 `;
 
 type ContainerProps = {
