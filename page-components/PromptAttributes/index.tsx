@@ -87,7 +87,6 @@ export const PromptAttributes = ({
                   onChange={(e) =>
                     updateAttributeValue(attribute, e.target.value)
                   }
-                  placeholder="Enter a value for this attribute"
                 />
               </Grid>
             ))}
