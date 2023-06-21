@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps<{
     props: {
       attributes,
     },
-    revalidate: minutes(1),
+    revalidate: 60,
   };
 };
 
