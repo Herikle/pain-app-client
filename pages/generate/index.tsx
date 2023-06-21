@@ -8,14 +8,19 @@ import { getPublicAttributes } from "@queries/public/useGetPublic";
 import { useGenerateResponse } from "@queries/public/usePublic";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import {
+  GetServerSideProps,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from "next";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { CommonKeyStringPair } from "types";
 import ReCAPTCHA from "react-google-recaptcha";
+import { minutes } from "@utils/helpers/time";
 
-export const getServerSideProps: GetServerSideProps<{
+export const getStaticProps: GetStaticProps<{
   attributes: CommonKeyStringPair;
 }> = async () => {
   const attributes = await getPublicAttributes();
@@ -23,12 +28,13 @@ export const getServerSideProps: GetServerSideProps<{
     props: {
       attributes,
     },
+    revalidate: minutes(1),
   };
 };
 
 export default function GeneratePage({
   attributes,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const attributesList = Object.keys(attributes);
 
   const [gptResponse, setGptResponse] = useState("");
