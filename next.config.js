@@ -7,6 +7,11 @@ const nextConfig = withBundleAnalyzer({
     styledComponents: true,
   },
   swcMinify: true,
+  modularizeImports: {
+    "@phosphor-icons/react": {
+      transform: "@phosphor-icons/react/dist/icons/{{member}}",
+    },
+  },
 });
 
 module.exports = nextConfig;
