@@ -1,7 +1,7 @@
 import axios, { Method, ResponseType } from "axios";
 import { getToken } from "utils/localStorage/token";
 
-type service = "auth" | "prompt" | "account" | "patient" | "episode";
+type service = "auth" | "prompt" | "account" | "patient" | "episode" | "public";
 
 type IRequest = {
   method: Method;
@@ -13,10 +13,12 @@ type IRequest = {
 };
 
 axios.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  try {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (e) {}
   return config;
 });
 

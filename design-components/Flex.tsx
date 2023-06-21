@@ -4,6 +4,8 @@ type FlexProps = {
   gap?: number;
   align?: CSSProperties["alignItems"];
   justify?: CSSProperties["justifyContent"];
+  width?: CSSProperties["width"];
+  marginInline?: CSSProperties["marginInline"];
 };
 
 export const FlexRow = styled.div<FlexProps>`
@@ -11,6 +13,8 @@ export const FlexRow = styled.div<FlexProps>`
   align-items: ${(props) => props.align ?? "center"};
   justify-content: ${(props) => props.justify ?? "center"};
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
+  width: ${(props) => props.width ?? "unset"};
+  margin-inline: ${(props) => props.marginInline ?? "unset"};
 `;
 
 export const FlexColumn = styled.div<FlexProps>`
@@ -18,4 +22,6 @@ export const FlexColumn = styled.div<FlexProps>`
   flex-direction: column;
   justify-content: ${(props) => props.justify ?? "flex-start"};
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
+  width: ${(props) => props.width ?? "unset"};
+  margin-inline: ${(props) => props.marginInline ?? "unset"};
 `;

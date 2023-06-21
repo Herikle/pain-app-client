@@ -20,6 +20,7 @@ type ButtonProps = {
   textVariant?: TextVariant;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   textColor?: ThemeColors;
+  noPadding?: boolean;
 };
 
 const variants: Record<ButtonVariants, any> = {
@@ -48,6 +49,7 @@ export const Button = ({
   textVariant = "body2Bold",
   type,
   textColor,
+  noPadding,
 }: ButtonProps) => {
   const getTextColors = () => {
     if (textColor) {
@@ -72,6 +74,7 @@ export const Button = ({
       $fullWidth={fullWidth}
       $width={width}
       $disabled={disabled || loading}
+      $noPadding={noPadding}
       disabled={disabled || loading}
     >
       {loading ? (
@@ -91,15 +94,6 @@ export const Button = ({
   );
 };
 
-type ButtonContainerProps = {
-  $color: string;
-  $variant: ButtonVariants;
-  $hoverColor?: string;
-  $fullWidth: boolean;
-  $width?: string;
-  $disabled?: boolean;
-};
-
 const LoadingWrapper = styled.div`
   position: absolute;
   top: 50%;
@@ -107,8 +101,19 @@ const LoadingWrapper = styled.div`
   transform: translate(-50%, -50%);
 `;
 
+type ButtonContainerProps = {
+  $color: string;
+  $variant: ButtonVariants;
+  $hoverColor?: string;
+  $fullWidth: boolean;
+  $width?: string;
+  $disabled?: boolean;
+  $noPadding?: boolean;
+};
+
 const ButtonContainer = styled.button<ButtonContainerProps>`
   padding: 10px;
+  padding: ${({ $noPadding }) => $noPadding && 0};
   border-radius: 4px;
   position: relative;
   font-family: inherit;
