@@ -1,7 +1,5 @@
 import { AddButton } from "@components/AddButton";
 import { Text } from "@components/Text";
-import { PlusCircle } from "@phosphor-icons/react";
-import { theme } from "@styles/theme";
 import Link from "next/link";
 import styled from "styled-components";
 

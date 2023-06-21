@@ -8,17 +8,12 @@ import { getPublicAttributes } from "@queries/public/useGetPublic";
 import { useGenerateResponse } from "@queries/public/usePublic";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
-import {
-  GetServerSideProps,
-  GetStaticProps,
-  InferGetStaticPropsType,
-} from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { CommonKeyStringPair } from "types";
 import ReCAPTCHA from "react-google-recaptcha";
-import { minutes } from "@utils/helpers/time";
 
 export const getStaticProps: GetStaticProps<{
   attributes: CommonKeyStringPair;
@@ -28,7 +23,7 @@ export const getStaticProps: GetStaticProps<{
     props: {
       attributes,
     },
-    revalidate: 60,
+    revalidate: 1,
   };
 };
 
@@ -39,12 +34,16 @@ export default function GeneratePage({
 
   const [gptResponse, setGptResponse] = useState("");
 
+  const [loadingRecaptcha, setLoadingRecaptcha] = useState(false);
+
   const { register, handleSubmit } = useForm();
 
   const generateResponse = useGenerateResponse();
 
   const onSubmit = async (data: any) => {
+    setLoadingRecaptcha(true);
     const recaptchaValue = await recaptchaRef.current?.executeAsync();
+    setLoadingRecaptcha(false);
     const response = await generateResponse.mutateAsync({
       body: {
         attributes: data,
@@ -81,7 +80,7 @@ export default function GeneratePage({
                 size="invisible"
                 sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
               />
-              <Button loading={generateResponse.isLoading}>
+              <Button loading={generateResponse.isLoading || loadingRecaptcha}>
                 Create your draft
               </Button>
             </FlexColumn>

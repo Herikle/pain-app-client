@@ -1,6 +1,4 @@
 import { LoadingWrapper } from "@components/LoadingWrapper";
-import { PlusCircle } from "@phosphor-icons/react";
-import { theme } from "@styles/theme";
 import Link from "next/link";
 import { Tooltip } from "react-tooltip";
 import styled, { css } from "styled-components";

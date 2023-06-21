@@ -8,8 +8,6 @@ import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { RoutesPath } from "utils/routes";
 import Link from "next/link";
-// import { GoogleLogo } from "@phosphor-icons/react";
-// import { FlexRow } from "design-components/Flex";
 
 const LoginSchema = z.object({
   email: z.string().email().nonempty(),

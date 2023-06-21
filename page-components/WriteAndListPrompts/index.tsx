@@ -12,11 +12,7 @@ import {
 } from "@utils/helpers/prompt";
 import styled from "styled-components";
 import { IPrompt, IPromptOptions } from "types";
-import {
-  useSavePrompt,
-  useSetMainPrompt,
-  useUpdatePrompt,
-} from "@queries/prompt/usePrompt";
+import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
 import Router from "next/router";
 import { RoutesPath } from "@utils/routes";

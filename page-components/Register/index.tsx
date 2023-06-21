@@ -2,15 +2,12 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import Link from "next/link";
 import { RoutesPath } from "utils/routes";
-// import { GoogleLogo } from "@phosphor-icons/react";
-// import { FlexRow } from "design-components/Flex";
 
 const RegisterSchema = z
   .object({
