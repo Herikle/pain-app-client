@@ -11,7 +11,13 @@ import {
   promptHasAttributes,
 } from "@utils/helpers/prompt";
 import styled from "styled-components";
-import { IAttributesConfig, IPrompt, IPromptOptions } from "types";
+import {
+  CommonKeyBooleanPair,
+  CommonKeyStringPair,
+  IAttributesConfig,
+  IPrompt,
+  IPromptOptions,
+} from "types";
 import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
 import Router from "next/router";
@@ -20,6 +26,7 @@ import { TokensUsageType } from "@page-components/PromptResponse";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
 import { useSetSetMainPrompt } from "@components/Modals/SetMainPromptModal/hook";
+import { CleanUpUndefined } from "@utils/helpers/object";
 
 const inconsolata = Inconsolata({ subsets: ["latin"] });
 
@@ -28,8 +35,9 @@ type WriteAndListPromptsProps = {
   onChangePrompt: (prompt: string) => void;
   prompts: IPrompt[];
   attributes: { [key: string]: string };
-  attributesConfig: IAttributesConfig;
   onChangeAttributes: (attributes: { [key: string]: string }) => void;
+  attributesConfig: IAttributesConfig;
+  onChangeAttributesConfig: (attributesConfig: IAttributesConfig) => void;
   tokensUsage: TokensUsageType | null;
   options: IPromptOptions;
   prompt_id?: string;
@@ -43,8 +51,9 @@ export const WriteAndListPrompts = ({
   onChangePrompt,
   prompts,
   attributes,
-  attributesConfig,
   onChangeAttributes,
+  attributesConfig,
+  onChangeAttributesConfig,
   tokensUsage,
   options,
   prompt_id,
@@ -68,6 +77,7 @@ export const WriteAndListPrompts = ({
           attributes,
           prompt,
           options,
+          attributesConfig,
         },
       });
     } else {
@@ -97,10 +107,34 @@ export const WriteAndListPrompts = ({
       });
 
       const currentAttibutes = { ...attributes };
+      const currentAttributesConfig = { ...attributesConfig };
 
       Object.keys(currentAttibutes).forEach((key) => {
         if (!attributesDetected.includes(key)) {
           delete currentAttibutes[key];
+          currentAttributesConfig.helperText =
+            CleanUpUndefined<CommonKeyStringPair>({
+              ...currentAttributesConfig.helperText,
+              [key]: undefined,
+            });
+          currentAttributesConfig.label = CleanUpUndefined<CommonKeyStringPair>(
+            {
+              ...currentAttributesConfig.label,
+              [key]: undefined,
+            }
+          );
+
+          currentAttributesConfig.placeholder =
+            CleanUpUndefined<CommonKeyStringPair>({
+              ...currentAttributesConfig.placeholder,
+              [key]: undefined,
+            });
+
+          currentAttributesConfig.isTextArea =
+            CleanUpUndefined<CommonKeyBooleanPair>({
+              ...currentAttributesConfig.isTextArea,
+              [key]: undefined,
+            });
         }
       });
 
@@ -108,6 +142,8 @@ export const WriteAndListPrompts = ({
         ...currentAttibutes,
         ...newAttributes,
       });
+
+      onChangeAttributesConfig(currentAttributesConfig);
     } else {
       onChangeAttributes({});
     }
