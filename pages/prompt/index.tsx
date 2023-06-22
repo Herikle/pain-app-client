@@ -11,12 +11,20 @@ import {
   TokensUsageType,
 } from "@page-components/PromptResponse";
 import { useSetSelectedPrompt } from "state/useSelectedPrompt";
-import { IPromptOptions } from "types";
+import {
+  EmptyAttributesConfig,
+  IAttributesConfig,
+  IPromptOptions,
+} from "types";
 
 export default function PromptPage() {
   const [prompt, setPrompt] = useState("");
 
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
+
+  const [attributesConfig, setAttributesConfig] = useState<IAttributesConfig>(
+    EmptyAttributesConfig
+  );
 
   const [options, setOptions] = useState<IPromptOptions>({});
 
@@ -74,6 +82,7 @@ export default function PromptPage() {
           prompt={prompt}
           onChangePrompt={setPrompt}
           attributes={attributes}
+          attributesConfig={attributesConfig}
           onChangeAttributes={setAttributes}
           options={options}
           tokensUsage={tokensUsage}
@@ -82,6 +91,8 @@ export default function PromptPage() {
         <PromptAttributes
           attributes={attributes}
           onUpdateAttributes={setAttributes}
+          attributesConfig={attributesConfig}
+          onUpdateAttributesConfig={setAttributesConfig}
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
           getPromptWithAttributes={getPromptWithAttributes}

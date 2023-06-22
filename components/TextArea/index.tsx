@@ -5,6 +5,8 @@ import styled, { css } from "styled-components";
 import TextareaAutosize, {
   TextareaAutosizeProps,
 } from "react-textarea-autosize";
+import { Question } from "@phosphor-icons/react";
+import { Tooltip } from "react-tooltip";
 
 interface Props extends TextareaAutosizeProps {
   label?: string;
@@ -13,11 +15,22 @@ interface Props extends TextareaAutosizeProps {
   error?: string;
   minRows?: number;
   maxRows?: number;
+  helperText?: string;
 }
 
 export const TextArea = React.forwardRef(
   (
-    { label, fullWidth, width, error, rows, minRows, maxRows, ...rest }: Props,
+    {
+      label,
+      fullWidth,
+      width,
+      error,
+      rows,
+      minRows,
+      maxRows,
+      helperText,
+      ...rest
+    }: Props,
     ref: any
   ) => {
     return (
@@ -25,6 +38,20 @@ export const TextArea = React.forwardRef(
         {label && (
           <Label htmlFor={rest?.id}>
             <Text variant="body2Bold">{label}</Text>
+            {helperText && rest?.id && (
+              <>
+                <Question size={16} weight="fill" id={`${rest?.id}-helper`} />
+                <TooltipWrapper>
+                  <Tooltip anchorSelect={`#${rest?.id}-helper`} noArrow>
+                    <TooltipContainer>
+                      <Text variant="body2" color="font_color">
+                        {helperText}
+                      </Text>
+                    </TooltipContainer>
+                  </Tooltip>
+                </TooltipWrapper>
+              </>
+            )}
           </Label>
         )}
         <TextAreaStyled
@@ -41,7 +68,23 @@ export const TextArea = React.forwardRef(
 
 TextArea.displayName = "TextArea";
 
-const Label = styled.label``;
+const TooltipWrapper = styled.div`
+  & .react-tooltip {
+    background-color: ${theme.colors.pure_white};
+    border: 1px solid ${theme.colors.font_color};
+    opacity: 1 !important;
+  }
+`;
+
+const TooltipContainer = styled.div`
+  max-width: 300px;
+`;
+
+const Label = styled.label`
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+`;
 
 const TextAreaStyled = styled(TextareaAutosize)`
   border-radius: 2px;
@@ -52,6 +95,10 @@ const TextAreaStyled = styled(TextareaAutosize)`
   padding: 12px;
   resize: none;
   ${LightScrollBar};
+  &:focus {
+    border: 2px solid ${theme.colors.secondary_color};
+  }
+  box-sizing: border-box;
 `;
 
 type ContainerProps = {

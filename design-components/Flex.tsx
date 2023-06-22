@@ -19,6 +19,7 @@ export const FlexRow = styled.div<FlexProps>`
 
 export const FlexColumn = styled.div<FlexProps>`
   display: flex;
+  align-items: ${(props) => props.align ?? "unset"};
   flex-direction: column;
   justify-content: ${(props) => props.justify ?? "flex-start"};
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};

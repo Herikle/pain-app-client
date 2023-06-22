@@ -11,7 +11,7 @@ import {
   promptHasAttributes,
 } from "@utils/helpers/prompt";
 import styled from "styled-components";
-import { IPrompt, IPromptOptions } from "types";
+import { IAttributesConfig, IPrompt, IPromptOptions } from "types";
 import { useSavePrompt, useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { ListPrompts } from "./components/ListPrompts";
 import Router from "next/router";
@@ -28,6 +28,7 @@ type WriteAndListPromptsProps = {
   onChangePrompt: (prompt: string) => void;
   prompts: IPrompt[];
   attributes: { [key: string]: string };
+  attributesConfig: IAttributesConfig;
   onChangeAttributes: (attributes: { [key: string]: string }) => void;
   tokensUsage: TokensUsageType | null;
   options: IPromptOptions;
@@ -42,6 +43,7 @@ export const WriteAndListPrompts = ({
   onChangePrompt,
   prompts,
   attributes,
+  attributesConfig,
   onChangeAttributes,
   tokensUsage,
   options,
@@ -74,6 +76,7 @@ export const WriteAndListPrompts = ({
           prompt: prompt,
           attributes: attributes,
           options,
+          attributesConfig,
         },
       });
       Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));

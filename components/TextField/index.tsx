@@ -89,6 +89,10 @@ const Input = styled.input<InputProps>`
       : css`
           padding-block: 0.1rem;
         `}
+
+  &:focus {
+    border: 2px solid ${theme.colors.secondary_color};
+  }
 `;
 
 type ContainerProps = {

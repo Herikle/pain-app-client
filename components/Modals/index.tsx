@@ -1,3 +1,4 @@
+import { AttributesConfigModal } from "./AttributesConfigModal";
 import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { PromptOptionsModal } from "./PromptOptionsModal";
@@ -12,6 +13,7 @@ export const Modals = () => {
       <ChangedPromptWarningModal />
       <PromptOptionsModal />
       <SetMainPromptModal />
+      <AttributesConfigModal />
     </>
   );
 };

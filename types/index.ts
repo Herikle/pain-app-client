@@ -12,6 +12,10 @@ export type CommonKeyStringPair = {
   [key: string]: string;
 };
 
+export type CommonKeyBooleanPair = {
+  [key: string]: boolean;
+};
+
 export type IMe = {
   _id: string;
   name: string;
@@ -29,12 +33,27 @@ export type IPromptOptions = {
   top_p?: number;
 };
 
+export const EmptyAttributesConfig = {
+  label: {},
+  helperText: {},
+  placeholder: {},
+  isTextArea: {},
+};
+
+export type IAttributesConfig = {
+  label: CommonKeyStringPair;
+  placeholder: CommonKeyStringPair;
+  helperText: CommonKeyStringPair;
+  isTextArea: CommonKeyBooleanPair;
+};
+
 export type IPrompt = {
   _id: string;
   title: string;
   prompt: string;
   options: IPromptOptions;
   attributes: any;
+  attributesConfig?: IAttributesConfig;
   createdAt: string;
   updatedAt: string;
   isMain?: boolean;

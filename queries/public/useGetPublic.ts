@@ -1,5 +1,10 @@
 import { request } from "@queries/request";
-import { CommonKeyStringPair } from "types";
+import { CommonKeyStringPair, IAttributesConfig } from "types";
+
+export type GetPublicAttributesResponse = {
+  attributes: CommonKeyStringPair;
+  attributesConfig: IAttributesConfig;
+};
 
 export const getPublicAttributes = async () => {
   const { data } = await request({
@@ -8,5 +13,5 @@ export const getPublicAttributes = async () => {
     url: "/attributes",
   });
 
-  return data as CommonKeyStringPair;
+  return data as GetPublicAttributesResponse;
 };

@@ -5,12 +5,13 @@ import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { SetStateAction, useState } from "react";
-import { CommonKeyStringPair, IPromptOptions } from "types";
+import { CommonKeyStringPair, IAttributesConfig, IPromptOptions } from "types";
 import { useSetPromptOptionsModal } from "@components/Modals/PromptOptionsModal/hook";
-import { Copy } from "@phosphor-icons/react";
+import { Copy, Gear } from "@phosphor-icons/react";
 import { Box } from "@mui/material";
 import { Tooltip } from "react-tooltip";
 import { theme } from "@styles/theme";
+import { useSetAttributesConfigModal } from "@components/Modals/AttributesConfigModal/hook";
 
 type PromptAttributesProps = {
   attributes: CommonKeyStringPair;
@@ -19,6 +20,8 @@ type PromptAttributesProps = {
       [key: string]: string;
     }>
   ) => void;
+  attributesConfig: IAttributesConfig;
+  onUpdateAttributesConfig: (value: SetStateAction<IAttributesConfig>) => void;
   sendPrompt: () => void;
   isLoading: boolean;
   options: IPromptOptions;
@@ -30,6 +33,8 @@ type PromptAttributesProps = {
 export const PromptAttributes = ({
   attributes,
   onUpdateAttributes,
+  attributesConfig,
+  onUpdateAttributesConfig,
   sendPrompt,
   isLoading,
   options,
@@ -66,6 +71,17 @@ export const PromptAttributes = ({
     }, 2000);
   };
 
+  const openAttributesConfigModal = useSetAttributesConfigModal();
+
+  const openAttributesConfig = (attribute: string) => {
+    openAttributesConfigModal({
+      attributesConfig,
+      onUpdateAttributesConfig,
+      attribute,
+      prompt_id,
+    });
+  };
+
   return (
     <Attributes opacity={noAttributes ? 0.5 : 1}>
       <Text variant="body2Bold">Step 2: Edit your attributes</Text>
@@ -80,14 +96,22 @@ export const PromptAttributes = ({
           <Grid container spacing={4}>
             {Object.keys(attributes).map((attribute) => (
               <Grid xs={4} key={attribute}>
-                <TextArea
-                  label={attribute}
-                  fullWidth
-                  value={attributes[attribute]}
-                  onChange={(e) =>
-                    updateAttributeValue(attribute, e.target.value)
-                  }
-                />
+                <FlexRow align="flex-start">
+                  <TextArea
+                    label={attribute}
+                    fullWidth
+                    value={attributes[attribute]}
+                    onChange={(e) =>
+                      updateAttributeValue(attribute, e.target.value)
+                    }
+                  />
+                  <Gear
+                    size={22}
+                    color={theme.colors.text_switched}
+                    cursor="pointer"
+                    onClick={() => openAttributesConfig(attribute)}
+                  />
+                </FlexRow>
               </Grid>
             ))}
           </Grid>

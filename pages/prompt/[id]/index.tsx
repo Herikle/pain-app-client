@@ -15,7 +15,12 @@ import { LoadingWrapper } from "@components/LoadingWrapper";
 import { useSetSelectedPrompt } from "state/useSelectedPrompt";
 import { useSetChangedPromptWarningModal } from "@components/Modals/ChangedPromptWarningModal/hook";
 import { RoutesPath } from "@utils/routes";
-import { IPromptOptions } from "types";
+import {
+  CommonKeyStringPair,
+  EmptyAttributesConfig,
+  IAttributesConfig,
+  IPromptOptions,
+} from "types";
 
 export default function PromptPage() {
   const router = useRouter();
@@ -24,7 +29,11 @@ export default function PromptPage() {
 
   const [prompt, setPrompt] = useState("");
 
-  const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
+  const [attributes, setAttributes] = useState<CommonKeyStringPair>({});
+
+  const [attributesConfig, setAttributesConfig] = useState<IAttributesConfig>(
+    EmptyAttributesConfig
+  );
 
   const [options, setOptions] = useState<IPromptOptions>({});
 
@@ -59,6 +68,7 @@ export default function PromptPage() {
     if (promptById) {
       setPrompt(promptById.prompt);
       setAttributes(promptById.attributes ?? {});
+      setAttributesConfig(promptById.attributesConfig ?? EmptyAttributesConfig);
       setSelectedPrompt(promptById);
       setOptions(promptById.options ?? {});
     }
@@ -124,6 +134,7 @@ export default function PromptPage() {
           prompt={prompt}
           onChangePrompt={setPrompt}
           attributes={attributes}
+          attributesConfig={attributesConfig}
           onChangeAttributes={setAttributes}
           tokensUsage={tokensUsage}
           prompts={prompts ?? []}
@@ -135,6 +146,8 @@ export default function PromptPage() {
         <PromptAttributes
           attributes={attributes}
           onUpdateAttributes={setAttributes}
+          attributesConfig={attributesConfig}
+          onUpdateAttributesConfig={setAttributesConfig}
           sendPrompt={sendPrompt}
           isLoading={generateResponse.isLoading}
           options={options}

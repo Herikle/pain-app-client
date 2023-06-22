@@ -4,7 +4,10 @@ import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { ArrowClockwise, Copy } from "@phosphor-icons/react";
-import { getPublicAttributes } from "@queries/public/useGetPublic";
+import {
+  GetPublicAttributesResponse,
+  getPublicAttributes,
+} from "@queries/public/useGetPublic";
 import { useGenerateResponse } from "@queries/public/usePublic";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
@@ -12,11 +15,12 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { CommonKeyStringPair } from "types";
+import { CommonKeyStringPair, EmptyAttributesConfig } from "types";
 import ReCAPTCHA from "react-google-recaptcha";
+import { TextField } from "@components/TextField";
 
 export const getStaticProps: GetStaticProps<{
-  attributes: CommonKeyStringPair;
+  attributes: GetPublicAttributesResponse;
 }> = async () => {
   const attributes = await getPublicAttributes();
   return {
@@ -30,8 +34,8 @@ export const getStaticProps: GetStaticProps<{
 export default function GeneratePage({
   attributes,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const attributesList = Object.keys(attributes);
-
+  const attributesList = Object.keys(attributes.attributes);
+  const attributesConfig = attributes.attributesConfig ?? EmptyAttributesConfig;
   const [gptResponse, setGptResponse] = useState("");
 
   const [loadingRecaptcha, setLoadingRecaptcha] = useState(false);
@@ -65,16 +69,37 @@ export default function GeneratePage({
           </Text>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FlexColumn gap={1} width="400px" marginInline="auto">
-              {attributesList.map((attribute) => (
-                <TextArea
-                  key={attribute}
-                  label={textElipsis(attribute, 50)}
-                  minRows={3}
-                  maxRows={3}
-                  required
-                  {...register(attribute)}
-                />
-              ))}
+              {attributesList.map((attribute) =>
+                attributesConfig.isTextArea?.[attribute] ? (
+                  <TextArea
+                    key={attribute}
+                    label={
+                      attributesConfig.label?.[attribute] ||
+                      textElipsis(attribute, 50)
+                    }
+                    placeholder={attributesConfig.placeholder?.[attribute]}
+                    helperText={attributesConfig.helperText?.[attribute]}
+                    id={attribute}
+                    minRows={3}
+                    maxRows={3}
+                    required
+                    {...register(attribute)}
+                  />
+                ) : (
+                  <TextField
+                    key={attribute}
+                    label={
+                      attributesConfig.label?.[attribute] ||
+                      textElipsis(attribute, 50)
+                    }
+                    placeholder={attributesConfig.placeholder?.[attribute]}
+                    helperText={attributesConfig.helperText?.[attribute]}
+                    id={attribute}
+                    required
+                    {...register(attribute)}
+                  />
+                )
+              )}
               <ReCAPTCHA
                 ref={recaptchaRef}
                 size="invisible"

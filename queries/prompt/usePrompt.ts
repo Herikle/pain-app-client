@@ -3,7 +3,7 @@ import { request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { IPrompt, IPromptOptions } from "types";
+import { IAttributesConfig, IPrompt, IPromptOptions } from "types";
 
 type GeneratePromptPayload = {
   body: {
@@ -38,6 +38,7 @@ type SavePromptPayload = {
   body: {
     prompt: string;
     attributes: any;
+    attributesConfig: IAttributesConfig;
     options: IPromptOptions;
   };
 };
@@ -102,6 +103,7 @@ type UpdatePromptPayload = {
   body: {
     prompt?: string;
     attributes?: any;
+    attributesConfig?: IAttributesConfig;
     title?: string;
     options?: IPromptOptions;
   };
