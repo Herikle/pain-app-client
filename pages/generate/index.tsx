@@ -150,7 +150,7 @@ export default function GeneratePage({
             an Initial Draft of a Scientific Manuscript
           </Text>
           <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-            <FlexColumn gap={1} width="400px" marginInline="auto">
+            <FormColumn gap={1} marginInline="auto">
               {attributesList.map((attribute) =>
                 attributesConfig.isTextArea?.[attribute] ? (
                   <TextArea
@@ -190,7 +190,7 @@ export default function GeneratePage({
               <Button loading={isLoading} disabled={isRunning}>
                 Create your draft
               </Button>
-            </FlexColumn>
+            </FormColumn>
           </form>
         </FlexColumn>
       </Container>
@@ -231,6 +231,13 @@ export default function GeneratePage({
     </>
   );
 }
+
+const FormColumn = styled(FlexColumn)`
+  width: 400px;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+`;
 
 const ResponseTextContainer = styled.div`
   margin-top: 4rem;
