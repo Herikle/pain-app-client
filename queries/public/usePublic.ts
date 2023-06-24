@@ -11,14 +11,15 @@ type GeneratePromptPayload = {
 };
 
 const generateResponse = async ({ body }: GeneratePromptPayload) => {
-  const { data } = await request({
+  const response = await request({
     method: "POST",
     service: "public",
     url: "/generate",
     data: body,
+    responseType: "stream",
   });
 
-  return data as string;
+  return response;
 };
 
 export const useGenerateResponse = () => {

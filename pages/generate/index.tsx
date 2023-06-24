@@ -31,6 +31,28 @@ export const getStaticProps: GetStaticProps<{
   };
 };
 
+const parseData = (data: string) => {
+  const replacedData = data.replace("data: ", "");
+  if (!replacedData) return "";
+  const parsed = JSON.parse(replacedData);
+  const text = parsed?.choices?.[0]?.delta?.content;
+
+  return text;
+};
+
+const getStreamText = (chunk: string) => {
+  try {
+    const allChunks = chunk.split("\n");
+    let text = "";
+    for (const chunk of allChunks) {
+      text += parseData(chunk);
+    }
+    return text;
+  } catch (e) {
+    return "";
+  }
+};
+
 export default function GeneratePage({
   attributes,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -38,23 +60,47 @@ export default function GeneratePage({
   const attributesConfig = attributes.attributesConfig ?? EmptyAttributesConfig;
   const [gptResponse, setGptResponse] = useState("");
 
-  const [loadingRecaptcha, setLoadingRecaptcha] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit } = useForm();
 
-  const generateResponse = useGenerateResponse();
-
-  const onSubmit = async (data: any) => {
-    setLoadingRecaptcha(true);
+  const onSubmit = async (attributes: any) => {
+    setGptResponse("");
+    setIsLoading(true);
     const recaptchaValue = await recaptchaRef.current?.executeAsync();
-    setLoadingRecaptcha(false);
-    const response = await generateResponse.mutateAsync({
-      body: {
-        attributes: data,
-        recaptchaToken: recaptchaValue,
-      },
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + "/public/generate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Connection: "keep-alive",
+          "Response-Type": "stream",
+        },
+        body: JSON.stringify({
+          attributes,
+          recaptchaToken: recaptchaValue,
+        }),
+      }
+    );
+    setIsLoading(false);
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
     });
-    setGptResponse(response);
+    if (response?.status !== 200) {
+      // throw error
+      return;
+    }
+    const reader = response?.body?.getReader();
+    const decoder = new TextDecoder("utf-8");
+    while (true) {
+      const { value, done } = (await reader?.read()) || {};
+      if (done) break;
+      const chunk = decoder.decode(value);
+      const pieceOfText = getStreamText(chunk);
+      setGptResponse((prev) => prev + pieceOfText);
+    }
   };
 
   const recaptchaRef = React.createRef<ReCAPTCHA>();
@@ -105,9 +151,7 @@ export default function GeneratePage({
                 size="invisible"
                 sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
               />
-              <Button loading={generateResponse.isLoading || loadingRecaptcha}>
-                Create your draft
-              </Button>
+              <Button loading={isLoading}>Create your draft</Button>
             </FlexColumn>
           </form>
         </FlexColumn>

@@ -10,6 +10,7 @@ type IRequest = {
   data?: { [key: string]: any };
   query?: { [key: string]: any };
   responseType?: ResponseType;
+  headers?: { [key: string]: any };
 };
 
 axios.interceptors.request.use((config) => {
@@ -29,11 +30,13 @@ export const request = ({
   query,
   service,
   responseType,
+  headers = {},
 }: IRequest) =>
   axios.request({
     baseURL: process.env.NEXT_PUBLIC_API_URL + "/" + service,
     headers: {
       "Content-Type": "application/json",
+      ...headers,
     },
     url,
     method,
