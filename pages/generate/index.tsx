@@ -53,12 +53,12 @@ const getStreamText = (chunk: string) => {
   }
 };
 
-// const scrollBottom = () => {
-//   window.scrollTo({
-//     top: document.body.scrollHeight,
-//     behavior: "smooth",
-//   });
-// };
+const scrollBottom = () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth",
+  });
+};
 
 export default function GeneratePage({
   attributes,
@@ -99,7 +99,7 @@ export default function GeneratePage({
       // throw error
       return;
     }
-    // scrollBottom();
+    scrollBottom();
     // const interval = setInterval(scrollBottom, 500);
     const reader = response?.body?.getReader();
     const decoder = new TextDecoder("utf-8");
