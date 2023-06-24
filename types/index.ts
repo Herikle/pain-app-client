@@ -38,6 +38,7 @@ export const EmptyAttributesConfig = {
   helperText: {},
   placeholder: {},
   isTextArea: {},
+  isRequired: {},
 };
 
 export type IAttributesConfig = {
@@ -45,6 +46,7 @@ export type IAttributesConfig = {
   placeholder: CommonKeyStringPair;
   helperText: CommonKeyStringPair;
   isTextArea: CommonKeyBooleanPair;
+  isRequired: CommonKeyBooleanPair;
 };
 
 export type IPrompt = {

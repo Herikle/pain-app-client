@@ -27,6 +27,7 @@ type FormValues = {
   helperText: string;
   placeholder: string;
   isTextArea: boolean;
+  isRequired: boolean;
 };
 
 const Child = ({
@@ -58,12 +59,18 @@ const Child = ({
     [attributesConfig.isTextArea, attribute]
   );
 
+  const isRequired = useMemo(
+    () => attributesConfig.isRequired?.[attribute] ?? false,
+    [attributesConfig.isRequired, attribute]
+  );
+
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       label: labelTextValue,
       helperText: helperTextValue,
       placeholder: placeholderValue,
       isTextArea,
+      isRequired,
     },
   });
 
@@ -86,6 +93,10 @@ const Child = ({
         ...(attributesConfig.isTextArea ?? {}),
         [attribute]: data.isTextArea,
       },
+      isRequired: {
+        ...(attributesConfig.isRequired ?? {}),
+        [attribute]: data.isRequired,
+      },
     };
     if (prompt_id) {
       await updatePrompt.mutateAsync({
@@ -99,6 +110,17 @@ const Child = ({
     }
     onUpdateAttributesConfig(updatedAttributesConfig);
     onClose();
+  };
+
+  const getLabel = () => {
+    const isRequired = watch("isRequired");
+    const label = watch("label") || textElipsis(attribute, 50);
+
+    if (isRequired) {
+      return label;
+    } else {
+      return label + " (optional)";
+    }
   };
 
   return (
@@ -124,6 +146,16 @@ const Child = ({
               label={<Text>use textarea</Text>}
             />
 
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={watch("isRequired")}
+                  {...register("isRequired")}
+                />
+              }
+              label={<Text>is required</Text>}
+            />
+
             <Button fullWidth loading={updatePrompt.isLoading}>
               Save
             </Button>
@@ -143,7 +175,7 @@ const Child = ({
           {watch("isTextArea") ? (
             <TextArea
               key={attribute}
-              label={watch("label") || textElipsis(attribute, 50)}
+              label={getLabel()}
               placeholder={watch("placeholder")}
               helperText={watch("helperText")}
               id={attribute}
@@ -153,7 +185,7 @@ const Child = ({
           ) : (
             <TextField
               key={attribute}
-              label={watch("label") || textElipsis(attribute, 50)}
+              label={getLabel()}
               placeholder={watch("placeholder")}
               helperText={watch("helperText")}
               id={attribute}

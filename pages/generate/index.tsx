@@ -12,7 +12,7 @@ import { useGenerateResponse } from "@queries/public/usePublic";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { CommonKeyStringPair, EmptyAttributesConfig } from "types";
@@ -53,6 +53,13 @@ const getStreamText = (chunk: string) => {
   }
 };
 
+// const scrollBottom = () => {
+//   window.scrollTo({
+//     top: document.body.scrollHeight,
+//     behavior: "smooth",
+//   });
+// };
+
 export default function GeneratePage({
   attributes,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -61,6 +68,8 @@ export default function GeneratePage({
   const [gptResponse, setGptResponse] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isRunning, setIsRunning] = useState(false);
 
   const { register, handleSubmit } = useForm();
 
@@ -84,19 +93,23 @@ export default function GeneratePage({
       }
     );
     setIsLoading(false);
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
+    setIsRunning(true);
+
     if (response?.status !== 200) {
       // throw error
       return;
     }
+    // scrollBottom();
+    // const interval = setInterval(scrollBottom, 500);
     const reader = response?.body?.getReader();
     const decoder = new TextDecoder("utf-8");
     while (true) {
       const { value, done } = (await reader?.read()) || {};
-      if (done) break;
+      if (done) {
+        setIsRunning(false);
+        // clearInterval(interval);
+        break;
+      }
       const chunk = decoder.decode(value);
       const pieceOfText = getStreamText(chunk);
       setGptResponse((prev) => prev + pieceOfText);
@@ -104,6 +117,29 @@ export default function GeneratePage({
   };
 
   const recaptchaRef = React.createRef<ReCAPTCHA>();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const rerun = () => {
+    if (isRunning) {
+      return;
+    } else {
+      formRef.current?.dispatchEvent(
+        new Event("submit", { cancelable: true, bubbles: true })
+      );
+    }
+  };
+
+  const getLabel = (attribute: string, required: boolean) => {
+    if (required) {
+      return attributesConfig.label?.[attribute] || textElipsis(attribute, 50);
+    } else {
+      return (
+        (attributesConfig.label?.[attribute] || textElipsis(attribute, 50)) +
+        " (optional)"
+      );
+    }
+  };
 
   return (
     <>
@@ -113,35 +149,35 @@ export default function GeneratePage({
             Describing Pain Episodes with the Cumulative Pain Method Generating
             an Initial Draft of a Scientific Manuscript
           </Text>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <FlexColumn gap={1} width="400px" marginInline="auto">
               {attributesList.map((attribute) =>
                 attributesConfig.isTextArea?.[attribute] ? (
                   <TextArea
                     key={attribute}
-                    label={
-                      attributesConfig.label?.[attribute] ||
-                      textElipsis(attribute, 50)
-                    }
+                    label={getLabel(
+                      attribute,
+                      attributesConfig.isRequired?.[attribute]
+                    )}
                     placeholder={attributesConfig.placeholder?.[attribute]}
                     helperText={attributesConfig.helperText?.[attribute]}
                     id={attribute}
                     minRows={3}
                     maxRows={3}
-                    required
+                    required={attributesConfig.isRequired?.[attribute]}
                     {...register(attribute)}
                   />
                 ) : (
                   <TextField
                     key={attribute}
-                    label={
-                      attributesConfig.label?.[attribute] ||
-                      textElipsis(attribute, 50)
-                    }
+                    label={getLabel(
+                      attribute,
+                      attributesConfig.isRequired?.[attribute]
+                    )}
                     placeholder={attributesConfig.placeholder?.[attribute]}
                     helperText={attributesConfig.helperText?.[attribute]}
                     id={attribute}
-                    required
+                    required={attributesConfig.isRequired?.[attribute]}
                     {...register(attribute)}
                   />
                 )
@@ -151,7 +187,9 @@ export default function GeneratePage({
                 size="invisible"
                 sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
               />
-              <Button loading={isLoading}>Create your draft</Button>
+              <Button loading={isLoading} disabled={isRunning}>
+                Create your draft
+              </Button>
             </FlexColumn>
           </form>
         </FlexColumn>
@@ -164,7 +202,7 @@ export default function GeneratePage({
               color="pure_white"
               textColor="text_switched"
               textVariant="body2"
-              onClick={() => alert("Not implemented yet")}
+              onClick={rerun}
               noPadding
             >
               <FlexRow>
@@ -196,6 +234,7 @@ export default function GeneratePage({
 
 const ResponseTextContainer = styled.div`
   margin-top: 4rem;
+  padding-bottom: 4rem;
 `;
 
 const Response = styled.div`
