@@ -4,12 +4,11 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import { DeletePromptModalProps } from ".";
 
-type DeletePromptModalProps = {
-  prompt_id: string;
-};
+type DeletePromptModalPropsOmit = Omit<DeletePromptModalProps, "onClose">;
 
-const recoilDeleteModal = atom<DeletePromptModalProps | null>({
+const recoilDeleteModal = atom<DeletePromptModalPropsOmit | null>({
   key: "recoilDeleteModal",
   default: null,
 });

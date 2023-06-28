@@ -70,3 +70,34 @@ export const useUpdatePatient = () => {
     },
   });
 };
+
+type DeletePatientPayload = {
+  params: {
+    patient_id: string;
+  };
+};
+
+const deletePatient = async ({ params }: DeletePatientPayload) => {
+  const { data } = await request({
+    service: "patient",
+    url: `/${params.patient_id}`,
+    method: "DELETE",
+  });
+
+  return data;
+};
+
+export const useDeletePatient = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deletePatient, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QueryKeys.Patients.ByID);
+      queryClient.invalidateQueries(QueryKeys.Patients.List);
+      ToastSuccess("Patient deleted successfully");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};

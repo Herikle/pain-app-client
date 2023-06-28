@@ -1,7 +1,7 @@
 import { Button } from "@components/Button";
 import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
-import { FlexColumn } from "@design-components/Flex";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,9 @@ import styled from "styled-components";
 import { IPatient } from "types";
 import { getOnlyDateFromIsoDate } from "@utils/helpers/date";
 import { useUpdatePatient } from "@queries/patient/usePatient";
+import { Trash } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
+import { useSetDeletePatientModal } from "@components/Modals/DeletePatientModal/hook";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -35,6 +38,8 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   const updatePatient = useUpdatePatient();
 
+  const setDeletePatientModal = useSetDeletePatientModal();
+
   const { errors, isDirty } = formState;
 
   const onSubmit = async (data: PatientSchema) => {
@@ -45,6 +50,13 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       body: data,
     });
     reset(data);
+  };
+
+  const onDelete = () => {
+    setDeletePatientModal({
+      patient_id: patient._id,
+      patient,
+    });
   };
 
   return (
@@ -81,13 +93,21 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
             />
           </Grid>
         </Grid>
-        <Button
-          width="160px"
-          loading={updatePatient.isLoading}
-          disabled={!isDirty}
-        >
-          Save changes
-        </Button>
+        <FlexRow justify="space-between">
+          <Button
+            width="160px"
+            loading={updatePatient.isLoading}
+            disabled={!isDirty}
+          >
+            Save changes
+          </Button>
+          <Trash
+            size={24}
+            color={theme.colors.text_switched}
+            cursor="pointer"
+            onClick={onDelete}
+          />
+        </FlexRow>
       </Container>
     </form>
   );
