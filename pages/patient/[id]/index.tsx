@@ -15,6 +15,7 @@ import { CallToAction } from "@components/CallToAction";
 import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { useGetEpisodesList } from "@queries/episode/useGetEpisode";
 import { IEpisode } from "types";
+import { getDotDateFormat } from "@utils/helpers/date";
 
 export default function Patient() {
   const router = useRouter();
@@ -80,6 +81,7 @@ export default function Patient() {
               {
                 accessor: "createdAt",
                 label: "Date",
+                render: getDotDateFormat,
               },
               {
                 accessor: "tracks",
@@ -112,8 +114,6 @@ const Container = styled(FlexColumn)`
   gap: 2rem;
 `;
 
-const Wrapper = styled(FlexRow)`
-  justify-content: unset;
-  align-items: flex-start;
+const Wrapper = styled(FlexColumn)`
   gap: 5rem;
 `;

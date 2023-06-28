@@ -91,7 +91,7 @@ const Input = styled.input<InputProps>`
         `}
 
   &:focus {
-    border: 2px solid ${theme.colors.secondary_color};
+    border: 1px solid ${theme.colors.secondary_color};
   }
 `;
 

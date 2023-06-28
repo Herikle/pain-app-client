@@ -76,7 +76,6 @@ export const Container = styled.div`
   min-height: 20rem;
   height: 20rem;
   min-width: 500px;
-  max-width: 500px;
   display: flex;
   flex-direction: column;
 `;

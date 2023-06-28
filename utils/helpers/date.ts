@@ -1,4 +1,4 @@
-import { differenceInYears } from "date-fns";
+import { differenceInYears, format } from "date-fns";
 
 export const getAgeByBirthDate = (date: string) => {
   const today = new Date();
@@ -10,14 +10,14 @@ export const getOnlyDateFromIsoDate = (date: string | undefined) => {
   if (!date) {
     return "";
   }
-  const dateObject = new Date(date);
 
-  const year = dateObject.getFullYear();
-  const month = dateObject.getMonth() + 1;
-  const day = dateObject.getDate();
+  return format(new Date(date), "yyyy-MM-dd");
+};
 
-  const monthString = month < 10 ? `0${month}` : `${month}`;
-  const dayString = day < 10 ? `0${day}` : `${day}`;
+export const getDotDateFormat = (date: string | undefined) => {
+  if (!date) {
+    return "";
+  }
 
-  return `${year}-${monthString}-${dayString}`;
+  return format(new Date(date), "dd.MM.yy");
 };

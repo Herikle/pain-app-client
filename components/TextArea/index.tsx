@@ -96,7 +96,7 @@ const TextAreaStyled = styled(TextareaAutosize)`
   resize: none;
   ${LightScrollBar};
   &:focus {
-    border: 2px solid ${theme.colors.secondary_color};
+    border: 1px solid ${theme.colors.secondary_color};
   }
   box-sizing: border-box;
 `;

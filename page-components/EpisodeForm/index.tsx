@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { IEpisode } from "types";
 import { getOnlyDateFromIsoDate } from "@utils/helpers/date";
 import { useUpdatePatient } from "@queries/patient/usePatient";
+import { useUpdateEpisode } from "@queries/episode/useEpisode";
 
 const episodeSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -36,13 +37,17 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
     },
   });
 
-  const updatePatient = useUpdatePatient();
+  const updateEpisode = useUpdateEpisode();
 
   const { errors, isDirty } = formState;
 
   const onSubmit = async (data: EpisodeSchema) => {
-    console.log(data);
-    alert("Not implemented yet");
+    await updateEpisode.mutateAsync({
+      params: {
+        episode_id: episode._id,
+      },
+      body: data,
+    });
   };
 
   return (
@@ -91,7 +96,7 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
         </Grid>
         <Button
           width="160px"
-          loading={updatePatient.isLoading}
+          loading={updateEpisode.isLoading}
           disabled={!isDirty}
         >
           Save

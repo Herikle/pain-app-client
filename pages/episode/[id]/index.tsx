@@ -46,6 +46,7 @@ export default function EpisodePage() {
             }
           />
         )}
+        <Text variant="h1">Pain Episode</Text>
         {!!episode && <EpisodeForm episode={episode} />}
       </Container>
     </LoggedLayout>
