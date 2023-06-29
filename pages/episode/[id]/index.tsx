@@ -1,4 +1,5 @@
 import { BackButton } from "@components/BackButton";
+import { Canvas } from "@components/Canvas";
 import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
@@ -48,6 +49,7 @@ export default function EpisodePage() {
         )}
         <Text variant="h1">Pain Episode</Text>
         {!!episode && <EpisodeForm episode={episode} />}
+        <Canvas />
       </Container>
     </LoggedLayout>
   );
