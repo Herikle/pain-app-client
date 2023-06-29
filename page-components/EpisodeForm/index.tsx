@@ -8,8 +8,7 @@ import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
 import { IEpisode } from "types";
-import { getOnlyDateFromIsoDate } from "@utils/helpers/date";
-import { useUpdatePatient } from "@queries/patient/usePatient";
+import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
 
 const episodeSchema = z.object({
@@ -27,13 +26,13 @@ type EpisodeFormProps = {
 };
 
 export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
-  const { register, handleSubmit, formState, reset } = useForm<EpisodeSchema>({
+  const { register, handleSubmit, formState, watch } = useForm<EpisodeSchema>({
     resolver: zodResolver(episodeSchema),
     defaultValues: {
       name: episode.name,
       location: episode.location,
       diagnosis: episode.diagnosis,
-      start_date: getOnlyDateFromIsoDate(episode?.start_date),
+      start_date: getDateAndTimeFromIsoDate(episode?.start_date),
     },
   });
 
@@ -78,8 +77,8 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
           </Grid>
           <Grid xs={5}>
             <TextField
-              label="Date of start"
-              type="date"
+              label="Date and time of start"
+              type="datetime-local"
               {...register("start_date")}
               error={errors.start_date?.message}
             />

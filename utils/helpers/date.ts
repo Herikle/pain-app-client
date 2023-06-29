@@ -14,6 +14,14 @@ export const getOnlyDateFromIsoDate = (date: string | undefined) => {
   return format(new Date(date), "yyyy-MM-dd");
 };
 
+export const getDateAndTimeFromIsoDate = (date: string | undefined) => {
+  if (!date) {
+    return "";
+  }
+
+  return format(new Date(date), "yyyy-MM-dd'T'HH:mm");
+};
+
 export const getDotDateFormat = (date: string | undefined) => {
   if (!date) {
     return "";
