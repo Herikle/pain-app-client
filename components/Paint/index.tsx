@@ -12,22 +12,13 @@ type DrawObject = {
   points: Line;
 };
 
-const LAZY_RADIUS = 2;
-const BRUSH_RADIUS = 1;
-
-const lazy = new LazyBrush({
-  radius: BRUSH_RADIUS,
-  enabled: true,
-  initialPoint: { x: 0, y: 0 },
-});
-
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const Paint = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lineWidth, setLineWidth] = useState(5);
+  const [lineWidth, setLineWidth] = useState(2);
   const [lineColor, setLineColor] = useState("black");
   const [lineOpacity, setLineOpacity] = useState(1);
   const [stateSaved, setStateSaved] = useState<DrawObject[]>([]);
@@ -38,8 +29,6 @@ export const Paint = () => {
 
   const [objects, setObjects] = useState<DrawObject[]>([]);
 
-  // Initialization when the component
-  // mounts for the first time
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -47,6 +36,8 @@ export const Paint = () => {
       if (ctx) {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
+        ctx.shadowColor = "rgba(0,0,0,.5)";
+        ctx.shadowBlur = 2;
         ctx.globalAlpha = lineOpacity;
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
@@ -60,23 +51,23 @@ export const Paint = () => {
       ctxRef.current?.beginPath();
       ctxRef.current?.moveTo(object.position.x, object.position.y);
       for (const point of object.points) {
-        const x = object.position.x + point[0];
-        const y = object.position.y + point[1];
-        ctxRef.current?.beginPath();
-        ctxRef.current?.arc(x, y, LAZY_RADIUS, 0, Math.PI * 2, true);
+        ctxRef.current?.lineTo(
+          object.position.x + point[0],
+          object.position.y + point[1]
+        );
         ctxRef.current?.stroke();
-        await sleep(1);
-        ctxRef.current?.stroke();
+        await sleep(10);
       }
       ctxRef.current?.closePath();
     }
+    setObjects(toDraw);
   };
 
   // Function for starting the drawing
   const startDrawing = (e) => {
     if (ctxRef.current) {
-      // ctxRef.current.beginPath();
-      // ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      ctxRef.current.beginPath();
+      ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
       setIsDrawing(true);
       setCurrentStartPosition({
         x: e.nativeEvent.offsetX,
@@ -112,32 +103,13 @@ export const Paint = () => {
       const x = e.nativeEvent.offsetX;
       const y = e.nativeEvent.offsetY;
 
-      lazy.update({ x, y });
-      const brushHasMoved = lazy.brushHasMoved();
+      if (currentStartPosition && canvasRef?.current) {
+        ctxRef.current.lineTo(x, y);
 
-      if (brushHasMoved && currentStartPosition && canvasRef?.current) {
-        const brush = lazy.getBrushCoordinates();
-
-        // ctxRef.current.beginPath();
-        // ctxRef.current.fillStyle = "red";
-        // ctxRef.current.arc(
-        //   brush.x,
-        //   brush.y,
-        //   BRUSH_RADIUS,
-        //   0,
-        //   Math.PI * 2,
-        //   true
-        // );
-        // ctxRef.current.fill();
-
-        ctxRef.current.beginPath();
-        ctxRef.current.strokeStyle = "blue";
-        ctxRef.current.arc(brush.x, brush.y, LAZY_RADIUS, 0, Math.PI * 2, true);
         ctxRef.current.stroke();
-
         const points: Point = [
-          brush.x - currentStartPosition.x,
-          brush.y - currentStartPosition.y,
+          x - currentStartPosition.x,
+          y - currentStartPosition.y,
         ];
 
         setCurrentPoints((prev) => [...prev, points]);
@@ -162,7 +134,6 @@ export const Paint = () => {
   };
 
   const save = () => {
-    console.log(objects);
     setStateSaved(objects);
   };
 
