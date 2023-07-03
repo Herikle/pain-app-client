@@ -14,11 +14,16 @@ type DrawObject = {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const Paint = () => {
+type PaintProps = {
+  width: number;
+  height: number;
+};
+
+export const Paint = ({ width, height }: PaintProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lineWidth, setLineWidth] = useState(2);
+  const [lineWidth, setLineWidth] = useState(1);
   const [lineColor, setLineColor] = useState("black");
   const [lineOpacity, setLineOpacity] = useState(1);
   const [stateSaved, setStateSaved] = useState<DrawObject[]>([]);
@@ -36,7 +41,7 @@ export const Paint = () => {
       if (ctx) {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.shadowColor = "rgba(0,0,0,.5)";
+        ctx.shadowColor = "rgba(0,0,0,1)";
         ctx.shadowBlur = 2;
         ctx.globalAlpha = lineOpacity;
         ctx.strokeStyle = lineColor;
@@ -56,7 +61,7 @@ export const Paint = () => {
           object.position.y + point[1]
         );
         ctxRef.current?.stroke();
-        await sleep(10);
+        await sleep(1);
       }
       ctxRef.current?.closePath();
     }
@@ -150,9 +155,9 @@ export const Paint = () => {
           height={500}
         />
       </CanvasContainer>
-      <Button onClick={clear}>Clear</Button>
+      {/* <Button onClick={clear}>Clear</Button>
       <Button onClick={redraw}>Redraw</Button>
-      <Button onClick={save}>Save</Button>
+      <Button onClick={save}>Save</Button> */}
     </Container>
   );
 };

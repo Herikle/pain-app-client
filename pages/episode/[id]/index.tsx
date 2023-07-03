@@ -49,7 +49,7 @@ export default function EpisodePage() {
         )}
         <Text variant="h1">Pain Episode</Text>
         {!!episode && <EpisodeForm episode={episode} />}
-        <Paint />
+        <Paint width={500} height={500} />
       </Container>
     </LoggedLayout>
   );
