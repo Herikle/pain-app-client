@@ -1,6 +1,9 @@
+import { AddButton } from "@components/AddButton";
 import { BackButton } from "@components/BackButton";
+import { Paint } from "@components/Paint";
 import { Text } from "@components/Text";
-import { FlexColumn } from "@design-components/Flex";
+import { Track } from "@components/Track";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import { EpisodeForm } from "@page-components/EpisodeForm";
 import { useGetEpisodeById } from "@queries/episode/useGetEpisode";
@@ -48,14 +51,25 @@ export default function EpisodePage() {
         )}
         <Text variant="h1">Pain Episode</Text>
         {!!episode && <EpisodeForm episode={episode} />}
+        <TrackContainer>
+          <FlexColumn gap={4}>
+            <FlexRow gap={0} justify="space-between">
+              <Text variant="h1">Tracks</Text>
+              <AddButton onClick={() => alert("not implemented yet")} />
+            </FlexRow>
+            <Track />
+          </FlexColumn>
+        </TrackContainer>
       </Container>
     </LoggedLayout>
   );
 }
 
+const TrackContainer = styled.div`
+  margin-top: 5rem;
+`;
+
 const Container = styled(FlexColumn)`
   align-items: flex-start;
   gap: 2rem;
 `;
-
-//6483da5531ceb825dbd11c06

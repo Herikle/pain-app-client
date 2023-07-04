@@ -18,6 +18,13 @@ const LightThemeColors = {
   red_danger: "#FF0000",
 };
 
+const PainLevelColors = {
+  excruciating: "#7C2E90",
+  disabling: "#C83420",
+  hurful: "#C19039",
+  annoying: "#94923A",
+};
+
 const LightThemeHover = {
   primary: LightThemeColors.secondary_color,
   cta: LightThemeColors.cta_secondary,
@@ -27,6 +34,7 @@ const LightThemeHover = {
 
 export const theme = {
   colors: LightThemeColors,
+  pain_level_colors: PainLevelColors,
   hover_state: LightThemeHover,
 };
 
