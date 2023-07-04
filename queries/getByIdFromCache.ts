@@ -16,7 +16,6 @@ export const useReactQueryCache = () => {
   const getByIdFromCache = <T>(_id: string, queryKey: any) => {
     try {
       const datas = useQuery.getQueriesData([queryKey]) as any[];
-      console.log(datas);
       if (datas && datas.length > 0) {
         for (const data of datas) {
           const genericData = data?.[1] as GenericListData;

@@ -162,10 +162,7 @@ export const Paint = ({ width, height }: PaintProps) => {
   );
 };
 
-console.log(PencilIcon);
-
 const CanvasContainer = styled.div`
-  /* cursor: crosshair; */
   cursor: url(${PencilIcon.src}) 5 22, auto;
 `;
 
