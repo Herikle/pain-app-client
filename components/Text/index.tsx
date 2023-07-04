@@ -45,6 +45,7 @@ const variants: Record<TextVariant, any> = {
 
 type TextProps = {
   children: React.ReactNode;
+  customColor?: string;
   variant?: TextVariant;
   color?: ThemeColors;
   fontSize?: string;
@@ -63,6 +64,7 @@ type TextProps = {
 
 export const Text = ({
   children,
+  customColor,
   color = "font_color",
   variant = "body1",
   fontSize,
@@ -82,11 +84,11 @@ export const Text = ({
     <TextStyled
       className={fontFamily?.className}
       style={{
-        marginTop: mt ? `${mt}rem` : "0px",
-        paddingInline: px ? `${px}rem` : "0px",
+        marginTop: mt ? `${mt}rem` : undefined,
+        paddingInline: px ? `${px}rem` : undefined,
       }}
       $variant={variant}
-      $color={theme.colors[color]}
+      $color={customColor ?? theme.colors[color]}
       $fontSize={fontSize}
       $fontWeight={fontWeight}
       $align={align}
@@ -96,6 +98,7 @@ export const Text = ({
       $textElipsis={textElipsis}
       $maxWidth={maxWidth}
       $minWidth={minWidth}
+      title={textElipsis ? (children as string) : undefined}
     >
       {children}
     </TextStyled>

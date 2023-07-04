@@ -1,8 +1,8 @@
-import { Button } from "@components/Button";
 import { FlexColumn } from "@design-components/Flex";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { LazyBrush } from "lazy-brush";
+import PencilIcon from "public/icons/pencil.svg";
+import { Pencil } from "@phosphor-icons/react";
 
 type Point = [number, number];
 type Line = Point[];
@@ -42,7 +42,7 @@ export const Paint = ({ width, height }: PaintProps) => {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.shadowColor = "rgba(0,0,0,1)";
-        ctx.shadowBlur = 2;
+        ctx.shadowBlur = 1.5;
         ctx.globalAlpha = lineOpacity;
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
@@ -151,19 +151,25 @@ export const Paint = ({ width, height }: PaintProps) => {
           onMouseUp={endDrawing}
           onMouseMove={draw}
           ref={canvasRef}
-          width={500}
-          height={500}
+          width={width}
+          height={height}
         />
       </CanvasContainer>
-      {/* <Button onClick={clear}>Clear</Button>
-      <Button onClick={redraw}>Redraw</Button>
-      <Button onClick={save}>Save</Button> */}
+      {/* <Button onClick={clear}>Clear</Button> */}
+      {/* <Button onClick={redraw}>Redraw</Button> */}
+      {/* <Button onClick={save}>Save</Button> */}
     </Container>
   );
 };
 
+console.log(PencilIcon);
+
 const CanvasContainer = styled.div`
-  border: 1px solid black;
+  /* cursor: crosshair; */
+  cursor: url(${PencilIcon.src}) 5 22, auto;
 `;
 
-const Container = styled(FlexColumn)``;
+const Container = styled(FlexColumn)`
+  position: absolute;
+  top: 0;
+`;
