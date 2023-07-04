@@ -57,7 +57,7 @@ export const Track = () => {
       <Container>
         <SegmentsTitleComponent />
         <SegmentsContainer>
-          {[...Array(6)].map((_, index) => (
+          {[...Array(4)].map((_, index) => (
             <Segment key={index} hasDraw />
           ))}
         </SegmentsContainer>
