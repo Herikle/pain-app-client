@@ -1,7 +1,7 @@
 import { Paint } from "@components/Paint";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const SIZE_MULTIPLIER = 1.5;
 
@@ -11,22 +11,38 @@ const height = section_height * 4;
 
 type SegmentProps = {
   hasDraw?: boolean;
+  readOnly?: boolean;
+  onClick?: () => void;
+  backgroundColor?: string;
+  isSolitary?: boolean;
+  name?: string;
 };
 
-export const Segment = ({ hasDraw = false }: SegmentProps) => {
+export const Segment = ({
+  hasDraw = false,
+  readOnly = false,
+  onClick,
+  backgroundColor,
+  isSolitary = false,
+  name = "",
+}: SegmentProps) => {
   return (
-    <Wrapper>
+    <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
         <Text align="center" textElipsis maxWidth={`${width}px`}>
-          Nome de segmento bem grande pra poder testar direitinho
+          {name}
         </Text>
       </SegmentName>
-      <Container>
+      <Container
+        $hasClick={!!onClick}
+        onClick={onClick}
+        $bgColor={backgroundColor}
+      >
         <Section />
         <Section />
         <Section />
         <Section />
-        {hasDraw && <Paint width={width} height={height} />}
+        {hasDraw && <Paint width={width} height={height} readOnly={readOnly} />}
       </Container>
     </Wrapper>
   );
@@ -53,19 +69,39 @@ const Section = styled.div`
   }
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  $hasClick: boolean;
+  $bgColor?: string;
+};
+
+const Container = styled.div<ContainerProps>`
   position: relative;
   border: 2px solid ${theme.colors.font_color};
   border-top: none;
   border-bottom: none;
+  width: fit-content;
+  cursor: ${({ $hasClick }) => ($hasClick ? "pointer" : "default")};
+  ${({ $bgColor }) =>
+    $bgColor &&
+    css`
+      background-color: ${$bgColor};
+    `}
 `;
 
-const Wrapper = styled.div`
+type WrapperProps = {
+  $isSolitary: boolean;
+};
+
+const Wrapper = styled.div<WrapperProps>`
   display: flex;
   flex-direction: column;
-  &:not(:first-child) {
-    ${Container} {
-      border-left: none;
-    }
-  }
+  ${({ $isSolitary }) =>
+    !$isSolitary &&
+    css`
+      &:not(:first-child) {
+        ${Container} {
+          border-left: none;
+        }
+      }
+    `}
 `;

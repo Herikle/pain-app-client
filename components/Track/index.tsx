@@ -4,6 +4,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
 import { NotePencil } from "@phosphor-icons/react";
+import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -42,6 +43,14 @@ export const SegmentsTitleComponent = () => {
 };
 
 export const Track = () => {
+  const setSegmentModal = useSetSegmentModal();
+
+  const onClickSegment = () => {
+    setSegmentModal({
+      segment: {},
+    });
+  };
+
   return (
     <Wrapper gap={2}>
       <FlexRow justify="flex-start">
@@ -58,7 +67,13 @@ export const Track = () => {
         <SegmentsTitleComponent />
         <SegmentsContainer>
           {[...Array(4)].map((_, index) => (
-            <Segment key={index} hasDraw />
+            <Segment
+              name="Segment name with a giant name to test the ellipsis"
+              key={index}
+              hasDraw
+              readOnly
+              onClick={onClickSegment}
+            />
           ))}
         </SegmentsContainer>
       </Container>

@@ -1,4 +1,5 @@
 import { Portal } from "@components/Portal";
+import { X } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import styled from "styled-components";
 
@@ -6,9 +7,10 @@ type Props = {
   children: React.ReactNode;
   open?: boolean;
   onClose?: () => void;
+  hasCloseButton?: boolean;
 };
 
-export const Modal = ({ children, onClose, open }: Props) => {
+export const Modal = ({ children, onClose, open, hasCloseButton }: Props) => {
   const isOpen = open ?? true;
 
   return (
@@ -16,12 +18,30 @@ export const Modal = ({ children, onClose, open }: Props) => {
       {isOpen && (
         <>
           <ModalOverlay onClick={onClose} />
-          <Container>{children}</Container>
+          <Container>
+            {children}
+            {hasCloseButton && (
+              <XContainer>
+                <X
+                  size={24}
+                  color={theme.colors.font_color}
+                  onClick={onClose}
+                  cursor="pointer"
+                />
+              </XContainer>
+            )}
+          </Container>
         </>
       )}
     </Portal>
   );
 };
+
+const XContainer = styled.div`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+`;
 
 const ModalOverlay = styled.div`
   position: fixed;

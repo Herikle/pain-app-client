@@ -16,6 +16,7 @@ const LightThemeColors = {
   medium_grey: "#838383",
   pastel_green: "#92E3A9",
   red_danger: "#FF0000",
+  pastel: "#F5F5F5",
 };
 
 const PainLevelColors = {

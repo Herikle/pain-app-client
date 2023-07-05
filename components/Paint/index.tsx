@@ -2,7 +2,6 @@ import { FlexColumn } from "@design-components/Flex";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PencilIcon from "public/icons/pencil.svg";
-import { Pencil } from "@phosphor-icons/react";
 
 type Point = [number, number];
 type Line = Point[];
@@ -17,15 +16,17 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type PaintProps = {
   width: number;
   height: number;
+  readOnly?: boolean;
 };
 
-export const Paint = ({ width, height }: PaintProps) => {
+const LINE_WIDTH = 1;
+const LINE_COLOR = "black";
+const LINE_OPACITY = 1;
+
+export const Paint = ({ width, height, readOnly }: PaintProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lineWidth, setLineWidth] = useState(1);
-  const [lineColor, setLineColor] = useState("black");
-  const [lineOpacity, setLineOpacity] = useState(1);
   const [stateSaved, setStateSaved] = useState<DrawObject[]>([]);
   const [currentStartPosition, setCurrentStartPosition] =
     useState<Position | null>(null);
@@ -43,13 +44,13 @@ export const Paint = ({ width, height }: PaintProps) => {
         ctx.lineJoin = "round";
         ctx.shadowColor = "rgba(0,0,0,1)";
         ctx.shadowBlur = 1.5;
-        ctx.globalAlpha = lineOpacity;
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = lineWidth;
+        ctx.globalAlpha = LINE_OPACITY;
+        ctx.strokeStyle = LINE_COLOR;
+        ctx.lineWidth = LINE_WIDTH;
         ctxRef.current = ctx;
       }
     }
-  }, [lineColor, lineOpacity, lineWidth]);
+  }, []);
 
   const drawObjects = async (toDraw: DrawObject[]) => {
     for (const object of toDraw) {
@@ -70,6 +71,7 @@ export const Paint = ({ width, height }: PaintProps) => {
 
   // Function for starting the drawing
   const startDrawing = (e) => {
+    if (readOnly) return;
     if (ctxRef.current) {
       ctxRef.current.beginPath();
       ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
@@ -83,6 +85,7 @@ export const Paint = ({ width, height }: PaintProps) => {
 
   // Function for ending the drawing
   const endDrawing = () => {
+    if (readOnly) return;
     if (isDrawing && currentStartPosition) {
       if (ctxRef?.current) {
         ctxRef.current.closePath();
@@ -101,6 +104,7 @@ export const Paint = ({ width, height }: PaintProps) => {
   };
 
   const draw = (e) => {
+    if (readOnly) return;
     if (!isDrawing) {
       return;
     }
@@ -143,8 +147,16 @@ export const Paint = ({ width, height }: PaintProps) => {
   };
 
   return (
-    <Container>
-      <CanvasContainer>
+    <Container
+      style={{
+        zIndex: readOnly ? -1 : 1,
+      }}
+    >
+      <CanvasContainer
+        style={{
+          cursor: readOnly ? "default" : `url(${PencilIcon.src}) 5 22, auto`,
+        }}
+      >
         <canvas
           onMouseDown={startDrawing}
           onMouseLeave={endDrawing}
@@ -155,16 +167,14 @@ export const Paint = ({ width, height }: PaintProps) => {
           height={height}
         />
       </CanvasContainer>
-      {/* <Button onClick={clear}>Clear</Button> */}
-      {/* <Button onClick={redraw}>Redraw</Button> */}
-      {/* <Button onClick={save}>Save</Button> */}
+      {/*<Button onClick={clear}>Clear</Button>*/}
+      {/*<Button onClick={redraw}>Redraw</Button>*/}
+      {/*<Button onClick={save}>Save</Button> */}
     </Container>
   );
 };
 
-const CanvasContainer = styled.div`
-  cursor: url(${PencilIcon.src}) 5 22, auto;
-`;
+const CanvasContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   position: absolute;
