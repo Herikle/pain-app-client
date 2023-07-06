@@ -1,6 +1,7 @@
 import { Paint } from "@components/Paint";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
+import { transparentize } from "polished";
 import styled, { css } from "styled-components";
 
 const SIZE_MULTIPLIER = 1.5;
@@ -86,6 +87,14 @@ const Container = styled.div<ContainerProps>`
     css`
       background-color: ${$bgColor};
     `}
+  transition: background-color 0.2s ease-in-out;
+  ${({ $hasClick }) =>
+    $hasClick &&
+    css`
+      &:hover {
+        background-color: ${transparentize(0.6, theme.colors.primary)};
+      }
+    `};
 `;
 
 type WrapperProps = {
