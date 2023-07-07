@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Segment } from "./components/Segment";
+import { SEGMENT_SECTION_HEIGHT, Segment } from "./components/Segment";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
@@ -82,7 +82,7 @@ export const Track = () => {
 };
 
 const SegmentName = styled.div`
-  height: ${36 * 1.5}px;
+  height: ${SEGMENT_SECTION_HEIGHT}px;
   > span {
     margin-block: auto;
   }

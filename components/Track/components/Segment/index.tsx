@@ -6,9 +6,11 @@ import styled, { css } from "styled-components";
 
 const SIZE_MULTIPLIER = 1.5;
 
-const width = 120 * SIZE_MULTIPLIER;
-const section_height = 36 * SIZE_MULTIPLIER;
-const height = section_height * 4;
+export const SEGMENT_WIDTH = 120 * SIZE_MULTIPLIER;
+
+export const SEGMENT_SECTION_HEIGHT = 42 * SIZE_MULTIPLIER;
+
+export const SEGMENT_HEIGHT = SEGMENT_SECTION_HEIGHT * 4;
 
 type SegmentProps = {
   hasDraw?: boolean;
@@ -30,7 +32,7 @@ export const Segment = ({
   return (
     <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
-        <Text align="center" textElipsis maxWidth={`${width}px`}>
+        <Text align="center" textElipsis maxWidth={`${SEGMENT_WIDTH}px`}>
           {name}
         </Text>
       </SegmentName>
@@ -43,14 +45,20 @@ export const Segment = ({
         <Section />
         <Section />
         <Section />
-        {hasDraw && <Paint width={width} height={height} readOnly={readOnly} />}
+        {hasDraw && (
+          <Paint
+            width={SEGMENT_WIDTH}
+            height={SEGMENT_HEIGHT}
+            readOnly={readOnly}
+          />
+        )}
       </Container>
     </Wrapper>
   );
 };
 
 const SegmentName = styled.div`
-  width: ${width}px;
+  width: ${SEGMENT_WIDTH}px;
   text-align: center;
   margin-bottom: 0.5rem;
   min-height: 1.5rem;
@@ -60,8 +68,8 @@ const SegmentName = styled.div`
 `;
 
 const Section = styled.div`
-  width: ${width}px;
-  height: ${section_height}px;
+  width: ${SEGMENT_WIDTH}px;
+  height: ${SEGMENT_SECTION_HEIGHT}px;
   border: 2px solid ${theme.colors.font_color};
   border-left: none;
   border-right: none;

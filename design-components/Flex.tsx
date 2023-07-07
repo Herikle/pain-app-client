@@ -7,6 +7,7 @@ type FlexProps = {
   width?: CSSProperties["width"];
   marginInline?: CSSProperties["marginInline"];
   mt?: CSSProperties["marginTop"];
+  pl?: CSSProperties["paddingLeft"];
 };
 
 export const FlexRow = styled.div<FlexProps>`
@@ -17,6 +18,7 @@ export const FlexRow = styled.div<FlexProps>`
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => `${props.mt}rem` ?? "unset"};
+  padding-left: ${(props) => `${props.pl}rem` ?? "unset"};
 `;
 
 export const FlexColumn = styled.div<FlexProps>`
@@ -28,4 +30,5 @@ export const FlexColumn = styled.div<FlexProps>`
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => `${props.mt}rem` ?? "unset"};
+  padding-left: ${(props) => `${props.pl}rem` ?? "unset"};
 `;
