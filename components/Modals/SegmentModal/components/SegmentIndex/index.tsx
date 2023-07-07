@@ -11,6 +11,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
+import { QualityPage } from "../QualityPage";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -121,7 +122,7 @@ export const SegmentIndex = () => {
           <IntensitiesPage />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          Quality
+          <QualityPage />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={3}>
           Intervention

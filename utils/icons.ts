@@ -6,4 +6,10 @@ export const IconsPath = {
   Doctor: "/icons/doctor.svg",
   Patient: "/icons/patient.svg",
   Episode: "/icons/episode.svg",
+  texture: {
+    Stretching: "/texture/stretching.svg",
+    Stinging: "/texture/stinging.svg",
+    Burning: "/texture/burning.svg",
+    Pressing: "/texture/pressing.svg",
+  },
 };
