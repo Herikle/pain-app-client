@@ -26,13 +26,14 @@ type EpisodeFormProps = {
 };
 
 export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
-  const { register, handleSubmit, formState, watch } = useForm<EpisodeSchema>({
+  const { register, handleSubmit, formState, reset } = useForm<EpisodeSchema>({
     resolver: zodResolver(episodeSchema),
     defaultValues: {
       name: episode.name,
       location: episode.location,
       diagnosis: episode.diagnosis,
       start_date: getDateAndTimeFromIsoDate(episode?.start_date),
+      comment: episode.comment,
     },
   });
 
@@ -47,6 +48,8 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
       },
       body: data,
     });
+
+    reset(data);
   };
 
   return (

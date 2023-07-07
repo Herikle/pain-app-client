@@ -3,9 +3,14 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import { theme } from "@styles/theme";
+import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
 import { IntensitiesPage } from "../IntensitiesPage";
+import { SegmentPage } from "../SegmentPage";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { Button } from "@components/Button";
+import { Trash } from "@phosphor-icons/react";
+import { notImplemented } from "@utils/helpers/dev";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -55,83 +60,110 @@ export const SegmentIndex = () => {
 
   return (
     <Container>
-      <TabsContainer>
-        <Tabs
-          onChange={handleChange}
-          value={value}
-          aria-label="Tabs where each tab needs to be selected manually"
-          sx={{
-            "& .MuiTabs-indicator": {
-              backgroundColor: theme.colors.primary,
-            },
-          }}
-        >
-          <Tab
-            label={
-              <Text variant="body1Bold" color={getColor(0)}>
-                Segment
-              </Text>
-            }
-            sx={TabSx}
-          />
-          <Tab
-            label={
-              <Text variant="body1Bold" color={getColor(1)}>
-                Intensities
-              </Text>
-            }
-            sx={TabSx}
-          />
-          <Tab
-            label={
-              <Text variant="body1Bold" color={getColor(2)}>
-                Quality
-              </Text>
-            }
-            sx={TabSx}
-          />
-          <Tab
-            label={
-              <Text variant="body1Bold" color={getColor(3)}>
-                Intervention
-              </Text>
-            }
-            sx={TabSx}
-          />
-          <Tab
-            label={
-              <Text variant="body1Bold" color={getColor(4)}>
-                Symptoms
-              </Text>
-            }
-            sx={TabSx}
-          />
-        </Tabs>
-      </TabsContainer>
-      <TabPanel value={value} index={0}>
-        Segment
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <IntensitiesPage />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Quality
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Intervention
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Symptoms
-      </TabPanel>
+      <Content>
+        <TabsContainer>
+          <Tabs
+            onChange={handleChange}
+            value={value}
+            aria-label="Tabs where each tab needs to be selected manually"
+            sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: theme.colors.primary,
+              },
+            }}
+          >
+            <Tab
+              label={
+                <Text variant="body1Bold" color={getColor(0)}>
+                  Segment
+                </Text>
+              }
+              sx={TabSx}
+            />
+            <Tab
+              label={
+                <Text variant="body1Bold" color={getColor(1)}>
+                  Intensities
+                </Text>
+              }
+              sx={TabSx}
+            />
+            <Tab
+              label={
+                <Text variant="body1Bold" color={getColor(2)}>
+                  Quality
+                </Text>
+              }
+              sx={TabSx}
+            />
+            <Tab
+              label={
+                <Text variant="body1Bold" color={getColor(3)}>
+                  Intervention
+                </Text>
+              }
+              sx={TabSx}
+            />
+            <Tab
+              label={
+                <Text variant="body1Bold" color={getColor(4)}>
+                  Symptoms
+                </Text>
+              }
+              sx={TabSx}
+            />
+          </Tabs>
+        </TabsContainer>
+        <CustomTabPanel value={value} index={0}>
+          <SegmentPage />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <IntensitiesPage />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          Quality
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+          Intervention
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+          Symptoms
+        </CustomTabPanel>
+      </Content>
+      <FlexRow justify="space-between">
+        <Trash
+          onClick={notImplemented}
+          size={32}
+          color={theme.colors.text_switched}
+          cursor="pointer"
+        />
+        <Button onClick={notImplemented}>Save Changes</Button>
+      </FlexRow>
     </Container>
   );
 };
 
+const Content = styled.div``;
+
+const CustomTabPanel = styled(TabPanel)`
+  & .MuiBox-root {
+    padding-inline: 2rem;
+    padding-block: 3rem;
+  }
+`;
+
 const TabsContainer = styled.div``;
 
-const Container = styled.div`
+const Container = styled(FlexColumn)`
   width: 840px;
-  height: 680px;
+  min-height: 600px;
+  height: fit-content;
   max-width: 80vw;
   max-height: 80vh;
+  justify-content: space-between;
+  overflow: auto;
+  ${LightScrollBar};
+  @media screen and (max-width: 1366px) {
+    min-height: 80vh;
+  }
 `;
