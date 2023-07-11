@@ -7,6 +7,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import Image from "next/image";
 import { TextField } from "@components/TextField";
 import { TextArea } from "@components/TextArea";
+import { useState } from "react";
 
 const textures = [
   {
@@ -63,6 +64,36 @@ const depths = [
 ];
 
 export const QualityPage = () => {
+  const [selectedTexture, setSelectedTexture] = useState<number | null>(null);
+
+  const [selectedDepth, setSelectedDepth] = useState<number | null>(null);
+
+  const handleTextureClick = (id: number) => {
+    if (selectedTexture === id) {
+      setSelectedTexture(null);
+    } else {
+      setSelectedTexture(id);
+    }
+  };
+
+  const handleDepthClick = (id: number) => {
+    if (selectedDepth === id) {
+      setSelectedDepth(null);
+    } else {
+      setSelectedDepth(id);
+    }
+  };
+
+  const isTexureSelected = (id: number) => selectedTexture === id;
+
+  const isDepthSelected = (id: number) => selectedDepth === id;
+
+  const isTextureNotSelected = (id: number) =>
+    selectedTexture !== null && selectedTexture !== id;
+
+  const isDepthNotSelected = (id: number) =>
+    selectedDepth !== null && selectedDepth !== id;
+
   return (
     <Container gap={4}>
       <SelectionSession gap={2}>
@@ -75,6 +106,9 @@ export const QualityPage = () => {
                   iconPath={texture.iconPath}
                   label={texture.label}
                   description={texture.description}
+                  onClick={() => handleTextureClick(texture.id)}
+                  isSelected={isTexureSelected(texture.id)}
+                  isNotSelected={isTextureNotSelected(texture.id)}
                 />
               </Grid>
             ))}
@@ -90,6 +124,9 @@ export const QualityPage = () => {
                   label={depth.label}
                   description={depth.description}
                   iconSize={36}
+                  onClick={() => handleDepthClick(depth.id)}
+                  isSelected={isDepthSelected(depth.id)}
+                  isNotSelected={isDepthNotSelected(depth.id)}
                 />
               </Grid>
             ))}
