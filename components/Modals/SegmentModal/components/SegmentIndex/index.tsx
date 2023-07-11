@@ -157,7 +157,7 @@ const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   width: 880px;
-  min-height: 620px;
+  min-height: 650px;
   height: fit-content;
   max-width: 80vw;
   max-height: 80vh;
