@@ -8,19 +8,21 @@ type QualityAttributeProps = {
   iconPath: string;
   label: string;
   description: string;
+  iconSize?: number;
 };
 
 export const QualityAttribute = ({
   iconPath,
   label,
   description,
+  iconSize = 32,
 }: QualityAttributeProps) => {
   return (
-    <Container gap={0.5}>
+    <Container gap={0.5} justify="flex-start">
       <Image
         src={iconPath}
-        width={32}
-        height={32}
+        width={iconSize}
+        height={iconSize}
         alt={`Attribute ${label} Icon`}
       />
       <FlexColumn>
@@ -39,4 +41,5 @@ const Container = styled(FlexRow)`
   &:hover {
     background-color: ${theme.colors.hover_state};
   }
+  width: 100%;
 `;

@@ -156,7 +156,7 @@ const CustomTabPanel = styled(TabPanel)`
 const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
-  width: 840px;
+  width: 880px;
   min-height: 620px;
   height: fit-content;
   max-width: 80vw;

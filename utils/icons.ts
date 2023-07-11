@@ -12,4 +12,11 @@ export const IconsPath = {
     Burning: "/texture/burning.svg",
     Pressing: "/texture/pressing.svg",
   },
+  depth: {
+    Muscular: "/depth/muscular.svg",
+    Bone: "/depth/bone.svg",
+    Superficial: "/depth/superficial.svg",
+    Visceral: "/depth/visceral.svg",
+    Anatomy: "/depth/anatomy.svg",
+  },
 };
