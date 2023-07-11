@@ -19,4 +19,5 @@ export const IconsPath = {
     Visceral: "/depth/visceral.svg",
     Anatomy: "/depth/anatomy.svg",
   },
+  Invervention: "/icons/intervention.svg",
 };
