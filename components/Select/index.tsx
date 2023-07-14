@@ -5,29 +5,31 @@ import { Question } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { Tooltip } from "react-tooltip";
 import styled, { css } from "styled-components";
+import React from "react";
 
-type SelectProps = {
+interface SelectProps extends React.ComponentPropsWithoutRef<"select"> {
   options: any[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  value: string;
   getLabel: (option: any) => string;
   getValue: (option: any) => string;
   id: string;
   label?: string;
   helperText?: string;
   noPadding?: boolean;
-};
+  error?: string;
+  register?: any;
+}
 
 export const Select = ({
   options,
-  onChange,
-  value,
   getLabel,
   getValue,
   id,
   label,
   helperText,
   noPadding,
+  error,
+  register,
+  ...rest
 }: SelectProps) => {
   return (
     <Container gap={0.75}>
@@ -50,13 +52,26 @@ export const Select = ({
           )}
         </Label>
       )}
-      <SelectStyled $noPadding={noPadding} onChange={onChange} value={value}>
+      <SelectStyled
+        defaultValue={""}
+        $noPadding={noPadding}
+        {...(register ?? {})}
+        {...rest}
+      >
+        <option value="" disabled>
+          Select
+        </option>
         {options.map((option) => (
           <option key={getValue(option)} value={getValue(option)}>
             {getLabel(option)}
           </option>
         ))}
       </SelectStyled>
+      {error && (
+        <Text variant="body2" color="red_danger">
+          {error}
+        </Text>
+      )}
     </Container>
   );
 };

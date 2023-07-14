@@ -6,9 +6,12 @@ type FlexProps = {
   justify?: CSSProperties["justifyContent"];
   width?: CSSProperties["width"];
   marginInline?: CSSProperties["marginInline"];
-  mt?: CSSProperties["marginTop"];
-  pl?: CSSProperties["paddingLeft"];
+  height?: CSSProperties["height"];
+  mt?: number;
+  pl?: number;
 };
+
+const writeSizeProperty = (size?: number) => (size ? `${size}rem` : "unset");
 
 export const FlexRow = styled.div<FlexProps>`
   display: flex;
@@ -17,8 +20,9 @@ export const FlexRow = styled.div<FlexProps>`
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
-  margin-top: ${(props) => `${props.mt}rem` ?? "unset"};
-  padding-left: ${(props) => `${props.pl}rem` ?? "unset"};
+  margin-top: ${(props) => writeSizeProperty(props.mt)};
+  padding-left: ${(props) => writeSizeProperty(props.pl)};
+  height: ${(props) => props.height ?? "unset"};
 `;
 
 export const FlexColumn = styled.div<FlexProps>`
@@ -29,6 +33,7 @@ export const FlexColumn = styled.div<FlexProps>`
   gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
-  margin-top: ${(props) => `${props.mt}rem` ?? "unset"};
-  padding-left: ${(props) => `${props.pl}rem` ?? "unset"};
+  margin-top: ${(props) => writeSizeProperty(props.mt)};
+  padding-left: ${(props) => writeSizeProperty(props.pl)};
+  height: ${(props) => props.height ?? "unset"};
 `;

@@ -12,7 +12,7 @@ import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
 import { QualityPage } from "../QualityPage";
-import { InterventionPage } from "../Intervention";
+import { InterventionPage } from "../InterventionPage";
 
 const TabSx = {
   "&.MuiTab-root": {

@@ -85,3 +85,11 @@ export type IEpisode = {
   start_date?: string;
   patient?: IPatient;
 };
+
+export type IIntervetion = {
+  _id: string;
+  name: string;
+  datetime: string;
+  dose: string;
+  effective: boolean;
+};
