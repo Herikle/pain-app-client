@@ -60,6 +60,7 @@ type TextProps = {
   maxWidth?: string;
   minWidth?: string;
   fontFamily?: NextFont;
+  transition?: CSSProperties["transition"];
 };
 
 export const Text = ({
@@ -79,6 +80,7 @@ export const Text = ({
   maxWidth,
   minWidth,
   fontFamily,
+  transition,
 }: TextProps) => {
   return (
     <TextStyled
@@ -98,6 +100,7 @@ export const Text = ({
       $textElipsis={textElipsis}
       $maxWidth={maxWidth}
       $minWidth={minWidth}
+      $transition={transition}
       title={textElipsis ? (children as string) : undefined}
     >
       {children}
@@ -117,6 +120,7 @@ type TextStyledProps = {
   $maxWidth?: string;
   $textElipsis?: boolean;
   $minWidth?: string;
+  $transition?: CSSProperties["transition"];
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -180,5 +184,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $minWidth &&
     css`
       min-width: ${$minWidth};
+    `}
+
+    ${({ $transition }) =>
+    $transition &&
+    css`
+      transition: ${$transition};
     `}
 `;

@@ -13,6 +13,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { IIntervetion } from "types";
 import { InterventionCard } from "./components/InterventionCard";
+import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 
 export const InterventionPage = () => {
   const [interventions, setInterventions] = useState<IIntervetion[]>([
@@ -32,6 +33,10 @@ export const InterventionPage = () => {
     },
   ]);
 
+  const [selected, setSelected] = useState<IIntervetion | null>(null);
+
+  const [toDelete, setToDelete] = useState<IIntervetion | null>(null);
+
   const [addInterventionModalOpen, setAddInterventionModalOpen] =
     useState(false);
 
@@ -47,43 +52,65 @@ export const InterventionPage = () => {
     setInterventions((prev) => [...prev, { ...intervention, _id: uuidv4() }]);
   };
 
+  const deleteById = (id: string) => {
+    setInterventions((prev) => prev.filter((i) => i._id !== id));
+  };
+
   return (
-    <Container align="flex-start" gap={4}>
-      <ListIntervention>
-        <AddTitle justify="space-between">
-          <FlexRow>
-            <Image
-              src={IconsPath.Invervention}
-              width={32}
-              height={32}
-              alt="Intervention Icon"
+    <>
+      <Container align="flex-start" gap={4}>
+        <ListIntervention>
+          <AddTitle justify="space-between">
+            <FlexRow>
+              <Image
+                src={IconsPath.Invervention}
+                width={32}
+                height={32}
+                alt="Intervention Icon"
+              />
+              <Text variant="body2Bold">Intervention</Text>
+            </FlexRow>
+            <AddButton onClick={openAddModal} />
+          </AddTitle>
+          <FlexColumn mt={1}>
+            {interventions.map((intervention) => (
+              <InterventionCard
+                key={intervention._id}
+                onClick={() => setSelected(intervention)}
+                onClickDelete={() => setToDelete(intervention)}
+                isActive={selected?._id === intervention._id}
+                intervention={intervention}
+              />
+            ))}
+          </FlexColumn>
+        </ListIntervention>
+        <Observation>
+          {!!selected && (
+            <TextArea
+              label={`Observation about '${selected.name}'`}
+              placeholder="Write something..."
+              minRows={15}
+              maxRows={15}
             />
-            <Text variant="body2Bold">Intervention</Text>
-          </FlexRow>
-          <AddButton onClick={openAddModal} />
-        </AddTitle>
-        <FlexColumn>
-          {interventions.map((intervention) => (
-            <InterventionCard
-              key={intervention._id}
-              intervention={intervention}
-            />
-          ))}
-        </FlexColumn>
-      </ListIntervention>
-      <Observation>
-        <TextArea
-          label="Observation about 'Pracetamol'"
-          minRows={15}
-          maxRows={15}
+          )}
+        </Observation>
+        <InterventionModal
+          open={addInterventionModalOpen}
+          onClose={closeAddModal}
+          onAdd={onAddIntervention}
         />
-      </Observation>
-      <InterventionModal
-        open={addInterventionModalOpen}
-        onClose={closeAddModal}
-        onAdd={onAddIntervention}
-      />
-    </Container>
+      </Container>
+      {toDelete && (
+        <ConfirmActionModal
+          description={`Are you sure you want to delete '${toDelete.name}'?`}
+          onClose={() => setToDelete(null)}
+          onConfirm={() => {
+            deleteById(toDelete._id);
+            setToDelete(null);
+          }}
+        />
+      )}
+    </>
   );
 };
 

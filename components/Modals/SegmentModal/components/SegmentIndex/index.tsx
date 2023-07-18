@@ -139,7 +139,9 @@ export const SegmentIndex = () => {
           color={theme.colors.text_switched}
           cursor="pointer"
         />
-        <Button onClick={notImplemented}>Save Changes</Button>
+        <Button onClick={notImplemented} width="160px">
+          Save changes
+        </Button>
       </FlexRow>
     </Container>
   );
