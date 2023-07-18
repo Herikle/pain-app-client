@@ -1,26 +1,26 @@
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { CheckCircle, Trash, XCircle } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
 import { ThemeColors, theme } from "@styles/theme";
 import { dateAndTimeFormat } from "@utils/helpers/date";
 import React from "react";
 import styled, { css, keyframes } from "styled-components";
-import { IIntervetion } from "types";
+import { ISymptom } from "types";
 
-type InterventionCard = {
-  intervention: IIntervetion;
+type SymptomCard = {
+  symptom: ISymptom;
   onClick?: () => void;
   onClickDelete?: () => void;
   isActive?: boolean;
 };
 
-export const InterventionCard = ({
-  intervention,
+export const SymptomCard = ({
+  symptom,
   onClick,
   onClickDelete,
   isActive,
-}: InterventionCard) => {
-  const { name, effective, datetime } = intervention;
+}: SymptomCard) => {
+  const { name, datetime } = symptom;
 
   const textColor = (): ThemeColors => {
     if (isActive) {
@@ -46,19 +46,6 @@ export const InterventionCard = ({
           >
             {name}
           </Text>
-          {effective ? (
-            <CheckCircle
-              size={16}
-              color={theme.colors.green_success}
-              weight="fill"
-            />
-          ) : (
-            <XCircle
-              size={16}
-              color={theme.colors.dark_red_danger}
-              weight="fill"
-            />
-          )}
         </NameContainer>
         <Text color={textColor()} transition="color 0.2s ease-in-out">
           {dateAndTimeFormat(datetime)}

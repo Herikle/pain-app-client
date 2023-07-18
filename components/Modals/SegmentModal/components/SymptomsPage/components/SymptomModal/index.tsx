@@ -12,19 +12,17 @@ import { useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const InterventionSchema = zod.object({
+const SymptomSchema = zod.object({
   name: zod.string().nonempty(),
   datetime: zod.string().nonempty(),
-  dose: zod.string().nonempty(),
-  effective: zod.boolean(),
 });
 
-export type CreateIntervention = zod.infer<typeof InterventionSchema>;
+export type CreateSymptom = zod.infer<typeof SymptomSchema>;
 
 type InterventionModalProps = {
   open: boolean;
   onClose: () => void;
-  onAdd: (intervention: CreateIntervention) => void;
+  onAdd: (intervention: CreateSymptom) => void;
 };
 
 export const InterventionModal = ({
@@ -37,11 +35,8 @@ export const InterventionModal = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateIntervention>({
-    resolver: zodResolver(InterventionSchema),
-    defaultValues: {
-      dose: "",
-    },
+  } = useForm<CreateSymptom>({
+    resolver: zodResolver(SymptomSchema),
   });
 
   const close = () => {
@@ -49,7 +44,7 @@ export const InterventionModal = ({
     onClose();
   };
 
-  const onSubmit = (data: CreateIntervention) => {
+  const onSubmit = (data: CreateSymptom) => {
     onAdd(data);
     reset();
     close();
@@ -61,11 +56,7 @@ export const InterventionModal = ({
         <Container>
           <Grid container spacing={2}>
             <Grid xs={12}>
-              <TextField
-                placeholder="Intervention"
-                {...register("name")}
-                required
-              />
+              <TextField placeholder="Symptom" {...register("name")} required />
             </Grid>
             <Grid xs={12}>
               <TextField
@@ -75,36 +66,10 @@ export const InterventionModal = ({
                 required
               />
             </Grid>
-            <Grid xs={6}>
-              <Select
-                options={[
-                  {
-                    id: "option-1",
-                    label: "Option 1",
-                  },
-                  {
-                    id: "option-2",
-                    label: "Option 2",
-                  },
-                ]}
-                getLabel={(option) => option.label}
-                getValue={(option) => option.id}
-                id="select-dose"
-                register={register("dose")}
-                required
-                error={errors.dose?.message}
-              />
-            </Grid>
-            <Grid xs={6}>
-              <FlexRow justify="space-between" height="100%">
-                <Text>Effective?</Text>
-                <Switch register={register("effective")} />
-              </FlexRow>
-            </Grid>
           </Grid>
           <Box mt={4}>
             <Button fullWidth type="submit">
-              Add intervention
+              Add symptom
             </Button>
           </Box>
         </Container>

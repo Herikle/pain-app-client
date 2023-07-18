@@ -13,6 +13,7 @@ import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
 import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
+import { SymptomsPage } from "../SymptomsPage";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -129,7 +130,7 @@ export const SegmentIndex = () => {
           <InterventionPage />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={4}>
-          Symptoms
+          <SymptomsPage />
         </CustomTabPanel>
       </Content>
       <FlexRow justify="space-between">

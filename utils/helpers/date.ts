@@ -29,3 +29,11 @@ export const getDotDateFormat = (date: string | undefined) => {
 
   return format(new Date(date), "dd.MM.yy");
 };
+
+export const dateAndTimeFormat = (date: string | undefined) => {
+  if (!date) {
+    return "";
+  }
+
+  return format(new Date(date), "dd/MM/yy 'at' HH:mm");
+};

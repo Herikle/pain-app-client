@@ -93,3 +93,9 @@ export type IIntervetion = {
   dose: string;
   effective: boolean;
 };
+
+export type ISymptom = {
+  _id: string;
+  name: string;
+  datetime: string;
+};
