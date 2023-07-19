@@ -1,6 +1,6 @@
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { CheckCircle, Trash, XCircle } from "@phosphor-icons/react";
+import { CheckCircle, Pencil, Trash, XCircle } from "@phosphor-icons/react";
 import { ThemeColors, theme } from "@styles/theme";
 import { dateAndTimeFormat } from "@utils/helpers/date";
 import React from "react";
@@ -11,13 +11,17 @@ type InterventionCard = {
   intervention: IIntervetion;
   onClick?: () => void;
   onClickDelete?: () => void;
+  onClickEdit?: () => void;
   isActive?: boolean;
 };
+
+const ICON_SIZE = 20;
 
 export const InterventionCard = ({
   intervention,
   onClick,
   onClickDelete,
+  onClickEdit,
   isActive,
 }: InterventionCard) => {
   const { name, effective, datetime } = intervention;
@@ -35,6 +39,11 @@ export const InterventionCard = ({
     onClickDelete?.();
   };
 
+  const onEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    onClickEdit?.();
+  };
+
   return (
     <Container onClick={onClick} justify="space-between" $isActive={isActive}>
       <DetailsContainer align="flex-start">
@@ -43,6 +52,8 @@ export const InterventionCard = ({
             variant="body2Bold"
             color={textColor()}
             transition="color 0.2s ease-in-out"
+            maxWidth="200px"
+            textElipsis
           >
             {name}
           </Text>
@@ -64,9 +75,14 @@ export const InterventionCard = ({
           {dateAndTimeFormat(datetime)}
         </Text>
       </DetailsContainer>
-      <DeleteContainer onClick={onDelete}>
-        <Trash size={20} color={theme.colors.red_danger} />
-      </DeleteContainer>
+      <IconsContainer>
+        <IconContainer onClick={onEdit}>
+          <Pencil size={ICON_SIZE} color={theme.colors.primary} />
+        </IconContainer>
+        <IconContainer onClick={onDelete}>
+          <Trash size={ICON_SIZE} color={theme.colors.red_danger} />
+        </IconContainer>
+      </IconsContainer>
     </Container>
   );
 };
@@ -86,7 +102,12 @@ const ClickAnimation = keyframes`
 
 `;
 
-const DeleteContainer = styled(FlexRow)`
+const IconsContainer = styled(FlexRow)`
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+`;
+
+const IconContainer = styled(FlexRow)`
   background-color: ${theme.colors.pure_white};
   padding: 0.5rem;
   border-radius: 50%;
@@ -120,4 +141,8 @@ const Container = styled(FlexRow)<ContainerProps>`
             background-color: ${theme.colors.hover_state};
           }
         `}
+
+  &:hover ${IconsContainer} {
+    opacity: 1;
+  }
 `;

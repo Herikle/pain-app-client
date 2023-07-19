@@ -6,7 +6,7 @@ import { IconsPath } from "@utils/icons";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
-import { CreateSymptom, InterventionModal } from "./components/SymptomModal";
+import { CreateSymptom, SymptomModal } from "./components/SymptomModal";
 import { v4 as uuidv4 } from "uuid";
 import { ISymptom } from "types";
 import { SymptomCard } from "./components/SymptomCard";
@@ -30,6 +30,8 @@ export const SymptomsPage = () => {
 
   const [toDelete, setToDelete] = useState<ISymptom | null>(null);
 
+  const [toEdit, setToEdit] = useState<ISymptom | null>(null);
+
   const [addInterventionModalOpen, setAddInterventionModalOpen] =
     useState(false);
 
@@ -47,6 +49,16 @@ export const SymptomsPage = () => {
 
   const deleteById = (id: string) => {
     setSymptoms((prev) => prev.filter((i) => i._id !== id));
+  };
+
+  const edit = (symptom: CreateSymptom) => {
+    if (toEdit) {
+      const _id = toEdit._id;
+      const index = symptoms.findIndex((i) => i._id === _id);
+      const newSymptoms = [...symptoms];
+      newSymptoms[index] = { ...symptom, _id };
+      setSymptoms(newSymptoms);
+    }
   };
 
   return (
@@ -72,6 +84,7 @@ export const SymptomsPage = () => {
                 onClick={() => setSelected(symptom)}
                 onClickDelete={() => setToDelete(symptom)}
                 isActive={selected?._id === symptom._id}
+                onClickEdit={() => setToEdit(symptom)}
                 symptom={symptom}
               />
             ))}
@@ -87,11 +100,19 @@ export const SymptomsPage = () => {
             />
           )}
         </Observation>
-        <InterventionModal
+        <SymptomModal
           open={addInterventionModalOpen}
           onClose={closeAddModal}
           onAdd={onAddIntervention}
         />
+        {!!toEdit && (
+          <SymptomModal
+            open={!!toEdit}
+            onClose={() => setToEdit(null)}
+            onAdd={edit}
+            defaultValues={toEdit}
+          />
+        )}
       </Container>
       {toDelete && (
         <ConfirmActionModal

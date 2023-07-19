@@ -23,12 +23,14 @@ type InterventionModalProps = {
   open: boolean;
   onClose: () => void;
   onAdd: (intervention: CreateSymptom) => void;
+  defaultValues?: CreateSymptom;
 };
 
-export const InterventionModal = ({
+export const SymptomModal = ({
   open,
   onClose,
   onAdd,
+  defaultValues,
 }: InterventionModalProps) => {
   const {
     register,
@@ -37,6 +39,7 @@ export const InterventionModal = ({
     formState: { errors },
   } = useForm<CreateSymptom>({
     resolver: zodResolver(SymptomSchema),
+    defaultValues,
   });
 
   const close = () => {
@@ -69,7 +72,7 @@ export const InterventionModal = ({
           </Grid>
           <Box mt={4}>
             <Button fullWidth type="submit">
-              Add symptom
+              {!!defaultValues ? "Save changes" : "Add symptom"}
             </Button>
           </Box>
         </Container>

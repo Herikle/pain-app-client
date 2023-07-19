@@ -25,21 +25,24 @@ type InterventionModalProps = {
   open: boolean;
   onClose: () => void;
   onAdd: (intervention: CreateIntervention) => void;
+  defaultValues?: CreateIntervention;
 };
 
 export const InterventionModal = ({
   open,
   onClose,
   onAdd,
+  defaultValues,
 }: InterventionModalProps) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    watch,
   } = useForm<CreateIntervention>({
     resolver: zodResolver(InterventionSchema),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       dose: "",
     },
   });
@@ -98,13 +101,16 @@ export const InterventionModal = ({
             <Grid xs={6}>
               <FlexRow justify="space-between" height="100%">
                 <Text>Effective?</Text>
-                <Switch register={register("effective")} />
+                <Switch
+                  defaultChecked={watch("effective")}
+                  register={register("effective")}
+                />
               </FlexRow>
             </Grid>
           </Grid>
           <Box mt={4}>
             <Button fullWidth type="submit">
-              Add intervention
+              {!!defaultValues ? "Save changes" : "Add intervention"}
             </Button>
           </Box>
         </Container>

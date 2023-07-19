@@ -21,14 +21,14 @@ export const InterventionPage = () => {
       _id: "1",
       name: "Paracetamol",
       datetime: "2023-07-15T21:49",
-      dose: "1 comprimido",
+      dose: "option-1",
       effective: true,
     },
     {
       _id: "2",
       name: "Anesthesia",
       datetime: "2023-07-15T21:49",
-      dose: "1 gota",
+      dose: "option-2",
       effective: false,
     },
   ]);
@@ -36,6 +36,8 @@ export const InterventionPage = () => {
   const [selected, setSelected] = useState<IIntervetion | null>(null);
 
   const [toDelete, setToDelete] = useState<IIntervetion | null>(null);
+
+  const [toEdit, setToEdit] = useState<IIntervetion | null>(null);
 
   const [addInterventionModalOpen, setAddInterventionModalOpen] =
     useState(false);
@@ -54,6 +56,16 @@ export const InterventionPage = () => {
 
   const deleteById = (id: string) => {
     setInterventions((prev) => prev.filter((i) => i._id !== id));
+  };
+
+  const edit = (intervention: CreateIntervention) => {
+    if (toEdit) {
+      const _id = toEdit._id;
+      const index = interventions.findIndex((i) => i._id === _id);
+      const newInterventions = [...interventions];
+      newInterventions[index] = { ...intervention, _id };
+      setInterventions(newInterventions);
+    }
   };
 
   return (
@@ -78,6 +90,7 @@ export const InterventionPage = () => {
                 key={intervention._id}
                 onClick={() => setSelected(intervention)}
                 onClickDelete={() => setToDelete(intervention)}
+                onClickEdit={() => setToEdit(intervention)}
                 isActive={selected?._id === intervention._id}
                 intervention={intervention}
               />
@@ -99,6 +112,14 @@ export const InterventionPage = () => {
           onClose={closeAddModal}
           onAdd={onAddIntervention}
         />
+        {!!toEdit && (
+          <InterventionModal
+            open={!!toEdit}
+            onClose={() => setToEdit(null)}
+            onAdd={edit}
+            defaultValues={toEdit}
+          />
+        )}
       </Container>
       {toDelete && (
         <ConfirmActionModal

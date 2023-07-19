@@ -45,6 +45,7 @@ const variants: Record<TextVariant, any> = {
 
 type TextProps = {
   children: React.ReactNode;
+
   customColor?: string;
   variant?: TextVariant;
   color?: ThemeColors;
