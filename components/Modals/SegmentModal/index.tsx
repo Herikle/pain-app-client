@@ -1,7 +1,5 @@
-import { FlexColumn } from "@design-components/Flex";
 import { Modal } from "../Modal";
 import { useSegmentModalState } from "./hook";
-import styled from "styled-components";
 import { SegmentIndex } from "./components/SegmentIndex";
 
 export type SegmentModalChildProps = {

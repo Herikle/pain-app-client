@@ -19,6 +19,7 @@ type SegmentProps = {
   backgroundColor?: string;
   isSolitary?: boolean;
   name?: string;
+  mode?: "draw" | "values";
 };
 
 export const Segment = ({
@@ -28,6 +29,7 @@ export const Segment = ({
   backgroundColor,
   isSolitary = false,
   name = "",
+  mode = "draw",
 }: SegmentProps) => {
   return (
     <Wrapper $isSolitary={isSolitary}>
@@ -41,11 +43,22 @@ export const Segment = ({
         onClick={onClick}
         $bgColor={backgroundColor}
       >
-        <Section />
-        <Section />
-        <Section />
-        <Section />
-        {hasDraw && (
+        {mode === "draw" ? (
+          <>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Section key={index} />
+            ))}
+          </>
+        ) : (
+          <>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Section key={index}>
+                <Input />
+              </Section>
+            ))}
+          </>
+        )}
+        {mode === "draw" && hasDraw && (
           <Paint
             width={SEGMENT_WIDTH}
             height={SEGMENT_HEIGHT}
@@ -56,6 +69,15 @@ export const Segment = ({
     </Wrapper>
   );
 };
+
+const Input = styled.input`
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  padding: 1rem;
+  font-size: 1.5rem;
+`;
 
 const SegmentName = styled.div`
   width: ${SEGMENT_WIDTH}px;

@@ -5,20 +5,34 @@ import { SegmentsTitleComponent } from "@components/Track";
 import { Segment } from "@components/Track/components/Segment";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
+import { useState } from "react";
 import styled from "styled-components";
 
 export const IntensitiesPage = () => {
+  const [segmentType, setSegmentType] = useState<"draw" | "percentage">(
+    "percentage"
+  );
+
   return (
     <Container gap={3} align="flex-start">
       <FlexRow gap={6} pl={3}>
         <Radio label="Draw" name="segment_type" value="draw" />
-        <Radio label="Percentage" name="segment_type" value="percentage" />
+        <Radio
+          label="Percentage"
+          name="segment_type"
+          value="percentage"
+          defaultChecked
+        />
       </FlexRow>
       <FlexColumn width="100%">
         <FlexRow gap={4}>
           <FlexRow gap={0} justify="flex-start">
             <SegmentsTitleComponent />
-            <Segment hasDraw backgroundColor={theme.colors.pastel} isSolitary />
+            <Segment
+              mode="values"
+              backgroundColor={theme.colors.pastel}
+              isSolitary
+            />
           </FlexRow>
           <TextArea
             fullWidth
