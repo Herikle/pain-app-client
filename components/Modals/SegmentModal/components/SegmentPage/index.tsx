@@ -1,4 +1,3 @@
-import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import styled from "styled-components";
 import Grid from "@mui/material/Unstable_Grid2";

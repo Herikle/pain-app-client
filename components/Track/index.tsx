@@ -3,8 +3,9 @@ import { SEGMENT_SECTION_HEIGHT, Segment } from "./components/Segment";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
-import { NotePencil } from "@phosphor-icons/react";
+import { Pencil } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
+import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -45,22 +46,28 @@ export const SegmentsTitleComponent = () => {
 export const Track = () => {
   const setSegmentModal = useSetSegmentModal();
 
+  const setTrackModal = useSetTrackModal();
+
   const onClickSegment = () => {
     setSegmentModal({
       segment: {},
     });
   };
 
+  const onClickTrackEdit = () => {
+    setTrackModal({});
+  };
+
   return (
     <Wrapper gap={2}>
       <FlexRow justify="flex-start">
         <Text variant="body1Bold">Arm pain</Text>
-        <NotePencil
+        <Pencil
           size={16}
           color={theme.colors.font_color}
           weight="fill"
           cursor="pointer"
-          onClick={() => alert("not implemented yet")}
+          onClick={onClickTrackEdit}
         />
       </FlexRow>
       <Container>

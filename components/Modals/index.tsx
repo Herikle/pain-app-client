@@ -5,6 +5,7 @@ import { DeletePromptModal } from "./DeletePromptModal";
 import { PromptOptionsModal } from "./PromptOptionsModal";
 import { SegmentModal } from "./SegmentModal";
 import { SetMainPromptModal } from "./SetMainPromptModal";
+import { TrackModal } from "./TrackModal";
 import { WelcomeUserTypeSelectorModal } from "./WelcomeUserTypeSelectorModal";
 
 export const Modals = () => {
@@ -18,6 +19,7 @@ export const Modals = () => {
       <AttributesConfigModal />
       <DeletePatientModal />
       <SegmentModal />
+      <TrackModal />
     </>
   );
 };
