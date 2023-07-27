@@ -3,10 +3,12 @@ import { BackButton } from "@components/BackButton";
 import { Paint } from "@components/Paint";
 import { Text } from "@components/Text";
 import { Track } from "@components/Track";
+import { ListTrack } from "@components/Track/components/ListTracks";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import { EpisodeForm } from "@page-components/EpisodeForm";
 import { useGetEpisodeById } from "@queries/episode/useGetEpisode";
+import { useCreateTrack } from "@queries/track/useTrack";
 import { RoutesPath } from "@utils/routes";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
@@ -26,6 +28,16 @@ export default function EpisodePage() {
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
   const episode = useMemo(() => getEpisodeById.data, [getEpisodeById.data]);
+
+  const createTrack = useCreateTrack();
+
+  const onCreateTrack = async () => {
+    await createTrack.mutateAsync({
+      body: {
+        episode_id: id,
+      },
+    });
+  };
 
   useEffect(() => {
     if (episode) {
@@ -55,9 +67,12 @@ export default function EpisodePage() {
           <FlexColumn gap={4}>
             <FlexRow gap={0} justify="space-between">
               <Text variant="h1">Tracks</Text>
-              <AddButton onClick={() => alert("not implemented yet")} />
+              <AddButton
+                onClick={onCreateTrack}
+                loading={createTrack.isLoading}
+              />
             </FlexRow>
-            <Track />
+            <ListTrack episode_id={id} />
           </FlexColumn>
         </TrackContainer>
       </Container>

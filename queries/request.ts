@@ -1,7 +1,14 @@
 import axios, { Method, ResponseType } from "axios";
 import { getToken } from "utils/localStorage/token";
 
-type service = "auth" | "prompt" | "account" | "patient" | "episode" | "public";
+type service =
+  | "auth"
+  | "prompt"
+  | "account"
+  | "patient"
+  | "episode"
+  | "public"
+  | "track";
 
 type IRequest = {
   method: Method;

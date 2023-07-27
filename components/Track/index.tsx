@@ -6,6 +6,7 @@ import { theme } from "@styles/theme";
 import { Pencil } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
 import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
+import { ITrack } from "types";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -43,7 +44,11 @@ export const SegmentsTitleComponent = () => {
   );
 };
 
-export const Track = () => {
+type TrackProps = {
+  track: ITrack;
+};
+
+export const Track = ({ track }: TrackProps) => {
   const setSegmentModal = useSetSegmentModal();
 
   const setTrackModal = useSetTrackModal();
@@ -55,13 +60,15 @@ export const Track = () => {
   };
 
   const onClickTrackEdit = () => {
-    setTrackModal({});
+    setTrackModal({
+      track,
+    });
   };
 
   return (
     <Wrapper gap={2}>
       <FlexRow justify="flex-start">
-        <Text variant="body1Bold">Arm pain</Text>
+        <Text variant="body1Bold">{track.name}</Text>
         <Pencil
           size={16}
           color={theme.colors.font_color}

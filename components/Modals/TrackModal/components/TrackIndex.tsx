@@ -9,7 +9,8 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
-import { TrackDetailsPage } from "./TrackDetailsPage";
+import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
+import { ITrack } from "types";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -44,8 +45,21 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
-export const TrackIndex = () => {
+type TrackIndexProps = {
+  track: ITrack;
+};
+
+export const TrackIndex = ({ track }: TrackIndexProps) => {
   const [value, setValue] = useState(0);
+
+  const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
+  const [trackDetailIsDirty, setTrackDetailIsDirty] = useState(false);
+
+  const onChangeTrackDetails = (data: TrackEditType, isDirty: boolean) => {
+    setTrackDetails(data);
+    setTrackDetailIsDirty(isDirty);
+  };
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -55,6 +69,10 @@ export const TrackIndex = () => {
       return "font_color";
     }
     return "text_switched";
+  };
+
+  const isDirty = () => {
+    return trackDetailIsDirty;
   };
 
   return (
@@ -82,7 +100,7 @@ export const TrackIndex = () => {
           </Tabs>
         </TabsContainer>
         <CustomTabPanel value={value} index={0}>
-          <TrackDetailsPage />
+          <TrackDetailsPage track={track} onChange={onChangeTrackDetails} />
         </CustomTabPanel>
       </Content>
       <FlexRow justify="space-between">
@@ -92,7 +110,7 @@ export const TrackIndex = () => {
           color={theme.colors.text_switched}
           cursor="pointer"
         />
-        <Button onClick={notImplemented} width="160px">
+        <Button onClick={notImplemented} width="160px" disabled={!isDirty()}>
           Save changes
         </Button>
       </FlexRow>

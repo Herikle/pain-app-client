@@ -86,6 +86,16 @@ export type IEpisode = {
   patient?: IPatient;
 };
 
+type ITrackPainType = "psychological" | "physical";
+
+export type ITrack = {
+  _id: string;
+  name: string;
+  pain_type: ITrackPainType;
+  episode_id: string;
+  comment?: string;
+};
+
 export type IIntervetion = {
   _id: string;
   name: string;
