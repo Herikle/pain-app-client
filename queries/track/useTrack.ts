@@ -29,3 +29,35 @@ export const useCreateTrack = () => {
     },
   });
 };
+
+type UpdateTrackPayload = {
+  params: {
+    track_id: string;
+  };
+  body: {
+    name?: string;
+    comment?: string;
+    pain_type: ITrack["pain_type"];
+  };
+};
+
+const updateTrack = async ({ params, body }: UpdateTrackPayload) => {
+  const { data } = await request({
+    method: "PATCH",
+    service: "track",
+    url: `/${params.track_id}`,
+    data: body,
+  });
+
+  return data as ITrack;
+};
+
+export const useUpdateTrack = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateTrack, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Track.List]);
+      ToastSuccess("Track updated successfully");
+    },
+  });
+};

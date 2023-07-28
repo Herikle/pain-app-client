@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
@@ -11,6 +11,7 @@ import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
+import { useUpdateTrack } from "@queries/track/useTrack";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -53,12 +54,13 @@ export const TrackIndex = ({ track }: TrackIndexProps) => {
   const [value, setValue] = useState(0);
 
   const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
-  const [trackDetailIsDirty, setTrackDetailIsDirty] = useState(false);
+  const [trackDetailsValid, setTrackDetailsValid] = useState(false);
 
-  const onChangeTrackDetails = (data: TrackEditType, isDirty: boolean) => {
+  const updateTrack = useUpdateTrack();
+
+  const onChangeTrackDetails = useCallback((data: TrackEditType) => {
     setTrackDetails(data);
-    setTrackDetailIsDirty(isDirty);
-  };
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -71,8 +73,17 @@ export const TrackIndex = ({ track }: TrackIndexProps) => {
     return "text_switched";
   };
 
-  const isDirty = () => {
-    return trackDetailIsDirty;
+  const onSave = async () => {
+    await updateTrack.mutateAsync({
+      params: {
+        track_id: track._id,
+      },
+      body: trackDetails,
+    });
+  };
+
+  const isValid = () => {
+    return trackDetailsValid;
   };
 
   return (
@@ -100,7 +111,11 @@ export const TrackIndex = ({ track }: TrackIndexProps) => {
           </Tabs>
         </TabsContainer>
         <CustomTabPanel value={value} index={0}>
-          <TrackDetailsPage track={track} onChange={onChangeTrackDetails} />
+          <TrackDetailsPage
+            track={{ ...track, ...trackDetails }}
+            onChange={onChangeTrackDetails}
+            onValidChange={setTrackDetailsValid}
+          />
         </CustomTabPanel>
       </Content>
       <FlexRow justify="space-between">
@@ -110,7 +125,12 @@ export const TrackIndex = ({ track }: TrackIndexProps) => {
           color={theme.colors.text_switched}
           cursor="pointer"
         />
-        <Button onClick={notImplemented} width="160px" disabled={!isDirty()}>
+        <Button
+          onClick={onSave}
+          width="160px"
+          loading={updateTrack.isLoading}
+          disabled={!isValid()}
+        >
           Save changes
         </Button>
       </FlexRow>
