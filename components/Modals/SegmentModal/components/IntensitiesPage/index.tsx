@@ -7,21 +7,30 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
 import { useState } from "react";
 import styled from "styled-components";
+import { ISegment, ISegmentIntensities } from "types";
 
-export const IntensitiesPage = () => {
-  const [segmentType, setSegmentType] = useState<"draw" | "percentage">(
-    "percentage"
-  );
+type Props = {
+  intensities: ISegmentIntensities;
+  segment: ISegment;
+};
+
+export const IntensitiesPage = ({ intensities, segment }: Props) => {
+  const { type } = intensities;
 
   return (
     <Container gap={3} align="flex-start">
       <FlexRow gap={6} pl={3}>
-        <Radio label="Draw" name="segment_type" value="draw" />
+        <Radio
+          label="Draw"
+          name="segment_type"
+          value="draw"
+          defaultChecked={type === "draw"}
+        />
         <Radio
           label="Percentage"
           name="segment_type"
-          value="percentage"
-          defaultChecked
+          value="values"
+          defaultChecked={type === "values"}
         />
       </FlexRow>
       <FlexColumn width="100%">
@@ -29,7 +38,7 @@ export const IntensitiesPage = () => {
           <FlexRow gap={0} justify="flex-start">
             <SegmentsTitleComponent />
             <Segment
-              mode="values"
+              segment={segment}
               backgroundColor={theme.colors.pastel}
               isSolitary
             />

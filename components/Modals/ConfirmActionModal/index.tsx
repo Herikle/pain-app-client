@@ -18,6 +18,7 @@ type ConfirmActionModalProps = {
   loading?: boolean;
   confirmText?: string;
   cancelText?: string;
+  hasCloseButton?: boolean;
 };
 
 export const ConfirmActionModal = ({
@@ -29,6 +30,7 @@ export const ConfirmActionModal = ({
   loading = false,
   confirmText = "Yes, confirm",
   cancelText = "No, I want to go back",
+  hasCloseButton = false,
 }: ConfirmActionModalProps) => {
   const [confirmationText, setConfirmationText] = useState("");
 
@@ -39,7 +41,7 @@ export const ConfirmActionModal = ({
   const isValid = writeConfirmation?.testText === confirmationText;
 
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} hasCloseButton={hasCloseButton}>
       <Container gap={2}>
         <Text variant="body2Bold">{title}</Text>
         <Text variant="body2">{description}</Text>
@@ -51,7 +53,7 @@ export const ConfirmActionModal = ({
               label="Type here"
               value={confirmationText}
               onChange={(e) => setConfirmationText(e.target.value)}
-              helperText="Respect case sensitive"
+              helperText="Respect case sensitive: 'A' is different from 'a'"
               id="confirmation-text"
             />
           </>

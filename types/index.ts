@@ -72,6 +72,74 @@ export type IPatient = {
   about?: string;
 };
 
+export type IIntervetion = {
+  _id: string;
+  name: string;
+  datetime: string;
+  dose: string;
+  effective: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ISymptom = {
+  _id: string;
+  name: string;
+  datetime: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type IIntensityType = "draw" | "values";
+type ISegmentTimeUnit = "minutes" | "hours" | "days";
+type ISegmentEstimativeType = "reported" | "measured" | "inferred";
+type ISegmentPainType = "acute" | "chronic";
+
+export type ISegmentIntensities = {
+  type: IIntensityType;
+  draw?: any;
+  values?: any;
+  justification?: string;
+};
+
+export type ISegmentQuality = {
+  texture?: string;
+  depth?: string;
+  anatomy?: string;
+  comment?: string;
+};
+
+export type ISegment = {
+  _id: string;
+  name?: string;
+  start?: number;
+  end?: number;
+  time_unit: ISegmentTimeUnit;
+  start_date?: Date;
+  estimative_type: ISegmentEstimativeType;
+  comment?: string;
+  pain_type: ISegmentPainType;
+  intensities: ISegmentIntensities;
+  quality?: ISegmentQuality;
+  interventions: IIntervetion[];
+  symptoms: ISymptom[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+type ITrackPainType = "psychological" | "physical";
+
+export type ITrack = {
+  _id: string;
+  name: string;
+  pain_type: ITrackPainType;
+  episode_id: string;
+  segments?: ISegment[];
+  comment?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type IEpisode = {
   _id: string;
   name: string;
@@ -84,28 +152,4 @@ export type IEpisode = {
   comment?: string;
   start_date?: string;
   patient?: IPatient;
-};
-
-type ITrackPainType = "psychological" | "physical";
-
-export type ITrack = {
-  _id: string;
-  name: string;
-  pain_type: ITrackPainType;
-  episode_id: string;
-  comment?: string;
-};
-
-export type IIntervetion = {
-  _id: string;
-  name: string;
-  datetime: string;
-  dose: string;
-  effective: boolean;
-};
-
-export type ISymptom = {
-  _id: string;
-  name: string;
-  datetime: string;
 };

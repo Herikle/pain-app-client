@@ -1,16 +1,17 @@
 import { Modal } from "../Modal";
 import { useSegmentModalState } from "./hook";
 import { SegmentIndex } from "./components/SegmentIndex";
+import { ISegment } from "types";
 
 export type SegmentModalChildProps = {
   onClose: () => void;
-  segment: any;
+  segment: ISegment;
 };
 
 const Child = ({ onClose, segment }: SegmentModalChildProps) => {
   return (
     <Modal onClose={onClose} hasCloseButton>
-      <SegmentIndex />
+      <SegmentIndex segment={segment} />
     </Modal>
   );
 };

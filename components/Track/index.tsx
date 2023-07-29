@@ -6,7 +6,7 @@ import { theme } from "@styles/theme";
 import { Pencil } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
 import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
-import { ITrack } from "types";
+import { ISegment, ITrack } from "types";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -53,9 +53,9 @@ export const Track = ({ track }: TrackProps) => {
 
   const setTrackModal = useSetTrackModal();
 
-  const onClickSegment = () => {
+  const onClickSegment = (segment: ISegment) => {
     setSegmentModal({
-      segment: {},
+      segment,
     });
   };
 
@@ -64,6 +64,8 @@ export const Track = ({ track }: TrackProps) => {
       track,
     });
   };
+
+  const { segments } = track;
 
   return (
     <Wrapper gap={2}>
@@ -80,13 +82,13 @@ export const Track = ({ track }: TrackProps) => {
       <Container>
         <SegmentsTitleComponent />
         <SegmentsContainer>
-          {[...Array(4)].map((_, index) => (
+          {segments?.map((segment, index) => (
             <Segment
-              name="Segment name with a giant name to test the ellipsis"
               key={index}
+              segment={segment}
               hasDraw
               readOnly
-              onClick={onClickSegment}
+              onClick={() => onClickSegment(segment)}
             />
           ))}
         </SegmentsContainer>

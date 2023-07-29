@@ -11,7 +11,8 @@ import { Trash } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
-import { useUpdateTrack } from "@queries/track/useTrack";
+import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
+import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -48,15 +49,38 @@ const TabPanelContainer = styled.div``;
 
 type TrackIndexProps = {
   track: ITrack;
+  onClose: () => void;
 };
 
-export const TrackIndex = ({ track }: TrackIndexProps) => {
+export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
   const [value, setValue] = useState(0);
 
   const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
   const [trackDetailsValid, setTrackDetailsValid] = useState(false);
 
+  const [confirmDeleteTrack, setConfirmDeleteTrack] = useState(false);
+
+  const openConfirmDelete = () => {
+    setConfirmDeleteTrack(true);
+  };
+
+  const closeConfirmDelete = () => {
+    setConfirmDeleteTrack(false);
+  };
+
   const updateTrack = useUpdateTrack();
+
+  const deleteTrack = useDeleteTrack();
+
+  const onDelete = async () => {
+    await deleteTrack.mutateAsync({
+      params: {
+        track_id: track._id,
+      },
+    });
+    onClose();
+    setConfirmDeleteTrack(false);
+  };
 
   const onChangeTrackDetails = useCallback((data: TrackEditType) => {
     setTrackDetails(data);
@@ -87,54 +111,75 @@ export const TrackIndex = ({ track }: TrackIndexProps) => {
   };
 
   return (
-    <Container>
-      <Content>
-        <TabsContainer>
-          <Tabs
-            onChange={handleChange}
-            value={value}
-            aria-label="Tabs where each tab needs to be selected manually"
-            sx={{
-              "& .MuiTabs-indicator": {
-                backgroundColor: theme.colors.primary,
-              },
-            }}
-          >
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(0)}>
-                  Track details
-                </Text>
-              }
-              sx={TabSx}
+    <>
+      <Container>
+        <Content>
+          <TabsContainer>
+            <Tabs
+              onChange={handleChange}
+              value={value}
+              aria-label="Tabs where each tab needs to be selected manually"
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: theme.colors.primary,
+                },
+              }}
+            >
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(0)}>
+                    Track details
+                  </Text>
+                }
+                sx={TabSx}
+              />
+            </Tabs>
+          </TabsContainer>
+          <CustomTabPanel value={value} index={0}>
+            <TrackDetailsPage
+              track={{ ...track, ...trackDetails }}
+              onChange={onChangeTrackDetails}
+              onValidChange={setTrackDetailsValid}
             />
-          </Tabs>
-        </TabsContainer>
-        <CustomTabPanel value={value} index={0}>
-          <TrackDetailsPage
-            track={{ ...track, ...trackDetails }}
-            onChange={onChangeTrackDetails}
-            onValidChange={setTrackDetailsValid}
+          </CustomTabPanel>
+        </Content>
+        <FlexRow justify="space-between">
+          <Trash
+            onClick={openConfirmDelete}
+            size={32}
+            color={theme.colors.text_switched}
+            cursor="pointer"
           />
-        </CustomTabPanel>
-      </Content>
-      <FlexRow justify="space-between">
-        <Trash
-          onClick={notImplemented}
-          size={32}
-          color={theme.colors.text_switched}
-          cursor="pointer"
+          <Button
+            onClick={onSave}
+            width="160px"
+            loading={updateTrack.isLoading}
+            disabled={!isValid()}
+          >
+            Save changes
+          </Button>
+        </FlexRow>
+      </Container>
+      {confirmDeleteTrack && (
+        <ConfirmActionModal
+          onClose={closeConfirmDelete}
+          title="Are you sure you want to delete this track?"
+          description="All segments will be lost. This action cannot be undone."
+          confirmText="Yes, delete it"
+          writeConfirmation={{
+            label: (
+              <>
+                To delete this track, type the track name{" "}
+                <strong>{track.name}</strong>
+              </>
+            ),
+            testText: track.name,
+          }}
+          onConfirm={onDelete}
+          loading={deleteTrack.isLoading}
         />
-        <Button
-          onClick={onSave}
-          width="160px"
-          loading={updateTrack.isLoading}
-          disabled={!isValid()}
-        >
-          Save changes
-        </Button>
-      </FlexRow>
-    </Container>
+      )}
+    </>
   );
 };
 

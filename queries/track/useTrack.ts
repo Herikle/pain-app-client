@@ -1,6 +1,7 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { ToastSuccess } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toats";
+import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { ITrack } from "types";
 
@@ -26,6 +27,9 @@ export const useCreateTrack = () => {
   return useMutation(createTrack, {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Track.List]);
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
     },
   });
 };
@@ -58,6 +62,38 @@ export const useUpdateTrack = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Track.List]);
       ToastSuccess("Track updated successfully");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type DeleteTrackPayload = {
+  params: {
+    track_id: string;
+  };
+};
+
+const deleteTrack = async ({ params }: DeleteTrackPayload) => {
+  const { data } = await request({
+    method: "DELETE",
+    service: "track",
+    url: `/${params.track_id}`,
+  });
+
+  return data as ITrack;
+};
+
+export const useDeleteTrack = () => {
+  const queryClient = useQueryClient();
+  return useMutation(deleteTrack, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Track.List]);
+      ToastSuccess("Track deleted successfully");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
     },
   });
 };

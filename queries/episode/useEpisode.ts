@@ -1,6 +1,7 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { ToastSuccess } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toats";
+import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IEpisode } from "types";
 
@@ -54,6 +55,9 @@ export const useUpdateEpisode = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Episode.ByID]);
       ToastSuccess("Episode updated successfully");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
     },
   });
 };

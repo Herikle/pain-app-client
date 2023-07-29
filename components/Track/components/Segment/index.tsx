@@ -3,6 +3,7 @@ import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
 import { transparentize } from "polished";
 import styled, { css } from "styled-components";
+import { ISegment } from "types";
 
 const SIZE_MULTIPLIER = 1.5;
 
@@ -18,8 +19,7 @@ type SegmentProps = {
   onClick?: () => void;
   backgroundColor?: string;
   isSolitary?: boolean;
-  name?: string;
-  mode?: "draw" | "values";
+  segment: ISegment;
 };
 
 export const Segment = ({
@@ -28,14 +28,15 @@ export const Segment = ({
   onClick,
   backgroundColor,
   isSolitary = false,
-  name = "",
-  mode = "draw",
+  segment,
 }: SegmentProps) => {
+  const { name, intensities } = segment;
+  const { type } = intensities;
   return (
     <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
         <Text align="center" textElipsis maxWidth={`${SEGMENT_WIDTH}px`}>
-          {name}
+          {name ?? ""}
         </Text>
       </SegmentName>
       <Container
@@ -43,7 +44,7 @@ export const Segment = ({
         onClick={onClick}
         $bgColor={backgroundColor}
       >
-        {mode === "draw" ? (
+        {type === "draw" ? (
           <>
             {Array.from({ length: 4 }).map((_, index) => (
               <Section key={index} />
@@ -58,7 +59,7 @@ export const Segment = ({
             ))}
           </>
         )}
-        {mode === "draw" && hasDraw && (
+        {type === "draw" && hasDraw && (
           <Paint
             width={SEGMENT_WIDTH}
             height={SEGMENT_HEIGHT}

@@ -14,6 +14,7 @@ import { notImplemented } from "@utils/helpers/dev";
 import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
 import { SymptomsPage } from "../SymptomsPage";
+import { ISegment } from "types";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -48,7 +49,11 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
-export const SegmentIndex = () => {
+type Props = {
+  segment: ISegment;
+};
+
+export const SegmentIndex = ({ segment }: Props) => {
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -121,7 +126,10 @@ export const SegmentIndex = () => {
           <SegmentPage />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <IntensitiesPage />
+          <IntensitiesPage
+            segment={segment}
+            intensities={segment.intensities}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
           <QualityPage />
