@@ -115,7 +115,7 @@ export type ISegment = {
   start?: number;
   end?: number;
   time_unit: ISegmentTimeUnit;
-  start_date?: Date;
+  start_date?: string;
   estimative_type: ISegmentEstimativeType;
   comment?: string;
   pain_type: ISegmentPainType;

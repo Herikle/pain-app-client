@@ -2,11 +2,11 @@ import styled from "styled-components";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
 import { IntensitiesPage } from "../IntensitiesPage";
-import { SegmentPage } from "../SegmentPage";
+import { SegmentPage, SegmentPageForm } from "../SegmentPage";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
@@ -55,6 +55,23 @@ type Props = {
 
 export const SegmentIndex = ({ segment }: Props) => {
   const [value, setValue] = useState(0);
+
+  const [segmentPageForm, setSegmentPageForm] = useState<SegmentPageForm>({
+    name: segment.name,
+    start: segment.start,
+    end: segment.end,
+    estimative_type: segment.estimative_type,
+    pain_type: segment.pain_type,
+    start_date: segment.start_date,
+    time_unit: segment.time_unit,
+    comment: segment.comment,
+  });
+  const [segmentPageFormIsValid, setSegmentPageFormIsValid] = useState(false);
+
+  const onChangeSsegmentPageForm = useCallback((data: SegmentPageForm) => {
+    setSegmentPageForm(data);
+  }, []);
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -64,6 +81,10 @@ export const SegmentIndex = ({ segment }: Props) => {
       return "font_color";
     }
     return "text_switched";
+  };
+
+  const isValid = () => {
+    return segmentPageFormIsValid;
   };
 
   return (
@@ -123,7 +144,11 @@ export const SegmentIndex = ({ segment }: Props) => {
           </Tabs>
         </TabsContainer>
         <CustomTabPanel value={value} index={0}>
-          <SegmentPage />
+          <SegmentPage
+            segmentPageForm={segmentPageForm}
+            onChange={onChangeSsegmentPageForm}
+            onValidChange={setSegmentPageFormIsValid}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <IntensitiesPage
@@ -148,7 +173,7 @@ export const SegmentIndex = ({ segment }: Props) => {
           color={theme.colors.text_switched}
           cursor="pointer"
         />
-        <Button onClick={notImplemented} width="160px">
+        <Button onClick={notImplemented} width="160px" disabled={!isValid()}>
           Save changes
         </Button>
       </FlexRow>

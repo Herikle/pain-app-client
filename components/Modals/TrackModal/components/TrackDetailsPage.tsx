@@ -30,18 +30,17 @@ export const TrackDetailsPage = ({
   onChange,
   onValidChange,
 }: TrackDetailsPageProps) => {
-  const { register, formState, handleSubmit, getValues } =
-    useForm<TrackEditType>({
-      resolver: zodResolver(schema),
-      defaultValues: {
-        name: track.name,
-        pain_type: track.pain_type,
-        comment: track.comment ?? "",
-      },
-      mode: "onChange",
-    });
+  const { register, formState, getValues } = useForm<TrackEditType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: track.name,
+      pain_type: track.pain_type,
+      comment: track.comment ?? "",
+    },
+    mode: "onChange",
+  });
 
-  const { errors, isValid, isDirty } = formState;
+  const { errors, isValid } = formState;
 
   const onUpdate = () => {
     onChange(getValues());

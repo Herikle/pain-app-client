@@ -68,7 +68,7 @@ export const Select = ({
         ))}
       </SelectStyled>
       {error && (
-        <Text variant="body2" color="red_danger">
+        <Text variant="caption" color="red_danger">
           {error}
         </Text>
       )}

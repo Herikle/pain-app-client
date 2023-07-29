@@ -42,7 +42,7 @@ export const TextField = React.forwardRef(
         )}
         <Input $noPadding={noPadding} ref={ref} {...rest} />
         {error && (
-          <Text variant="body2" color="red_danger">
+          <Text variant="caption" color="red_danger">
             {error}
           </Text>
         )}

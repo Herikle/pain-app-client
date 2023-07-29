@@ -60,7 +60,11 @@ export const TextArea = React.forwardRef(
           minRows={minRows}
           maxRows={maxRows}
         />
-        {error && <Text color="red_danger">{error}</Text>}
+        {error && (
+          <Text variant="caption" color="red_danger">
+            {error}
+          </Text>
+        )}
       </Container>
     );
   }
