@@ -6,12 +6,13 @@ import { ISegment } from "types";
 export type SegmentModalChildProps = {
   onClose: () => void;
   segment: ISegment;
+  episode_id: string;
 };
 
-const Child = ({ onClose, segment }: SegmentModalChildProps) => {
+const Child = ({ onClose, segment, episode_id }: SegmentModalChildProps) => {
   return (
     <Modal onClose={onClose} hasCloseButton>
-      <SegmentIndex segment={segment} />
+      <SegmentIndex segment={segment} episode_id={episode_id} />
     </Modal>
   );
 };

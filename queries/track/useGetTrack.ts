@@ -12,7 +12,7 @@ type GetTrackListPayload = {
   };
 };
 
-type GetTracksListResponse = {
+export type GetTracksListResponse = {
   results: ITrack[];
   meta: Meta;
 };

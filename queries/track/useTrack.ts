@@ -4,6 +4,7 @@ import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { ITrack } from "types";
+import { useUpdateTrackOnCache } from "./hooks/useUpdateTrackOnCache";
 
 type CreateTrackPayload = {
   body: {
@@ -57,10 +58,12 @@ const updateTrack = async ({ params, body }: UpdateTrackPayload) => {
 };
 
 export const useUpdateTrack = () => {
-  const queryClient = useQueryClient();
+  const { updateTrackOnCache } = useUpdateTrackOnCache();
   return useMutation(updateTrack, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Track.List]);
+    onSuccess: (data) => {
+      updateTrackOnCache({
+        track: data,
+      });
       ToastSuccess("Track updated successfully");
     },
     onError: (error: AxiosError) => {

@@ -8,7 +8,8 @@ type service =
   | "patient"
   | "episode"
   | "public"
-  | "track";
+  | "track"
+  | "segment";
 
 type IRequest = {
   method: Method;

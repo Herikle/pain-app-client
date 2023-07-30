@@ -56,6 +56,7 @@ export const Track = ({ track }: TrackProps) => {
   const onClickSegment = (segment: ISegment) => {
     setSegmentModal({
       segment,
+      episode_id: track.episode_id,
     });
   };
 

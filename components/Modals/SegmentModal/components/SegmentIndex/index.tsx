@@ -15,6 +15,7 @@ import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
 import { SymptomsPage } from "../SymptomsPage";
 import { ISegment } from "types";
+import { useUpdateSegment } from "@queries/segment/useSegment";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -51,9 +52,10 @@ const TabPanelContainer = styled.div``;
 
 type Props = {
   segment: ISegment;
+  episode_id: string;
 };
 
-export const SegmentIndex = ({ segment }: Props) => {
+export const SegmentIndex = ({ segment, episode_id }: Props) => {
   const [value, setValue] = useState(0);
 
   const [segmentPageForm, setSegmentPageForm] = useState<SegmentPageForm>({
@@ -85,6 +87,22 @@ export const SegmentIndex = ({ segment }: Props) => {
 
   const isValid = () => {
     return segmentPageFormIsValid;
+  };
+
+  const updateSegment = useUpdateSegment();
+
+  const onSubmit = async () => {
+    const segment_updated = updateSegment.mutateAsync({
+      params: {
+        segment_id: segment._id,
+      },
+      body: {
+        ...segmentPageForm,
+      },
+      extra: {
+        episode_id,
+      },
+    });
   };
 
   return (
@@ -173,7 +191,12 @@ export const SegmentIndex = ({ segment }: Props) => {
           color={theme.colors.text_switched}
           cursor="pointer"
         />
-        <Button onClick={notImplemented} width="160px" disabled={!isValid()}>
+        <Button
+          onClick={onSubmit}
+          width="160px"
+          disabled={!isValid()}
+          loading={updateSegment.isLoading}
+        >
           Save changes
         </Button>
       </FlexRow>

@@ -122,6 +122,7 @@ export type ISegment = {
   intensities: ISegmentIntensities;
   quality?: ISegmentQuality;
   interventions: IIntervetion[];
+  track_id: string;
   symptoms: ISymptom[];
   createdAt: string;
   updatedAt: string;

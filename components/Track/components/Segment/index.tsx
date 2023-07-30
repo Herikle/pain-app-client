@@ -54,7 +54,7 @@ export const Segment = ({
           <>
             {Array.from({ length: 4 }).map((_, index) => (
               <Section key={index}>
-                <Input />
+                <Input readOnly={readOnly} />
               </Section>
             ))}
           </>
@@ -78,6 +78,10 @@ const Input = styled.input`
   outline: none;
   padding: 1rem;
   font-size: 1.5rem;
+
+  &:read-only {
+    cursor: inherit;
+  }
 `;
 
 const SegmentName = styled.div`
