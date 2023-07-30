@@ -1,3 +1,4 @@
+import { LoadingWrapper } from "@components/LoadingWrapper";
 import { Track } from "@components/Track";
 import { useGetTracksList } from "@queries/track/useGetTrack";
 import { useMemo } from "react";
@@ -12,10 +13,10 @@ export const ListTrack = ({ episode_id }: ListTrackProps) => {
   const tracks = useMemo(() => getTracks.data?.results, [getTracks.data]);
 
   return (
-    <>
+    <LoadingWrapper loading={getTracks.isLoading}>
       {tracks?.map((track) => (
         <Track key={track._id} track={track} />
       ))}
-    </>
+    </LoadingWrapper>
   );
 };

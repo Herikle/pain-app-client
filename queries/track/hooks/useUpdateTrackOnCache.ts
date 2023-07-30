@@ -41,5 +41,52 @@ export const useUpdateTrackOnCache = () => {
     );
   };
 
-  return { updateTrackOnCache };
+  const addTrackOnCache = async (values: UpdateTrackOnCache) => {
+    const { track } = values;
+
+    const episode_id = track.episode_id;
+
+    queryClient.setQueriesData(
+      [QueryKeys.Track.List, { episode_id }],
+      (old: GetTracksListResponse) => {
+        const newResults = update(old, {
+          results: {
+            $push: [track],
+          },
+        });
+
+        return newResults;
+      }
+    );
+  };
+
+  const remoteTrackOnCache = async (values: UpdateTrackOnCache) => {
+    const { track } = values;
+
+    const episode_id = track.episode_id;
+
+    queryClient.setQueriesData(
+      [QueryKeys.Track.List, { episode_id }],
+      (old: GetTracksListResponse) => {
+        const track_id = track._id;
+
+        const trackIndex = old.results.findIndex(
+          (track: ITrack) => track._id === track_id
+        );
+        if (trackIndex >= 0) {
+          const newResults = update(old, {
+            results: {
+              $splice: [[trackIndex, 1]],
+            },
+          });
+
+          return newResults;
+        }
+
+        return old;
+      }
+    );
+  };
+
+  return { updateTrackOnCache, addTrackOnCache, remoteTrackOnCache };
 };

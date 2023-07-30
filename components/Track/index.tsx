@@ -7,6 +7,7 @@ import { Pencil } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
 import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
 import { ISegment, ITrack } from "types";
+import { Element } from "react-scroll";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -69,32 +70,34 @@ export const Track = ({ track }: TrackProps) => {
   const { segments } = track;
 
   return (
-    <Wrapper gap={2}>
-      <FlexRow justify="flex-start">
-        <Text variant="body1Bold">{track.name}</Text>
-        <Pencil
-          size={16}
-          color={theme.colors.font_color}
-          weight="fill"
-          cursor="pointer"
-          onClick={onClickTrackEdit}
-        />
-      </FlexRow>
-      <Container>
-        <SegmentsTitleComponent />
-        <SegmentsContainer>
-          {segments?.map((segment, index) => (
-            <Segment
-              key={index}
-              segment={segment}
-              hasDraw
-              readOnly
-              onClick={() => onClickSegment(segment)}
-            />
-          ))}
-        </SegmentsContainer>
-      </Container>
-    </Wrapper>
+    <Element name={`track_${track._id}`}>
+      <Wrapper gap={2}>
+        <FlexRow justify="flex-start">
+          <Text variant="body1Bold">{track.name}</Text>
+          <Pencil
+            size={16}
+            color={theme.colors.font_color}
+            weight="fill"
+            cursor="pointer"
+            onClick={onClickTrackEdit}
+          />
+        </FlexRow>
+        <Container>
+          <SegmentsTitleComponent />
+          <SegmentsContainer>
+            {segments?.map((segment, index) => (
+              <Segment
+                key={index}
+                segment={segment}
+                hasDraw
+                readOnly
+                onClick={() => onClickSegment(segment)}
+              />
+            ))}
+          </SegmentsContainer>
+        </Container>
+      </Wrapper>
+    </Element>
   );
 };
 

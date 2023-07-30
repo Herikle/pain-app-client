@@ -92,7 +92,7 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
   const updateSegment = useUpdateSegment();
 
   const onSubmit = async () => {
-    const segment_updated = updateSegment.mutateAsync({
+    updateSegment.mutateAsync({
       params: {
         segment_id: segment._id,
       },

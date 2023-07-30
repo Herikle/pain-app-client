@@ -1,10 +1,10 @@
-import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { ITrack } from "types";
 import { useUpdateTrackOnCache } from "./hooks/useUpdateTrackOnCache";
+import { scroller } from "react-scroll";
 
 type CreateTrackPayload = {
   body: {
@@ -24,10 +24,12 @@ const createTrack = async ({ body }: CreateTrackPayload) => {
 };
 
 export const useCreateTrack = () => {
-  const queryClient = useQueryClient();
+  const { addTrackOnCache } = useUpdateTrackOnCache();
   return useMutation(createTrack, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Track.List]);
+    onSuccess: async (data) => {
+      addTrackOnCache({
+        track: data,
+      });
     },
     onError: (error: AxiosError) => {
       ToastError(error);
@@ -89,10 +91,12 @@ const deleteTrack = async ({ params }: DeleteTrackPayload) => {
 };
 
 export const useDeleteTrack = () => {
-  const queryClient = useQueryClient();
+  const { remoteTrackOnCache } = useUpdateTrackOnCache();
   return useMutation(deleteTrack, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Track.List]);
+    onSuccess: (data) => {
+      remoteTrackOnCache({
+        track: data,
+      });
       ToastSuccess("Track deleted successfully");
     },
     onError: (error: AxiosError) => {
