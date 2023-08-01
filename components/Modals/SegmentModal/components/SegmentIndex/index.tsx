@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useCallback, useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
-import { IntensitiesPage } from "../IntensitiesPage";
+import { IntensitiesPage, IntensitiesPageForm } from "../IntensitiesPage";
 import { SegmentPage, SegmentPageForm } from "../SegmentPage";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
@@ -74,6 +74,24 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
     setSegmentPageForm(data);
   }, []);
 
+  const [intensitiesPageForm, setIntensitiesPageForm] =
+    useState<IntensitiesPageForm>({
+      type: segment.intensities.type,
+      justification: segment.intensities.justification,
+      values: segment.intensities.values,
+      draw: segment.intensities.draw,
+    });
+
+  const [intensitiesPageFormIsValid, setIntensitiesPageFormIsValid] =
+    useState(false);
+
+  const onChangeIntensitiesPageForm = useCallback(
+    (data: IntensitiesPageForm) => {
+      setIntensitiesPageForm(data);
+    },
+    []
+  );
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -86,7 +104,7 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
   };
 
   const isValid = () => {
-    return segmentPageFormIsValid;
+    return segmentPageFormIsValid && intensitiesPageFormIsValid;
   };
 
   const updateSegment = useUpdateSegment();
@@ -98,6 +116,7 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
       },
       body: {
         ...segmentPageForm,
+        intensities: intensitiesPageForm,
       },
       extra: {
         episode_id,
@@ -171,7 +190,9 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
         <CustomTabPanel value={value} index={1}>
           <IntensitiesPage
             segment={segment}
-            intensities={segment.intensities}
+            intensities={intensitiesPageForm}
+            onChange={onChangeIntensitiesPageForm}
+            onValidChange={setIntensitiesPageFormIsValid}
           />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>

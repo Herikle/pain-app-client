@@ -3,6 +3,11 @@ import { useSegmentModalState } from "./hook";
 import { SegmentIndex } from "./components/SegmentIndex";
 import { ISegment } from "types";
 
+export type CommonSegmentModalProps<T> = {
+  onChange: (data: T) => void;
+  onValidChange: (valid: boolean) => void;
+};
+
 export type SegmentModalChildProps = {
   onClose: () => void;
   segment: ISegment;

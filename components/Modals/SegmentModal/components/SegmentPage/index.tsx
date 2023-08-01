@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { setValueAsNumber } from "@utils/helpers/zodValidation";
+import { CommonSegmentModalProps } from "../..";
 
 const SegmentPageSchema = z.object({
   name: z.string().optional(),
@@ -27,9 +28,7 @@ export type SegmentPageForm = z.infer<typeof SegmentPageSchema>;
 
 type Props = {
   segmentPageForm: SegmentPageForm;
-  onChange: (data: SegmentPageForm) => void;
-  onValidChange: (valid: boolean) => void;
-};
+} & CommonSegmentModalProps<SegmentPageForm>;
 
 export const SegmentPage = ({
   segmentPageForm,

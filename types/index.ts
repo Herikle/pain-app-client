@@ -95,10 +95,17 @@ type ISegmentTimeUnit = "minutes" | "hours" | "days";
 type ISegmentEstimativeType = "reported" | "measured" | "inferred";
 type ISegmentPainType = "acute" | "chronic";
 
+export type ISegmentValues = {
+  excruciating?: number;
+  disabling?: number;
+  hurful?: number;
+  annoying?: number;
+};
+
 export type ISegmentIntensities = {
   type: IIntensityType;
   draw?: any;
-  values?: any;
+  values?: ISegmentValues;
   justification?: string;
 };
 

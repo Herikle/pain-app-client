@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { SEGMENT_SECTION_HEIGHT, Segment } from "./components/Segment";
+import { Segment } from "./components/Segment";
+import { SEGMENT_SECTION_HEIGHT } from "./components/Segment/const";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
