@@ -3,7 +3,7 @@ import { Text } from "@components/Text";
 import { ISegment } from "types";
 import { SEGMENT_WIDTH } from "./const";
 import { SegmentDraw } from "./components/SegmentDraw";
-import { SegmentValues } from "./components/SegmentValues";
+import { SegmentValues, onChangeValueProps } from "./components/SegmentValues";
 
 type SegmentProps = {
   hasDraw?: boolean;
@@ -12,6 +12,7 @@ type SegmentProps = {
   backgroundColor?: string;
   isSolitary?: boolean;
   segment: ISegment;
+  onChangeValues?: (data: onChangeValueProps) => void;
 };
 
 export const Segment = ({
@@ -21,9 +22,11 @@ export const Segment = ({
   backgroundColor,
   isSolitary = false,
   segment,
+  onChangeValues,
 }: SegmentProps) => {
   const { name, intensities } = segment;
   const { type } = intensities;
+
   return (
     <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
@@ -39,7 +42,11 @@ export const Segment = ({
         {type === "draw" ? (
           <SegmentDraw hasDraw={hasDraw} readOnly={readOnly} />
         ) : (
-          <SegmentValues readOnly={readOnly} values={intensities.values} />
+          <SegmentValues
+            readOnly={readOnly}
+            values={intensities.values}
+            onChange={onChangeValues}
+          />
         )}
       </Container>
     </Wrapper>

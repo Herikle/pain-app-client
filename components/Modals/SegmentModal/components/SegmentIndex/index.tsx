@@ -68,7 +68,7 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
     time_unit: segment.time_unit,
     comment: segment.comment,
   });
-  const [segmentPageFormIsValid, setSegmentPageFormIsValid] = useState(false);
+  const [segmentPageFormIsValid, setSegmentPageFormIsValid] = useState(true);
 
   const onChangeSsegmentPageForm = useCallback((data: SegmentPageForm) => {
     setSegmentPageForm(data);
@@ -83,7 +83,7 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
     });
 
   const [intensitiesPageFormIsValid, setIntensitiesPageFormIsValid] =
-    useState(false);
+    useState(true);
 
   const onChangeIntensitiesPageForm = useCallback(
     (data: IntensitiesPageForm) => {

@@ -5,12 +5,15 @@ import { SegmentsTitleComponent } from "@components/Track";
 import { Segment } from "@components/Track/components/Segment";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ISegment } from "types";
+import { ISegment, ISegmentValues } from "types";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
 import { CommonSegmentModalProps } from "../..";
-import { SegmentValuesSchema } from "@components/Track/components/Segment/components/SegmentValues";
+import {
+  SegmentValuesSchema,
+  onChangeValueProps,
+} from "@components/Track/components/Segment/components/SegmentValues";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
@@ -32,7 +35,7 @@ export const IntensitiesPage = ({
   onChange,
   onValidChange,
 }: Props) => {
-  const { register, getValues, formState, watch } =
+  const { register, getValues, formState, watch, setValue } =
     useForm<IntensitiesPageForm>({
       resolver: zodResolver(IntensitiesPageSchema),
       defaultValues: {
@@ -44,6 +47,22 @@ export const IntensitiesPage = ({
       mode: "onChange",
     });
 
+  const [segmentErrors, setSegmentErrors] = useState<string[]>([]);
+
+  const [hasError, setHasError] = useState(false);
+
+  const onUpdateSegmentValues = (data: onChangeValueProps) => {
+    if (data.hasError) {
+      setHasError(true);
+      setSegmentErrors(data.errors);
+    } else {
+      setHasError(false);
+      setSegmentErrors([]);
+    }
+
+    setValue("values", data.values);
+  };
+
   const onUpdate = () => {
     onChange(getValues());
   };
@@ -51,8 +70,8 @@ export const IntensitiesPage = ({
   const { errors, isValid } = formState;
 
   useEffect(() => {
-    onValidChange(isValid);
-  }, [isValid, onValidChange]);
+    onValidChange(isValid && !hasError);
+  }, [isValid, onValidChange, hasError]);
 
   return (
     <form onChange={onUpdate}>
@@ -75,6 +94,7 @@ export const IntensitiesPage = ({
                 }}
                 hasDraw
                 backgroundColor={theme.colors.pastel}
+                onChangeValues={onUpdateSegmentValues}
                 isSolitary
               />
             </FlexRow>
@@ -88,10 +108,20 @@ export const IntensitiesPage = ({
               error={errors.justification?.message}
             />
           </FlexRow>
-          <Text maxWidth="300px">
-            Tip: try to measure your pain drawing a line with the mouse between
-            the indicators.
-          </Text>
+          {watch("type") === "draw" ? (
+            <Text maxWidth="300px">
+              Tip: try to measure your pain drawing a line with the mouse
+              between the indicators.
+            </Text>
+          ) : (
+            <>
+              {segmentErrors?.map((error) => (
+                <Text variant="body2" key={error} color="dark_red_danger">
+                  {error}
+                </Text>
+              ))}
+            </>
+          )}
         </FlexColumn>
       </Container>
     </form>

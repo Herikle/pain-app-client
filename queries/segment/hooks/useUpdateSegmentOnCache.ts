@@ -41,6 +41,7 @@ export const useUpdateSegmentOnCache = () => {
                   },
                 },
               });
+
               return newResults;
             }
           }

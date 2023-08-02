@@ -1,9 +1,7 @@
-import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
-import { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
-import { ISegment, ITrack } from "types";
+import { useMutation } from "react-query";
+import { ISegment } from "types";
 import { useUpdateSegmentOnCache } from "./hooks/useUpdateSegmentOnCache";
 
 type UpdateSegmentPayload = {
@@ -32,6 +30,7 @@ export const useUpdateSegment = () => {
   return useMutation(updateSegment, {
     onSuccess: (data, { extra }) => {
       ToastSuccess("Segment Updated");
+
       updateSegmentOnCache({
         segment: data,
         episode_id: extra.episode_id,

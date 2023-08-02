@@ -1,29 +1,48 @@
+import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { Section } from "../shared-style";
 import { Input } from "./style";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { theme } from "@styles/theme";
 
 const parseNumber = (value: number | undefined) => {
-  if (value === undefined) return 0;
+  if (value === undefined) return "";
   return value;
 };
 
 export const SegmentValuesSchema = z
   .object({
-    excruciating: z.number().nonnegative().optional(),
-    disabling: z.number().nonnegative().optional(),
-    hurful: z.number().nonnegative().optional(),
-    annoying: z.number().nonnegative().optional(),
+    excruciating: z
+      .number()
+      .nonnegative("Excruciating must be a positive number")
+      .optional(),
+    disabling: z
+      .number()
+      .nonnegative("Disabling must be a positive number")
+      .optional(),
+    hurful: z
+      .number()
+      .nonnegative("Hurful must be a positive number")
+      .optional(),
+    annoying: z
+      .number()
+      .nonnegative("Annoying must be a positive number")
+      .optional(),
   })
-  .partial()
   .refine(
     (data) => {
-      const sum = Object.values(data).reduce((acc, curr) => acc + curr, 0);
+      const sum = Object.values(data).reduce(
+        (acc, curr: number | undefined) => acc + (curr ?? 0),
+        0
+      );
+      console.log(sum);
       return sum <= 100;
     },
     {
-      message: "The sum of all values must be less than 100",
-      path: ["values"],
+      message: "The sum of all values must be less or equal to 100",
+      params: {
+        id: "MAX_SUM",
+      },
     }
   );
 
@@ -36,37 +55,79 @@ const valuesArray: (keyof SegmentValuesForm)[] = [
   "annoying",
 ];
 
+export type onChangeValueProps = {
+  values: SegmentValuesForm;
+  hasError: boolean;
+  errors: string[];
+};
+
 type ValuesSectionProps = {
   readOnly: boolean;
   values?: SegmentValuesForm;
+  onChange?: (data: onChangeValueProps) => void;
 };
 
-export const SegmentValues = ({ readOnly, values }: ValuesSectionProps) => {
-  const { register, getValues, formState, watch } = useForm<SegmentValuesForm>({
+export const SegmentValues = ({
+  readOnly,
+  values,
+  onChange,
+}: ValuesSectionProps) => {
+  const { register, getValues } = useForm<SegmentValuesForm>({
     resolver: zodResolver(SegmentValuesSchema),
     mode: "onChange",
     defaultValues: {
-      annoying: parseNumber(values?.annoying),
-      disabling: parseNumber(values?.disabling),
-      excruciating: parseNumber(values?.excruciating),
-      hurful: parseNumber(values?.hurful),
+      annoying: values?.annoying,
+      disabling: values?.disabling,
+      excruciating: values?.excruciating,
+      hurful: values?.hurful,
     },
   });
 
-  const { errors } = formState;
+  const onUpdate = () => {
+    const values = getValues();
+    const result = SegmentValuesSchema.safeParse(values);
+
+    let errors: string[] = [];
+
+    if (!result.success) {
+      const messages = result.error.issues.map((issue) => issue.message);
+      errors = messages;
+    }
+
+    onChange?.({
+      values,
+      hasError: !result.success,
+      errors,
+    });
+  };
 
   return (
-    <>
+    <form onChange={onUpdate}>
       {valuesArray.map((value) => (
         <Section key={value}>
-          <Input
-            readOnly={readOnly}
-            {...register(value, {
-              valueAsNumber: true,
-            })}
-          />
+          {readOnly ? (
+            <Input
+              type="number"
+              readOnly={true}
+              value={parseNumber(values?.[value])}
+              style={{
+                color: theme.pain_level_colors[value],
+              }}
+            />
+          ) : (
+            <Input
+              type="number"
+              autoComplete="off"
+              {...register(value, {
+                setValueAs: setValueAsNumber,
+              })}
+              style={{
+                color: theme.pain_level_colors[value],
+              }}
+            />
+          )}
         </Section>
       ))}
-    </>
+    </form>
   );
 };
