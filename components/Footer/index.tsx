@@ -14,7 +14,7 @@ export const Footer = () => {
         Pain<strong>Track</strong>
       </Text>
       <FooterLinks>
-        <Link href="#contact">
+        {/* <Link href="#contact">
           <Text color="pure_white" opacity={0.4}>
             Contact
           </Text>
@@ -23,7 +23,7 @@ export const Footer = () => {
           <Text color="pure_white" opacity={0.4}>
             About PainTrack.org
           </Text>
-        </Link>
+        </Link> */}
       </FooterLinks>
     </Container>
   );

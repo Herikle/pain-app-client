@@ -25,7 +25,7 @@ export const TopBar = () => {
         />
       </Link>
       <TopBarLinks>
-        <StyledLink href={`${RoutesPath.home}#how-to-use`}>
+        {/* <StyledLink href={`${RoutesPath.home}#how-to-use`}>
           <Text color="pure_white">How to use</Text>
         </StyledLink>
         <StyledLink href="#user-guide">
@@ -36,9 +36,9 @@ export const TopBar = () => {
         </StyledLink>
         <StyledLink href="#contact">
           <Text color="pure_white">Contact</Text>
-        </StyledLink>
+        </StyledLink> */}
       </TopBarLinks>
-      {user ? (
+      {/* {user ? (
         <MenuLink
           href={RoutesPath.profile}
           iconPath={IconsPath.Doctor}
@@ -50,7 +50,7 @@ export const TopBar = () => {
             Log in
           </Button>
         </Link>
-      )}
+      )} */}
     </Container>
   );
 };

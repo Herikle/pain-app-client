@@ -23,9 +23,9 @@ export const BackgroundVideo = () => {
           <br />
           the pain experience
         </Text>
-        <Button color="cta" width="400px">
+        {/* <Button color="cta" width="400px">
           Register a pain episode
-        </Button>
+        </Button> */}
       </Apresentation>
     </Container>
   );

@@ -18,6 +18,9 @@ import styled from "styled-components";
 import { CommonKeyStringPair, EmptyAttributesConfig } from "types";
 import ReCAPTCHA from "react-google-recaptcha";
 import { TextField } from "@components/TextField";
+import Image from "next/image";
+import { ImagesPath } from "@utils/icons";
+import { Box } from "@mui/material";
 
 export const getStaticProps: GetStaticProps<{
   attributes: GetPublicAttributesResponse;
@@ -145,9 +148,34 @@ export default function GeneratePage({
     <>
       <Container>
         <FlexColumn gap={2}>
+          <Box display="flex" justifyContent="center">
+            <a
+              href="https://www.welfarefootprint.org/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={ImagesPath.WelfareLogo}
+                style={{
+                  width: "100%",
+                  maxWidth: "436px",
+                  height: "auto",
+                }}
+                alt="Welfare Footprint project logo"
+              />
+            </a>
+          </Box>
           <Text variant="h1" align="center">
             Describing Pain Episodes with the Cumulative Pain Method Generating
             an Initial Draft of a Scientific Manuscript
+          </Text>
+          <Text variant="body2" align="center">
+            This is an exploratory tool designed to demonstrate how artificial
+            intelligence can aid in assessing welfare challenges using the
+            Cumulative Pain framework. Please note that the results generated
+            are not scientifically valid, but are intended solely to stimulate
+            thought and facilitate learning.
           </Text>
           <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <FormColumn gap={1} marginInline="auto">

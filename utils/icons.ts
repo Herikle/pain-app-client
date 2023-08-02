@@ -22,3 +22,7 @@ export const IconsPath = {
   Invervention: "/icons/intervention.svg",
   Symptom: "/icons/symptom.svg",
 };
+
+export const ImagesPath = {
+  WelfareLogo: "/images/welfare-logo.png",
+};
