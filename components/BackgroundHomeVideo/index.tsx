@@ -21,7 +21,7 @@ export const BackgroundVideo = () => {
         <Text color={"pure_white"} align="center" variant="body1Bold">
           A scientific tool for the description and analysis of
           <br />
-          the pain experience
+          the pain experience {"(working in progress)"}
         </Text>
         {/* <Button color="cta" width="400px">
           Register a pain episode
