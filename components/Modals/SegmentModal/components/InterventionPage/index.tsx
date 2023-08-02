@@ -15,6 +15,8 @@ import { IIntervetion } from "types";
 import { InterventionCard } from "./components/InterventionCard";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 
+const fakeDate = new Date().toISOString();
+
 export const InterventionPage = () => {
   const [interventions, setInterventions] = useState<IIntervetion[]>([
     {
@@ -23,6 +25,8 @@ export const InterventionPage = () => {
       datetime: "2023-07-15T21:49",
       dose: "option-1",
       effective: true,
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
     },
     {
       _id: "2",
@@ -30,6 +34,8 @@ export const InterventionPage = () => {
       datetime: "2023-07-15T21:49",
       dose: "option-2",
       effective: false,
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
     },
   ]);
 
@@ -51,7 +57,15 @@ export const InterventionPage = () => {
   };
 
   const onAddIntervention = (intervention: CreateIntervention) => {
-    setInterventions((prev) => [...prev, { ...intervention, _id: uuidv4() }]);
+    setInterventions((prev) => [
+      ...prev,
+      {
+        ...intervention,
+        _id: uuidv4(),
+        createdAt: fakeDate,
+        updatedAt: fakeDate,
+      },
+    ]);
   };
 
   const deleteById = (id: string) => {
@@ -63,7 +77,12 @@ export const InterventionPage = () => {
       const _id = toEdit._id;
       const index = interventions.findIndex((i) => i._id === _id);
       const newInterventions = [...interventions];
-      newInterventions[index] = { ...intervention, _id };
+      newInterventions[index] = {
+        ...intervention,
+        _id,
+        updatedAt: fakeDate,
+        createdAt: fakeDate,
+      };
       setInterventions(newInterventions);
     }
   };

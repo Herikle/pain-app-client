@@ -12,17 +12,23 @@ import { ISymptom } from "types";
 import { SymptomCard } from "./components/SymptomCard";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 
+const fakeDate = new Date().toISOString();
+
 export const SymptomsPage = () => {
   const [symptoms, setSymptoms] = useState<ISymptom[]>([
     {
       _id: "1",
       name: "Swelling",
       datetime: "2023-07-15T21:49",
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
     },
     {
       _id: "2",
       name: "Headache",
       datetime: "2023-07-15T21:49",
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
     },
   ]);
 
@@ -44,7 +50,10 @@ export const SymptomsPage = () => {
   };
 
   const onAddIntervention = (symptom: CreateSymptom) => {
-    setSymptoms((prev) => [...prev, { ...symptom, _id: uuidv4() }]);
+    setSymptoms((prev) => [
+      ...prev,
+      { ...symptom, _id: uuidv4(), createdAt: fakeDate, updatedAt: fakeDate },
+    ]);
   };
 
   const deleteById = (id: string) => {
@@ -56,7 +65,12 @@ export const SymptomsPage = () => {
       const _id = toEdit._id;
       const index = symptoms.findIndex((i) => i._id === _id);
       const newSymptoms = [...symptoms];
-      newSymptoms[index] = { ...symptom, _id };
+      newSymptoms[index] = {
+        ...symptom,
+        _id,
+        createdAt: fakeDate,
+        updatedAt: fakeDate,
+      };
       setSymptoms(newSymptoms);
     }
   };
