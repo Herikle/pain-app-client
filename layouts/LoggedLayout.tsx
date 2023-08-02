@@ -29,7 +29,7 @@ export const LoggedLayout = ({ children, onlySuper }: Props) => {
       {isLogged ? (
         <>
           <SideMenu />
-          <Content>{children}</Content>
+          <Content id="main-content">{children}</Content>
         </>
       ) : (
         <LoadingPage />

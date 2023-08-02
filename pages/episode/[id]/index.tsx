@@ -15,6 +15,7 @@ import { useEffect, useMemo } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
+import { scroller } from "react-scroll";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -32,11 +33,18 @@ export default function EpisodePage() {
   const createTrack = useCreateTrack();
 
   const onCreateTrack = async () => {
-    await createTrack.mutateAsync({
+    const track_created = await createTrack.mutateAsync({
       body: {
         episode_id: id,
       },
     });
+    setTimeout(() => {
+      scroller.scrollTo(`track_${track_created._id}`, {
+        duration: 800,
+        smooth: true,
+        containerId: "main-content",
+      });
+    }, 250);
   };
 
   useEffect(() => {
