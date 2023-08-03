@@ -8,17 +8,26 @@ type Props = {
   open?: boolean;
   onClose?: () => void;
   hasCloseButton?: boolean;
+  removeOverlay?: boolean;
+  removePadding?: boolean;
 };
 
-export const Modal = ({ children, onClose, open, hasCloseButton }: Props) => {
+export const Modal = ({
+  children,
+  onClose,
+  open,
+  hasCloseButton,
+  removeOverlay = false,
+  removePadding = false,
+}: Props) => {
   const isOpen = open ?? true;
 
   return (
     <Portal>
       {isOpen && (
         <>
-          <ModalOverlay onClick={onClose} />
-          <Container>
+          {!removeOverlay && <ModalOverlay onClick={onClose} />}
+          <Container $removePadding={removePadding}>
             {children}
             {hasCloseButton && (
               <XContainer>
@@ -54,12 +63,16 @@ const ModalOverlay = styled.div`
   opacity: 0.5;
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  $removePadding?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: ${theme.colors.pure_white};
-  padding: 2rem;
+  padding: ${({ $removePadding }) => ($removePadding ? 0 : "2rem")};
 `;

@@ -16,8 +16,12 @@ export type SegmentModalChildProps = {
 
 const Child = ({ onClose, segment, episode_id }: SegmentModalChildProps) => {
   return (
-    <Modal onClose={onClose} hasCloseButton>
-      <SegmentIndex segment={segment} episode_id={episode_id} />
+    <Modal removePadding removeOverlay>
+      <SegmentIndex
+        segment={segment}
+        episode_id={episode_id}
+        onClose={onClose}
+      />
     </Modal>
   );
 };

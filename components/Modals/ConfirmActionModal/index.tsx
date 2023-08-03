@@ -19,6 +19,7 @@ type ConfirmActionModalProps = {
   confirmText?: string;
   cancelText?: string;
   hasCloseButton?: boolean;
+  onCancel?: () => void;
 };
 
 export const ConfirmActionModal = ({
@@ -31,6 +32,7 @@ export const ConfirmActionModal = ({
   confirmText = "Yes, confirm",
   cancelText = "No, I want to go back",
   hasCloseButton = false,
+  onCancel,
 }: ConfirmActionModalProps) => {
   const [confirmationText, setConfirmationText] = useState("");
 
@@ -67,7 +69,7 @@ export const ConfirmActionModal = ({
           {confirmText}
         </Button>
         <Button
-          onClick={onClose}
+          onClick={onCancel ?? onClose}
           fullWidth
           color="pure_white"
           textColor="pure_black"

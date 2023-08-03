@@ -109,9 +109,27 @@ export type ISegmentIntensities = {
   justification?: string;
 };
 
+export const qualityTextureEnum = [
+  "stretching",
+  "stinging",
+  "burning",
+  "pressing",
+] as const;
+
+export type IQualityTexture = (typeof qualityTextureEnum)[number];
+
+export const qualityDepthEnum = [
+  "muscular",
+  "visceral",
+  "superficial",
+  "bone",
+] as const;
+
+export type IQualityDepth = (typeof qualityDepthEnum)[number];
+
 export type ISegmentQuality = {
-  texture?: string;
-  depth?: string;
+  texture?: IQualityTexture;
+  depth?: IQualityDepth;
   anatomy?: string;
   comment?: string;
 };

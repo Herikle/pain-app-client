@@ -9,13 +9,18 @@ import { IntensitiesPage, IntensitiesPageForm } from "../IntensitiesPage";
 import { SegmentPage, SegmentPageForm } from "../SegmentPage";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
-import { Trash } from "@phosphor-icons/react";
+import { Trash, X } from "@phosphor-icons/react";
 import { notImplemented } from "@utils/helpers/dev";
 import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
 import { SymptomsPage } from "../SymptomsPage";
 import { ISegment } from "types";
 import { useUpdateSegment } from "@queries/segment/useSegment";
+import { useSegmentPageForm } from "./pagesFormHooks/useSegmentPageForm";
+import { useIntensitiesPageForm } from "./pagesFormHooks/useIntensitiesPageForm";
+import { useQualityPageForm } from "./pagesFormHooks/useQualityPageForm";
+import { Portal } from "@components/Portal";
+import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -53,47 +58,54 @@ const TabPanelContainer = styled.div``;
 type Props = {
   segment: ISegment;
   episode_id: string;
+  onClose: () => void;
 };
 
-export const SegmentIndex = ({ segment, episode_id }: Props) => {
+export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
   const [value, setValue] = useState(0);
 
-  const [segmentPageForm, setSegmentPageForm] = useState<SegmentPageForm>({
-    name: segment.name,
-    start: segment.start,
-    end: segment.end,
-    estimative_type: segment.estimative_type,
-    pain_type: segment.pain_type,
-    start_date: segment.start_date,
-    time_unit: segment.time_unit,
-    comment: segment.comment,
-  });
-  const [segmentPageFormIsValid, setSegmentPageFormIsValid] = useState(true);
+  const [segmentState, setSegmentState] = useState<ISegment>(segment);
 
-  const onChangeSsegmentPageForm = useCallback((data: SegmentPageForm) => {
-    setSegmentPageForm(data);
-  }, []);
+  const [confirmClose, setConfirmClose] = useState(false);
 
-  const [intensitiesPageForm, setIntensitiesPageForm] =
-    useState<IntensitiesPageForm>({
-      type: segment.intensities.type,
-      justification: segment.intensities.justification,
-      values: segment.intensities.values,
-      draw: segment.intensities.draw,
-    });
+  const {
+    segmentPageForm,
+    segmentPageFormIsValid,
+    onChangeSsegmentPageForm,
+    setSegmentPageFormIsValid,
+    isDirtySegmentPageForm,
+  } = useSegmentPageForm(segmentState);
 
-  const [intensitiesPageFormIsValid, setIntensitiesPageFormIsValid] =
-    useState(true);
+  const {
+    intensitiesPageForm,
+    intensitiesPageFormIsValid,
+    onChangeIntensitiesPageForm,
+    setIntensitiesPageFormIsValid,
+    isDirtyIntensitiesPageForm,
+  } = useIntensitiesPageForm(segmentState);
 
-  const onChangeIntensitiesPageForm = useCallback(
-    (data: IntensitiesPageForm) => {
-      setIntensitiesPageForm(data);
-    },
-    []
-  );
+  const {
+    qualityPageForm,
+    qualityPageFormIsValid,
+    onChangeQualityPageForm,
+    setQualityPageFormIsValid,
+    isDirtyQualityPageForm,
+  } = useQualityPageForm(segmentState);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const close = () => {
+    if (
+      isDirtySegmentPageForm() ||
+      isDirtyIntensitiesPageForm() ||
+      isDirtyQualityPageForm()
+    ) {
+      setConfirmClose(true);
+    } else {
+      onClose();
+    }
   };
 
   const getColor = (index: number) => {
@@ -104,126 +116,183 @@ export const SegmentIndex = ({ segment, episode_id }: Props) => {
   };
 
   const isValid = () => {
-    return segmentPageFormIsValid && intensitiesPageFormIsValid;
+    return (
+      segmentPageFormIsValid &&
+      intensitiesPageFormIsValid &&
+      qualityPageFormIsValid
+    );
   };
 
   const updateSegment = useUpdateSegment();
 
-  const onSubmit = async () => {
-    updateSegment.mutateAsync({
+  const onSubmit = async (closeAfterSave = false) => {
+    const updatedSegment = await updateSegment.mutateAsync({
       params: {
         segment_id: segment._id,
       },
       body: {
         ...segmentPageForm,
         intensities: intensitiesPageForm,
+        quality: qualityPageForm,
       },
       extra: {
         episode_id,
       },
     });
+
+    if (closeAfterSave) {
+      onClose();
+    } else {
+      setSegmentState(updatedSegment);
+    }
   };
 
   return (
-    <Container>
-      <Content>
-        <TabsContainer>
-          <Tabs
-            onChange={handleChange}
-            value={value}
-            aria-label="Tabs where each tab needs to be selected manually"
-            sx={{
-              "& .MuiTabs-indicator": {
-                backgroundColor: theme.colors.primary,
-              },
-            }}
-          >
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(0)}>
-                  Segment
-                </Text>
-              }
-              sx={TabSx}
-            />
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(1)}>
-                  Intensities
-                </Text>
-              }
-              sx={TabSx}
-            />
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(2)}>
-                  Quality
-                </Text>
-              }
-              sx={TabSx}
-            />
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(3)}>
-                  Intervention
-                </Text>
-              }
-              sx={TabSx}
-            />
-            <Tab
-              label={
-                <Text variant="body1Bold" color={getColor(4)}>
-                  Symptoms
-                </Text>
-              }
-              sx={TabSx}
-            />
-          </Tabs>
-        </TabsContainer>
-        <CustomTabPanel value={value} index={0}>
-          <SegmentPage
-            segmentPageForm={segmentPageForm}
-            onChange={onChangeSsegmentPageForm}
-            onValidChange={setSegmentPageFormIsValid}
-          />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <IntensitiesPage
-            segment={segment}
-            intensities={intensitiesPageForm}
-            onChange={onChangeIntensitiesPageForm}
-            onValidChange={setIntensitiesPageFormIsValid}
-          />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          <QualityPage />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={3}>
-          <InterventionPage />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={4}>
-          <SymptomsPage />
-        </CustomTabPanel>
-      </Content>
-      <FlexRow justify="space-between">
-        <Trash
-          onClick={notImplemented}
-          size={32}
-          color={theme.colors.text_switched}
-          cursor="pointer"
-        />
-        <Button
-          onClick={onSubmit}
-          width="160px"
-          disabled={!isValid()}
+    <>
+      {confirmClose && (
+        <ConfirmActionModal
+          onClose={() => setConfirmClose(false)}
+          onConfirm={() => onSubmit(true)}
+          onCancel={onClose}
+          title="Unsaved Changes"
+          description="You have unsaved changes. Save them before closing?"
+          confirmText="Save"
+          cancelText="No, close without saving"
           loading={updateSegment.isLoading}
-        >
-          Save changes
-        </Button>
-      </FlexRow>
-    </Container>
+        />
+      )}
+      <Container id="batata">
+        <Content>
+          <TabsContainer>
+            <Tabs
+              onChange={handleChange}
+              value={value}
+              aria-label="Tabs where each tab needs to be selected manually"
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: theme.colors.primary,
+                },
+              }}
+            >
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(0)}>
+                    Segment
+                  </Text>
+                }
+                sx={TabSx}
+              />
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(1)}>
+                    Intensities
+                  </Text>
+                }
+                sx={TabSx}
+              />
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(2)}>
+                    Quality
+                  </Text>
+                }
+                sx={TabSx}
+              />
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(3)}>
+                    Intervention
+                  </Text>
+                }
+                sx={TabSx}
+              />
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(4)}>
+                    Symptoms
+                  </Text>
+                }
+                sx={TabSx}
+              />
+            </Tabs>
+          </TabsContainer>
+          <CustomTabPanel value={value} index={0}>
+            <SegmentPage
+              segmentPageForm={segmentPageForm}
+              onChange={onChangeSsegmentPageForm}
+              onValidChange={setSegmentPageFormIsValid}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <IntensitiesPage
+              segment={segment}
+              intensities={intensitiesPageForm}
+              onChange={onChangeIntensitiesPageForm}
+              onValidChange={setIntensitiesPageFormIsValid}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            <QualityPage
+              qualityValues={qualityPageForm}
+              onChange={onChangeQualityPageForm}
+              onValidChange={setQualityPageFormIsValid}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+            <InterventionPage />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={4}>
+            <SymptomsPage />
+          </CustomTabPanel>
+        </Content>
+        <FlexRow justify="space-between">
+          <Trash
+            onClick={notImplemented}
+            size={32}
+            color={theme.colors.text_switched}
+            cursor="pointer"
+          />
+          <Button
+            onClick={onSubmit}
+            width="160px"
+            disabled={!isValid()}
+            loading={updateSegment.isLoading}
+          >
+            Save changes
+          </Button>
+        </FlexRow>
+        <XContainer>
+          <X
+            size={24}
+            color={theme.colors.font_color}
+            onClick={close}
+            cursor="pointer"
+          />
+        </XContainer>
+      </Container>
+      <Portal>
+        <ModalOverlay onClick={close} />
+      </Portal>
+    </>
   );
 };
+
+const XContainer = styled.div`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${theme.colors.pure_black};
+  opacity: 0.5;
+`;
 
 const Content = styled.div``;
 
@@ -237,15 +306,17 @@ const CustomTabPanel = styled(TabPanel)`
 const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
-  width: 880px;
-  min-height: 650px;
+  width: 950px;
+  min-height: 720px;
   height: fit-content;
   max-width: 80vw;
   max-height: 80vh;
   justify-content: space-between;
+  position: relative;
   overflow: auto;
   ${LightScrollBar};
   @media screen and (max-width: 1366px) {
     min-height: 80vh;
   }
+  padding: 2rem;
 `;

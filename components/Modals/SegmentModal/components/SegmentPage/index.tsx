@@ -39,7 +39,7 @@ export const SegmentPage = ({
     resolver: zodResolver(SegmentPageSchema),
     defaultValues: {
       ...segmentPageForm,
-      start_date: getDateAndTimeFromIsoDate(segmentPageForm?.start_date),
+      start_date: segmentPageForm?.start_date,
     },
     mode: "onChange",
   });
