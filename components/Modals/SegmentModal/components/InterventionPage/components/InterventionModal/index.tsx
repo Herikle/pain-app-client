@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 
 const InterventionSchema = zod.object({
   name: zod.string().nonempty(),
@@ -42,8 +43,11 @@ export const InterventionModal = ({
     watch,
   } = useForm<CreateIntervention>({
     resolver: zodResolver(InterventionSchema),
-    defaultValues: defaultValues ?? {
-      dose: "",
+    defaultValues: {
+      name: defaultValues?.name,
+      dose: defaultValues?.dose,
+      datetime: getDateAndTimeFromIsoDate(defaultValues?.datetime),
+      effective: defaultValues?.effective,
     },
   });
 
@@ -80,16 +84,12 @@ export const InterventionModal = ({
             </Grid>
             <Grid xs={6}>
               <Select
-                options={[
-                  {
-                    id: "option-1",
-                    label: "Option 1",
-                  },
-                  {
-                    id: "option-2",
-                    label: "Option 2",
-                  },
-                ]}
+                options={
+                  Array.from({ length: 10 }, (_, i) => ({
+                    id: i + 1,
+                    label: i,
+                  })) ?? []
+                }
                 getLabel={(option) => option.label}
                 getValue={(option) => option.id}
                 id="select-dose"

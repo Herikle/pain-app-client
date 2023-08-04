@@ -78,6 +78,7 @@ export type IIntervetion = {
   datetime: string;
   dose: string;
   effective: boolean;
+  observation?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -86,6 +87,7 @@ export type ISymptom = {
   _id: string;
   name: string;
   datetime: string;
+  observation?: string;
   createdAt: string;
   updatedAt: string;
 };

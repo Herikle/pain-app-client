@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 
 const SymptomSchema = zod.object({
   name: zod.string().nonempty(),
@@ -32,14 +33,12 @@ export const SymptomModal = ({
   onAdd,
   defaultValues,
 }: InterventionModalProps) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<CreateSymptom>({
+  const { register, handleSubmit, reset, formState } = useForm<CreateSymptom>({
     resolver: zodResolver(SymptomSchema),
-    defaultValues,
+    defaultValues: {
+      name: defaultValues?.name,
+      datetime: getDateAndTimeFromIsoDate(defaultValues?.datetime),
+    },
   });
 
   const close = () => {

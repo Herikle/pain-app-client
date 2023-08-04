@@ -21,6 +21,8 @@ import { useIntensitiesPageForm } from "./pagesFormHooks/useIntensitiesPageForm"
 import { useQualityPageForm } from "./pagesFormHooks/useQualityPageForm";
 import { Portal } from "@components/Portal";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageForm";
+import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -92,6 +94,20 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
     isDirtyQualityPageForm,
   } = useQualityPageForm(segmentState);
 
+  const {
+    interventionPageForm,
+    onChangeInterventionPageForm,
+    isDirtyInterventionPageForm,
+    getValuesToSend,
+  } = useInterventionPageForm(segmentState);
+
+  const {
+    symptomPageForm,
+    onChangeSymptomPageForm,
+    isDirtySymptomPageForm,
+    getValuesToSend: getSymptomValues,
+  } = useSymptomPageForm(segmentState);
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -100,7 +116,9 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
     if (
       isDirtySegmentPageForm() ||
       isDirtyIntensitiesPageForm() ||
-      isDirtyQualityPageForm()
+      isDirtyQualityPageForm() ||
+      isDirtyInterventionPageForm() ||
+      isDirtySymptomPageForm()
     ) {
       setConfirmClose(true);
     } else {
@@ -134,6 +152,8 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
         ...segmentPageForm,
         intensities: intensitiesPageForm,
         quality: qualityPageForm,
+        interventions: getValuesToSend(),
+        symptoms: getSymptomValues(),
       },
       extra: {
         episode_id,
@@ -141,6 +161,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
     });
 
     if (closeAfterSave) {
+      console.log("aa");
       onClose();
     } else {
       setSegmentState(updatedSegment);
@@ -239,10 +260,16 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
             />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-            <InterventionPage />
+            <InterventionPage
+              interventions={interventionPageForm}
+              onChange={onChangeInterventionPageForm}
+            />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={4}>
-            <SymptomsPage />
+            <SymptomsPage
+              symptoms={symptomPageForm}
+              onChange={onChangeSymptomPageForm}
+            />
           </CustomTabPanel>
         </Content>
         <FlexRow justify="space-between">
@@ -253,7 +280,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
             cursor="pointer"
           />
           <Button
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             width="160px"
             disabled={!isValid()}
             loading={updateSegment.isLoading}

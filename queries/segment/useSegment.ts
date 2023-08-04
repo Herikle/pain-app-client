@@ -1,14 +1,26 @@
 import { request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { useMutation } from "react-query";
-import { ISegment } from "types";
+import { IIntervetion, ISegment, ISymptom } from "types";
 import { useUpdateSegmentOnCache } from "./hooks/useUpdateSegmentOnCache";
+
+type CreationInterventions = Omit<
+  IIntervetion,
+  "_id" | "createdAt" | "updatedAt"
+>[];
+
+type CreationSymptoms = Omit<ISymptom, "_id" | "createdAt" | "updatedAt">[];
 
 type UpdateSegmentPayload = {
   params: {
     segment_id: string;
   };
-  body: Partial<ISegment>;
+  body: Partial<
+    Omit<ISegment, "interventions" | "symptoms"> & {
+      interventions: CreationInterventions;
+      symptoms: CreationSymptoms;
+    }
+  >;
   extra: {
     episode_id: string;
   };

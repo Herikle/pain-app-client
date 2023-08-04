@@ -14,31 +14,16 @@ import { v4 as uuidv4 } from "uuid";
 import { IIntervetion } from "types";
 import { InterventionCard } from "./components/InterventionCard";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { CommonSegmentModalProps } from "../..";
+import update from "immutability-helper";
 
 const fakeDate = new Date().toISOString();
 
-export const InterventionPage = () => {
-  const [interventions, setInterventions] = useState<IIntervetion[]>([
-    {
-      _id: "1",
-      name: "Paracetamol",
-      datetime: "2023-07-15T21:49",
-      dose: "option-1",
-      effective: true,
-      createdAt: fakeDate,
-      updatedAt: fakeDate,
-    },
-    {
-      _id: "2",
-      name: "Anesthesia",
-      datetime: "2023-07-15T21:49",
-      dose: "option-2",
-      effective: false,
-      createdAt: fakeDate,
-      updatedAt: fakeDate,
-    },
-  ]);
+type Props = {
+  interventions: IIntervetion[];
+} & Omit<CommonSegmentModalProps<IIntervetion[]>, "onValidChange">;
 
+export const InterventionPage = ({ interventions, onChange }: Props) => {
   const [selected, setSelected] = useState<IIntervetion | null>(null);
 
   const [toDelete, setToDelete] = useState<IIntervetion | null>(null);
@@ -47,6 +32,13 @@ export const InterventionPage = () => {
 
   const [addInterventionModalOpen, setAddInterventionModalOpen] =
     useState(false);
+
+  const [observation, setObservation] = useState<string>("");
+
+  const changeSelected = (intervention: IIntervetion) => {
+    setSelected(intervention);
+    setObservation(intervention.observation ?? "");
+  };
 
   const openAddModal = () => {
     setAddInterventionModalOpen(true);
@@ -57,33 +49,58 @@ export const InterventionPage = () => {
   };
 
   const onAddIntervention = (intervention: CreateIntervention) => {
-    setInterventions((prev) => [
-      ...prev,
-      {
-        ...intervention,
-        _id: uuidv4(),
-        createdAt: fakeDate,
-        updatedAt: fakeDate,
-      },
-    ]);
+    const newIntervention = {
+      ...intervention,
+      _id: uuidv4(),
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
+    };
+
+    const newInterventions = update(interventions, {
+      $push: [newIntervention],
+    });
+
+    onChange(newInterventions);
   };
 
   const deleteById = (id: string) => {
-    setInterventions((prev) => prev.filter((i) => i._id !== id));
+    const index = interventions.findIndex((i) => i._id === id);
+    const newInterventions = update(interventions, {
+      $splice: [[index, 1]],
+    });
+    onChange(newInterventions);
   };
 
   const edit = (intervention: CreateIntervention) => {
     if (toEdit) {
       const _id = toEdit._id;
       const index = interventions.findIndex((i) => i._id === _id);
-      const newInterventions = [...interventions];
-      newInterventions[index] = {
-        ...intervention,
-        _id,
-        updatedAt: fakeDate,
-        createdAt: fakeDate,
-      };
-      setInterventions(newInterventions);
+
+      const updatedInterventions = update(interventions, {
+        [index]: {
+          $merge: {
+            ...intervention,
+          },
+        },
+      });
+
+      onChange(updatedInterventions);
+    }
+  };
+
+  const onBlurObservation = () => {
+    if (selected) {
+      const index = interventions.findIndex((i) => i._id === selected._id);
+
+      const updatedInterventions = update(interventions, {
+        [index]: {
+          $merge: {
+            observation,
+          },
+        },
+      });
+
+      onChange(updatedInterventions);
     }
   };
 
@@ -107,7 +124,7 @@ export const InterventionPage = () => {
             {interventions.map((intervention) => (
               <InterventionCard
                 key={intervention._id}
-                onClick={() => setSelected(intervention)}
+                onClick={() => changeSelected(intervention)}
                 onClickDelete={() => setToDelete(intervention)}
                 onClickEdit={() => setToEdit(intervention)}
                 isActive={selected?._id === intervention._id}
@@ -123,6 +140,9 @@ export const InterventionPage = () => {
               placeholder="Write something..."
               minRows={15}
               maxRows={15}
+              onChange={(e) => setObservation(e.target.value)}
+              value={observation}
+              onBlur={onBlurObservation}
             />
           )}
         </Observation>

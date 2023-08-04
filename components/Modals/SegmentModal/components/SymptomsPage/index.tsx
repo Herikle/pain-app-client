@@ -1,91 +1,116 @@
+import { useState } from "react";
+import styled from "styled-components";
+import { ISymptom } from "types";
+import { v4 as uuidv4 } from "uuid";
+import Image from "next/image";
 import { AddButton } from "@components/AddButton";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { IconsPath } from "@utils/icons";
-import Image from "next/image";
-import { useState } from "react";
-import styled from "styled-components";
 import { CreateSymptom, SymptomModal } from "./components/SymptomModal";
-import { v4 as uuidv4 } from "uuid";
-import { ISymptom } from "types";
 import { SymptomCard } from "./components/SymptomCard";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { CommonSegmentModalProps } from "../..";
+import update from "immutability-helper";
 
 const fakeDate = new Date().toISOString();
 
-export const SymptomsPage = () => {
-  const [symptoms, setSymptoms] = useState<ISymptom[]>([
-    {
-      _id: "1",
-      name: "Swelling",
-      datetime: "2023-07-15T21:49",
-      createdAt: fakeDate,
-      updatedAt: fakeDate,
-    },
-    {
-      _id: "2",
-      name: "Headache",
-      datetime: "2023-07-15T21:49",
-      createdAt: fakeDate,
-      updatedAt: fakeDate,
-    },
-  ]);
+type Props = {
+  symptoms: ISymptom[];
+} & Omit<CommonSegmentModalProps<ISymptom[]>, "onValidChange">;
 
+export const SymptomsPage = ({ symptoms, onChange }: Props) => {
   const [selected, setSelected] = useState<ISymptom | null>(null);
 
   const [toDelete, setToDelete] = useState<ISymptom | null>(null);
 
   const [toEdit, setToEdit] = useState<ISymptom | null>(null);
 
-  const [addInterventionModalOpen, setAddInterventionModalOpen] =
-    useState(false);
+  const [addSymptomModalOpen, setAddSymptomModalOpen] = useState(false);
+
+  const [observation, setObservation] = useState<string>("");
+
+  const changeSelected = (symptom: ISymptom) => {
+    setSelected(symptom);
+    setObservation(symptom.observation ?? "");
+  };
 
   const openAddModal = () => {
-    setAddInterventionModalOpen(true);
+    setAddSymptomModalOpen(true);
   };
 
   const closeAddModal = () => {
-    setAddInterventionModalOpen(false);
+    setAddSymptomModalOpen(false);
   };
 
-  const onAddIntervention = (symptom: CreateSymptom) => {
-    setSymptoms((prev) => [
-      ...prev,
-      { ...symptom, _id: uuidv4(), createdAt: fakeDate, updatedAt: fakeDate },
-    ]);
+  const onAddSymptom = (symptom: CreateSymptom) => {
+    const newSymptom = {
+      ...symptom,
+      _id: uuidv4(),
+      createdAt: fakeDate,
+      updatedAt: fakeDate,
+    };
+
+    const newSymptoms = update(symptoms, {
+      $push: [newSymptom],
+    });
+
+    onChange(newSymptoms);
   };
 
   const deleteById = (id: string) => {
-    setSymptoms((prev) => prev.filter((i) => i._id !== id));
+    const index = symptoms.findIndex((i) => i._id === id);
+    const newSymptoms = update(symptoms, {
+      $splice: [[index, 1]],
+    });
+    onChange(newSymptoms);
   };
 
   const edit = (symptom: CreateSymptom) => {
     if (toEdit) {
       const _id = toEdit._id;
       const index = symptoms.findIndex((i) => i._id === _id);
-      const newSymptoms = [...symptoms];
-      newSymptoms[index] = {
-        ...symptom,
-        _id,
-        createdAt: fakeDate,
-        updatedAt: fakeDate,
-      };
-      setSymptoms(newSymptoms);
+
+      const updatedSymptoms = update(symptoms, {
+        [index]: {
+          $merge: {
+            ...symptom,
+          },
+        },
+      });
+
+      onChange(updatedSymptoms);
+    }
+  };
+
+  const onBlurObservation = () => {
+    if (selected) {
+      const index = symptoms.findIndex((i) => i._id === selected._id);
+
+      const updatedSymptoms = update(symptoms, {
+        [index]: {
+          $merge: {
+            observation,
+          },
+        },
+      });
+
+      onChange(updatedSymptoms);
     }
   };
 
   return (
     <>
       <Container align="flex-start" gap={4}>
-        <ListIntervention>
+        <ListSymptom>
           <AddTitle justify="space-between">
             <FlexRow>
               <Image
                 src={IconsPath.Symptom}
                 width={32}
                 height={32}
-                alt="Intervention Icon"
+                alt="Symptom Icon"
               />
               <Text variant="body2Bold">Symptom</Text>
             </FlexRow>
@@ -95,7 +120,7 @@ export const SymptomsPage = () => {
             {symptoms.map((symptom) => (
               <SymptomCard
                 key={symptom._id}
-                onClick={() => setSelected(symptom)}
+                onClick={() => changeSelected(symptom)}
                 onClickDelete={() => setToDelete(symptom)}
                 isActive={selected?._id === symptom._id}
                 onClickEdit={() => setToEdit(symptom)}
@@ -103,7 +128,7 @@ export const SymptomsPage = () => {
               />
             ))}
           </FlexColumn>
-        </ListIntervention>
+        </ListSymptom>
         <Observation>
           {!!selected && (
             <TextArea
@@ -111,13 +136,16 @@ export const SymptomsPage = () => {
               placeholder="Write something..."
               minRows={15}
               maxRows={15}
+              onChange={(e) => setObservation(e.target.value)}
+              value={observation}
+              onBlur={onBlurObservation}
             />
           )}
         </Observation>
         <SymptomModal
-          open={addInterventionModalOpen}
+          open={addSymptomModalOpen}
           onClose={closeAddModal}
-          onAdd={onAddIntervention}
+          onAdd={onAddSymptom}
         />
         {!!toEdit && (
           <SymptomModal
@@ -150,7 +178,7 @@ const Observation = styled(FlexColumn)`
   width: 50%;
 `;
 
-const ListIntervention = styled(FlexColumn)`
+const ListSymptom = styled(FlexColumn)`
   width: 50%;
 `;
 
