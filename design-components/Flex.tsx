@@ -8,6 +8,7 @@ type FlexProps = {
   marginInline?: CSSProperties["marginInline"];
   height?: CSSProperties["height"];
   mt?: number;
+  mb?: number;
   pl?: number;
 };
 
@@ -21,6 +22,7 @@ export const FlexRow = styled.div<FlexProps>`
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => writeSizeProperty(props.mt)};
+  margin-bottom: ${(props) => writeSizeProperty(props.mb)};
   padding-left: ${(props) => writeSizeProperty(props.pl)};
   height: ${(props) => props.height ?? "unset"};
 `;
@@ -34,6 +36,7 @@ export const FlexColumn = styled.div<FlexProps>`
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => writeSizeProperty(props.mt)};
+  margin-bottom: ${(props) => writeSizeProperty(props.mb)};
   padding-left: ${(props) => writeSizeProperty(props.pl)};
   height: ${(props) => props.height ?? "unset"};
 `;

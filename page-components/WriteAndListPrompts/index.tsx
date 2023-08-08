@@ -65,8 +65,6 @@ export const WriteAndListPrompts = ({
 
   const updatePrompt = useUpdatePrompt();
 
-  const setMainPromptModal = useSetSetMainPrompt();
-
   const onSavePrompt = async () => {
     if (prompt_id) {
       await updatePrompt.mutateAsync({
@@ -149,16 +147,9 @@ export const WriteAndListPrompts = ({
     }
   };
 
-  const updateAsMainPrompt = () => {
-    if (prompt_id) {
-      setMainPromptModal({
-        prompt_id,
-      });
-    }
-  };
-
   return (
     <UserInteractionContainer>
+      <ListPrompts prompts={prompts} onClickNewPrompt={onClickNewPrompt} />
       <WritePromptContainer gap={1}>
         <Text variant="body2Bold">Step 1: Input your prompt</Text>
         <TextArea
@@ -209,34 +200,9 @@ export const WriteAndListPrompts = ({
                 )
               }
             />
-            {!!prompt_id && (
-              <CustomLoadingButton
-                size={22}
-                tooltip={
-                  !!isMain
-                    ? {
-                        text: "This is the main prompt. To unset this, select another prompt as main prompt",
-                        id: "main-prompt",
-                      }
-                    : {
-                        text: "Set this prompt as the main prompt",
-                        id: "set-main-prompt",
-                      }
-                }
-                onClick={!!isMain ? undefined : updateAsMainPrompt}
-                icon={
-                  !!isMain ? (
-                    <Star size={22} weight="fill" color={theme.colors.cta} />
-                  ) : (
-                    <Star size={22} color={theme.colors.text_switched} />
-                  )
-                }
-              />
-            )}
           </FlexRow>
         </WritePromptBottom>
       </WritePromptContainer>
-      <ListPrompts prompts={prompts} onClickNewPrompt={onClickNewPrompt} />
     </UserInteractionContainer>
   );
 };
@@ -246,10 +212,11 @@ const WritePromptBottom = styled(FlexRow)`
 `;
 
 const WritePromptContainer = styled(FlexColumn)`
-  width: 70%;
+  width: 100%;
+  max-width: 900px;
 `;
 
-const UserInteractionContainer = styled(FlexRow)`
+const UserInteractionContainer = styled(FlexColumn)`
   align-items: flex-start;
   width: 100%;
   gap: 2rem;

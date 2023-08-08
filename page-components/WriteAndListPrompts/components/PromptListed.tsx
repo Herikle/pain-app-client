@@ -2,12 +2,18 @@ import { useSetDeletePromptModal } from "@components/Modals/DeletePromptModal/ho
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { FlexRow } from "@design-components/Flex";
-import { Check, PencilSimpleLine, Trash, X } from "@phosphor-icons/react";
-import { theme } from "@styles/theme";
+import {
+  Check,
+  FileArrowUp,
+  PencilSimpleLine,
+  Trash,
+  X,
+} from "@phosphor-icons/react";
+import { ThemeColors, theme } from "@styles/theme";
 import { RoutesPath } from "@utils/routes";
 import Link from "next/link";
-import { useState } from "react";
-import styled from "styled-components";
+import { useCallback, useState } from "react";
+import styled, { css } from "styled-components";
 import { IPrompt } from "types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,9 +30,14 @@ type PromptFormType = z.infer<typeof schema>;
 type PromptListedProps = {
   prompt: IPrompt;
   selected: boolean;
+  onPublishClick: (prompt_id: string) => void;
 };
 
-export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
+export const PromptListed = ({
+  prompt,
+  selected,
+  onPublishClick,
+}: PromptListedProps) => {
   const { handleSubmit, register, reset } = useForm<PromptFormType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -38,7 +49,9 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
 
   const updatePrompt = useUpdatePrompt();
 
-  const toggleEditMode = () => {
+  const toggleEditMode = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     setEditMode(!editMode);
     if (!editMode) {
       reset();
@@ -47,10 +60,18 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
 
   const setDeleteModal = useSetDeletePromptModal();
 
-  const onDelete = () => {
+  const onDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     setDeleteModal({
       prompt_id: prompt._id,
     });
+  };
+
+  const onClickPublish = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onPublishClick(prompt._id);
   };
 
   const submit = async (data: PromptFormType) => {
@@ -64,10 +85,25 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
     reset(data);
   };
 
-  const color = selected ? "font_color" : "text_switched";
+  const textColor: ThemeColors = selected ? "pure_white" : "text_switched";
 
-  return (
-    <Container>
+  const render = useCallback(
+    (children: React.ReactNode) => {
+      if (!editMode) {
+        return (
+          <Link href={RoutesPath.prompt.replace("[id]", prompt._id)}>
+            {children}
+          </Link>
+        );
+      }
+
+      return children;
+    },
+    [editMode, prompt._id]
+  );
+
+  return render(
+    <Container $selected={selected}>
       {editMode ? (
         <form onSubmit={handleSubmit(submit)}>
           <TextField
@@ -75,6 +111,14 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
             fullWidth
             required
             autoFocus
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              color: theme.colors[textColor],
+              fontSize: "16px",
+              borderBottom: `1px solid ${theme.colors[textColor]}`,
+              padding: 0,
+            }}
             {...register("title")}
           />
           <LoadingWrapper
@@ -84,9 +128,16 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
           />
         </form>
       ) : (
-        <Link href={RoutesPath.prompt.replace("[id]", prompt._id)}>
-          <Text color={color}>{prompt.title}</Text>
-        </Link>
+        <FlexRow>
+          {selected && (
+            <FileArrowUp
+              size={22}
+              color={theme.colors.pure_white}
+              onClick={onClickPublish}
+            />
+          )}
+          <Text color={textColor}>{prompt.title}</Text>
+        </FlexRow>
       )}
       <FlexRow gap={1.5}>
         {editMode ? (
@@ -107,13 +158,13 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
         ) : (
           <>
             <PencilSimpleLine
-              color={theme.colors[color]}
+              color={theme.colors.text_switched}
               size={16}
               cursor="pointer"
               onClick={toggleEditMode}
             />
             <Trash
-              color={theme.colors[color]}
+              color={theme.colors.text_switched}
               size={16}
               cursor="pointer"
               onClick={onDelete}
@@ -125,13 +176,25 @@ export const PromptListed = ({ prompt, selected }: PromptListedProps) => {
   );
 };
 
-const Container = styled.div`
+type Props = {
+  $selected: boolean;
+};
+
+const Container = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
+  padding: 1rem;
+  padding-block: 1.25rem;
   form {
     width: 100%;
     padding-right: 1rem;
   }
+  border-radius: 4px;
+  ${({ $selected }) =>
+    $selected &&
+    css`
+      background-color: ${theme.colors.primary};
+    `}
 `;

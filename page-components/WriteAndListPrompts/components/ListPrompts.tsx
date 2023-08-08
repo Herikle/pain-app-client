@@ -1,6 +1,6 @@
 import { Text } from "@components/Text";
-import { FlexColumn } from "@design-components/Flex";
-import { BookOpenText, Star } from "@phosphor-icons/react";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { BookOpenText, FilePlus, Star } from "@phosphor-icons/react";
 import { LightScrollBar, theme } from "@styles/theme";
 import styled from "styled-components";
 import { IPrompt } from "types";
@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { AddButton } from "@components/AddButton";
 import { Box } from "@mui/material";
 import { RoutesPath } from "@utils/routes";
+import { useSetSetMainPrompt } from "@components/Modals/SetMainPromptModal/hook";
+import Link from "next/link";
 
 type ListPromptsProps = {
   prompts: IPrompt[];
@@ -21,10 +23,53 @@ export const ListPrompts = ({
 }: ListPromptsProps) => {
   const router = useRouter();
 
+  const setMainPromptModal = useSetSetMainPrompt();
+
   const { id } = router.query as { id: string };
+
+  const onPublish = (prompt_id: string) => {
+    setMainPromptModal({
+      prompt_id,
+    });
+  };
+
+  const renderAddButton = (children: React.ReactNode) => {
+    if (!!onClickNewPrompt) {
+      return children;
+    }
+
+    return (
+      <Link
+        style={{
+          width: "fit-content",
+        }}
+        href={RoutesPath.new_prompt}
+      >
+        {children}
+      </Link>
+    );
+  };
 
   return (
     <LoadSavedPromptContainer>
+      {renderAddButton(
+        <FlexRow
+          justify="flex-start"
+          mb={2}
+          onClick={onClickNewPrompt}
+          width="fit-content"
+          height="fit-content"
+          style={{
+            cursor: "pointer",
+          }}
+        >
+          <Text variant="body2Bold" color="text_switched">
+            Write a new prompt
+          </Text>
+          <FilePlus size={22} color={theme.colors.text_switched} />
+        </FlexRow>
+      )}
+
       <Text variant="body2Bold">Load a saved prompt</Text>
       <SavedPromptList $hasPrompt={prompts.length > 0}>
         {prompts.length > 0 ? (
@@ -33,6 +78,7 @@ export const ListPrompts = ({
               key={prompt._id}
               prompt={prompt}
               selected={prompt._id === id}
+              onPublishClick={onPublish}
             />
           ))
         ) : (
@@ -47,19 +93,13 @@ export const ListPrompts = ({
           </Text>
         )}
       </SavedPromptList>
-      <Box width="100%" display="flex" justifyContent="flex-end">
-        {!!onClickNewPrompt ? (
-          <AddButton onClick={onClickNewPrompt} />
-        ) : (
-          <AddButton href={RoutesPath.new_prompt} />
-        )}
-      </Box>
     </LoadSavedPromptContainer>
   );
 };
 
 const LoadSavedPromptContainer = styled(FlexColumn)`
-  width: 30%;
+  width: 100%;
+  max-width: 900px;
   gap: 1rem;
 `;
 
@@ -73,5 +113,6 @@ const SavedPromptList = styled(FlexColumn)<SavedPromptlistProps>`
     $hasPrompt ? "flex-start" : "center"};
   overflow: auto;
   padding-block: 0.5rem;
+  padding-inline-end: 1rem;
   ${LightScrollBar};
 `;

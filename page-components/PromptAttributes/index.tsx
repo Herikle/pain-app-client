@@ -95,7 +95,7 @@ export const PromptAttributes = ({
         <FlexColumn gap={1}>
           <Grid container spacing={4}>
             {Object.keys(attributes).map((attribute) => (
-              <Grid xs={4} key={attribute}>
+              <Grid xs={12} key={attribute}>
                 <FlexRow align="flex-start">
                   <TextArea
                     label={attribute}
@@ -152,5 +152,6 @@ type CommonOpacityProps = {
 const Attributes = styled(FlexColumn)<CommonOpacityProps>`
   margin-top: 2rem;
   width: 100%;
+  max-width: 900px;
   opacity: ${(props) => props.opacity};
 `;

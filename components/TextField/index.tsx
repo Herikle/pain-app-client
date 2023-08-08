@@ -80,6 +80,7 @@ const Input = styled.input<InputProps>`
   border: 1px solid ${theme.colors.secondary_font};
   width: 100%;
   outline: none;
+  font-family: inherit;
   ${({ $noPadding }) =>
     !$noPadding
       ? css`
