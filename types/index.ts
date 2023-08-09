@@ -175,6 +175,7 @@ export type IEpisode = {
   creator_id: string;
   createdAt: string;
   updatedAt: string;
+  tracks_count?: number;
   location?: string;
   diagnosis?: string;
   comment?: string;

@@ -84,9 +84,8 @@ export default function Patient() {
                 render: getDotDateFormat,
               },
               {
-                accessor: "tracks",
+                accessor: "tracks_count",
                 label: "N° of tracks",
-                render: () => 0,
               },
             ]}
             mountHref={(episode: IEpisode) =>
