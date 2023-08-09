@@ -75,6 +75,22 @@ type InputProps = {
   $noPadding?: boolean;
 };
 
+const TrackCSS = css`
+  background: ${theme.colors.light_grey};
+  height: 0.5rem;
+  border-radius: 4px;
+`;
+
+const ThumbCSS = css`
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -12px; /* Centers thumb on the track */
+  background-color: ${theme.colors.pure_black};
+  height: 2rem;
+  width: 1rem;
+  border-radius: 8px;
+`;
+
 const Input = styled.input<InputProps>`
   border-radius: 2px;
   border: 1px solid ${theme.colors.secondary_font};
@@ -93,6 +109,31 @@ const Input = styled.input<InputProps>`
 
   &:focus {
     border: 1px solid ${theme.colors.secondary_color};
+  }
+
+  &[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    margin-top: 1rem;
+    &:focus {
+      border: none;
+    }
+    outline: none;
+    &::-webkit-slider-runnable-track {
+      ${TrackCSS}
+    }
+    &::-moz-range-track {
+      ${TrackCSS}
+    }
+
+    &::-webkit-slider-thumb {
+      ${ThumbCSS}
+    }
+
+    &::-moz-range-thumb {
+      ${ThumbCSS}
+    }
   }
 `;
 

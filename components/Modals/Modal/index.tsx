@@ -1,6 +1,6 @@
 import { Portal } from "@components/Portal";
 import { X } from "@phosphor-icons/react";
-import { theme } from "@styles/theme";
+import { LightScrollBar, theme } from "@styles/theme";
 import styled from "styled-components";
 
 type Props = {
@@ -75,4 +75,7 @@ const Container = styled.div<ContainerProps>`
   z-index: 1000;
   background-color: ${theme.colors.pure_white};
   padding: ${({ $removePadding }) => ($removePadding ? 0 : "2rem")};
+  max-height: 90vh;
+  overflow-y: auto;
+  ${LightScrollBar};
 `;
