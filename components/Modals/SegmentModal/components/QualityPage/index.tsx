@@ -117,7 +117,7 @@ export const QualityPage = ({
             <Text variant="body1Bold">Anatomy</Text>
             <FlexRow justify="flex-start">
               <Image
-                src={IconsPath.depth.Anatomy}
+                src={IconsPath.depth.anatomy}
                 width={32}
                 height={32}
                 alt={`Attribute Anatomy Icon`}

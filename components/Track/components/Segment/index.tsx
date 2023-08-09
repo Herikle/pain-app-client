@@ -4,11 +4,18 @@ import { ISegment } from "types";
 import { SEGMENT_WIDTH } from "./const";
 import { SegmentDraw } from "./components/SegmentDraw";
 import { SegmentValues, onChangeValueProps } from "./components/SegmentValues";
+import styled from "styled-components";
+import { FlexRow } from "@design-components/Flex";
+import Image from "next/image";
+import { IconsPath } from "@utils/icons";
+import { SegmentModalTabs } from "@components/Modals/SegmentModal";
+import { Tooltip } from "react-tooltip";
+import v from "voca";
 
 type SegmentProps = {
   hasDraw?: boolean;
   readOnly?: boolean;
-  onClick?: () => void;
+  onClick?: (tab?: SegmentModalTabs) => void;
   backgroundColor?: string;
   isSolitary?: boolean;
   segment: ISegment;
@@ -36,7 +43,7 @@ export const Segment = ({
       </SegmentName>
       <Container
         $hasClick={!!onClick}
-        onClick={onClick}
+        onClick={() => onClick?.()}
         $bgColor={backgroundColor}
       >
         {type === "draw" ? (
@@ -49,6 +56,59 @@ export const Segment = ({
           />
         )}
       </Container>
+      <QualityIcons mt={1}>
+        {segment.quality?.texture && (
+          <>
+            <Image
+              src={IconsPath.texture?.[segment.quality.texture]}
+              width={22}
+              height={22}
+              alt="Quality Texture"
+              onClick={() => onClick?.("quality")}
+              id={`quality-texture-${segment._id}`}
+            />
+            <Tooltip anchorSelect={`#quality-texture-${segment._id}`}>
+              {v.capitalize(segment.quality.texture)}
+            </Tooltip>
+          </>
+        )}
+        {segment.quality?.depth && (
+          <>
+            <Image
+              src={IconsPath.depth?.[segment.quality.depth]}
+              width={22}
+              height={22}
+              alt="Quality Depth"
+              onClick={() => onClick?.("quality")}
+              id={`quality-depth-${segment._id}`}
+            />
+            <Tooltip anchorSelect={`#quality-depth-${segment._id}`}>
+              {v.capitalize(segment.quality.depth)}
+            </Tooltip>
+          </>
+        )}
+        {segment.quality?.anatomy && (
+          <>
+            <Image
+              src={IconsPath.depth.anatomy}
+              width={22}
+              height={22}
+              alt="Quality Anatomy"
+              onClick={() => onClick?.("quality")}
+              id={`quality-anatomy-${segment._id}`}
+            />
+            <Tooltip anchorSelect={`#quality-anatomy-${segment._id}`}>
+              {segment.quality.anatomy}
+            </Tooltip>
+          </>
+        )}
+      </QualityIcons>
     </Wrapper>
   );
 };
+
+const QualityIcons = styled(FlexRow)`
+  > * {
+    cursor: pointer;
+  }
+`;

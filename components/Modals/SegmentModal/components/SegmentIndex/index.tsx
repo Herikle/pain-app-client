@@ -23,6 +23,7 @@ import { Portal } from "@components/Portal";
 import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
 import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageForm";
 import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
+import { SegmentModalTabs } from "../..";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -57,14 +58,23 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
+const tabs_index: { [key in SegmentModalTabs]: number } = {
+  segment: 0,
+  intensities: 1,
+  quality: 2,
+  intervention: 3,
+  symptoms: 4,
+};
+
 type Props = {
   segment: ISegment;
   episode_id: string;
   onClose: () => void;
+  tab: SegmentModalTabs;
 };
 
-export const SegmentIndex = ({ segment, episode_id, onClose }: Props) => {
-  const [value, setValue] = useState(0);
+export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
+  const [value, setValue] = useState(tabs_index[tab]);
 
   const [segmentState, setSegmentState] = useState<ISegment>(segment);
 

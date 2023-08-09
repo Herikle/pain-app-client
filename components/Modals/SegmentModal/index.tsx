@@ -8,16 +8,30 @@ export type CommonSegmentModalProps<T> = {
   onValidChange: (valid: boolean) => void;
 };
 
+export type SegmentModalTabs =
+  | "segment"
+  | "intensities"
+  | "quality"
+  | "intervention"
+  | "symptoms";
+
 export type SegmentModalChildProps = {
   onClose: () => void;
   segment: ISegment;
   episode_id: string;
+  tab?: SegmentModalTabs;
 };
 
-const Child = ({ onClose, segment, episode_id }: SegmentModalChildProps) => {
+const Child = ({
+  onClose,
+  segment,
+  episode_id,
+  tab = "segment",
+}: SegmentModalChildProps) => {
   return (
     <Modal removePadding removeOverlay>
       <SegmentIndex
+        tab={tab}
         segment={segment}
         episode_id={episode_id}
         onClose={onClose}

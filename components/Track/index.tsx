@@ -9,6 +9,7 @@ import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
 import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
 import { ISegment, ITrack } from "types";
 import { Element } from "react-scroll";
+import { SegmentModalTabs } from "@components/Modals/SegmentModal";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -55,10 +56,14 @@ export const Track = ({ track }: TrackProps) => {
 
   const setTrackModal = useSetTrackModal();
 
-  const onClickSegment = (segment: ISegment) => {
+  const onClickSegment = (
+    segment: ISegment,
+    tab: SegmentModalTabs = "segment"
+  ) => {
     setSegmentModal({
       segment,
       episode_id: track.episode_id,
+      tab,
     });
   };
 
@@ -92,7 +97,7 @@ export const Track = ({ track }: TrackProps) => {
                 segment={segment}
                 hasDraw
                 readOnly
-                onClick={() => onClickSegment(segment)}
+                onClick={(tab) => onClickSegment(segment, tab)}
               />
             ))}
           </SegmentsContainer>
