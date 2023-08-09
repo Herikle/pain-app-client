@@ -23,3 +23,7 @@ export const IconsPath = {
   Symptom: "/icons/symptom.svg",
   Publish: "/icons/pub.svg",
 };
+
+export const ImagesPath = {
+  WelfareLogo: "/images/welfare-logo.png",
+};
