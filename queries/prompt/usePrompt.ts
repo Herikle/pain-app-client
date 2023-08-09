@@ -129,7 +129,7 @@ export const useUpdatePrompt = (invalidate = true) => {
         queryClient.invalidateQueries([QueryKeys.Prompt.List]);
         queryClient.invalidateQueries([QueryKeys.Prompt.ByID]);
       }
-      ToastSuccess("Prompt updated successfully");
+      // ToastSuccess("Prompt updated successfully");
     },
     onError: (error: AxiosError) => {
       ToastError(error);

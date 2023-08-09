@@ -64,7 +64,7 @@ export const ListPrompts = ({
           }}
         >
           <Text variant="body2Bold" color="text_switched">
-            Write a new prompt
+            Create a new prompt
           </Text>
           <FilePlus size={22} color={theme.colors.text_switched} />
         </FlexRow>

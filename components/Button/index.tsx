@@ -11,7 +11,7 @@ type ButtonProps = {
   children: React.ReactNode;
   variant?: ButtonVariants;
   color?: ButtonColors;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;

@@ -20,6 +20,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdatePrompt } from "@queries/prompt/usePrompt";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import Image from "next/image";
+import { IconsPath } from "@utils/icons";
+import { Tooltip } from "react-tooltip";
 
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
@@ -130,11 +133,19 @@ export const PromptListed = ({
       ) : (
         <FlexRow>
           {selected && (
-            <FileArrowUp
-              size={22}
-              color={theme.colors.pure_white}
-              onClick={onClickPublish}
-            />
+            <>
+              <Image
+                src={IconsPath.Publish}
+                width={22}
+                height={22}
+                alt="publish prompt"
+                id={`publish-prompt-${prompt._id}`}
+                onClick={onClickPublish}
+              />
+              <Tooltip anchorSelect={`#publish-prompt-${prompt._id}`}>
+                Publish prompt to the public
+              </Tooltip>
+            </>
           )}
           <Text color={textColor}>{prompt.title}</Text>
         </FlexRow>

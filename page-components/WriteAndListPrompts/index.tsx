@@ -10,7 +10,7 @@ import {
   getAllAttributesFromPrompt,
   promptHasAttributes,
 } from "@utils/helpers/prompt";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   CommonKeyBooleanPair,
   CommonKeyStringPair,
@@ -27,6 +27,8 @@ import Image from "next/image";
 import { IconsPath } from "@utils/icons";
 import { useSetSetMainPrompt } from "@components/Modals/SetMainPromptModal/hook";
 import { CleanUpUndefined } from "@utils/helpers/object";
+import { Portal } from "@components/Portal";
+import { useDebounce } from "@utils/hooks/useDebounce";
 
 const inconsolata = Inconsolata({ subsets: ["latin"] });
 
@@ -44,6 +46,11 @@ type WriteAndListPromptsProps = {
   isMain?: boolean;
   promptHasChanged?: boolean;
   onClickNewPrompt?: () => void;
+};
+
+type SavePrompt = {
+  attributes?: any;
+  attributesConfig?: any;
 };
 
 export const WriteAndListPrompts = ({
@@ -65,33 +72,38 @@ export const WriteAndListPrompts = ({
 
   const updatePrompt = useUpdatePrompt();
 
-  const onSavePrompt = async () => {
-    if (prompt_id) {
-      await updatePrompt.mutateAsync({
-        params: {
-          prompt_id,
-        },
-        body: {
-          attributes,
-          prompt,
-          options,
-          attributesConfig,
-        },
-      });
-    } else {
-      const createdPrompt = await savePrompt.mutateAsync({
-        body: {
-          prompt: prompt,
-          attributes: attributes,
-          options,
-          attributesConfig,
-        },
-      });
-      Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));
+  const onSavePrompt = async (props?: SavePrompt) => {
+    if (promptHasChanged) {
+      if (prompt_id) {
+        await updatePrompt.mutateAsync({
+          params: {
+            prompt_id,
+          },
+          body: {
+            attributes: props?.attributes ?? attributes,
+            prompt,
+            options,
+            attributesConfig: props?.attributesConfig ?? attributesConfig,
+          },
+        });
+      } else {
+        const createdPrompt = await savePrompt.mutateAsync({
+          body: {
+            prompt: prompt,
+            attributes: attributes,
+            options,
+            attributesConfig,
+          },
+        });
+        Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));
+      }
     }
   };
 
-  const generateAttributes = () => {
+  const generateAttributes = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
     const attributesDetected = getAllAttributesFromPrompt(prompt);
     if (attributesDetected) {
       const allAttributesKeys = attributesDetected;
@@ -136,76 +148,112 @@ export const WriteAndListPrompts = ({
         }
       });
 
-      onChangeAttributes({
-        ...currentAttibutes,
-        ...newAttributes,
-      });
+      const updatedAttributes = { ...currentAttibutes, ...newAttributes };
 
+      onChangeAttributes(updatedAttributes);
       onChangeAttributesConfig(currentAttributesConfig);
+
+      onSavePrompt({
+        attributes: updatedAttributes,
+        attributesConfig: currentAttributesConfig,
+      });
     } else {
       onChangeAttributes({});
+      const emptyAttributesConfig = {
+        helperText: {},
+        label: {},
+        placeholder: {},
+        isTextArea: {},
+        isRequired: {},
+      };
+      onChangeAttributesConfig(emptyAttributesConfig);
+      onSavePrompt({
+        attributes: {},
+        attributesConfig: emptyAttributesConfig,
+      });
     }
   };
 
   return (
-    <UserInteractionContainer>
-      <ListPrompts prompts={prompts} onClickNewPrompt={onClickNewPrompt} />
-      <WritePromptContainer gap={1}>
-        <Text variant="body2Bold">Step 1: Input your prompt</Text>
-        <TextArea
-          value={prompt}
-          onChange={(e) => onChangePrompt(e.target.value)}
-          placeholder="Write your prompt..."
-          minRows={15}
-          maxRows={30}
-        />
-        <WritePromptBottom>
-          <Button
-            width="300px"
-            disabled={!promptHasAttributes(prompt)}
-            onClick={generateAttributes}
-          >
-            Generate attribute form
-          </Button>
-          <FlexRow gap={1.5}>
-            <FlexRow>
-              <Image
-                src={IconsPath.GPTBlack}
-                alt="ChatGPT Icon"
-                width="22"
-                height="22"
-              />
-              <Text fontFamily={inconsolata}>
-                Tokens used on this input: {tokensUsage?.prompt_tokens ?? 0}
-              </Text>
-            </FlexRow>
-            <CustomLoadingButton
-              size={22}
-              tooltip={{
-                text: "Save",
-                id: "save-prompt",
-              }}
-              loading={savePrompt.isLoading || updatePrompt.isLoading}
-              onClick={onSavePrompt}
-              disabled={!prompt}
-              icon={
-                promptHasChanged ? (
-                  <FloppyDisk
-                    size={22}
-                    color={theme.colors.primary}
-                    weight="fill"
-                  />
-                ) : (
-                  <FloppyDisk size={22} color={theme.colors.text_switched} />
-                )
-              }
-            />
-          </FlexRow>
-        </WritePromptBottom>
-      </WritePromptContainer>
-    </UserInteractionContainer>
+    <>
+      <UserInteractionContainer>
+        <ListPrompts prompts={prompts} onClickNewPrompt={onClickNewPrompt} />
+        <WritePromptContainer gap={1}>
+          <Text variant="body2Bold">Step 1: Input your prompt</Text>
+          <TextArea
+            value={prompt}
+            onChange={(e) => onChangePrompt(e.target.value)}
+            placeholder="Write your prompt..."
+            minRows={15}
+            maxRows={30}
+            onBlur={() => onSavePrompt()}
+          />
+          <WritePromptBottom>
+            <Button
+              width="300px"
+              disabled={!promptHasAttributes(prompt)}
+              onClick={generateAttributes}
+            >
+              Generate attribute form
+            </Button>
+            {tokensUsage?.prompt_tokens && (
+              <FlexRow>
+                <Image
+                  src={IconsPath.GPTBlack}
+                  alt="ChatGPT Icon"
+                  width="22"
+                  height="22"
+                />
+                <Text fontFamily={inconsolata}>
+                  Tokens used on this input: {tokensUsage.prompt_tokens}
+                </Text>
+              </FlexRow>
+            )}
+          </WritePromptBottom>
+        </WritePromptContainer>
+      </UserInteractionContainer>
+      <Portal>
+        {updatePrompt.isLoading && (
+          <SavingIconContainer>
+            <Disk size={64} color={theme.colors.primary} weight="fill" />
+          </SavingIconContainer>
+        )}
+      </Portal>
+    </>
   );
 };
+
+const spinning_jumping_animation = keyframes`
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+`;
+
+const Disk = styled(FloppyDisk)`
+  animation: ${spinning_jumping_animation} 1s infinite;
+`;
+
+const from_bottom_to_up_animation = keyframes`
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }  
+`;
+
+const SavingIconContainer = styled.div`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  animation: ${from_bottom_to_up_animation} 0.5s ease-in-out;
+`;
 
 const WritePromptBottom = styled(FlexRow)`
   justify-content: space-between;
