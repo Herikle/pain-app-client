@@ -21,6 +21,7 @@ type SegmentProps = {
   isSolitary?: boolean;
   segment: ISegment;
   onChangeValues?: (data: onChangeValueProps) => void;
+  showFooterDetails?: boolean;
 };
 
 export const Segment = ({
@@ -31,6 +32,7 @@ export const Segment = ({
   isSolitary = false,
   segment,
   onChangeValues,
+  showFooterDetails,
 }: SegmentProps) => {
   const { name, intensities } = segment;
   const { type } = intensities;
@@ -57,61 +59,63 @@ export const Segment = ({
           />
         )}
       </Container>
-      <SegmentFooter mt={1} align="center">
-        {(!!segment.start || !!segment.end) && (
-          <TimeSegment>
-            {segment.start ?? "?"}~{segment.end ?? "?"}
-            {getTimeUnitAbbreviation(segment.time_unit)}
-          </TimeSegment>
-        )}
-        <QualityIcons>
-          {segment.quality?.texture && (
-            <>
-              <Image
-                src={IconsPath.texture?.[segment.quality.texture]}
-                width={22}
-                height={22}
-                alt="Quality Texture"
-                onClick={() => onClick?.("quality")}
-                id={`quality-texture-${segment._id}`}
-              />
-              <Tooltip anchorSelect={`#quality-texture-${segment._id}`}>
-                {v.capitalize(segment.quality.texture)}
-              </Tooltip>
-            </>
+      {showFooterDetails && (
+        <SegmentFooter mt={1} align="center">
+          {(!!segment.start || !!segment.end) && (
+            <TimeSegment>
+              {segment.start ?? "?"}~{segment.end ?? "?"}
+              {getTimeUnitAbbreviation(segment.time_unit)}
+            </TimeSegment>
           )}
-          {segment.quality?.depth && (
-            <>
-              <Image
-                src={IconsPath.depth?.[segment.quality.depth]}
-                width={22}
-                height={22}
-                alt="Quality Depth"
-                onClick={() => onClick?.("quality")}
-                id={`quality-depth-${segment._id}`}
-              />
-              <Tooltip anchorSelect={`#quality-depth-${segment._id}`}>
-                {v.capitalize(segment.quality.depth)}
-              </Tooltip>
-            </>
-          )}
-          {segment.quality?.anatomy && (
-            <>
-              <Image
-                src={IconsPath.depth.anatomy}
-                width={22}
-                height={22}
-                alt="Quality Anatomy"
-                onClick={() => onClick?.("quality")}
-                id={`quality-anatomy-${segment._id}`}
-              />
-              <Tooltip anchorSelect={`#quality-anatomy-${segment._id}`}>
-                {segment.quality.anatomy}
-              </Tooltip>
-            </>
-          )}
-        </QualityIcons>
-      </SegmentFooter>
+          <QualityIcons>
+            {segment.quality?.texture && (
+              <>
+                <Image
+                  src={IconsPath.texture?.[segment.quality.texture]}
+                  width={22}
+                  height={22}
+                  alt="Quality Texture"
+                  onClick={() => onClick?.("quality")}
+                  id={`quality-texture-${segment._id}`}
+                />
+                <Tooltip anchorSelect={`#quality-texture-${segment._id}`}>
+                  {v.capitalize(segment.quality.texture)}
+                </Tooltip>
+              </>
+            )}
+            {segment.quality?.depth && (
+              <>
+                <Image
+                  src={IconsPath.depth?.[segment.quality.depth]}
+                  width={22}
+                  height={22}
+                  alt="Quality Depth"
+                  onClick={() => onClick?.("quality")}
+                  id={`quality-depth-${segment._id}`}
+                />
+                <Tooltip anchorSelect={`#quality-depth-${segment._id}`}>
+                  {v.capitalize(segment.quality.depth)}
+                </Tooltip>
+              </>
+            )}
+            {segment.quality?.anatomy && (
+              <>
+                <Image
+                  src={IconsPath.depth.anatomy}
+                  width={22}
+                  height={22}
+                  alt="Quality Anatomy"
+                  onClick={() => onClick?.("quality")}
+                  id={`quality-anatomy-${segment._id}`}
+                />
+                <Tooltip anchorSelect={`#quality-anatomy-${segment._id}`}>
+                  {segment.quality.anatomy}
+                </Tooltip>
+              </>
+            )}
+          </QualityIcons>
+        </SegmentFooter>
+      )}
     </Wrapper>
   );
 };

@@ -98,6 +98,7 @@ export const Track = ({ track }: TrackProps) => {
                 hasDraw
                 readOnly
                 onClick={(tab) => onClickSegment(segment, tab)}
+                showFooterDetails
               />
             ))}
           </SegmentsContainer>
