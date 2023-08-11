@@ -102,10 +102,20 @@ export const Track = ({ track }: TrackProps) => {
             ))}
           </SegmentsContainer>
         </Container>
+        {!!track.comment && (
+          <CommentContainer>
+            <Text>{track.comment}</Text>
+          </CommentContainer>
+        )}
       </Wrapper>
     </Element>
   );
 };
+
+const CommentContainer = styled.div`
+  max-width: 900px;
+  margin-bottom: 2rem;
+`;
 
 const SegmentName = styled.div`
   height: ${SEGMENT_SECTION_HEIGHT}px;
