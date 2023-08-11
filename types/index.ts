@@ -93,7 +93,7 @@ export type ISymptom = {
 };
 
 type IIntensityType = "draw" | "values";
-type ISegmentTimeUnit = "minutes" | "hours" | "days";
+export type ISegmentTimeUnit = "minutes" | "hours" | "days";
 type ISegmentEstimativeType = "reported" | "measured" | "inferred";
 type ISegmentPainType = "acute" | "chronic";
 
