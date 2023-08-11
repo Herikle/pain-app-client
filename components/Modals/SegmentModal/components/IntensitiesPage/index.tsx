@@ -14,6 +14,7 @@ import {
   SegmentValuesSchema,
   onChangeValueProps,
 } from "@components/Track/components/Segment/components/SegmentValues";
+import { DrawObject } from "@components/Paint";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
@@ -63,6 +64,10 @@ export const IntensitiesPage = ({
     setValue("values", data.values);
   };
 
+  const onUpdateSegmentDraw = (data: DrawObject[]) => {
+    setValue("draw", data);
+  };
+
   const onUpdate = () => {
     onChange(getValues());
   };
@@ -95,6 +100,7 @@ export const IntensitiesPage = ({
                 hasDraw
                 backgroundColor={theme.colors.pastel}
                 onChangeValues={onUpdateSegmentValues}
+                onChangeDraw={onUpdateSegmentDraw}
                 isSolitary
               />
             </FlexRow>

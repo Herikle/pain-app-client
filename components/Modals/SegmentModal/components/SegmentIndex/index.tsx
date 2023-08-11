@@ -171,7 +171,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     });
 
     if (closeAfterSave) {
-      console.log("aa");
       onClose();
     } else {
       setSegmentState(updatedSegment);

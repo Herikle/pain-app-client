@@ -35,7 +35,6 @@ export const SegmentValuesSchema = z
         (acc, curr: number | undefined) => acc + (curr ?? 0),
         0
       );
-      console.log(sum);
       return sum <= 100;
     },
     {

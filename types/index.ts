@@ -1,3 +1,5 @@
+import { DrawObject } from "@components/Paint";
+
 export type Meta = {
   current_count: number;
   current_page: number;
@@ -106,7 +108,7 @@ export type ISegmentValues = {
 
 export type ISegmentIntensities = {
   type: IIntensityType;
-  draw?: any;
+  draw?: DrawObject[];
   values?: ISegmentValues;
   justification?: string;
 };

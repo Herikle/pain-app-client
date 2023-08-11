@@ -12,6 +12,7 @@ import { SegmentModalTabs } from "@components/Modals/SegmentModal";
 import { Tooltip } from "react-tooltip";
 import v from "voca";
 import { getTimeUnitAbbreviation } from "@utils/helpers/segmentHelpers";
+import { DrawObject } from "@components/Paint";
 
 type SegmentProps = {
   hasDraw?: boolean;
@@ -21,6 +22,7 @@ type SegmentProps = {
   isSolitary?: boolean;
   segment: ISegment;
   onChangeValues?: (data: onChangeValueProps) => void;
+  onChangeDraw?: (data: DrawObject[]) => void;
   showFooterDetails?: boolean;
 };
 
@@ -32,6 +34,7 @@ export const Segment = ({
   isSolitary = false,
   segment,
   onChangeValues,
+  onChangeDraw,
   showFooterDetails,
 }: SegmentProps) => {
   const { name, intensities } = segment;
@@ -50,7 +53,12 @@ export const Segment = ({
         $bgColor={backgroundColor}
       >
         {type === "draw" ? (
-          <SegmentDraw hasDraw={hasDraw} readOnly={readOnly} />
+          <SegmentDraw
+            hasDraw={hasDraw}
+            readOnly={readOnly}
+            onChangeDraw={onChangeDraw}
+            initialDrawValue={intensities.draw}
+          />
         ) : (
           <SegmentValues
             readOnly={readOnly}

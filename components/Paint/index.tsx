@@ -6,7 +6,7 @@ import PencilIcon from "public/icons/pencil.svg";
 type Point = [number, number];
 type Line = Point[];
 type Position = { x: number; y: number };
-type DrawObject = {
+export type DrawObject = {
   position: Position;
   points: Line;
 };
@@ -17,19 +17,28 @@ type PaintProps = {
   width: number;
   height: number;
   readOnly?: boolean;
+  onChange?: (data: DrawObject[]) => void;
+  initialDrawValue?: DrawObject[];
 };
 
 const LINE_WIDTH = 1;
 const LINE_COLOR = "black";
 const LINE_OPACITY = 1;
 
-export const Paint = ({ width, height, readOnly }: PaintProps) => {
+export const Paint = ({
+  width,
+  height,
+  readOnly,
+  onChange,
+  initialDrawValue,
+}: PaintProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [stateSaved, setStateSaved] = useState<DrawObject[]>([]);
   const [currentStartPosition, setCurrentStartPosition] =
     useState<Position | null>(null);
+
+  const [firstRenderHasPassed, setFirstRenderHasPassed] = useState(false);
 
   const [currentPoints, setCurrentPoints] = useState<Line>([]);
 
@@ -51,6 +60,21 @@ export const Paint = ({ width, height, readOnly }: PaintProps) => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!firstRenderHasPassed) {
+      setFirstRenderHasPassed(true);
+
+      if (initialDrawValue) {
+        drawObjects(initialDrawValue);
+      }
+    }
+  }, [initialDrawValue, firstRenderHasPassed]);
+
+  useEffect(() => {
+    onChange?.(objects);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [objects]);
 
   const drawObjects = async (toDraw: DrawObject[]) => {
     for (const object of toDraw) {
@@ -136,14 +160,6 @@ export const Paint = ({ width, height, readOnly }: PaintProps) => {
       );
     }
     setObjects([]);
-  };
-
-  const redraw = () => {
-    drawObjects(stateSaved);
-  };
-
-  const save = () => {
-    setStateSaved(objects);
   };
 
   return (
