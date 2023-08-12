@@ -66,6 +66,7 @@ export const IntensitiesPage = ({
 
   const onUpdateSegmentDraw = (data: DrawObject[]) => {
     setValue("draw", data);
+    onUpdate();
   };
 
   const onUpdate = () => {

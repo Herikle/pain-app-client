@@ -2,6 +2,10 @@ import { FlexColumn } from "@design-components/Flex";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PencilIcon from "public/icons/pencil.svg";
+import update from "immutability-helper";
+import { X } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
+import { Tooltip } from "react-tooltip";
 
 type Point = [number, number];
 type Line = Point[];
@@ -61,7 +65,19 @@ export const Paint = ({
     }
   }, []);
 
+  const updateObjects = (newObjects: DrawObject[]) => {
+    setObjects(newObjects);
+    onChange?.(newObjects);
+  };
+
   useEffect(() => {
+    if (readOnly) {
+      if (initialDrawValue) {
+        clearWithoutUpdate();
+        drawObjects(initialDrawValue);
+      }
+      return;
+    }
     if (!firstRenderHasPassed) {
       setFirstRenderHasPassed(true);
 
@@ -69,12 +85,7 @@ export const Paint = ({
         drawObjects(initialDrawValue);
       }
     }
-  }, [initialDrawValue, firstRenderHasPassed]);
-
-  useEffect(() => {
-    onChange?.(objects);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [objects]);
+  }, [initialDrawValue, firstRenderHasPassed, readOnly]);
 
   const drawObjects = async (toDraw: DrawObject[]) => {
     for (const object of toDraw) {
@@ -86,7 +97,7 @@ export const Paint = ({
           object.position.y + point[1]
         );
         ctxRef.current?.stroke();
-        await sleep(1);
+        // await sleep(1);
       }
       ctxRef.current?.closePath();
     }
@@ -114,13 +125,17 @@ export const Paint = ({
       if (ctxRef?.current) {
         ctxRef.current.closePath();
       }
-      setObjects((prev) => [
-        ...prev,
-        {
-          position: currentStartPosition,
-          points: currentPoints,
-        },
-      ]);
+
+      const newObjects = update(objects, {
+        $push: [
+          {
+            position: currentStartPosition,
+            points: currentPoints,
+          },
+        ],
+      });
+
+      updateObjects(newObjects);
       setCurrentStartPosition(null);
       setCurrentPoints([]);
     }
@@ -150,7 +165,7 @@ export const Paint = ({
     }
   };
 
-  const clear = () => {
+  const clearWithoutUpdate = () => {
     if (ctxRef?.current) {
       ctxRef.current.clearRect(
         0,
@@ -159,7 +174,11 @@ export const Paint = ({
         ctxRef.current.canvas.height
       );
     }
-    setObjects([]);
+  };
+
+  const clear = () => {
+    clearWithoutUpdate();
+    updateObjects([]);
   };
 
   return (
@@ -183,12 +202,34 @@ export const Paint = ({
           height={height}
         />
       </CanvasContainer>
+      {!readOnly && (
+        <>
+          <Clear id="clear-drawing" onClick={clear}>
+            <X size={16} color={theme.colors.pure_white} />
+          </Clear>
+          <Tooltip anchorSelect="#clear-drawing">Clear drawing</Tooltip>
+        </>
+      )}
       {/*<Button onClick={clear}>Clear</Button>*/}
       {/*<Button onClick={redraw}>Redraw</Button>*/}
       {/*<Button onClick={save}>Save</Button> */}
     </Container>
   );
 };
+
+const Clear = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: ${theme.colors.primary};
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  cursor: pointer;
+  transform: translate(100%, -100%);
+`;
 
 const CanvasContainer = styled.div``;
 

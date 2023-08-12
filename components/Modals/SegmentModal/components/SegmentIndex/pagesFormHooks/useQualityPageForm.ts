@@ -6,7 +6,7 @@ import { normalizeString } from "@utils/helpers/string";
 
 export const useQualityPageForm = (segment: ISegment) => {
   const [qualityPageForm, setQualityPageForm] = useState<QualityFormValues>({
-    anatomy: segment.quality?.anatomy,
+    anatomy: normalizeString(segment.quality?.anatomy),
     comment: normalizeString(segment.quality?.comment),
     depth: segment.quality?.depth,
     texture: segment.quality?.texture,
@@ -20,7 +20,7 @@ export const useQualityPageForm = (segment: ISegment) => {
 
   const isDirtyQualityPageForm = () => {
     const qualityValues = {
-      anatomy: segment.quality?.anatomy,
+      anatomy: normalizeString(segment.quality?.anatomy),
       comment: normalizeString(segment.quality?.comment),
       depth: segment.quality?.depth,
       texture: segment.quality?.texture,

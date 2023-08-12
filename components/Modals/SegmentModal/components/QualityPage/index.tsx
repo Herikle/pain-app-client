@@ -66,11 +66,9 @@ export const QualityPage = ({
     onChange(getValues());
   };
 
-  const { isValid } = formState;
-
   useEffect(() => {
-    onValidChange(isValid);
-  }, [isValid, onValidChange]);
+    onValidChange(true);
+  }, [onValidChange]);
 
   return (
     <form onChange={onUpdate}>
