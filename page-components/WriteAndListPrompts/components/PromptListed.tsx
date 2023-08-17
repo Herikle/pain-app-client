@@ -132,10 +132,10 @@ export const PromptListed = ({
         </form>
       ) : (
         <FlexRow>
-          {selected && (
+          {prompt.isMain && (
             <>
               <Image
-                src={IconsPath.Publish}
+                src={!selected ? IconsPath.PubMain : IconsPath.Publish}
                 width={22}
                 height={22}
                 alt="publish prompt"
@@ -150,39 +150,48 @@ export const PromptListed = ({
           <Text color={textColor}>{prompt.title}</Text>
         </FlexRow>
       )}
-      <FlexRow gap={1.5}>
-        {editMode ? (
-          <>
-            <Check
-              size={16}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-              onClick={handleSubmit(submit)}
+
+      {editMode ? (
+        <FlexRow gap={1.5}>
+          <Check
+            size={16}
+            color={theme.colors.text_switched}
+            cursor="pointer"
+            onClick={handleSubmit(submit)}
+          />
+          <X
+            size={16}
+            color={theme.colors.text_switched}
+            cursor="pointer"
+            onClick={toggleEditMode}
+          />
+        </FlexRow>
+      ) : (
+        <IconsContainer gap={1.5}>
+          {!prompt.isMain && (
+            <Image
+              src={IconsPath.PubMain}
+              width={16}
+              height={16}
+              alt="publish prompt"
+              id={`publish-prompt-${prompt._id}`}
+              onClick={onClickPublish}
             />
-            <X
-              size={16}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-              onClick={toggleEditMode}
-            />
-          </>
-        ) : (
-          <>
-            <PencilSimpleLine
-              color={theme.colors.text_switched}
-              size={16}
-              cursor="pointer"
-              onClick={toggleEditMode}
-            />
-            <Trash
-              color={theme.colors.text_switched}
-              size={16}
-              cursor="pointer"
-              onClick={onDelete}
-            />
-          </>
-        )}
-      </FlexRow>
+          )}
+          <PencilSimpleLine
+            color={theme.colors.text_switched}
+            size={16}
+            cursor="pointer"
+            onClick={toggleEditMode}
+          />
+          <Trash
+            color={theme.colors.text_switched}
+            size={16}
+            cursor="pointer"
+            onClick={onDelete}
+          />
+        </IconsContainer>
+      )}
     </Container>
   );
 };
@@ -191,13 +200,16 @@ type Props = {
   $selected: boolean;
 };
 
+const IconsContainer = styled(FlexRow)`
+  opacity: 0;
+`;
+
 const Container = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   padding: 1rem;
-  padding-block: 1.25rem;
   form {
     width: 100%;
     padding-right: 1rem;
@@ -208,4 +220,15 @@ const Container = styled.div<Props>`
     css`
       background-color: ${theme.colors.primary};
     `}
+
+  &:hover {
+    ${({ $selected }) =>
+      !$selected &&
+      css`
+        background-color: ${theme.colors.hover_state};
+      `}
+    ${IconsContainer} {
+      opacity: 1;
+    }
+  }
 `;

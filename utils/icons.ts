@@ -22,6 +22,7 @@ export const IconsPath = {
   Invervention: "/icons/intervention.svg",
   Symptom: "/icons/symptom.svg",
   Publish: "/icons/pub.svg",
+  PubMain: "/icons/pub-main.svg",
 };
 
 export const ImagesPath = {
