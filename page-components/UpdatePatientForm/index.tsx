@@ -13,6 +13,8 @@ import { useUpdatePatient } from "@queries/patient/usePatient";
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { useSetDeletePatientModal } from "@components/Modals/DeletePatientModal/hook";
+import { useFormPrompt } from "@utils/hooks/useFormPrompt";
+import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -42,6 +44,8 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   const { errors, isDirty } = formState;
 
+  useFormPrompt(isDirty);
+
   const onSubmit = async (data: PatientSchema) => {
     await updatePatient.mutateAsync({
       params: {
@@ -61,6 +65,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
           <Grid xs={6}>

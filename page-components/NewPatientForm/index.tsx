@@ -10,6 +10,8 @@ import styled from "styled-components";
 import { useCreatePatient } from "@queries/patient/usePatient";
 import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
+import { useFormPrompt } from "@utils/hooks/useFormPrompt";
+import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -26,6 +28,8 @@ export const NewPatientForm = () => {
 
   const { errors } = formState;
 
+  const { isDirty } = formState;
+
   const createPatient = useCreatePatient();
 
   const onSubmit = async (data: PatientSchema) => {
@@ -35,8 +39,11 @@ export const NewPatientForm = () => {
     Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
   };
 
+  useFormPrompt(isDirty);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
           <Grid xs={6}>

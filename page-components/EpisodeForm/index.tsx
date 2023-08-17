@@ -10,6 +10,8 @@ import styled from "styled-components";
 import { IEpisode } from "types";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
+import { useFormPrompt } from "@utils/hooks/useFormPrompt";
+import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 const episodeSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -41,6 +43,8 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
 
   const { errors, isDirty } = formState;
 
+  useFormPrompt(isDirty);
+
   const onSubmit = async (data: EpisodeSchema) => {
     await updateEpisode.mutateAsync({
       params: {
@@ -54,6 +58,7 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
           <Grid xs={5}>

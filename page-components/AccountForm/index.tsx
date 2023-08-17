@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useUpdateAccount } from "@queries/account/useAccount";
+import { useFormPrompt } from "@utils/hooks/useFormPrompt";
+import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 const accountFormSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -32,6 +34,8 @@ export const AccountForm = () => {
 
   const { isDirty } = formState;
 
+  useFormPrompt(isDirty);
+
   const onSubmit = async (data: AccountFormType) => {
     await updateAccount.mutateAsync({
       body: data,
@@ -41,6 +45,7 @@ export const AccountForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Text variant="h1">Account info</Text>
         <Grid container spacing={4}>
