@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PencilIcon from "public/icons/pencil.svg";
 import update from "immutability-helper";
-import { X } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { Tooltip } from "react-tooltip";
+import { transparentize } from "polished";
 
 type Point = [number, number];
 type Line = Point[];
@@ -205,30 +206,28 @@ export const Paint = ({
       {!readOnly && (
         <>
           <Clear id="clear-drawing" onClick={clear}>
-            <X size={16} color={theme.colors.pure_white} />
+            <Trash size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-drawing">Clear drawing</Tooltip>
         </>
       )}
-      {/*<Button onClick={clear}>Clear</Button>*/}
-      {/*<Button onClick={redraw}>Redraw</Button>*/}
-      {/*<Button onClick={save}>Save</Button> */}
     </Container>
   );
 };
 
 const Clear = styled.div`
   position: absolute;
-  top: 0;
+  top: 1.5rem;
   right: 0;
-  background-color: ${theme.colors.primary};
+  background-color: ${theme.colors.hover_state};
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.25rem;
   cursor: pointer;
-  transform: translate(100%, -100%);
+  transform: translate(calc(100% + 0.5rem), -100%);
+  box-shadow: 0px 4px 4px 0px ${transparentize(0.75, theme.colors.pure_black)};
 `;
 
 const CanvasContainer = styled.div``;
