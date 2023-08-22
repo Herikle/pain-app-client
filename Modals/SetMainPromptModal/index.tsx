@@ -47,20 +47,10 @@ const Child = ({ onClose, prompt_id }: SetMainPromptChildProps) => {
             the current main prompt will be replaced. This will affect the
             public page form.
           </Text>
-          <Text variant="body2">
-            Type &quot;<strong>I understand</strong>&quot; to continue.
-          </Text>
-          <TextField
-            fullWidth
-            label="Type here"
-            value={confirmationText}
-            onChange={(e) => setConfirmationText(e.target.value)}
-          />
           <Button
             fullWidth
             loading={setMainPrompt.isLoading}
             onClick={updateAsMainPrompt}
-            disabled={confirmationText !== "I understand"}
           >
             Set as main
           </Button>
