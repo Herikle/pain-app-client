@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
-import { SegmentModalTabs } from "@components/Modals/SegmentModal";
+import { SegmentModalTabs } from "Modals/SegmentModal";
 import { Tooltip } from "react-tooltip";
 import v from "voca";
 import { getTimeUnitAbbreviation } from "@utils/helpers/segmentHelpers";
@@ -136,4 +136,6 @@ const QualityIcons = styled(FlexRow)`
 
 const TimeSegment = styled.div``;
 
-const SegmentFooter = styled(FlexColumn)``;
+const SegmentFooter = styled(FlexColumn)`
+  min-height: 49px;
+`;

@@ -52,5 +52,76 @@ export const useUpdateSegmentOnCache = () => {
     );
   };
 
-  return { updateSegmentOnCache };
+  const addSegmentOnCache = async (values: UpdateSegmentOnCache) => {
+    const { segment, episode_id } = values;
+
+    queryClient.setQueriesData(
+      [QueryKeys.Track.List, { episode_id }],
+      (old: GetTracksListResponse) => {
+        const track_id = segment.track_id;
+
+        const trackIndex = old.results.findIndex(
+          (track: ITrack) => track._id === track_id
+        );
+        if (trackIndex >= 0) {
+          const track = old.results[trackIndex];
+          if (track?.segments) {
+            const newResults = update(old, {
+              results: {
+                [trackIndex]: {
+                  segments: {
+                    $push: [segment],
+                  },
+                },
+              },
+            });
+
+            return newResults;
+          }
+        }
+
+        return old;
+      }
+    );
+  };
+
+  const deleteSegmentOnCache = async (values: UpdateSegmentOnCache) => {
+    const { segment, episode_id } = values;
+
+    queryClient.setQueriesData(
+      [QueryKeys.Track.List, { episode_id }],
+      (old: GetTracksListResponse) => {
+        const track_id = segment.track_id;
+
+        const trackIndex = old.results.findIndex(
+          (track: ITrack) => track._id === track_id
+        );
+        if (trackIndex >= 0) {
+          const track = old.results[trackIndex];
+          if (track?.segments) {
+            const segmentIndex = track.segments.findIndex(
+              (seg: ISegment) => seg._id === segment._id
+            );
+            if (segmentIndex >= 0) {
+              const newResults = update(old, {
+                results: {
+                  [trackIndex]: {
+                    segments: {
+                      $splice: [[segmentIndex, 1]],
+                    },
+                  },
+                },
+              });
+
+              return newResults;
+            }
+          }
+        }
+
+        return old;
+      }
+    );
+  };
+
+  return { updateSegmentOnCache, addSegmentOnCache, deleteSegmentOnCache };
 };

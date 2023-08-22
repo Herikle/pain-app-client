@@ -15,12 +15,15 @@ import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
 import { SymptomsPage } from "../SymptomsPage";
 import { ISegment } from "types";
-import { useUpdateSegment } from "@queries/segment/useSegment";
+import {
+  useDeleteSegment,
+  useUpdateSegment,
+} from "@queries/segment/useSegment";
 import { useSegmentPageForm } from "./pagesFormHooks/useSegmentPageForm";
 import { useIntensitiesPageForm } from "./pagesFormHooks/useIntensitiesPageForm";
 import { useQualityPageForm } from "./pagesFormHooks/useQualityPageForm";
 import { Portal } from "@components/Portal";
-import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageForm";
 import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 import { SegmentModalTabs } from "../..";
@@ -79,6 +82,22 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   const [segmentState, setSegmentState] = useState<ISegment>(segment);
 
   const [confirmClose, setConfirmClose] = useState(false);
+
+  const [confirmDeleteSegment, setConfirmDeleteSegment] = useState(false);
+
+  const deleteSegment = useDeleteSegment();
+
+  const onDeleteSegment = async () => {
+    await deleteSegment.mutateAsync({
+      params: {
+        segment_id: segment._id,
+      },
+      extra: {
+        episode_id,
+      },
+    });
+    onClose();
+  };
 
   const {
     segmentPageForm,
@@ -283,7 +302,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
         </Content>
         <FlexRow justify="space-between">
           <Trash
-            onClick={notImplemented}
+            onClick={() => setConfirmDeleteSegment(true)}
             size={32}
             color={theme.colors.text_switched}
             cursor="pointer"
@@ -309,6 +328,16 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
       <Portal>
         <ModalOverlay onClick={close} />
       </Portal>
+      {confirmDeleteSegment && (
+        <ConfirmActionModal
+          description="Are you sure you want to delete this segment?"
+          onConfirm={onDeleteSegment}
+          onClose={() => setConfirmDeleteSegment(false)}
+          hasCloseButton
+          title="Delete Segment"
+          loading={deleteSegment.isLoading}
+        />
+      )}
     </>
   );
 };

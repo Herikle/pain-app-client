@@ -13,7 +13,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { IIntervetion } from "types";
 import { InterventionCard } from "./components/InterventionCard";
-import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { CommonSegmentModalProps } from "../..";
 import update from "immutability-helper";
 

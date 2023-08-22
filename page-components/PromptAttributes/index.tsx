@@ -6,12 +6,12 @@ import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { SetStateAction, useState } from "react";
 import { CommonKeyStringPair, IAttributesConfig, IPromptOptions } from "types";
-import { useSetPromptOptionsModal } from "@components/Modals/PromptOptionsModal/hook";
+import { useSetPromptOptionsModal } from "Modals/PromptOptionsModal/hook";
 import { Copy, Gear } from "@phosphor-icons/react";
 import { Box } from "@mui/material";
 import { Tooltip } from "react-tooltip";
 import { theme } from "@styles/theme";
-import { useSetAttributesConfigModal } from "@components/Modals/AttributesConfigModal/hook";
+import { useSetAttributesConfigModal } from "Modals/AttributesConfigModal/hook";
 
 type PromptAttributesProps = {
   attributes: CommonKeyStringPair;

@@ -5,11 +5,12 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
 import { Pencil } from "@phosphor-icons/react";
-import { useSetSegmentModal } from "@components/Modals/SegmentModal/hook";
-import { useSetTrackModal } from "@components/Modals/TrackModal/hook";
+import { useSetSegmentModal } from "Modals/SegmentModal/hook";
+import { useSetTrackModal } from "Modals/TrackModal/hook";
 import { ISegment, ITrack } from "types";
 import { Element } from "react-scroll";
-import { SegmentModalTabs } from "@components/Modals/SegmentModal";
+import { SegmentModalTabs } from "Modals/SegmentModal";
+import { ListSegments } from "./components/ListSegments";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -75,6 +76,8 @@ export const Track = ({ track }: TrackProps) => {
 
   const { segments } = track;
 
+  const hasSegments = !!segments;
+
   return (
     <Element name={`track_${track._id}`}>
       <Wrapper gap={2}>
@@ -90,18 +93,13 @@ export const Track = ({ track }: TrackProps) => {
         </FlexRow>
         <Container>
           <SegmentsTitleComponent />
-          <SegmentsContainer>
-            {segments?.map((segment, index) => (
-              <Segment
-                key={index}
-                segment={segment}
-                hasDraw
-                readOnly
-                onClick={(tab) => onClickSegment(segment, tab)}
-                showFooterDetails
-              />
-            ))}
-          </SegmentsContainer>
+          {hasSegments && (
+            <ListSegments
+              track={track}
+              onClickSegment={onClickSegment}
+              enableAddNewSegment
+            />
+          )}
         </Container>
         {!!track.comment && (
           <CommentContainer>
@@ -125,10 +123,6 @@ const SegmentName = styled.div`
   }
   display: flex;
   flex-direction: column;
-`;
-
-const SegmentsContainer = styled.div`
-  display: flex;
 `;
 
 const SegmentsTitle = styled(FlexColumn)`

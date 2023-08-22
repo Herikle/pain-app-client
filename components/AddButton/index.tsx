@@ -1,6 +1,6 @@
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { PlusCircle } from "@phosphor-icons/react";
-import { theme } from "@styles/theme";
+import { ThemeColors, theme } from "@styles/theme";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -8,9 +8,17 @@ type AddButtonProps = {
   onClick?: () => void;
   href?: string;
   loading?: boolean;
+  id?: string;
+  color?: ThemeColors;
 };
 
-export const AddButton = ({ onClick, href, loading }: AddButtonProps) => {
+export const AddButton = ({
+  onClick,
+  href,
+  loading,
+  id,
+  color,
+}: AddButtonProps) => {
   const render = (children) => {
     if (href) {
       return <Link href={href}>{children}</Link>;
@@ -19,15 +27,23 @@ export const AddButton = ({ onClick, href, loading }: AddButtonProps) => {
     return children;
   };
 
+  const getButtonColor = () => {
+    if (loading) return theme.colors.disabled_color;
+
+    if (color) return theme.colors[color];
+
+    return theme.colors.primary;
+  };
+
   return render(
-    <Container>
+    <Container id={id}>
       <LoadingWrapper loading={!!loading} overContainer size={16} />
       <PlusCircle
         onClick={onClick}
         cursor="pointer"
         size={32}
         weight="fill"
-        color={!!loading ? theme.colors.disabled_color : theme.colors.primary}
+        color={getButtonColor()}
       />
     </Container>
   );

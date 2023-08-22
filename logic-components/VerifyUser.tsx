@@ -1,4 +1,4 @@
-import { useSetWelcomeUserTypeSelectorModal } from "@components/Modals/WelcomeUserTypeSelectorModal/hook";
+import { useSetWelcomeUserTypeSelectorModal } from "Modals/WelcomeUserTypeSelectorModal/hook";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "utils/hooks/useAuth";

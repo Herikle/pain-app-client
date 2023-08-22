@@ -12,7 +12,8 @@ import { notImplemented } from "@utils/helpers/dev";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
 import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
-import { ConfirmActionModal } from "@components/Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { TrackIntensityOverTrackPage } from "./TrackIntensityOverTrackPage";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -133,6 +134,14 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
                 }
                 sx={TabSx}
               />
+              <Tab
+                label={
+                  <Text variant="body1Bold" color={getColor(1)}>
+                    Intensity over track
+                  </Text>
+                }
+                sx={TabSx}
+              />
             </Tabs>
           </TabsContainer>
           <CustomTabPanel value={value} index={0}>
@@ -141,6 +150,9 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
               onChange={onChangeTrackDetails}
               onValidChange={setTrackDetailsValid}
             />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <TrackIntensityOverTrackPage track={track} />
           </CustomTabPanel>
         </Content>
         <FlexRow justify="space-between">

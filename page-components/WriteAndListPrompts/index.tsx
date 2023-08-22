@@ -25,7 +25,7 @@ import { RoutesPath } from "@utils/routes";
 import { TokensUsageType } from "@page-components/PromptResponse";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
-import { useSetSetMainPrompt } from "@components/Modals/SetMainPromptModal/hook";
+import { useSetSetMainPrompt } from "Modals/SetMainPromptModal/hook";
 import { CleanUpUndefined } from "@utils/helpers/object";
 import { Portal } from "@components/Portal";
 import { useDebounce } from "@utils/hooks/useDebounce";

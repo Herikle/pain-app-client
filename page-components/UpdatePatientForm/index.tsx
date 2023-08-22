@@ -12,7 +12,7 @@ import { getOnlyDateFromIsoDate } from "@utils/helpers/date";
 import { useUpdatePatient } from "@queries/patient/usePatient";
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
-import { useSetDeletePatientModal } from "@components/Modals/DeletePatientModal/hook";
+import { useSetDeletePatientModal } from "Modals/DeletePatientModal/hook";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
