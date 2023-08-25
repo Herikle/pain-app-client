@@ -16,11 +16,13 @@ import { useMemo } from "react";
 import { useSelectedPromptValue } from "state/useSelectedPrompt";
 
 export const SideMenu = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut, isLogged } = useAuth();
 
   const { pathname } = useRouter();
 
-  const getLastPrompt = useGetLastPrompt();
+  const getLastPrompt = useGetLastPrompt({
+    enabled: isLogged,
+  });
 
   const lastPrompt = useMemo(() => getLastPrompt.data, [getLastPrompt.data]);
 

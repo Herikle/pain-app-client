@@ -46,9 +46,10 @@ const getLastPrompt = async () => {
   return data as IPrompt;
 };
 
-export const useGetLastPrompt = () => {
+export const useGetLastPrompt = ({ enabled = true }) => {
   return useQuery(QueryKeys.Prompt.Last, getLastPrompt, {
     refetchOnWindowFocus: false,
+    enabled,
   });
 };
 

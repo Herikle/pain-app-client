@@ -1,10 +1,25 @@
 import styled from "styled-components";
+import Router from "next/router";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
+import { useCreateEpisode } from "@queries/episode/useEpisode";
+import { RoutesPath } from "@utils/routes";
 
 export const BackgroundVideo = () => {
+  const createEpisode = useCreateEpisode();
+
+  const onCreateEpisode = async () => {
+    const created = await createEpisode.mutateAsync({
+      body: {
+        patient_id: null,
+      },
+    });
+
+    Router.push(RoutesPath.episode.replace("[id]", created._id));
+  };
+
   return (
     <Container>
       <Video src="/video/video-background.mp4" autoPlay muted loop />
@@ -23,7 +38,12 @@ export const BackgroundVideo = () => {
           <br />
           the pain experience
         </Text>
-        <Button color="cta" width="400px">
+        <Button
+          color="cta"
+          width="400px"
+          onClick={onCreateEpisode}
+          loading={createEpisode.isLoading}
+        >
           Register a pain episode
         </Button>
       </Apresentation>

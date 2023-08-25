@@ -1,19 +1,21 @@
 import axios, { Method, ResponseType } from "axios";
 import { getToken } from "utils/localStorage/token";
 
-type service =
+export type RequestService =
   | "auth"
   | "prompt"
   | "account"
   | "patient"
   | "episode"
+  | "episode-guest"
   | "public"
   | "track"
+  | "track-guest"
   | "segment";
 
 type IRequest = {
   method: Method;
-  service: service;
+  service: RequestService;
   url?: string;
   data?: { [key: string]: any };
   query?: { [key: string]: any };

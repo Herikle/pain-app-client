@@ -8,6 +8,7 @@ import { RoutesPath } from "utils/routes";
 type UseAuthOptions = {
   redirect?: boolean;
   redirectTo?: string;
+  allowGuest?: boolean;
 };
 
 export const useAuth = (options?: UseAuthOptions) => {

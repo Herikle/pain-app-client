@@ -1,20 +1,25 @@
 import { QueryKeys } from "@queries/keys";
-import { request } from "@queries/request";
+import { RequestService, request } from "@queries/request";
+import { hasToken } from "@utils/localStorage/token";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IEpisode } from "types";
 
+export const getEpisodeService = (): RequestService => {
+  return hasToken() ? "episode" : "episode-guest";
+};
+
 type CreateEpisodePayload = {
   body: {
-    patient_id: string;
+    patient_id: string | null;
   };
 };
 
 const createEpisode = async ({ body }: CreateEpisodePayload) => {
   const { data } = await request({
     method: "POST",
-    service: "episode",
+    service: getEpisodeService(),
     url: "/",
     data: body,
   });
@@ -40,7 +45,7 @@ type UpdateEpisodePayload = {
 const updateEpisode = async ({ params, body }: UpdateEpisodePayload) => {
   const { data } = await request({
     method: "PATCH",
-    service: "episode",
+    service: getEpisodeService(),
     url: `/${params.episode_id}`,
     data: body,
   });

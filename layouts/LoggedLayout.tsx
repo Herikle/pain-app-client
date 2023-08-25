@@ -8,11 +8,12 @@ import { RoutesPath } from "utils/routes";
 
 type Props = {
   children: React.ReactNode;
+  allowGuest?: boolean;
   onlySuper?: boolean;
 };
 
-export const LoggedLayout = ({ children, onlySuper }: Props) => {
-  const { isLogged, user } = useAuth({ redirect: true });
+export const LoggedLayout = ({ children, allowGuest, onlySuper }: Props) => {
+  const { isLogged, user } = useAuth({ redirect: !allowGuest });
 
   useEffect(() => {
     if (user) {
@@ -26,7 +27,7 @@ export const LoggedLayout = ({ children, onlySuper }: Props) => {
 
   return (
     <Container>
-      {isLogged ? (
+      {isLogged || allowGuest ? (
         <>
           <SideMenu />
           <Content id="main-content">{children}</Content>

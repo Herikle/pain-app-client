@@ -3,6 +3,7 @@ import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { useQuery } from "react-query";
 import { ITrack, Meta } from "types";
+import { getTrackService } from "./useTrack";
 
 type GetTrackListPayload = {
   query: {
@@ -20,7 +21,7 @@ export type GetTracksListResponse = {
 const getTrackList = async ({ query }: GetTrackListPayload) => {
   const { data } = await request({
     method: "GET",
-    service: "track",
+    service: getTrackService(),
     url: `/`,
     query,
   });

@@ -3,6 +3,7 @@ import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { useQuery } from "react-query";
 import { IEpisode, Meta } from "types";
+import { getEpisodeService } from "./useEpisode";
 
 type GetEpisodsListPayload = {
   query: {
@@ -50,7 +51,7 @@ type GetEpisodeByIdPayload = {
 const getEpisodeById = async ({ params }: GetEpisodeByIdPayload) => {
   const { data } = await request({
     method: "GET",
-    service: "episode",
+    service: getEpisodeService(),
     url: `/${params.episode_id}`,
   });
 

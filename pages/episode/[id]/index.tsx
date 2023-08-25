@@ -56,10 +56,12 @@ export default function EpisodePage() {
     }
   }, [episode, setSelectedPatient, setSelectedEpisode]);
 
+  console.log(getEpisodeById);
+
   return (
-    <LoggedLayout>
+    <LoggedLayout allowGuest={!getEpisodeById.isError}>
       <Container>
-        {!!episode?.patient && (
+        {!!episode?.patient_id && (
           <BackButton
             href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
             text={

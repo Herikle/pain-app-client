@@ -1,10 +1,14 @@
-import { request } from "@queries/request";
+import { RequestService, request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 import { ITrack } from "types";
 import { useUpdateTrackOnCache } from "./hooks/useUpdateTrackOnCache";
-import { scroller } from "react-scroll";
+import { hasToken } from "@utils/localStorage/token";
+
+export const getTrackService = (): RequestService => {
+  return hasToken() ? "track" : "track-guest";
+};
 
 type CreateTrackPayload = {
   body: {
@@ -15,7 +19,7 @@ type CreateTrackPayload = {
 const createTrack = async ({ body }: CreateTrackPayload) => {
   const { data } = await request({
     method: "POST",
-    service: "track",
+    service: getTrackService(),
     url: "/",
     data: body,
   });
@@ -51,7 +55,7 @@ type UpdateTrackPayload = {
 const updateTrack = async ({ params, body }: UpdateTrackPayload) => {
   const { data } = await request({
     method: "PATCH",
-    service: "track",
+    service: getTrackService(),
     url: `/${params.track_id}`,
     data: body,
   });

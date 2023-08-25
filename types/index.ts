@@ -173,14 +173,14 @@ export type ITrack = {
 export type IEpisode = {
   _id: string;
   name: string;
-  patient_id: string;
-  creator_id: string;
   createdAt: string;
   updatedAt: string;
   tracks_count?: number;
   location?: string;
   diagnosis?: string;
   comment?: string;
+  patient_id?: string;
   start_date?: string;
+  creator_id?: string;
   patient?: IPatient;
 };
