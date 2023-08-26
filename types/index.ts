@@ -70,6 +70,7 @@ export type IPatient = {
   creator_id: string;
   createdAt: string;
   updatedAt: string;
+  episodes_count?: number;
   creator?: Omit<IMe, "super">;
   about?: string;
 };

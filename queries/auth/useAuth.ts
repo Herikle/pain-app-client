@@ -11,11 +11,12 @@ type AuthenticatedResponse = {
   token: string;
 };
 
-type SignUpPayload = {
+export type SignUpPayload = {
   body: {
     name: string;
     email: string;
     password: string;
+    episode_id?: string;
   };
 };
 
@@ -43,10 +44,11 @@ export const useSignUp = () => {
   });
 };
 
-type LogInPayload = {
+export type LogInPayload = {
   body: {
     email: string;
     password: string;
+    episode_id?: string;
   };
 };
 

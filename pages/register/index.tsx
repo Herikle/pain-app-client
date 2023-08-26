@@ -1,6 +1,10 @@
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
-import { Register } from "@page-components/Register";
-import { useSignUp } from "@queries/auth/useAuth";
+import { Register, RegisterPayload } from "@page-components/Register";
+import { SignUpPayload, useSignUp } from "@queries/auth/useAuth";
+import {
+  clearGuestEpisode,
+  getGuestEpisodeId,
+} from "@utils/localStorage/guestEpisode";
 import { GuestLayout } from "layouts/GuestLayout";
 import Router from "next/router";
 import styled from "styled-components";
@@ -12,10 +16,16 @@ export default function RegisterPage() {
 
   const signUp = useSignUp();
 
-  const onSubmitRegister = async (payload: any) => {
+  const onSubmitRegister = async (payload: RegisterPayload) => {
+    const signUpBody: SignUpPayload["body"] = payload;
+    const guestEpisodeId = getGuestEpisodeId();
+    if (guestEpisodeId) {
+      signUpBody.episode_id = guestEpisodeId;
+    }
     await signUp.mutateAsync({
-      body: payload,
+      body: signUpBody,
     });
+    if (guestEpisodeId) clearGuestEpisode();
     Router.push(RoutesPath.profile);
   };
 

@@ -17,7 +17,7 @@ type ConfirmActionModalProps = {
   title?: React.ReactNode;
   loading?: boolean;
   confirmText?: string;
-  cancelText?: string;
+  cancelText?: React.ReactNode;
   hasCloseButton?: boolean;
   onCancel?: () => void;
 };
@@ -45,8 +45,8 @@ export const ConfirmActionModal = ({
   return (
     <Modal onClose={onClose} hasCloseButton={hasCloseButton}>
       <Container gap={2}>
-        <Text variant="body2Bold">{title}</Text>
-        <Text variant="body2">{description}</Text>
+        {title && <Text variant="body2Bold">{title}</Text>}
+        {description && <Text variant="body2">{description}</Text>}
         {writeConfirmation && (
           <>
             <Text variant="body2">{writeConfirmation.label}</Text>
@@ -83,4 +83,5 @@ export const ConfirmActionModal = ({
 
 const Container = styled(FlexColumn)`
   align-items: center;
+  max-width: 500px;
 `;
