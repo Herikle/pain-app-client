@@ -86,7 +86,6 @@ type ContainerProps = {
 const Container = styled(FlexRow)<ContainerProps>`
   width: 100%;
   justify-content: flex-start;
-  cursor: pointer;
   ${({ $disabled }) =>
     $disabled &&
     css`

@@ -79,23 +79,34 @@ export const SideMenu = () => {
             height="55"
           />
         </Link>
-        <MenuLink
-          label={capitalize(user?.role) ?? "Doctor"}
-          href={RoutesPath.profile}
-          description={user?.name}
-          iconPath={IconsPath.Doctor}
-          disabled={pathname !== RoutesPath.profile}
-          fullWidth
-        />
-        <MenuLink
-          label="Patient"
-          description={selectedPatient?.name}
-          href={patientLinkHref()}
-          iconPath={IconsPath.Patient}
-          disabled={!pathname.includes(RoutesPath.new_patient)}
-          notAllowed={patientLinkIsNotAllowed}
-          fullWidth
-        />
+        {isLogged ? (
+          <>
+            <MenuLink
+              label={capitalize(user?.role) ?? "Doctor"}
+              href={RoutesPath.profile}
+              description={user?.name}
+              iconPath={IconsPath.Doctor}
+              disabled={pathname !== RoutesPath.profile}
+              fullWidth
+            />
+            <MenuLink
+              label="Patient"
+              description={selectedPatient?.name}
+              href={patientLinkHref()}
+              iconPath={IconsPath.Patient}
+              disabled={!pathname.includes(RoutesPath.new_patient)}
+              notAllowed={patientLinkIsNotAllowed}
+              fullWidth
+            />
+          </>
+        ) : (
+          <MenuLink
+            label="Guest User"
+            iconPath={IconsPath.Doctor}
+            disabled={true}
+            fullWidth
+          />
+        )}
         <MenuLink
           label="Pain Episode"
           description={selectedEpisode?.name}
@@ -117,14 +128,16 @@ export const SideMenu = () => {
         )}
       </TopItens>
       <BottomItens>
-        <LogOutContainer>
-          <MenuLink
-            PhosphorIcon={SignOut}
-            label="Exit session"
-            description={user?.name}
-            onClick={logOut}
-          />
-        </LogOutContainer>
+        {isLogged && (
+          <LogOutContainer>
+            <MenuLink
+              PhosphorIcon={SignOut}
+              label="Exit session"
+              description={user?.name}
+              onClick={logOut}
+            />
+          </LogOutContainer>
+        )}
       </BottomItens>
     </Container>
   );
