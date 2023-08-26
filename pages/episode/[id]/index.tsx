@@ -56,8 +56,6 @@ export default function EpisodePage() {
     }
   }, [episode, setSelectedPatient, setSelectedEpisode]);
 
-  console.log(getEpisodeById);
-
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
       <Container>

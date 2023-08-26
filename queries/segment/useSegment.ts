@@ -1,8 +1,13 @@
-import { request } from "@queries/request";
+import { RequestService, request } from "@queries/request";
 import { ToastError, ToastSuccess } from "@utils/toats";
 import { useMutation } from "react-query";
 import { IIntervetion, ISegment, ISymptom } from "types";
 import { useUpdateSegmentOnCache } from "./hooks/useUpdateSegmentOnCache";
+import { hasToken } from "@utils/localStorage/token";
+
+const getSegmentService = (): RequestService => {
+  return hasToken() ? "segment" : "segment-guest";
+};
 
 type CreationInterventions = Omit<
   IIntervetion,
@@ -29,7 +34,7 @@ type UpdateSegmentPayload = {
 const updateSegment = async ({ params, body }: UpdateSegmentPayload) => {
   const { data } = await request({
     method: "PATCH",
-    service: "segment",
+    service: getSegmentService(),
     url: `/${params.segment_id}`,
     data: body,
   });
@@ -64,7 +69,7 @@ type CreateSegmentPayload = {
 const createSegment = async ({ body }: CreateSegmentPayload) => {
   const { data } = await request({
     method: "POST",
-    service: "segment",
+    service: getSegmentService(),
     data: body,
   });
 
@@ -98,7 +103,7 @@ type DeleteSegmentPayload = {
 const deleteSegment = async ({ params }: DeleteSegmentPayload) => {
   const { data } = await request({
     method: "DELETE",
-    service: "segment",
+    service: getSegmentService(),
     url: `/${params.segment_id}`,
   });
 

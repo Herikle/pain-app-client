@@ -11,7 +11,8 @@ export type RequestService =
   | "public"
   | "track"
   | "track-guest"
-  | "segment";
+  | "segment"
+  | "segment-guest";
 
 type IRequest = {
   method: Method;
