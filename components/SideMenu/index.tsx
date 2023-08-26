@@ -135,6 +135,7 @@ export const SideMenu = () => {
               label="Exit session"
               description={user?.name}
               onClick={logOut}
+              cursor="pointer"
             />
           </LogOutContainer>
         )}

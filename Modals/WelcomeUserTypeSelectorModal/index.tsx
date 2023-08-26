@@ -74,7 +74,7 @@ const Child = ({ onClose }: ChildProps) => {
               height: "70vh",
               position: "fixed",
               background: "#ffffff0",
-              zIndex: 1050,
+              zIndex: 950,
             }}
           />
         </Portal>

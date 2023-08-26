@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled, { css } from "styled-components";
 import { Icon } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
+import { CSSProperties } from "react";
 
 type Props = {
   label: string;
@@ -16,6 +17,7 @@ type Props = {
   onClick?: () => void;
   disabled?: boolean;
   notAllowed?: boolean;
+  cursor?: CSSProperties["cursor"];
 };
 
 export const MenuLink = ({
@@ -26,6 +28,7 @@ export const MenuLink = ({
   fullWidth,
   href,
   onClick,
+  cursor,
   disabled = false,
   notAllowed = false,
 }: Props) => {
@@ -47,7 +50,14 @@ export const MenuLink = ({
   };
 
   return render(
-    <Container onClick={onClick} $disabled={disabled} $notAllowed={notAllowed}>
+    <Container
+      onClick={onClick}
+      $disabled={disabled}
+      $notAllowed={notAllowed}
+      style={{
+        cursor: cursor,
+      }}
+    >
       {PhosphorIcon ? (
         <PhosphorIcon size={36} color={theme.colors.pure_white} />
       ) : (
