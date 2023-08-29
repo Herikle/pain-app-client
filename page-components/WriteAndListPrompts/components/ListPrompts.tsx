@@ -1,6 +1,11 @@
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { BookOpenText, FilePlus, Star } from "@phosphor-icons/react";
+import {
+  BookOpenText,
+  FilePlus,
+  FloppyDisk,
+  Star,
+} from "@phosphor-icons/react";
 import { LightScrollBar, theme } from "@styles/theme";
 import styled from "styled-components";
 import { IPrompt } from "types";
@@ -84,7 +89,7 @@ export const ListPrompts = ({
         ) : (
           <Text align="center">
             {"You don't have any saved prompts. Press"}{" "}
-            <Star
+            <FloppyDisk
               size={16}
               cursor="pointer "
               color={theme.colors.text_switched}

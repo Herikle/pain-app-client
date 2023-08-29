@@ -70,33 +70,35 @@ export const WriteAndListPrompts = ({
 }: WriteAndListPromptsProps) => {
   const savePrompt = useSavePrompt();
 
+  const hasText = !!prompt;
+
   const updatePrompt = useUpdatePrompt();
 
+  const createPrompt = async () => {
+    const createdPrompt = await savePrompt.mutateAsync({
+      body: {
+        prompt: prompt,
+        attributes: attributes,
+        options,
+        attributesConfig,
+      },
+    });
+    Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));
+  };
+
   const onSavePrompt = async (props?: SavePrompt) => {
-    if (promptHasChanged) {
-      if (prompt_id) {
-        await updatePrompt.mutateAsync({
-          params: {
-            prompt_id,
-          },
-          body: {
-            attributes: props?.attributes ?? attributes,
-            prompt,
-            options,
-            attributesConfig: props?.attributesConfig ?? attributesConfig,
-          },
-        });
-      } else {
-        const createdPrompt = await savePrompt.mutateAsync({
-          body: {
-            prompt: prompt,
-            attributes: attributes,
-            options,
-            attributesConfig,
-          },
-        });
-        Router.push(RoutesPath.prompt.replace("[id]", createdPrompt._id));
-      }
+    if (prompt_id && promptHasChanged) {
+      await updatePrompt.mutateAsync({
+        params: {
+          prompt_id,
+        },
+        body: {
+          attributes: props?.attributes ?? attributes,
+          prompt,
+          options,
+          attributesConfig: props?.attributesConfig ?? attributesConfig,
+        },
+      });
     }
   };
 
@@ -208,6 +210,23 @@ export const WriteAndListPrompts = ({
                   Tokens used on this input: {tokensUsage.prompt_tokens}
                 </Text>
               </FlexRow>
+            )}
+            {!prompt_id && (
+              <CustomLoadingButton
+                icon={<FloppyDisk size={32} color={theme.colors.primary} />}
+                loading={savePrompt.isLoading}
+                size={32}
+                onClick={() => createPrompt()}
+                disabled={!hasText}
+                tooltip={
+                  !hasText
+                    ? {
+                        text: "Write something to save",
+                        id: "write-something-to-save",
+                      }
+                    : undefined
+                }
+              />
             )}
           </WritePromptBottom>
         </WritePromptContainer>

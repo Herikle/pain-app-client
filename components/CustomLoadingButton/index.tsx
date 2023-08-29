@@ -36,7 +36,7 @@ export const CustomLoadingButton = ({
   return render(
     <>
       <Container
-        onClick={!!loading ? undefined : onClick}
+        onClick={!!loading || disabled ? undefined : onClick}
         id={tooltip?.id}
         $size={size}
         $isLoading={!!loading}
@@ -46,7 +46,7 @@ export const CustomLoadingButton = ({
         <LoadingWrapper loading={!!loading} overContainer size={16} />
         {icon}
       </Container>
-      {tooltip && (
+      {!!tooltip && (
         <Tooltip anchorSelect={`#${tooltip.id}`}>{tooltip.text}</Tooltip>
       )}
     </>
@@ -83,7 +83,7 @@ const Container = styled.div<ContainerProps>`
   ${({ $disabled }) =>
     $disabled &&
     css`
-      pointer-events: none;
+      cursor: not-allowed;
       opacity: 0.5;
     `}
 `;
