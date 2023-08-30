@@ -54,8 +54,9 @@ const Content = styled.div`
   ${media.up.tablet`
     padding-inline: 1rem;   
     padding-block: 2rem;
-    height: calc(100vh - ${MOBILE_MENU_HEIGHT + TOP_BAR_HEIGHT_PIXELS}px);
+    height: 100%;
     margin-top: ${TOP_BAR_HEIGHT_PIXELS}px;
+    margin-bottom: ${MOBILE_MENU_HEIGHT}px;
   `}
 `;
 const Container = styled.div`

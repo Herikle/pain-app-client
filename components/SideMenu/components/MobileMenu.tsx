@@ -78,6 +78,7 @@ export const MOBILE_MENU_HEIGHT = 92;
 const Container = styled.div`
   width: 100%;
   height: ${MOBILE_MENU_HEIGHT}px;
+  min-height: ${MOBILE_MENU_HEIGHT}px;
   background-color: ${theme.colors.primary};
   display: flex;
   justify-content: center;
@@ -88,4 +89,5 @@ const Container = styled.div`
   ${media.up.mobileL`
     gap: 0;
   `}
+  z-index: 50;
 `;
