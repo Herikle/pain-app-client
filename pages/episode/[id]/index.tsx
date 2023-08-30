@@ -22,6 +22,8 @@ import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { useAuth } from "@utils/hooks/useAuth";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
+import { media } from "@styles/media-query";
+import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -115,11 +117,13 @@ export default function EpisodePage() {
           </FlexColumn>
         </TrackContainer>
       </Container>
-      <SaveButtonContainer>
-        <Button onClick={openSaveModal} width="150px">
-          Save
-        </Button>
-      </SaveButtonContainer>
+      {!isLogged && (
+        <SaveButtonContainer>
+          <Button onClick={openSaveModal} width="150px">
+            Save
+          </Button>
+        </SaveButtonContainer>
+      )}
       {saveModal && (
         <ConfirmActionModal
           description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
@@ -146,6 +150,10 @@ const SaveButtonContainer = styled.div`
   position: fixed;
   right: 2rem;
   bottom: 2rem;
+  ${media.up.tablet`
+    bottom: calc(${MOBILE_MENU_HEIGHT}px + 1rem);
+    right: 1rem;
+  `}
 `;
 
 const TrackContainer = styled.div`

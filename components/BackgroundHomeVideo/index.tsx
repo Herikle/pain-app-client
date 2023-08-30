@@ -1,11 +1,13 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Router from "next/router";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
-import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
+
 import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { RoutesPath } from "@utils/routes";
+import { media, useMatchMediaUp } from "@styles/media-query";
+import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
 
 export const BackgroundVideo = () => {
   const createEpisode = useCreateEpisode();
@@ -20,6 +22,8 @@ export const BackgroundVideo = () => {
     Router.push(RoutesPath.episode.replace("[id]", created._id));
   };
 
+  const isMobileL = useMatchMediaUp("mobileL");
+
   return (
     <Container>
       <Video src="/video/video-background.mp4" autoPlay muted loop />
@@ -27,7 +31,7 @@ export const BackgroundVideo = () => {
       <Apresentation>
         <Text
           variant="h1"
-          fontSize="80px"
+          fontSize={isMobileL ? "40px" : "80px"}
           fontWeight="400"
           color={"pure_white"}
         >
@@ -40,7 +44,7 @@ export const BackgroundVideo = () => {
         </Text>
         <Button
           color="cta"
-          width="400px"
+          width={isMobileL ? "100%" : "400px"}
           onClick={onCreateEpisode}
           loading={createEpisode.isLoading}
         >
@@ -61,6 +65,12 @@ const Apresentation = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 3rem;
+  ${media.up.mobileL`
+    padding-inline:1rem;
+    top: 40%;
+    width: 100%;
+    gap: 2rem;
+  `}
 `;
 
 const Overlay = styled.div`
@@ -75,6 +85,10 @@ const Video = styled.video`
   position: absolute;
   width: 100%;
   height: auto;
+  ${media.up.laptop`
+    height: 100%;
+    width: auto;
+  `}
 `;
 
 const Container = styled.div`

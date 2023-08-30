@@ -1,4 +1,4 @@
-import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
+import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
 import { Register, RegisterPayload } from "@page-components/Register";
 import { SignUpPayload, useSignUp } from "@queries/auth/useAuth";
 import {

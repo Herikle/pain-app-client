@@ -1,6 +1,7 @@
 export const IconsPath = {
   GPT: "/icons/gpt.svg",
   PainTrack: "/icons/pain-track.svg",
+  Burger: "/icons/burger.svg",
   GPTBlack: "/icons/gpt-black.svg",
   DoctorBlack: "/icons/doctor-black.svg",
   Doctor: "/icons/doctor.svg",

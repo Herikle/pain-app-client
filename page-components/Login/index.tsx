@@ -8,6 +8,7 @@ import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { RoutesPath } from "utils/routes";
 import Link from "next/link";
+import { media } from "@styles/media-query";
 
 const LoginSchema = z.object({
   email: z.string().email().nonempty(),
@@ -92,4 +93,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  ${media.up.mobileM`
+    padding-inline: 1.5rem;   
+  `}
 `;

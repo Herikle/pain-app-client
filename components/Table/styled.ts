@@ -1,4 +1,5 @@
 import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { media } from "@styles/media-query";
 import { theme } from "@styles/theme";
 import styled, { css } from "styled-components";
 
@@ -78,8 +79,14 @@ export const Container = styled.div`
   min-width: 500px;
   display: flex;
   flex-direction: column;
+  ${media.up.tablet`
+    width: 100%; 
+  `}
 `;
 
 export const Wrapper = styled(FlexColumn)`
   gap: 1rem;
+  ${media.up.tablet`
+    width: 100%; 
+  `}
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Inter } from "next/font/google";
 import { Text } from "@components/Text";
 import Link from "next/link";
-import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar";
+import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,11 +14,6 @@ export const Footer = () => {
         Pain<strong>Track</strong>
       </Text>
       <FooterLinks>
-        <Link href="#contact">
-          <Text color="pure_white" opacity={0.4}>
-            Contact
-          </Text>
-        </Link>
         <Link href="#about">
           <Text color="pure_white" opacity={0.4}>
             About PainTrack.org

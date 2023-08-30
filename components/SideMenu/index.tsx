@@ -1,19 +1,15 @@
-import { theme } from "@styles/theme";
-import Image from "next/image";
-import styled from "styled-components";
-import Link from "next/link";
 import { RoutesPath } from "utils/routes";
-import { IconsPath } from "utils/icons";
-import { MenuLink } from "@components/MenuLink";
 import { useAuth } from "utils/hooks/useAuth";
-import { SignOut } from "@phosphor-icons/react";
-import { capitalize } from "utils/helpers/string";
 import { useRouter } from "next/router";
 import { useSelectedPatientValue } from "state/useSelectedPatient";
 import { useSelectedEpisodeValue } from "state/useSelectedEpisode";
 import { useGetLastPrompt } from "@queries/prompt/useGetPrompt";
 import { useMemo } from "react";
 import { useSelectedPromptValue } from "state/useSelectedPrompt";
+import { useMatchMediaUp } from "@styles/media-query";
+import { DesktopMenu } from "./components/DesktopMenu";
+import { IEpisode, IMe, IPatient, IPrompt } from "types";
+import { MobileMenu } from "./components/MobileMenu";
 
 export const SideMenu = () => {
   const { user, logOut, isLogged } = useAuth();
@@ -68,102 +64,52 @@ export const SideMenu = () => {
     return RoutesPath.new_prompt;
   };
 
-  return (
-    <Container>
-      <TopItens>
-        <Link href={RoutesPath.home}>
-          <Image
-            src={IconsPath.PainTrack}
-            alt="Pain Track Icon"
-            width="85"
-            height="55"
-          />
-        </Link>
-        {isLogged ? (
-          <>
-            <MenuLink
-              label={capitalize(user?.role) ?? "Doctor"}
-              href={RoutesPath.profile}
-              description={user?.name}
-              iconPath={IconsPath.Doctor}
-              disabled={pathname !== RoutesPath.profile}
-              fullWidth
-            />
-            <MenuLink
-              label="Patient"
-              description={selectedPatient?.name}
-              href={patientLinkHref()}
-              iconPath={IconsPath.Patient}
-              disabled={!pathname.includes(RoutesPath.new_patient)}
-              notAllowed={patientLinkIsNotAllowed}
-              fullWidth
-            />
-          </>
-        ) : (
-          <MenuLink
-            label="Guest User"
-            iconPath={IconsPath.Doctor}
-            disabled={true}
-            fullWidth
-          />
-        )}
-        <MenuLink
-          label="Pain Episode"
-          description={selectedEpisode?.name}
-          href={episodeLinkHref()}
-          iconPath={IconsPath.Episode}
-          disabled={!pathname.includes(RoutesPath.episode)}
-          notAllowed={episodeLinkIsNotAllowed}
-          fullWidth
-        />
-        {user?.super && (
-          <MenuLink
-            label="ChatGPT AI"
-            description={focusedPrompt?.title}
-            href={promptHref()}
-            iconPath={IconsPath.GPT}
-            disabled={!pathname.includes(RoutesPath.new_prompt)}
-            fullWidth
-          />
-        )}
-      </TopItens>
-      <BottomItens>
-        {isLogged && (
-          <LogOutContainer>
-            <MenuLink
-              PhosphorIcon={SignOut}
-              label="Exit session"
-              description={user?.name}
-              onClick={logOut}
-              cursor="pointer"
-            />
-          </LogOutContainer>
-        )}
-      </BottomItens>
-    </Container>
+  const isTabletUp = useMatchMediaUp("tablet");
+
+  return isTabletUp ? (
+    <MobileMenu
+      isLogged={isLogged}
+      user={user}
+      selectedPatient={selectedPatient}
+      patientLinkHref={patientLinkHref}
+      pathname={pathname}
+      patientLinkIsNotAllowed={patientLinkIsNotAllowed}
+      selectedEpisode={selectedEpisode}
+      episodeLinkHref={episodeLinkHref}
+      episodeLinkIsNotAllowed={episodeLinkIsNotAllowed}
+      focusedPrompt={focusedPrompt}
+      promptHref={promptHref}
+      logOut={logOut}
+    />
+  ) : (
+    <DesktopMenu
+      isLogged={isLogged}
+      user={user}
+      selectedPatient={selectedPatient}
+      patientLinkHref={patientLinkHref}
+      pathname={pathname}
+      patientLinkIsNotAllowed={patientLinkIsNotAllowed}
+      selectedEpisode={selectedEpisode}
+      episodeLinkHref={episodeLinkHref}
+      episodeLinkIsNotAllowed={episodeLinkIsNotAllowed}
+      focusedPrompt={focusedPrompt}
+      promptHref={promptHref}
+      logOut={logOut}
+    />
   );
 };
 
-const LogOutContainer = styled.div``;
-
-const BottomItens = styled.div`
-  padding-bottom: 3rem;
-`;
-
-const TopItens = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-`;
-
-const Container = styled.div`
-  width: 250px;
-  height: 100vh;
-  background-color: ${theme.colors.primary};
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 3rem;
-`;
+export type MenuTypeProps = {
+  isLogged: boolean;
+  user: IMe | undefined;
+  selectedPatient: IPatient | null;
+  patientLinkHref: () => string;
+  pathname: string;
+  patientLinkIsNotAllowed: boolean;
+  selectedEpisode: IEpisode | null;
+  episodeLinkHref: () => string;
+  episodeLinkIsNotAllowed: boolean;
+  focusedPrompt: IPrompt | null | undefined;
+  promptHref: () => string;
+  logOut: () => void;
+};

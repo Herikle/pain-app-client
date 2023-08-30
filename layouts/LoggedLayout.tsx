@@ -5,6 +5,10 @@ import { LoadingPage } from "./Loading";
 import { useEffect } from "react";
 import Router from "next/router";
 import { RoutesPath } from "utils/routes";
+import { media, useMatchMediaUp } from "@styles/media-query";
+import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
+import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
+import { TopBar } from "@components/TopBar";
 
 type Props = {
   children: React.ReactNode;
@@ -25,11 +29,14 @@ export const LoggedLayout = ({ children, allowGuest, onlySuper }: Props) => {
     }
   }, [user, onlySuper]);
 
+  const isTabletUp = useMatchMediaUp("tablet");
+
   return (
     <Container>
       {isLogged || allowGuest ? (
         <>
           <SideMenu />
+          {isTabletUp && <TopBar />}
           <Content id="main-content">{children}</Content>
         </>
       ) : (
@@ -44,6 +51,12 @@ const Content = styled.div`
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  ${media.up.tablet`
+    padding-inline: 1rem;   
+    padding-block: 2rem;
+    height: calc(100vh - ${MOBILE_MENU_HEIGHT + TOP_BAR_HEIGHT_PIXELS}px);
+    margin-top: ${TOP_BAR_HEIGHT_PIXELS}px;
+  `}
 `;
 const Container = styled.div`
   display: flex;

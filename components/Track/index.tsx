@@ -11,6 +11,7 @@ import { ISegment, ITrack } from "types";
 import { Element } from "react-scroll";
 import { SegmentModalTabs } from "Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
+import { media } from "@styles/media-query";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -137,4 +138,7 @@ const Container = styled.div`
 
 const Wrapper = styled(FlexColumn)`
   padding-left: 2rem;
+  ${media.up.mobileL`
+    padding-left: 0;
+  `}
 `;

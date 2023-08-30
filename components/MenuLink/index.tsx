@@ -6,6 +6,8 @@ import styled, { css } from "styled-components";
 import { Icon } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { CSSProperties } from "react";
+import { media, useMatchMediaUp } from "@styles/media-query";
+import { transparentize } from "polished";
 
 type Props = {
   label: string;
@@ -32,13 +34,15 @@ export const MenuLink = ({
   disabled = false,
   notAllowed = false,
 }: Props) => {
+  const isTabletUp = useMatchMediaUp("tablet");
+
   const render = (children) => {
     if (href && !notAllowed) {
       return (
         <Link
           href={href}
           style={{
-            width: fullWidth ? "100%" : "auto",
+            width: fullWidth && !isTabletUp ? "100%" : "auto",
           }}
         >
           {children}
@@ -66,15 +70,19 @@ export const MenuLink = ({
         )
       )}
       <DescriptionContainer>
-        {description && (
-          <Text
-            color="pure_white"
-            textElipsis
-            maxWidth="140px"
-            minWidth="140px"
-          >
-            {description}
-          </Text>
+        {!isTabletUp && (
+          <>
+            {description && (
+              <Text
+                color="pure_white"
+                textElipsis
+                maxWidth="140px"
+                minWidth="140px"
+              >
+                {description}
+              </Text>
+            )}
+          </>
         )}
         <Text variant="body2Bold" color="pure_white">
           {label}
@@ -95,16 +103,40 @@ type ContainerProps = {
 
 const Container = styled(FlexRow)<ContainerProps>`
   width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
+  gap: 0.5rem;
   ${({ $disabled }) =>
-    $disabled &&
-    css`
-      opacity: 0.5;
-    `}
+    $disabled
+      ? css`
+          opacity: 0.5;
+        `
+      : css`
+          ${media.up.tablet`
+          background-color: ${transparentize(
+            0.7,
+            theme.colors.pure_black
+          )};        
+      `}
+        `}
 
   ${({ $notAllowed }) =>
     $notAllowed &&
     css`
       cursor: not-allowed;
+    `}    
+
+    ${media.up.tablet`
+      flex-direction: column;
+      width: fit-content;
+      justify-content: center;     
+      border-radius: 8px;
+      padding: 0.5rem;
+      padding-inline: 1rem; 
+    `}
+
+    ${media.up.mobileM`
+      padding-inline:0.5rem;
     `}
 `;
