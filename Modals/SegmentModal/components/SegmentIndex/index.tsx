@@ -2,15 +2,14 @@ import styled from "styled-components";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
-import { IntensitiesPage, IntensitiesPageForm } from "../IntensitiesPage";
-import { SegmentPage, SegmentPageForm } from "../SegmentPage";
+import { IntensitiesPage } from "../IntensitiesPage";
+import { SegmentPage } from "../SegmentPage";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash, X } from "@phosphor-icons/react";
-import { notImplemented } from "@utils/helpers/dev";
 import { QualityPage } from "../QualityPage";
 import { InterventionPage } from "../InterventionPage";
 import { SymptomsPage } from "../SymptomsPage";
@@ -27,6 +26,7 @@ import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageForm";
 import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 import { SegmentModalTabs } from "../..";
+import { media } from "@styles/media-query";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -222,6 +222,9 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
                   backgroundColor: theme.colors.primary,
                 },
               }}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
             >
               <Tab
                 label={
@@ -346,6 +349,10 @@ const XContainer = styled.div`
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
+  ${media.up.mobileL`
+    top: 0.5rem;
+    right: 0.5rem;
+  `}
 `;
 
 const ModalOverlay = styled.div`
@@ -372,16 +379,29 @@ const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   width: 950px;
-  min-height: 720px;
+  min-height: 750px;
   height: fit-content;
   max-width: 80vw;
   max-height: 80vh;
   justify-content: space-between;
   position: relative;
   overflow: auto;
-  ${LightScrollBar};
-  @media screen and (max-width: 1366px) {
-    min-height: 80vh;
-  }
   padding: 2rem;
+  ${LightScrollBar};
+  ${media.up.laptopL`
+    min-height: 80vh;    
+  `}
+
+  ${media.up.tablet`
+    min-width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    min-height: 100vh;   
+    padding: 1rem; 
+  `}
+
+  ${media.up.mobileL`
+    padding: 0;
+    padding-top:2rem;  
+  `}
 `;

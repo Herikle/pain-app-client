@@ -14,6 +14,7 @@ import { ITrack } from "types";
 import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { TrackIntensityOverTrackPage } from "./TrackIntensityOverTrackPage";
+import { media } from "@styles/media-query";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -125,6 +126,9 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
                   backgroundColor: theme.colors.primary,
                 },
               }}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
             >
               <Tab
                 label={
@@ -208,14 +212,29 @@ const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   width: 880px;
-  min-height: 650px;
+  min-height: 800px;
   height: fit-content;
   max-width: 80vw;
   max-height: 80vh;
   justify-content: space-between;
   overflow: auto;
+  padding: 2rem;
   ${LightScrollBar};
-  @media screen and (max-width: 1366px) {
-    min-height: 80vh;
-  }
+
+  ${media.up.laptopL`
+    min-height: 80vh;    
+  `}
+
+  ${media.up.tablet`
+    min-width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    min-height: 100vh;
+    padding: 1rem;        
+  `}
+
+${media.up.mobileL`
+    padding: 0;
+    padding-top:2rem;
+  `}
 `;

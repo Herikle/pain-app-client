@@ -61,7 +61,7 @@ export const PasswordSettingsForm = () => {
       <Container>
         <Text variant="h1">Password settings</Text>
         <Grid container spacing={4}>
-          <Grid xs={4}>
+          <Grid xl={4} lg={4} md={4} sm={12} xs={12}>
             <TextField
               type="password"
               label="Type your current password"
@@ -70,7 +70,7 @@ export const PasswordSettingsForm = () => {
               error={errors.current_password?.message}
             />
           </Grid>
-          <Grid xs={4}>
+          <Grid xl={4} lg={4} md={4} sm={12} xs={12}>
             <TextField
               type="password"
               label="Type your new password"
@@ -79,7 +79,7 @@ export const PasswordSettingsForm = () => {
               error={errors.new_password?.message}
             />
           </Grid>
-          <Grid xs={4}>
+          <Grid xl={4} lg={4} md={4} sm={12} xs={12}>
             <TextField
               type="password"
               label="Confirm your new password"

@@ -17,6 +17,7 @@ import {
   qualityTextureEnum,
 } from "types";
 import { useForm, z, zodResolver } from "@utils/helpers/form-validation";
+import { media } from "@styles/media-query";
 
 const QualitySchema = z.object({
   texture: z.enum(qualityTextureEnum).optional(),
@@ -72,13 +73,13 @@ export const QualityPage = ({
 
   return (
     <form onChange={onUpdate}>
-      <Container gap={4}>
+      <Container>
         <SelectionSession gap={2}>
           <Section gap={1}>
             <Text variant="body1Bold">Texture</Text>
             <Grid container spacing={1}>
               {textures.map((texture) => (
-                <Grid xs={6} key={texture.id}>
+                <Grid xl={6} lg={6} md={6} sm={12} xs={12} key={texture.id}>
                   <QualityAttribute
                     iconPath={texture.iconPath}
                     label={texture.label}
@@ -96,7 +97,7 @@ export const QualityPage = ({
             <Text variant="body1Bold">Depth</Text>
             <Grid container spacing={1}>
               {depths.map((depth) => (
-                <Grid xs={6} key={depth.id}>
+                <Grid xl={6} lg={6} md={6} sm={12} xs={12} key={depth.id}>
                   <QualityAttribute
                     iconPath={depth.iconPath}
                     label={depth.label}
@@ -142,10 +143,25 @@ const Section = styled(FlexColumn)``;
 
 const CommentSection = styled(FlexColumn)`
   width: 40%;
+
+  ${media.down.mobileL`
+    width: 100%;
+  `}
 `;
 
 const SelectionSession = styled(FlexColumn)`
   width: 60%;
+  ${media.down.mobileL`
+    width: 100%;
+  `}
 `;
 
-const Container = styled(FlexRow)``;
+const Container = styled.div`
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+
+  ${media.up.mobileL`
+    flex-direction: column;
+  `}
+`;

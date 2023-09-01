@@ -15,6 +15,7 @@ import {
   onChangeValueProps,
 } from "@components/Track/components/Segment/components/SegmentValues";
 import { DrawObject } from "@components/Paint";
+import { media } from "@styles/media-query";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
@@ -87,7 +88,7 @@ export const IntensitiesPage = ({
           <Radio label="Percentage" value="values" {...register("type")} />
         </FlexRow>
         <FlexColumn width="100%">
-          <FlexRow gap={4}>
+          <DrawAndJustificationContainer>
             <FlexRow gap={0} justify="flex-start">
               <SegmentsTitleComponent />
               <Segment
@@ -114,7 +115,7 @@ export const IntensitiesPage = ({
               {...register("justification")}
               error={errors.justification?.message}
             />
-          </FlexRow>
+          </DrawAndJustificationContainer>
           {watch("type") === "draw" ? (
             <Text maxWidth="300px">
               Tip: try to measure your pain drawing a line with the mouse
@@ -134,5 +135,15 @@ export const IntensitiesPage = ({
     </form>
   );
 };
+
+const DrawAndJustificationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+
+  ${media.up.mobileL`
+    flex-direction: column;
+  `}
+`;
 
 const Container = styled(FlexColumn)``;

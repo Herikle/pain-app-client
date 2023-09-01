@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { media, useMatchMediaUp } from "@styles/media-query";
 
 const schema = z.object({
   name: z.string().nonempty(),
@@ -50,10 +51,12 @@ export const TrackDetailsPage = ({
     onValidChange(isValid);
   }, [isValid, onValidChange]);
 
+  const isMobileL = useMatchMediaUp("mobileL");
+
   return (
     <form onChange={onUpdate}>
-      <Container gap={4} align="flex-start">
-        <Grid container spacing={4} width="50%">
+      <Container>
+        <Grid container spacing={4} width={isMobileL ? "100%" : "50%"}>
           <Grid xs={12}>
             <TextField
               label="Name"
@@ -80,7 +83,11 @@ export const TrackDetailsPage = ({
             </FlexColumn>
           </Grid>
         </Grid>
-        <FlexColumn width="50%" gap={4} justify="flex-start">
+        <FlexColumn
+          width={isMobileL ? "100%" : "50%"}
+          gap={4}
+          justify="flex-start"
+        >
           <TextArea
             label="Comment"
             minRows={12}
@@ -93,4 +100,12 @@ export const TrackDetailsPage = ({
   );
 };
 
-const Container = styled(FlexRow)``;
+const Container = styled.div`
+  display: flex;
+  gap: 4rem;
+  align-items: flex-start;
+
+  ${media.up.mobileL`
+    flex-direction: column;
+  `}
+`;

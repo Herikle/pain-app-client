@@ -1,7 +1,8 @@
 import { Portal } from "@components/Portal";
 import { X } from "@phosphor-icons/react";
+import { media } from "@styles/media-query";
 import { LightScrollBar, theme } from "@styles/theme";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 type Props = {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ type Props = {
   hasCloseButton?: boolean;
   removeOverlay?: boolean;
   removePadding?: boolean;
+  fullScreenOnMobile?: boolean;
 };
 
 export const Modal = ({
@@ -19,6 +21,7 @@ export const Modal = ({
   hasCloseButton,
   removeOverlay = false,
   removePadding = false,
+  fullScreenOnMobile = false,
 }: Props) => {
   const isOpen = open ?? true;
 
@@ -27,7 +30,10 @@ export const Modal = ({
       {isOpen && (
         <>
           {!removeOverlay && <ModalOverlay onClick={onClose} />}
-          <Container $removePadding={removePadding}>
+          <Container
+            $removePadding={removePadding}
+            $fullScreenOnMobile={fullScreenOnMobile}
+          >
             {children}
             {hasCloseButton && (
               <XContainer>
@@ -50,6 +56,10 @@ const XContainer = styled.div`
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
+  ${media.up.mobileL`
+    top: 0.5rem;
+    right: 0.5rem;
+  `}
 `;
 
 const ModalOverlay = styled.div`
@@ -64,7 +74,8 @@ const ModalOverlay = styled.div`
 `;
 
 type ContainerProps = {
-  $removePadding?: boolean;
+  $removePadding: boolean;
+  $fullScreenOnMobile: boolean;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -78,4 +89,17 @@ const Container = styled.div<ContainerProps>`
   max-height: 90vh;
   overflow-y: auto;
   ${LightScrollBar};
+
+  ${({ $fullScreenOnMobile }) =>
+    $fullScreenOnMobile &&
+    css`
+      ${media.up.tablet`
+      top: 0;
+      left: 0;
+      transform: none;
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      `}
+    `}
 `;

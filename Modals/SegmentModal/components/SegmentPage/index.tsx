@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { CommonSegmentModalProps } from "../..";
+import { media, useMatchMediaUp } from "@styles/media-query";
 
 const SegmentPageSchema = z.object({
   name: z.string().optional(),
@@ -54,10 +55,12 @@ export const SegmentPage = ({
     onValidChange(isValid);
   }, [isValid, onValidChange]);
 
+  const isMobileL = useMatchMediaUp("mobileL");
+
   return (
     <form onChange={onUpdate}>
-      <Container gap={4}>
-        <Grid container spacing={4} width="50%">
+      <Container>
+        <Grid container spacing={4} width={isMobileL ? "100%" : "50%"}>
           <Grid xs={12}>
             <TextField
               label="Segment Name"
@@ -142,7 +145,11 @@ export const SegmentPage = ({
             />
           </Grid>
         </Grid>
-        <FlexColumn width="50%" gap={4} justify="flex-start">
+        <FlexColumn
+          width={isMobileL ? "100%" : "50%"}
+          gap={4}
+          justify="flex-start"
+        >
           <RadioContainer>
             <Radio label="Acute" value="acute" {...register("pain_type")} />
             <Radio label="Chronic" value="chronic" {...register("pain_type")} />
@@ -161,4 +168,12 @@ export const SegmentPage = ({
 
 const RadioContainer = styled(FlexColumn)``;
 
-const Container = styled(FlexRow)``;
+const Container = styled.div`
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+
+  ${media.up.mobileL`
+    flex-direction: column;
+  `}
+`;

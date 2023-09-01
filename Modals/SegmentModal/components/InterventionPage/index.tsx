@@ -16,6 +16,8 @@ import { InterventionCard } from "./components/InterventionCard";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { CommonSegmentModalProps } from "../..";
 import update from "immutability-helper";
+import { media } from "@styles/media-query";
+import { LightScrollBar } from "@styles/theme";
 
 const fakeDate = new Date().toISOString();
 
@@ -106,7 +108,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
 
   return (
     <>
-      <Container align="flex-start" gap={4}>
+      <Container>
         <ListIntervention>
           <AddTitle justify="space-between">
             <FlexRow>
@@ -180,10 +182,28 @@ const AddTitle = styled(FlexRow)`
 
 const Observation = styled(FlexColumn)`
   width: 50%;
+  ${media.down.mobileL`
+    width: 100%;
+  `}
 `;
 
 const ListIntervention = styled(FlexColumn)`
   width: 50%;
+  ${media.down.mobileL`
+    width: 100%;
+    max-height: 40vh;
+    overflow: auto;
+    ${LightScrollBar};
+    padding-right: 0.5rem;
+  `}
 `;
 
-const Container = styled(FlexRow)``;
+const Container = styled.div`
+  display: flex;
+  gap: 4rem;
+  align-items: flex-start;
+
+  ${media.up.mobileL`
+    flex-direction: column;
+  `}
+`;

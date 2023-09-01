@@ -29,7 +29,7 @@ const Child = ({
   tab = "segment",
 }: SegmentModalChildProps) => {
   return (
-    <Modal removePadding removeOverlay>
+    <Modal removePadding removeOverlay fullScreenOnMobile>
       <SegmentIndex
         tab={tab}
         segment={segment}

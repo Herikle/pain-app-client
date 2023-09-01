@@ -61,7 +61,7 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
-          <Grid xs={5}>
+          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Episode name"
               required
@@ -69,21 +69,21 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
               error={errors.name?.message}
             />
           </Grid>
-          <Grid xs={5}>
+          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Geographic location"
               {...register("location")}
               error={errors.location?.message}
             />
           </Grid>
-          <Grid xs={5}>
+          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Diagnosis/harm"
               {...register("diagnosis")}
               error={errors.diagnosis?.message}
             />
           </Grid>
-          <Grid xs={5}>
+          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Date and time of start"
               type="datetime-local"
@@ -91,7 +91,7 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
               error={errors.start_date?.message}
             />
           </Grid>
-          <Grid xs={11}>
+          <Grid xl={11} lg={11} md={11} sm={12} xs={12}>
             <TextArea
               label="Comment"
               minRows={7}

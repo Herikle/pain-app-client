@@ -10,7 +10,7 @@ export type TrackModalChildProps = {
 
 const Child = ({ onClose, track }: TrackModalChildProps) => {
   return (
-    <Modal onClose={onClose} hasCloseButton>
+    <Modal onClose={onClose} removePadding hasCloseButton fullScreenOnMobile>
       <TrackIndex track={track} onClose={onClose} />
     </Modal>
   );

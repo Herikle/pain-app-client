@@ -1,6 +1,7 @@
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Pencil, Trash } from "@phosphor-icons/react";
+import { media } from "@styles/media-query";
 import { ThemeColors, theme } from "@styles/theme";
 import { dateAndTimeFormat } from "@utils/helpers/date";
 import React from "react";
@@ -92,6 +93,7 @@ const ClickAnimation = keyframes`
 const IconsContainer = styled(FlexRow)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  display: none;
 `;
 
 const IconContainer = styled(FlexRow)`
@@ -122,6 +124,12 @@ const Container = styled(FlexRow)<ContainerProps>`
     $isActive
       ? css`
           background-color: ${theme.colors.primary};
+          ${media.up.tablet`
+            ${IconsContainer} {
+              opacity: 1;
+              display:flex;
+            }
+          `}
         `
       : css`
           &:hover {
