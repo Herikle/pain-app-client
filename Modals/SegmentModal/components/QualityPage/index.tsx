@@ -144,14 +144,14 @@ const Section = styled(FlexColumn)``;
 const CommentSection = styled(FlexColumn)`
   width: 40%;
 
-  ${media.down.mobileL`
+  ${media.up.mobileL`
     width: 100%;
   `}
 `;
 
 const SelectionSession = styled(FlexColumn)`
   width: 60%;
-  ${media.down.mobileL`
+  ${media.up.mobileL`
     width: 100%;
   `}
 `;
