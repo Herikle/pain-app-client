@@ -10,6 +10,7 @@ export const ThHeader = styled(FlexRow)`
 
 export const Th = styled.th`
   padding: 1rem;
+  white-space: nowrap;
 `;
 
 type ItemContainerProps = {
@@ -80,7 +81,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   ${media.up.tablet`
-    width: 100%; 
+    width: 100%;    
+    min-width: unset;
+    max-width: 100%;
+    overflow: auto; 
   `}
 `;
 

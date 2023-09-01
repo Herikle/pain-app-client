@@ -7,6 +7,7 @@ import { LoggedLayout } from "@layouts/LoggedLayout";
 import { AccountForm } from "@page-components/AccountForm";
 import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
 import { useGetPatients } from "@queries/patient/useGetPatients";
+import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
@@ -114,4 +115,7 @@ const Container = styled(FlexColumn)`
   align-items: flex-start;
   width: fit-content;
   gap: 2rem;
+  ${media.up.tablet`
+    width:100%;
+  `}
 `;

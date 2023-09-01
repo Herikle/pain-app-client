@@ -8,6 +8,8 @@ import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { RoutesPath } from "@utils/routes";
 import { media, useMatchMediaUp } from "@styles/media-query";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
+import { useAuth } from "@utils/hooks/useAuth";
+import Link from "next/link";
 
 export const BackgroundVideo = () => {
   const createEpisode = useCreateEpisode();
@@ -23,6 +25,8 @@ export const BackgroundVideo = () => {
   };
 
   const isMobileL = useMatchMediaUp("mobileL");
+
+  const { isLogged } = useAuth();
 
   return (
     <Container>
@@ -42,14 +46,22 @@ export const BackgroundVideo = () => {
           <br />
           the pain experience
         </Text>
-        <Button
-          color="cta"
-          width={isMobileL ? "100%" : "400px"}
-          onClick={onCreateEpisode}
-          loading={createEpisode.isLoading}
-        >
-          Register a pain episode
-        </Button>
+        {isLogged ? (
+          <Link href={RoutesPath.profile}>
+            <Button color="cta" width={isMobileL ? "100%" : "400px"}>
+              Go to profile
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            color="cta"
+            width={isMobileL ? "100%" : "400px"}
+            onClick={onCreateEpisode}
+            loading={createEpisode.isLoading}
+          >
+            Register a pain episode
+          </Button>
+        )}
       </Apresentation>
     </Container>
   );
