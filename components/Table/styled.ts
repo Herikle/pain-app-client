@@ -83,7 +83,7 @@ export const Container = styled.div`
   ${media.up.tablet`
     width: 100%;    
     min-width: unset;
-    max-width: 100%;
+    max-width: calc(100vw - 2rem);
     overflow: auto; 
   `}
 `;

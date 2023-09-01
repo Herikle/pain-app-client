@@ -68,7 +68,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
-          <Grid xs={6}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Name"
               placeholder="Choose a name"
@@ -77,7 +77,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
               error={errors.name?.message}
             />
           </Grid>
-          <Grid xs={6}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Date of birth"
               placeholder="DD/MM/YYYY"

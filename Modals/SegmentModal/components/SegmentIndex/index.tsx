@@ -402,6 +402,7 @@ const Container = styled(FlexColumn)`
 
   ${media.up.mobileL`
     padding: 0;
+    padding-bottom: 1rem;
     padding-top:2rem;  
   `}
 `;
