@@ -9,6 +9,9 @@ import { TextField } from "@components/TextField";
 import Link from "next/link";
 import { RoutesPath } from "utils/routes";
 import { media } from "@styles/media-query";
+import { FlexRow } from "@design-components/Flex";
+import { GoogleLogo } from "@phosphor-icons/react";
+import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 
 const RegisterSchema = z
   .object({
@@ -40,6 +43,16 @@ export const Register = ({ onSubmit, loading }: Props) => {
   } = useForm<RegisterPayload>({
     resolver: zodResolver(RegisterSchema),
   });
+
+  const getGoogleOAuthUrl = useGetGoogleOAuthUrl();
+
+  const onClickGoogleLogin = async () => {
+    const data = await getGoogleOAuthUrl.mutateAsync();
+
+    const url_redirect = data.url;
+
+    window.location.replace(url_redirect);
+  };
 
   const onSubmitForm = (payload: RegisterPayload) => {
     onSubmit(payload);
@@ -88,15 +101,21 @@ export const Register = ({ onSubmit, loading }: Props) => {
           <Button loading={loading} fullWidth>
             Register
           </Button>
-          {/* <Text variant="body2Bold" color="font_color">
+          <Text variant="body2Bold" color="font_color">
             or
           </Text>
-          <Button type="submit" fullWidth color="font_color">
+          <Button
+            type="submit"
+            fullWidth
+            color="font_color"
+            onClick={onClickGoogleLogin}
+            loading={getGoogleOAuthUrl.isLoading}
+          >
             <FlexRow>
               <GoogleLogo size={22} weight="bold" />
               Sign up with Google
             </FlexRow>
-          </Button> */}
+          </Button>
         </Buttons>
       </Container>
     </form>
