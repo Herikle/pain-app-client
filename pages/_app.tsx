@@ -9,6 +9,7 @@ import "@styles/global.css";
 import { Modals } from "Modals";
 import { VerifyUser } from "@logic-components/VerifyUser";
 import { FiltersController } from "@logic-components/FiltersController";
+import { Analytics } from "@vercel/analytics/react";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ const Application = ({ children }: ApplicationProps) => {
         <VerifyUser />
         <FiltersController />
       </main>
+      <Analytics />
     </>
   );
 };
