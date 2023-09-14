@@ -138,14 +138,14 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
                 }
                 sx={TabSx}
               />
-              <Tab
+              {/* <Tab
                 label={
                   <Text variant="body1Bold" color={getColor(1)}>
                     Intensity over track
                   </Text>
                 }
                 sx={TabSx}
-              />
+              /> */}
             </Tabs>
           </TabsContainer>
           <CustomTabPanel value={value} index={0}>
@@ -155,9 +155,9 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
               onValidChange={setTrackDetailsValid}
             />
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
+          {/* <CustomTabPanel value={value} index={1}>
             <TrackIntensityOverTrackPage track={track} />
-          </CustomTabPanel>
+          </CustomTabPanel> */}
         </Content>
         <FlexRow justify="space-between">
           <Trash

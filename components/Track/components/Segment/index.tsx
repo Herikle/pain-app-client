@@ -121,6 +121,38 @@ export const Segment = ({
                 </Tooltip>
               </>
             )}
+            {segment.interventions.length > 0 && (
+              <>
+                <Image
+                  src={IconsPath.Invervention}
+                  width={22}
+                  height={22}
+                  alt="Intervention"
+                  onClick={() => onClick?.("intervention")}
+                  id={`intervention-${segment._id}`}
+                />
+                <Tooltip anchorSelect={`#intervention-${segment._id}`}>
+                  {segment.interventions
+                    .map((intervention) => intervention.name)
+                    .join(", ")}
+                </Tooltip>
+              </>
+            )}
+            {segment.symptoms.length > 0 && (
+              <>
+                <Image
+                  src={IconsPath.Symptom}
+                  width={22}
+                  height={22}
+                  alt="Symptom"
+                  onClick={() => onClick?.("symptoms")}
+                  id={`symptom-${segment._id}`}
+                />
+                <Tooltip anchorSelect={`#symptom-${segment._id}`}>
+                  {segment.symptoms.map((symptom) => symptom.name).join(", ")}
+                </Tooltip>
+              </>
+            )}
           </QualityIcons>
         </SegmentFooter>
       )}
