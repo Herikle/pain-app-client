@@ -10,6 +10,7 @@ import { media, useMatchMediaUp } from "@styles/media-query";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
 import { useAuth } from "@utils/hooks/useAuth";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 export const BackgroundVideo = () => {
   const createEpisode = useCreateEpisode();
@@ -28,9 +29,23 @@ export const BackgroundVideo = () => {
 
   const { isLogged } = useAuth();
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.5;
+    }
+  }, []);
+
   return (
     <Container>
-      <Video src="/video/video-background.mp4" autoPlay muted loop />
+      <Video
+        ref={videoRef}
+        src="/video/video-background.mp4"
+        autoPlay
+        muted
+        loop
+      />
       <Overlay />
       <Apresentation>
         <Text
