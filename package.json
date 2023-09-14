@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^3.1.1",
     "@mui/material": "^5.13.7",
     "@phosphor-icons/react": "^2.0.10",
+    "@vercel/analytics": "^1.0.2",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "eslint": "^8.44.0",

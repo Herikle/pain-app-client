@@ -93,7 +93,6 @@ const ClickAnimation = keyframes`
 const IconsContainer = styled(FlexRow)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-  display: none;
 `;
 
 const IconContainer = styled(FlexRow)`
