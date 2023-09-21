@@ -8,10 +8,12 @@ import { FlexRow } from "@design-components/Flex";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { theme } from "@styles/theme";
 
 const SymptomSchema = zod.object({
   name: zod.string().nonempty(),
@@ -33,7 +35,7 @@ export const SymptomModal = ({
   onAdd,
   defaultValues,
 }: InterventionModalProps) => {
-  const { register, handleSubmit, reset, formState } = useForm<CreateSymptom>({
+  const { register, handleSubmit, reset, control } = useForm<CreateSymptom>({
     resolver: zodResolver(SymptomSchema),
     defaultValues: {
       name: defaultValues?.name,
@@ -61,11 +63,30 @@ export const SymptomModal = ({
               <TextField placeholder="Symptom" {...register("name")} required />
             </Grid>
             <Grid xs={12}>
-              <TextField
-                placeholder="Date and Hour"
-                type="datetime-local"
-                {...register("datetime")}
-                required
+              <Controller
+                control={control}
+                name="datetime"
+                render={({ field }) => (
+                  <DateTimePicker
+                    {...field}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        height: "36px",
+                        borderRadius: "2px",
+                        border: `1px solid ${theme.colors.secondary_font}`,
+                        "&.Mui-focused": {
+                          border: `1px solid ${theme.colors.secondary_color}`,
+                        },
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "& .MuiInputBase-input": {
+                        fontSize: "14px",
+                      },
+                    }}
+                  />
+                )}
               />
             </Grid>
           </Grid>
