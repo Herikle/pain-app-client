@@ -1,8 +1,8 @@
 import { Button } from "@components/Button";
 import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
-import { FlexColumn } from "@design-components/Flex";
-import { useForm } from "react-hook-form";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -12,12 +12,15 @@ import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { theme } from "@styles/theme";
+import { Text } from "@components/Text";
 
 const episodeSchema = z.object({
   name: z.string().nonempty("Name is required"),
   location: z.string().optional(),
   diagnosis: z.string().optional(),
-  start_date: z.string().optional(),
+  start_date: z.date().optional(),
   comment: z.string().optional(),
 });
 
@@ -28,16 +31,19 @@ type EpisodeFormProps = {
 };
 
 export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
-  const { register, handleSubmit, formState, reset } = useForm<EpisodeSchema>({
-    resolver: zodResolver(episodeSchema),
-    defaultValues: {
-      name: episode.name,
-      location: episode.location,
-      diagnosis: episode.diagnosis,
-      start_date: getDateAndTimeFromIsoDate(episode?.start_date),
-      comment: episode.comment,
-    },
-  });
+  const { register, handleSubmit, formState, reset, control } =
+    useForm<EpisodeSchema>({
+      resolver: zodResolver(episodeSchema),
+      defaultValues: {
+        name: episode.name,
+        location: episode.location,
+        diagnosis: episode.diagnosis,
+        start_date: !!episode?.start_date
+          ? new Date(episode?.start_date)
+          : undefined,
+        comment: episode.comment,
+      },
+    });
 
   const updateEpisode = useUpdateEpisode();
 
@@ -84,12 +90,36 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
             />
           </Grid>
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
-            <TextField
-              label="Date and time of start"
-              type="datetime-local"
-              {...register("start_date")}
-              error={errors.start_date?.message}
-            />
+            <FlexColumn gap={0.7}>
+              <Label>
+                <Text variant="body2Bold">Date and time of start</Text>
+              </Label>
+              <Controller
+                control={control}
+                name="start_date"
+                render={({ field }) => (
+                  <DateTimePicker
+                    {...field}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        height: "36px",
+                        borderRadius: "2px",
+                        border: `1px solid ${theme.colors.secondary_font}`,
+                        "&.Mui-focused": {
+                          border: `1px solid ${theme.colors.secondary_color}`,
+                        },
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "& .MuiInputBase-input": {
+                        fontSize: "14px",
+                      },
+                    }}
+                  />
+                )}
+              />
+            </FlexColumn>
           </Grid>
           <Grid xl={11} lg={11} md={11} sm={12} xs={12}>
             <TextArea
@@ -112,6 +142,12 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
     </form>
   );
 };
+
+const Label = styled.label`
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+`;
 
 const Container = styled(FlexColumn)`
   gap: 1rem;

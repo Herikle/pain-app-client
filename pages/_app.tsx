@@ -10,6 +10,8 @@ import { Modals } from "Modals";
 import { VerifyUser } from "@logic-components/VerifyUser";
 import { FiltersController } from "@logic-components/FiltersController";
 import { Analytics } from "@vercel/analytics/react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -33,8 +35,10 @@ const Application = ({ children }: ApplicationProps) => {
             content="A scientific tool for the description and analysis of the pain experience"
           />
         </Head>
-        {children}
-        <Modals />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          {children}
+          <Modals />
+        </LocalizationProvider>
         <ToastContainer />
         <VerifyUser />
         <FiltersController />

@@ -8,15 +8,17 @@ import { FlexRow } from "@design-components/Flex";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { theme } from "@styles/theme";
 
 const InterventionSchema = zod.object({
   name: zod.string().nonempty(),
-  datetime: zod.string().nonempty(),
-  dose: zod.string().nonempty(),
+  datetime: zod.date().optional(),
+  dose: zod.string().optional(),
   effective: zod.boolean(),
 });
 
@@ -41,12 +43,15 @@ export const InterventionModal = ({
     reset,
     formState: { errors },
     watch,
+    control,
   } = useForm<CreateIntervention>({
     resolver: zodResolver(InterventionSchema),
     defaultValues: {
       name: defaultValues?.name,
       dose: defaultValues?.dose,
-      datetime: getDateAndTimeFromIsoDate(defaultValues?.datetime),
+      datetime: !!defaultValues?.datetime
+        ? new Date(defaultValues?.datetime)
+        : undefined,
       effective: defaultValues?.effective,
     },
   });
@@ -75,11 +80,30 @@ export const InterventionModal = ({
               />
             </Grid>
             <Grid xs={12}>
-              <TextField
-                placeholder="Date and Hour"
-                type="datetime-local"
-                {...register("datetime")}
-                required
+              <Controller
+                control={control}
+                name="datetime"
+                render={({ field }) => (
+                  <DateTimePicker
+                    {...field}
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        height: "36px",
+                        borderRadius: "2px",
+                        border: `1px solid ${theme.colors.secondary_font}`,
+                        "&.Mui-focused": {
+                          border: `1px solid ${theme.colors.secondary_color}`,
+                        },
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "& .MuiInputBase-input": {
+                        fontSize: "14px",
+                      },
+                    }}
+                  />
+                )}
               />
             </Grid>
             <Grid xs={6}>
@@ -94,7 +118,6 @@ export const InterventionModal = ({
                 getValue={(option) => option.id}
                 id="select-dose"
                 register={register("dose")}
-                required
                 error={errors.dose?.message}
               />
             </Grid>
