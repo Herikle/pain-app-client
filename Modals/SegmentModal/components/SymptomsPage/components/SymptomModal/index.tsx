@@ -11,13 +11,16 @@ import styled from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import {
+  getDateAndTimeFromIsoDate,
+  getDateFromString,
+} from "@utils/helpers/date";
 import { theme } from "@styles/theme";
+import { DateTimePicker } from "@components/DateTimePicker";
 
 const SymptomSchema = zod.object({
   name: zod.string().nonempty(),
-  datetime: zod.string().nonempty(),
+  datetime: zod.date().optional(),
 });
 
 export type CreateSymptom = zod.infer<typeof SymptomSchema>;
@@ -39,7 +42,7 @@ export const SymptomModal = ({
     resolver: zodResolver(SymptomSchema),
     defaultValues: {
       name: defaultValues?.name,
-      datetime: getDateAndTimeFromIsoDate(defaultValues?.datetime),
+      datetime: defaultValues?.datetime,
     },
   });
 
@@ -64,29 +67,9 @@ export const SymptomModal = ({
             </Grid>
             <Grid xs={12}>
               <Controller
-                control={control}
                 name="datetime"
-                render={({ field }) => (
-                  <DateTimePicker
-                    {...field}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        height: "36px",
-                        borderRadius: "2px",
-                        border: `1px solid ${theme.colors.secondary_font}`,
-                        "&.Mui-focused": {
-                          border: `1px solid ${theme.colors.secondary_color}`,
-                        },
-                      },
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      "& .MuiInputBase-input": {
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                )}
+                control={control}
+                render={({ field }) => <DateTimePicker {...field} />}
               />
             </Grid>
           </Grid>

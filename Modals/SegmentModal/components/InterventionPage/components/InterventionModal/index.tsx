@@ -11,9 +11,12 @@ import styled from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import {
+  getDateAndTimeFromIsoDate,
+  getDateFromString,
+} from "@utils/helpers/date";
 import { theme } from "@styles/theme";
+import { DateTimePicker } from "@components/DateTimePicker";
 
 const InterventionSchema = zod.object({
   name: zod.string().nonempty(),
@@ -49,9 +52,7 @@ export const InterventionModal = ({
     defaultValues: {
       name: defaultValues?.name,
       dose: defaultValues?.dose,
-      datetime: !!defaultValues?.datetime
-        ? new Date(defaultValues?.datetime)
-        : undefined,
+      datetime: defaultValues?.datetime,
       effective: defaultValues?.effective,
     },
   });
@@ -81,29 +82,9 @@ export const InterventionModal = ({
             </Grid>
             <Grid xs={12}>
               <Controller
-                control={control}
                 name="datetime"
-                render={({ field }) => (
-                  <DateTimePicker
-                    {...field}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        height: "36px",
-                        borderRadius: "2px",
-                        border: `1px solid ${theme.colors.secondary_font}`,
-                        "&.Mui-focused": {
-                          border: `1px solid ${theme.colors.secondary_color}`,
-                        },
-                      },
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      "& .MuiInputBase-input": {
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                )}
+                control={control}
+                render={({ field }) => <DateTimePicker {...field} />}
               />
             </Grid>
             <Grid xs={6}>

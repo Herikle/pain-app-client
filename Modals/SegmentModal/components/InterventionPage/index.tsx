@@ -51,16 +51,17 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
   };
 
   const onAddIntervention = (intervention: CreateIntervention) => {
-    const newIntervention = {
+    const newIntervention: IIntervetion = {
       ...intervention,
       _id: uuidv4(),
       createdAt: fakeDate,
       updatedAt: fakeDate,
     };
 
-    const newInterventions = update(interventions, {
-      $push: [newIntervention],
-    });
+    const newInterventions: IIntervetion[] = [
+      ...interventions,
+      newIntervention,
+    ];
 
     onChange(newInterventions);
   };

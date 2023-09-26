@@ -6,13 +6,14 @@ import { Radio } from "@components/Radio";
 import { TextArea } from "@components/TextArea";
 import { Select } from "@components/Select";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { CommonSegmentModalProps } from "../..";
 import { media, useMatchMediaUp } from "@styles/media-query";
+import { DateTimePicker } from "@components/DateTimePicker";
 
 const SegmentPageSchema = z.object({
   name: z.string().optional(),
@@ -36,7 +37,7 @@ export const SegmentPage = ({
   onChange,
   onValidChange,
 }: Props) => {
-  const { register, getValues, formState } = useForm<SegmentPageForm>({
+  const { register, getValues, formState, control } = useForm<SegmentPageForm>({
     resolver: zodResolver(SegmentPageSchema),
     defaultValues: {
       ...segmentPageForm,
@@ -113,11 +114,16 @@ export const SegmentPage = ({
             />
           </Grid>
           <Grid xs={12}>
-            <TextField
-              label="Date and time of start"
-              type="datetime-local"
-              {...register("start_date")}
-              error={errors.start_date?.message}
+            <Controller
+              name="start_date"
+              control={control}
+              render={({ field }) => (
+                <DateTimePicker
+                  label="Date and time of start"
+                  {...field}
+                  error={errors.start_date?.message}
+                />
+              )}
             />
           </Grid>
           <Grid xs={12}>
