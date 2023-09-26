@@ -44,11 +44,14 @@ export const NewPatientForm = () => {
     Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
   };
 
-  useFormPrompt(isDirty);
+  const shouldWarningUser =
+    isDirty && !createPatient.isSuccess && !createPatient.isLoading;
+
+  useFormPrompt(shouldWarningUser);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
+      <UnsavedChangesDialog shouldConfirmLeave={shouldWarningUser} />
       <Container>
         <Grid container spacing={4}>
           <Grid xs={6}>
