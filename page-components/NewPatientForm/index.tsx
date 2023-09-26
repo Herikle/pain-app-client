@@ -2,7 +2,7 @@ import { Button } from "@components/Button";
 import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
 import { FlexColumn } from "@design-components/Flex";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -12,19 +12,24 @@ import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
+import { DatePicker } from "@components/DatePicker";
 
 const newPatientSchema = z.object({
   name: z.string().nonempty("Name is required"),
-  birth_date: z.string().nonempty("Date of birth is required"),
+  birth_date: z.date({
+    required_error: "Date of birth is required",
+  }),
   about: z.string().optional(),
 });
 
 type PatientSchema = z.infer<typeof newPatientSchema>;
 
 export const NewPatientForm = () => {
-  const { register, handleSubmit, formState } = useForm<PatientSchema>({
-    resolver: zodResolver(newPatientSchema),
-  });
+  const { register, handleSubmit, formState, control } = useForm<PatientSchema>(
+    {
+      resolver: zodResolver(newPatientSchema),
+    }
+  );
 
   const { errors } = formState;
 
@@ -50,20 +55,22 @@ export const NewPatientForm = () => {
             <TextField
               label="Name *"
               placeholder="Choose a name"
-              required
               autoFocus
               {...register("name")}
               error={errors.name?.message}
             />
           </Grid>
           <Grid xs={6}>
-            <TextField
-              label="Date of birth *"
-              placeholder="DD/MM/YYYY"
-              type="date"
-              required
-              {...register("birth_date")}
-              error={errors.birth_date?.message}
+            <Controller
+              name="birth_date"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  label="Date of birth"
+                  error={errors.birth_date?.message}
+                />
+              )}
             />
           </Grid>
           <Grid xs={12}>

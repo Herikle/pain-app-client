@@ -37,3 +37,11 @@ export const dateAndTimeFormat = (date: string | undefined) => {
 
   return format(new Date(date), "dd/MM/yy 'at' HH:mm");
 };
+
+export const getDateFromString = (date: string | undefined) => {
+  if (!date) {
+    return undefined;
+  }
+
+  return new Date(date);
+};

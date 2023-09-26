@@ -12,7 +12,7 @@ import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@components/DateTimePicker";
 import { theme } from "@styles/theme";
 import { Text } from "@components/Text";
 
@@ -70,7 +70,6 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Episode name"
-              required
               {...register("name")}
               error={errors.name?.message}
             />
@@ -90,36 +89,17 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
             />
           </Grid>
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
-            <FlexColumn gap={0.7}>
-              <Label>
-                <Text variant="body2Bold">Date and time of start</Text>
-              </Label>
-              <Controller
-                control={control}
-                name="start_date"
-                render={({ field }) => (
-                  <DateTimePicker
-                    {...field}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        height: "36px",
-                        borderRadius: "2px",
-                        border: `1px solid ${theme.colors.secondary_font}`,
-                        "&.Mui-focused": {
-                          border: `1px solid ${theme.colors.secondary_color}`,
-                        },
-                      },
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      "& .MuiInputBase-input": {
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                )}
-              />
-            </FlexColumn>
+            <Controller
+              control={control}
+              name="start_date"
+              render={({ field }) => (
+                <DateTimePicker
+                  {...field}
+                  label="Date and time of start"
+                  error={errors.start_date?.message}
+                />
+              )}
+            />
           </Grid>
           <Grid xl={11} lg={11} md={11} sm={12} xs={12}>
             <TextArea
@@ -142,12 +122,6 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
     </form>
   );
 };
-
-const Label = styled.label`
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-`;
 
 const Container = styled(FlexColumn)`
   gap: 1rem;

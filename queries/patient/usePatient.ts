@@ -8,7 +8,7 @@ import { IPatient } from "types";
 type CreatePatientsPayload = {
   body: {
     name: string;
-    birth_date: string;
+    birth_date: Date;
     about?: string;
   };
 };
@@ -38,7 +38,7 @@ type UpdatePatientPayload = {
   };
   body: {
     name?: string;
-    birth_date?: string;
+    birth_date?: Date;
     about?: string;
   };
 };
