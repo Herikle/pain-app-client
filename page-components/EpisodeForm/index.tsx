@@ -15,6 +15,9 @@ import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DateTimePicker } from "@components/DateTimePicker";
 import { theme } from "@styles/theme";
 import { Text } from "@components/Text";
+import { TimePicker } from "@components/TimePicker";
+import { DatePicker } from "@components/DatePicker";
+import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const episodeSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -31,7 +34,7 @@ type EpisodeFormProps = {
 };
 
 export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
-  const { register, handleSubmit, formState, reset, control } =
+  const { register, handleSubmit, formState, reset, setValue, watch, control } =
     useForm<EpisodeSchema>({
       resolver: zodResolver(episodeSchema),
       defaultValues: {
@@ -92,11 +95,12 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
             <Controller
               control={control}
               name="start_date"
-              render={({ field }) => (
-                <DateTimePicker
-                  {...field}
-                  label="Date and time of start"
-                  error={errors.start_date?.message}
+              render={({ field: { onChange, value } }) => (
+                <DateAndTimePicker
+                  timeLabel="Time of start"
+                  dateLabel="Date of start"
+                  value={value}
+                  onChange={onChange}
                 />
               )}
             />

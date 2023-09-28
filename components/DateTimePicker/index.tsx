@@ -1,12 +1,12 @@
 import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
-import { DateTimePicker as MuiDateTimePIcker } from "@mui/x-date-pickers";
+import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers";
 import { theme } from "@styles/theme";
 import React from "react";
 import styled from "styled-components";
 
 interface DateTimePickerProps
-  extends React.ComponentProps<typeof MuiDateTimePIcker> {
+  extends React.ComponentProps<typeof MuiDateTimePicker> {
   error?: string;
 }
 
@@ -20,8 +20,9 @@ export const DateTimePicker = React.forwardRef(
         <Label>
           <Text variant="body2Bold">{label}</Text>
         </Label>
-        <MuiDateTimePIcker
+        <MuiDateTimePicker
           {...rest}
+          onError={console.log}
           ref={ref}
           sx={{
             "& .MuiInputBase-root": {

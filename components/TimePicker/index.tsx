@@ -1,17 +1,17 @@
 import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
-import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers";
+import { TimePicker as MuiTimePicker } from "@mui/x-date-pickers";
 import { theme } from "@styles/theme";
 import React from "react";
 import styled from "styled-components";
 
-interface DatePickerProps extends React.ComponentProps<typeof MuiDatePicker> {
+interface TimePickerProps extends React.ComponentProps<typeof MuiTimePicker> {
   error?: string;
 }
 
-export const DatePicker = React.forwardRef(
+export const TimePicker = React.forwardRef(
   (
-    { label, error, ...rest }: DatePickerProps,
+    { label, error, ...rest }: TimePickerProps,
     ref: React.Ref<HTMLDivElement>
   ) => {
     return (
@@ -21,7 +21,7 @@ export const DatePicker = React.forwardRef(
             <Text variant="body2Bold">{label}</Text>
           </Label>
         )}
-        <MuiDatePicker
+        <MuiTimePicker
           {...rest}
           ref={ref}
           sx={{
@@ -57,4 +57,4 @@ const Label = styled.label`
   align-items: center;
 `;
 
-DatePicker.displayName = "DatePicker";
+TimePicker.displayName = "TimePicker";

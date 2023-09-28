@@ -53,6 +53,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
   const onAddIntervention = (intervention: CreateIntervention) => {
     const newIntervention: IIntervetion = {
       ...intervention,
+      datetime: intervention.datetime?.toISOString(),
       _id: uuidv4(),
       createdAt: fakeDate,
       updatedAt: fakeDate,
@@ -83,6 +84,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
         [index]: {
           $merge: {
             ...intervention,
+            datetime: intervention.datetime?.toISOString(),
           },
         },
       });
@@ -159,7 +161,12 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
             open={!!toEdit}
             onClose={() => setToEdit(null)}
             onAdd={edit}
-            defaultValues={toEdit}
+            defaultValues={{
+              ...toEdit,
+              datetime: !!toEdit.datetime
+                ? new Date(toEdit.datetime)
+                : undefined,
+            }}
           />
         )}
       </Container>

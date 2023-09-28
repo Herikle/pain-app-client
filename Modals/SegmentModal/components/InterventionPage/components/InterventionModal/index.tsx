@@ -17,6 +17,7 @@ import {
 } from "@utils/helpers/date";
 import { theme } from "@styles/theme";
 import { DateTimePicker } from "@components/DateTimePicker";
+import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const InterventionSchema = zod.object({
   name: zod.string().nonempty(),
@@ -84,7 +85,9 @@ export const InterventionModal = ({
               <Controller
                 name="datetime"
                 control={control}
-                render={({ field }) => <DateTimePicker {...field} />}
+                render={({ field: { value, onChange } }) => (
+                  <DateAndTimePicker value={value} onChange={onChange} />
+                )}
               />
             </Grid>
             <Grid xs={6}>

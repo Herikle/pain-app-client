@@ -49,6 +49,7 @@ export const SymptomsPage = ({ symptoms, onChange }: Props) => {
   const onAddSymptom = (symptom: CreateSymptom) => {
     const newSymptom = {
       ...symptom,
+      datetime: symptom.datetime?.toISOString(),
       _id: uuidv4(),
       createdAt: fakeDate,
       updatedAt: fakeDate,
@@ -78,6 +79,7 @@ export const SymptomsPage = ({ symptoms, onChange }: Props) => {
         [index]: {
           $merge: {
             ...symptom,
+            datetime: symptom.datetime?.toISOString(),
           },
         },
       });
@@ -154,7 +156,10 @@ export const SymptomsPage = ({ symptoms, onChange }: Props) => {
             open={!!toEdit}
             onClose={() => setToEdit(null)}
             onAdd={edit}
-            defaultValues={toEdit}
+            defaultValues={{
+              ...toEdit,
+              datetime: toEdit.datetime ? new Date(toEdit.datetime) : undefined,
+            }}
           />
         )}
       </Container>
