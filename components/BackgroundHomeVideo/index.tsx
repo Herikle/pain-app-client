@@ -45,6 +45,7 @@ export const BackgroundVideo = () => {
         autoPlay
         muted
         loop
+        playsInline
       />
       <Overlay />
       <Apresentation>
