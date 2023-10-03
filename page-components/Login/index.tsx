@@ -76,11 +76,21 @@ export const Login = ({ onSubmit, loading }: Props) => {
           error={errors.password?.message}
         />
         <Checkbox label="Remember your info" {...register("remember")} />
+        <Link href={RoutesPath.forgot_password}>
+          <Text
+            variant="body2"
+            decoration="underline"
+            align="center"
+            color="primary"
+          >
+            Forgot your password?
+          </Text>
+        </Link>
         <Buttons>
           <Button fullWidth type="submit" loading={loading}>
             Log in
           </Button>
-          <Text variant="body2Bold" color="font_color">
+          <Text variant="body2" color="font_color">
             or
           </Text>
           <Button

@@ -95,3 +95,29 @@ export const useUpdatePasswordAccount = () => {
     },
   });
 };
+
+type RecoveryPasswordParams = {
+  email: string;
+};
+
+const recoveryPassword = async (params: RecoveryPasswordParams) => {
+  await request({
+    service: "account",
+    url: "/recovery-password",
+    method: "POST",
+    data: params,
+  });
+
+  return true;
+};
+
+export const useRecoveryPassword = () => {
+  return useMutation(recoveryPassword, {
+    onSuccess: () => {
+      ToastSuccess("Recovery password sent!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
