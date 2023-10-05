@@ -79,3 +79,12 @@ export const getStartOfTheDay = (dateString: string | Date) => {
   date.setHours(0, 0, 0, 0);
   return date.toISOString();
 };
+
+export const secondsToMinutesAndSeconds = (seconds: number) => {
+  const value = Math.floor(seconds);
+  return (
+    Math.floor(value / 60) +
+    ":" +
+    (value % 60 ? value % 60 : 0).toString().padStart(2, "0")
+  );
+};

@@ -11,6 +11,7 @@ const PublicRoutes = {
   home: "/",
   login: "/login",
   register: "/register",
+  forgot_password: "/forgot-password",
 };
 
 export const RoutesPath = {
