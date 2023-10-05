@@ -21,16 +21,20 @@ export type ForgotPasswordPayload = z.infer<typeof ForgotPasswordSchema>;
 
 type Props = {
   onSubmit: (payload: ForgotPasswordPayload) => void;
+  defaultEmail?: string;
   loading?: boolean;
 };
 
-export const ForgotPassword = ({ onSubmit, loading }: Props) => {
+export const ForgotPassword = ({ onSubmit, defaultEmail, loading }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ForgotPasswordPayload>({
     resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: {
+      email: defaultEmail,
+    },
   });
 
   const onSubmitForm = (payload: ForgotPasswordPayload) => {
@@ -41,7 +45,7 @@ export const ForgotPassword = ({ onSubmit, loading }: Props) => {
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <Container>
         <Text variant="h1" align="center">
-          Recover your password
+          Reset your password
         </Text>
         <Text align="left" variant="body2">
           {"Forgot your password? Dont't worry."}

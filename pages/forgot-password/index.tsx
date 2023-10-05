@@ -6,33 +6,45 @@ import { LogInPayload, useLogIn } from "@queries/auth/useAuth";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "@layouts/GuestLayout";
 import { useGuest } from "@utils/hooks/useAuth";
-import { RoutesPath } from "@utils/routes";
-import {
-  clearGuestEpisode,
-  getGuestEpisodeId,
-} from "@utils/localStorage/guestEpisode";
 import { useRecoveryPassword } from "@queries/account/useAccount";
 import { ForgotPassword } from "@page-components/ForgotPassoword";
+import { useState } from "react";
+import { EmailSent } from "@page-components/ForgotPassoword/EmailSent";
 
 export default function LoginPage() {
   useGuest();
 
+  const [savedEmail, setSavedEmail] = useState<string | undefined>(undefined);
+
+  const [showEmailSent, setShowEmailSent] = useState(false);
+
   const recoveryPassword = useRecoveryPassword();
 
   const onSubmit = async (payload: LoginPayload) => {
-    recoveryPassword.mutateAsync({
+    setSavedEmail(payload.email);
+    await recoveryPassword.mutateAsync({
       email: payload.email,
     });
+    setShowEmailSent(true);
   };
 
   return (
     <GuestLayout>
       <Container>
         <FormContainer>
-          <ForgotPassword
-            onSubmit={onSubmit}
-            loading={recoveryPassword.isLoading}
-          />
+          {showEmailSent ? (
+            <EmailSent
+              onResendClick={() => {
+                setShowEmailSent(false);
+              }}
+            />
+          ) : (
+            <ForgotPassword
+              onSubmit={onSubmit}
+              defaultEmail={savedEmail}
+              loading={recoveryPassword.isLoading}
+            />
+          )}
         </FormContainer>
       </Container>
     </GuestLayout>
