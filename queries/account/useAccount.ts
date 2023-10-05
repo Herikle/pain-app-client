@@ -121,3 +121,33 @@ export const useRecoveryPassword = () => {
     },
   });
 };
+
+type ResetPasswordParams = {
+  body: {
+    password: string;
+    password_confirm: string;
+    token: string;
+  };
+};
+
+const resetPassword = async ({ body }: ResetPasswordParams) => {
+  await request({
+    service: "account",
+    url: "/reset-password",
+    method: "PATCH",
+    data: body,
+  });
+
+  return true;
+};
+
+export const useResetPassword = () => {
+  return useMutation(resetPassword, {
+    onSuccess: () => {
+      ToastSuccess("Password reseted!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
