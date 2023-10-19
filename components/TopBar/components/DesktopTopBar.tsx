@@ -26,7 +26,7 @@ export const DesktopTopBar = ({ user }: DesktopTopBarProps) => {
         />
       </Link>
       <TopBarLinks>
-        <StyledLink href={`${RoutesPath.home}#how-to-use`}>
+        {/* <StyledLink href={`${RoutesPath.home}#how-to-use`}>
           <Text color="pure_white">How to use</Text>
         </StyledLink>
         <StyledLink href="#user-guide">
@@ -37,7 +37,7 @@ export const DesktopTopBar = ({ user }: DesktopTopBarProps) => {
         </StyledLink>
         <StyledLink href="#contact">
           <Text color="pure_white">Contact</Text>
-        </StyledLink>
+        </StyledLink> */}
       </TopBarLinks>
       {user ? (
         <MenuLink

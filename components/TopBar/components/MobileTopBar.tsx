@@ -14,10 +14,12 @@ import {
   List,
   Notebook,
   Question,
+  SignOut,
   UserCircle,
   UserList,
 } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@utils/hooks/useAuth";
 
 type SideBarProps = {
   user: IMe | undefined;
@@ -27,6 +29,8 @@ type SideBarProps = {
 
 const SideBar = ({ user, open, onClose }: SideBarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { logOut, isLogged } = useAuth();
 
   useEffect(() => {
     if (open) {
@@ -44,7 +48,7 @@ const SideBar = ({ user, open, onClose }: SideBarProps) => {
     <>
       <SideBarContainer $open={open}>
         <LoginButtonContainer>
-          {user ? (
+          {!!user ? (
             <StyledLink href={RoutesPath.profile}>
               <UserCircle size={26} color={theme.colors.pure_white} />
               <Text color="pure_white">{user?.name}</Text>
@@ -57,7 +61,7 @@ const SideBar = ({ user, open, onClose }: SideBarProps) => {
           )}
         </LoginButtonContainer>
         <Links>
-          <StyledLink href={`${RoutesPath.home}#how-to-use`}>
+          {/* <StyledLink href={`${RoutesPath.home}#how-to-use`}>
             <Question size={26} color={theme.colors.pure_white} />
             <Text color="pure_white">How to use</Text>
           </StyledLink>
@@ -72,13 +76,29 @@ const SideBar = ({ user, open, onClose }: SideBarProps) => {
           <StyledLink href="#contact">
             <ChatsCircle size={32} color={theme.colors.pure_white} />
             <Text color="pure_white">Contact</Text>
-          </StyledLink>
+          </StyledLink> */}
         </Links>
+        {isLogged && (
+          <LogOutContainer>
+            <MenuLink
+              fullWidth
+              PhosphorIcon={SignOut}
+              label="Exit session"
+              description={user?.name}
+              onClick={logOut}
+              cursor="pointer"
+            />
+          </LogOutContainer>
+        )}
       </SideBarContainer>
       <Overlay onClick={onClose} />
     </>
   );
 };
+
+const LogOutContainer = styled.div`
+  width: 100%;
+`;
 
 const Overlay = styled.div`
   position: fixed;
