@@ -52,6 +52,8 @@ const updateEpisode = async ({ params, body }: UpdateEpisodePayload) => {
     data: body,
   });
 
+  console.log(data);
+
   return data as IEpisode;
 };
 

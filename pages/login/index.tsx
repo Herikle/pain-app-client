@@ -1,7 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
-import { Login, LoginPayload } from "@page-components/Login";
+import { LoginPayload, Login } from "@page-components/Login";
 import { LogInPayload, useLogIn } from "@queries/auth/useAuth";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "@layouts/GuestLayout";
@@ -31,13 +31,15 @@ export default function LoginPage() {
   };
 
   return (
-    <GuestLayout>
-      <Container>
-        <FormContainer>
-          <Login onSubmit={onSubmitLogin} loading={logIn.isLoading} />
-        </FormContainer>
-      </Container>
-    </GuestLayout>
+    <>
+      <GuestLayout>
+        <Container>
+          <FormContainer>
+            <Login onSubmit={onSubmitLogin} loading={logIn.isLoading} />
+          </FormContainer>
+        </Container>
+      </GuestLayout>
+    </>
   );
 }
 

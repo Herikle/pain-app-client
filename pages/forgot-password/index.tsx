@@ -1,8 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
-import { Login, LoginPayload } from "@page-components/Login";
-import { LogInPayload, useLogIn } from "@queries/auth/useAuth";
+import { LoginPayload } from "@page-components/Login";
 import { theme } from "@styles/theme";
 import { GuestLayout } from "@layouts/GuestLayout";
 import { useGuest } from "@utils/hooks/useAuth";

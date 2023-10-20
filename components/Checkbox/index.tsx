@@ -8,9 +8,9 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   label: string;
 }
 
-export const Checkbox = React.forwardRef(
-  ({ label, ...rest }: Props, ref: any) => {
-    return (
+export const Checkbox = React.forwardRef(({ label, ...rest }: Props, ref: any) => {
+  return (
+    <div>
       <Label>
         <Text variant="body2">{label}</Text>
         <Input type="checkbox" ref={ref} {...rest} />
@@ -24,9 +24,10 @@ export const Checkbox = React.forwardRef(
           </CheckMarkChecked>
         </CheckMark>
       </Label>
-    );
-  }
-);
+    </div>
+  );
+});
+
 
 Checkbox.displayName = "Checkbox";
 

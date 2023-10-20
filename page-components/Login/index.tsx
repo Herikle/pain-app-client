@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@components/Button";
-import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { RoutesPath } from "utils/routes";
@@ -12,6 +10,8 @@ import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
+import { Checkbox } from "@components/Checkbox";
+import { Button } from "@components/Button";
 
 const LoginSchema = z.object({
   email: z.string().email().nonempty(),
@@ -75,7 +75,7 @@ export const Login = ({ onSubmit, loading }: Props) => {
           {...register("password")}
           error={errors.password?.message}
         />
-        <Checkbox label="Remember your info" {...register("remember")} />
+        {/* <Checkbox label="Remember your info" {...register("remember")} /> */}
         <Link href={RoutesPath.forgot_password}>
           <Text
             variant="body2"
@@ -95,14 +95,14 @@ export const Login = ({ onSubmit, loading }: Props) => {
           </Text>
           <Button
             fullWidth
-            color="font_color"
+            type="button"
             onClick={onClickGoogleLogin}
             loading={getGoogleOAuthUrl.isLoading}
-          >
+            >
             <FlexRow>
-              <GoogleLogo size={22} weight="bold" />
-              Continue with Google
-            </FlexRow>
+            {/* <GoogleLogo size={22} weight="bold" /> */}
+            Continue with Google
+          </FlexRow>
           </Button>
         </Buttons>
       </Container>
