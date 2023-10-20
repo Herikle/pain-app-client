@@ -16,7 +16,7 @@ import {
   Question,
   UserCircle,
   UserList,
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
 
 type SideBarProps = {

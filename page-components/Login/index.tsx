@@ -8,7 +8,7 @@ import { RoutesPath } from "utils/routes";
 import Link from "next/link";
 import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
-import { GoogleLogo } from "@phosphor-icons/react";
+import { GoogleLogo } from "@phosphor-icons/react/dist/ssr";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 import { Checkbox } from "@components/Checkbox";
 import { Button } from "@components/Button";
@@ -75,7 +75,7 @@ export const Login = ({ onSubmit, loading }: Props) => {
           {...register("password")}
           error={errors.password?.message}
         />
-        {/* <Checkbox label="Remember your info" {...register("remember")} /> */}
+        <Checkbox label="Remember your info" {...register("remember")} />
         <Link href={RoutesPath.forgot_password}>
           <Text
             variant="body2"
@@ -98,11 +98,11 @@ export const Login = ({ onSubmit, loading }: Props) => {
             type="button"
             onClick={onClickGoogleLogin}
             loading={getGoogleOAuthUrl.isLoading}
-            >
+          >
             <FlexRow>
-            {/* <GoogleLogo size={22} weight="bold" /> */}
-            Continue with Google
-          </FlexRow>
+              <GoogleLogo size={22} weight="bold" />
+              Continue with Google
+            </FlexRow>
           </Button>
         </Buttons>
       </Container>

@@ -3,7 +3,6 @@ import Router from "next/router";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { theme } from "@styles/theme";
-
 import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { RoutesPath } from "@utils/routes";
 import { media, useMatchMediaUp } from "@styles/media-query";

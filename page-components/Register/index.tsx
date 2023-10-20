@@ -10,7 +10,7 @@ import Link from "next/link";
 import { RoutesPath } from "utils/routes";
 import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
-import { GoogleLogo } from "@phosphor-icons/react";
+import { GoogleLogo } from "@phosphor-icons/react/dist/ssr";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 
 const RegisterSchema = z
