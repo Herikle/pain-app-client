@@ -26,6 +26,7 @@ const PainLevelColors = {
   disabling: "#C83420",
   hurful: "#C19039",
   annoying: "#94923A",
+  no_pain: "#8298b1",
 };
 
 const LightThemeHover = {

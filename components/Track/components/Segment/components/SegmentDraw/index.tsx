@@ -17,7 +17,7 @@ export const SegmentDraw = ({
 }: DrawSectionProps) => {
   return (
     <>
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: 5 }).map((_, index) => (
         <Section key={index} />
       ))}
       {hasDraw && (

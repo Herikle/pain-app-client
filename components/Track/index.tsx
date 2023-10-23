@@ -45,6 +45,11 @@ export const SegmentsTitleComponent = () => {
           Annoying
         </Text>
       </SegmentName>
+      <SegmentName>
+        <Text variant="body2Bold" customColor={theme.pain_level_colors.no_pain}>
+          No pain
+        </Text>
+      </SegmentName>
     </SegmentsTitle>
   );
 };

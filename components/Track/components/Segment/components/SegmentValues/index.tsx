@@ -28,6 +28,10 @@ export const SegmentValuesSchema = z
       .number()
       .nonnegative("Annoying must be a positive number")
       .optional(),
+    no_pain: z
+      .number()
+      .nonnegative("No pain must be a positive number")
+      .optional(),
   })
   .refine(
     (data) => {
@@ -52,6 +56,7 @@ const valuesArray: (keyof SegmentValuesForm)[] = [
   "disabling",
   "hurful",
   "annoying",
+  "no_pain",
 ];
 
 export type onChangeValueProps = {
