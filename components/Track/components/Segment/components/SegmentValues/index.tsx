@@ -84,6 +84,7 @@ export const SegmentValues = ({
       disabling: values?.disabling,
       excruciating: values?.excruciating,
       hurful: values?.hurful,
+      no_pain: values?.no_pain,
     },
   });
 
