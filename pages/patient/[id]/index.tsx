@@ -69,7 +69,7 @@ export default function Patient() {
           {patient && <UpdatePatientForm patient={patient} />}
           <Table
             header={{
-              title: "Episodes list",
+              title: "Pain Episodes list",
               onPlusClick: createEpisodeHandler,
               loading: createEpisode.isLoading,
             }}

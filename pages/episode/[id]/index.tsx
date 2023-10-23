@@ -107,7 +107,7 @@ export default function EpisodePage() {
         <TrackContainer>
           <FlexColumn gap={4}>
             <FlexRow gap={0} justify="space-between">
-              <Text variant="h1">Tracks</Text>
+              <Text variant="h1">Pain Tracks</Text>
               <AddButton
                 onClick={onCreateTrack}
                 loading={createTrack.isLoading}
