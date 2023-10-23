@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Router from "next/router";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
@@ -8,8 +8,6 @@ import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { RoutesPath } from "@utils/routes";
 import { media, useMatchMediaUp } from "@styles/media-query";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
-import { useAuth } from "@utils/hooks/useAuth";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 export const BackgroundVideo = () => {
@@ -18,7 +16,7 @@ export const BackgroundVideo = () => {
   const onCreateEpisode = async () => {
     const created = await createEpisode.mutateAsync({
       body: {
-        patient_id: null,
+        patient_id: undefined,
       },
     });
 
@@ -26,8 +24,6 @@ export const BackgroundVideo = () => {
   };
 
   const isMobileL = useMatchMediaUp("mobileL");
-
-  const { isLogged } = useAuth();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -62,22 +58,15 @@ export const BackgroundVideo = () => {
           <br />
           the pain experience
         </Text>
-        {isLogged ? (
-          <Link href={RoutesPath.profile}>
-            <Button color="cta" width={isMobileL ? "100%" : "400px"}>
-              Go to profile
-            </Button>
-          </Link>
-        ) : (
-          <Button
-            color="cta"
-            width={isMobileL ? "100%" : "400px"}
-            onClick={onCreateEpisode}
-            loading={createEpisode.isLoading}
-          >
-            Register a pain episode
-          </Button>
-        )}
+
+        <Button
+          color="cta"
+          width={isMobileL ? "100%" : "400px"}
+          onClick={onCreateEpisode}
+          loading={createEpisode.isLoading}
+        >
+          Register a pain episode
+        </Button>
       </Apresentation>
     </Container>
   );

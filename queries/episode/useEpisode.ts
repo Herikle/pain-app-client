@@ -12,7 +12,7 @@ export const getEpisodeService = (): RequestService => {
 
 type CreateEpisodePayload = {
   body: {
-    patient_id: string | null;
+    patient_id: string | undefined;
   };
 };
 
