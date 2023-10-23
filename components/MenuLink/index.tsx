@@ -56,6 +56,7 @@ export const MenuLink = ({
   return render(
     <Container
       onClick={onClick}
+      $fullWidth={!!fullWidth}
       $disabled={disabled}
       $notAllowed={notAllowed}
       style={{
@@ -99,6 +100,7 @@ const DescriptionContainer = styled(FlexColumn)`
 type ContainerProps = {
   $disabled: boolean;
   $notAllowed: boolean;
+  $fullWidth: boolean;
 };
 
 const Container = styled(FlexRow)<ContainerProps>`
@@ -126,17 +128,18 @@ const Container = styled(FlexRow)<ContainerProps>`
     css`
       cursor: not-allowed;
     `}    
+    
 
-    ${media.up.tablet`
+    ${({ $fullWidth }) => media.up.tablet`
       flex-direction: column;
-      width: fit-content;
+      width: ${$fullWidth ? "100%" : "fit-content"};
       justify-content: center;     
       border-radius: 8px;
       padding: 0.5rem;
       padding-inline: 1rem; 
-    `}
+    `}    
 
     ${media.up.mobileM`
-      padding-inline:0.5rem;
+      padding-inline:0.5rem;      
     `}
 `;

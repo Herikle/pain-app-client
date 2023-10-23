@@ -17,14 +17,20 @@ type CreateEpisodePayload = {
 };
 
 const createEpisode = async ({ body }: CreateEpisodePayload) => {
-  const { data } = await request({
-    method: "POST",
-    service: getEpisodeService(),
-    url: "/",
-    data: body,
-  });
+  try {
+    const { data } = await request({
+      method: "POST",
+      service: getEpisodeService(),
+      url: "/",
+      data: body,
+    });
 
-  return data as IEpisode;
+    return data as IEpisode;
+  } catch (error) {
+    console.error("Ошибка при создании эпизода:", error);
+
+    throw error;
+  }
 };
 
 export const useCreateEpisode = () => {
@@ -51,15 +57,11 @@ const updateEpisode = async ({ params, body }: UpdateEpisodePayload) => {
     url: `/${params.episode_id}`,
     data: body,
   });
-
-  console.log(data);
-
   return data as IEpisode;
 };
 
 export const useUpdateEpisode = () => {
   const queryClient = useQueryClient();
-
   return useMutation(updateEpisode, {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.Episode.ByID]);

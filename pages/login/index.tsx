@@ -31,15 +31,13 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <GuestLayout>
-        <Container>
-          <FormContainer>
-            <Login onSubmit={onSubmitLogin} loading={logIn.isLoading} />
-          </FormContainer>
-        </Container>
-      </GuestLayout>
-    </>
+    <GuestLayout>
+      <Container>
+        <FormContainer>
+          <Login onSubmit={onSubmitLogin} loading={logIn.isLoading} />
+        </FormContainer>
+      </Container>
+    </GuestLayout>
   );
 }
 

@@ -1,5 +1,5 @@
 import { LoadingWrapper } from "@components/LoadingWrapper";
-import { PlusCircle } from "@phosphor-icons/react";
+import { PlusCircle } from "@phosphor-icons/react/dist/ssr";
 import { ThemeColors, theme } from "@styles/theme";
 import Link from "next/link";
 import styled from "styled-components";
