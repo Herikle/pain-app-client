@@ -16,6 +16,10 @@ import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { useGetEpisodesList } from "@queries/episode/useGetEpisode";
 import { IEpisode } from "types";
 import { getDotDateFormat } from "@utils/helpers/date";
+import { useSetDeletePatientModal } from "Modals/DeletePatientModal/hook";
+import { Trash } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
+import { media } from "@styles/media-query";
 
 export default function Patient() {
   const router = useRouter();
@@ -60,11 +64,30 @@ export default function Patient() {
     Router.push(RoutesPath.episode.replace("[id]", episode_created._id));
   };
 
+  const setDeletePatientModal = useSetDeletePatientModal();
+
+  const onDelete = () => {
+    if (!!patient) {
+      setDeletePatientModal({
+        patient_id: patient?._id,
+        patient,
+      });
+    }
+  };
+
   return (
     <LoggedLayout>
       <Container>
         <BackButton href={RoutesPath.profile} text="Return to your profile" />
-        <Badge label={patient?.name} iconPath={IconsPath.Patient} />
+        <UserBadgeContainer justify="space-between">
+          <Badge label={patient?.name} iconPath={IconsPath.Patient} />
+          <Trash
+            size={24}
+            color={theme.colors.text_switched}
+            cursor="pointer"
+            onClick={onDelete}
+          />
+        </UserBadgeContainer>
         <Wrapper>
           {patient && <UpdatePatientForm patient={patient} />}
           <Table
@@ -107,6 +130,14 @@ export default function Patient() {
     </LoggedLayout>
   );
 }
+
+const UserBadgeContainer = styled(FlexRow)`
+  width: 710px;
+
+  ${media.up.tablet`
+    width:100%;
+  `}
+`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

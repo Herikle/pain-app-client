@@ -24,6 +24,11 @@ import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
+import { IconsPath } from "@utils/icons";
+import { Badge } from "@components/Badge";
+import { Trash } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
+import { useDeleteEpisode } from "@queries/episode/useEpisode";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -38,7 +43,11 @@ export default function EpisodePage() {
 
   const setSelectedEpisode = useSetSelectedEpisode();
 
+  const deleteEpisode = useDeleteEpisode();
+
   const [saveModal, setSaveModal] = useState(false);
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -79,6 +88,18 @@ export default function EpisodePage() {
 
   const openSaveModal = () => setSaveModal(true);
 
+  const onDeleteEpisode = async () => {
+    await deleteEpisode.mutateAsync({
+      params: {
+        episode_id: id,
+      },
+    });
+
+    if (!!episode?.patient_id) {
+      Router.push(RoutesPath.patient.replace("[id]", episode.patient_id));
+    }
+  };
+
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
@@ -102,7 +123,17 @@ export default function EpisodePage() {
             }
           />
         )}
-        <Text variant="h1">Pain Episode</Text>
+        <EpisodeBadgeContainer justify="space-between">
+          <Badge label={episode?.name} iconPath={IconsPath.Episode} />
+          {isLogged && (
+            <Trash
+              size={24}
+              color={theme.colors.text_switched}
+              cursor="pointer"
+              onClick={() => setConfirmDelete(true)}
+            />
+          )}
+        </EpisodeBadgeContainer>
         {!!episode && <EpisodeForm episode={episode} />}
         <TrackContainer>
           <FlexColumn gap={4}>
@@ -142,9 +173,27 @@ export default function EpisodePage() {
           title={false}
         />
       )}
+      {confirmDelete && (
+        <ConfirmActionModal
+          onConfirm={onDeleteEpisode}
+          onClose={() => {
+            setConfirmDelete(false);
+          }}
+          loading={deleteEpisode.isLoading}
+          description="Are you sure you want to delete this episode? This action cannot be undone."
+        />
+      )}
     </LoggedLayout>
   );
 }
+
+const EpisodeBadgeContainer = styled(FlexRow)`
+  width: 1180px;
+
+  ${media.up.laptopL`
+    width:100%;
+  `}
+`;
 
 const SaveButtonContainer = styled.div`
   position: fixed;

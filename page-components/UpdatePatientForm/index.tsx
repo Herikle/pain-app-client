@@ -44,8 +44,6 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   const updatePatient = useUpdatePatient();
 
-  const setDeletePatientModal = useSetDeletePatientModal();
-
   const { errors, isDirty } = formState;
 
   useFormPrompt(isDirty);
@@ -58,13 +56,6 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       body: data,
     });
     reset(data);
-  };
-
-  const onDelete = () => {
-    setDeletePatientModal({
-      patient_id: patient._id,
-      patient,
-    });
   };
 
   return (
@@ -112,12 +103,6 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
           >
             Save changes
           </Button>
-          <Trash
-            size={24}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-            onClick={onDelete}
-          />
         </FlexRow>
       </Container>
     </form>

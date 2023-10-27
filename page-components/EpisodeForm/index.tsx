@@ -105,7 +105,7 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
               )}
             />
           </Grid>
-          <Grid xl={11} lg={11} md={11} sm={12} xs={12}>
+          <Grid xl={10} lg={10} md={10} sm={12} xs={12}>
             <TextArea
               label="Comment"
               minRows={7}

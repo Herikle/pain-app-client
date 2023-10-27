@@ -68,3 +68,31 @@ export const useUpdateEpisode = () => {
     },
   });
 };
+
+type DeleteEpisodePayload = {
+  params: {
+    episode_id: string;
+  };
+};
+
+const deleteEpisode = async ({ params }: DeleteEpisodePayload) => {
+  const { data } = await request({
+    method: "DELETE",
+    service: "episode",
+    url: `/${params.episode_id}`,
+  });
+};
+
+export const useDeleteEpisode = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteEpisode, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Episode.ByID]);
+      ToastSuccess("Episode deleted successfully");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
