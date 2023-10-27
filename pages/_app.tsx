@@ -7,7 +7,6 @@ import { RecoilRoot } from "recoil";
 import "react-toastify/dist/ReactToastify.css";
 import "@styles/global.css";
 import { Modals } from "Modals";
-import { VerifyUser } from "@logic-components/VerifyUser";
 import { FiltersController } from "@logic-components/FiltersController";
 import { Analytics } from "@vercel/analytics/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -40,7 +39,6 @@ const Application = ({ children }: ApplicationProps) => {
           <Modals />
         </LocalizationProvider>
         <ToastContainer />
-        <VerifyUser />
         <FiltersController />
       </main>
       <Analytics />
