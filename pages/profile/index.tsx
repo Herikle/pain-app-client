@@ -113,9 +113,10 @@ const FormContainer = styled.div`
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
-  width: fit-content;
+  width: 800px;
   gap: 2rem;
-  ${media.up.tablet`
-    width:100%;
+
+  ${media.up.laptop`
+    width:100%; 
   `}
 `;
