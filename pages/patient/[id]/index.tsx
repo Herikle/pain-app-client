@@ -132,16 +132,17 @@ export default function Patient() {
 }
 
 const UserBadgeContainer = styled(FlexRow)`
-  width: 710px;
-
-  ${media.up.tablet`
-    width:100%;
-  `}
+  width: 100%;
 `;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
   gap: 2rem;
+  width: 710px;
+
+  ${media.up.laptop`
+    width:100%;
+  `}
 `;
 
 const Wrapper = styled(FlexColumn)`

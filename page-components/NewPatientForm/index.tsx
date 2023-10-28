@@ -13,23 +13,38 @@ import { RoutesPath } from "@utils/routes";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DatePicker } from "@components/DatePicker";
+import { Select } from "@components/Select";
+import { media } from "@styles/media-query";
+
+export const PatientTypeOptions = [
+  {
+    id: "animal",
+    label: "Animal",
+  },
+  {
+    id: "human",
+    label: "Human",
+  },
+];
 
 const newPatientSchema = z.object({
-  name: z.string().nonempty("Name is required"),
+  name: z.string().min(1, "Name is required"),
   birth_date: z.date({
     required_error: "Date of birth is required",
   }),
   about: z.string().optional(),
+  production_system: z.string().optional(),
+  life_fate: z.string().optional(),
+  type: z.enum(["animal", "human"]),
 });
 
 type PatientSchema = z.infer<typeof newPatientSchema>;
 
 export const NewPatientForm = () => {
-  const { register, handleSubmit, formState, control } = useForm<PatientSchema>(
-    {
+  const { register, handleSubmit, formState, control, watch } =
+    useForm<PatientSchema>({
       resolver: zodResolver(newPatientSchema),
-    }
-  );
+    });
 
   const { errors } = formState;
 
@@ -77,6 +92,40 @@ export const NewPatientForm = () => {
             />
           </Grid>
           <Grid xs={12}>
+            <Select
+              options={PatientTypeOptions}
+              getLabel={(option) => option.label}
+              getValue={(option) => option.id}
+              id="patient-type"
+              label="Patient type *"
+              {...register("type")}
+            />
+          </Grid>
+          {watch("type") === "animal" && (
+            <>
+              <Grid xs={12}>
+                <TextField
+                  label="Production system"
+                  placeholder="(e.g intensive, organic),"
+                  {...register("production_system")}
+                  error={errors.production_system?.message}
+                  id="production-system"
+                  helperText="Production system refers to a specific method or approach used to manage and care for animals with the aim of maximizing their production or output. It involves integrating various aspects such as housing, nutrition, breeding or health management."
+                />
+              </Grid>
+              <Grid xs={12}>
+                <TextField
+                  label="Life circunstances (or life-fate)"
+                  placeholder="(e.g pet, breeder, market animal)"
+                  {...register("life_fate")}
+                  error={errors.life_fate?.message}
+                  id="life-fate"
+                  helperText="Life circumstance refers to the unique conditions and factors that influence an animal's well-being, health, and overall quality of life. It encompasses aspects such as environmental conditions, social interactions, diet, exercise, and overall management practices."
+                />
+              </Grid>
+            </>
+          )}
+          <Grid xs={12}>
             <TextArea
               label="About the patient"
               placeholder="Write something about that patient..."
@@ -97,4 +146,9 @@ export const NewPatientForm = () => {
 
 const Container = styled(FlexColumn)`
   gap: 1rem;
+  width: 710px;
+
+  ${media.up.laptop`
+      width:100%;
+  `}
 `;

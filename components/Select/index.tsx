@@ -19,62 +19,70 @@ interface SelectProps extends React.ComponentPropsWithoutRef<"select"> {
   register?: any;
 }
 
-export const Select = ({
-  options,
-  getLabel,
-  getValue,
-  id,
-  label,
-  helperText,
-  noPadding,
-  error,
-  register,
-  ...rest
-}: SelectProps) => {
-  return (
-    <Container gap={0.75}>
-      {label && (
-        <Label htmlFor={id}>
-          <Text variant="body2Bold">{label}</Text>
-          {helperText && id && (
-            <>
-              <Question size={16} weight="fill" id={`${id}-helper`} />
-              <TooltipWrapper>
-                <Tooltip anchorSelect={`#${id}-helper`} noArrow>
-                  <TooltipContainer>
-                    <Text variant="body2" color="font_color">
-                      {helperText}
-                    </Text>
-                  </TooltipContainer>
-                </Tooltip>
-              </TooltipWrapper>
-            </>
-          )}
-        </Label>
-      )}
-      <SelectStyled
-        defaultValue={""}
-        $noPadding={noPadding}
-        {...(register ?? {})}
-        {...rest}
-      >
-        <option value="" disabled>
-          Select
-        </option>
-        {options.map((option) => (
-          <option key={getValue(option)} value={getValue(option)}>
-            {getLabel(option)}
+export const Select = React.forwardRef(
+  (
+    {
+      options,
+      getLabel,
+      getValue,
+      id,
+      label,
+      helperText,
+      noPadding,
+      error,
+      register,
+      ...rest
+    }: SelectProps,
+    ref: any
+  ) => {
+    return (
+      <Container gap={0.75}>
+        {label && (
+          <Label htmlFor={id}>
+            <Text variant="body2Bold">{label}</Text>
+            {helperText && id && (
+              <>
+                <Question size={16} weight="fill" id={`${id}-helper`} />
+                <TooltipWrapper>
+                  <Tooltip anchorSelect={`#${id}-helper`} noArrow>
+                    <TooltipContainer>
+                      <Text variant="body2" color="font_color">
+                        {helperText}
+                      </Text>
+                    </TooltipContainer>
+                  </Tooltip>
+                </TooltipWrapper>
+              </>
+            )}
+          </Label>
+        )}
+        <SelectStyled
+          defaultValue={""}
+          $noPadding={noPadding}
+          {...(register ?? {})}
+          {...rest}
+          ref={ref}
+        >
+          <option value="" disabled>
+            Select
           </option>
-        ))}
-      </SelectStyled>
-      {error && (
-        <Text variant="caption" color="red_danger">
-          {error}
-        </Text>
-      )}
-    </Container>
-  );
-};
+          {options.map((option) => (
+            <option key={getValue(option)} value={getValue(option)}>
+              {getLabel(option)}
+            </option>
+          ))}
+        </SelectStyled>
+        {error && (
+          <Text variant="caption" color="red_danger">
+            {error}
+          </Text>
+        )}
+      </Container>
+    );
+  }
+);
+
+Select.displayName = "Select";
 
 const Label = styled.label`
   display: flex;
