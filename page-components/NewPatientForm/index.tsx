@@ -16,7 +16,7 @@ import { DatePicker } from "@components/DatePicker";
 import { Select } from "@components/Select";
 import { media } from "@styles/media-query";
 
-const PatientTypeOptions = [
+export const PatientTypeOptions = [
   {
     id: "animal",
     label: "Animal",
