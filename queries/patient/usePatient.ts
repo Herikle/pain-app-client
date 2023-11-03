@@ -9,6 +9,9 @@ type CreatePatientsPayload = {
   body: {
     name: string;
     birth_date: Date;
+    type: IPatient["type"];
+    production_system?: string;
+    life_fate?: string;
     about?: string;
   };
 };
@@ -27,8 +30,6 @@ const createPatient = async ({ body }: CreatePatientsPayload) => {
 };
 
 export const useCreatePatient = () => {
-  const queryClient = useQueryClient();
-
   return useMutation(createPatient);
 };
 
@@ -39,6 +40,9 @@ type UpdatePatientPayload = {
   body: {
     name?: string;
     birth_date?: Date;
+    type?: IPatient["type"];
+    production_system?: string;
+    life_fate?: string;
     about?: string;
   };
 };

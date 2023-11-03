@@ -70,6 +70,9 @@ export type IPatient = {
   creator_id: string;
   createdAt: string;
   updatedAt: string;
+  type: "human" | "animal";
+  production_system?: string;
+  life_fate?: string;
   episodes_count?: number;
   creator?: Omit<IMe, "super">;
   about?: string;
