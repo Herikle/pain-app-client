@@ -44,6 +44,9 @@ export const NewPatientForm = () => {
   const { register, handleSubmit, formState, control, watch } =
     useForm<PatientSchema>({
       resolver: zodResolver(newPatientSchema),
+      defaultValues: {
+        type: "human",
+      },
     });
 
   const { errors } = formState;
@@ -94,7 +97,6 @@ export const NewPatientForm = () => {
           <Grid xs={12}>
             <Select
               options={PatientTypeOptions}
-              defaultValue={PatientTypeOptions[1].id}
               getLabel={(option) => option.label}
               getValue={(option) => option.id}
               id="patient-type"
