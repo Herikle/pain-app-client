@@ -94,6 +94,7 @@ export const NewPatientForm = () => {
           <Grid xs={12}>
             <Select
               options={PatientTypeOptions}
+              defaultValue={PatientTypeOptions[1].id}
               getLabel={(option) => option.label}
               getValue={(option) => option.id}
               id="patient-type"
