@@ -8,8 +8,11 @@ import { IPatient } from "types";
 type CreatePatientsPayload = {
   body: {
     name: string;
-    birth_date: Date;
     type: IPatient["type"];
+    location?: string;
+    common_name?: string;
+    scientific_name?: string;
+    birth_date?: Date;
     production_system?: string;
     life_fate?: string;
     about?: string;
@@ -44,6 +47,9 @@ type UpdatePatientPayload = {
     production_system?: string;
     life_fate?: string;
     about?: string;
+    location?: string;
+    common_name?: string;
+    scientific_name?: string;
   };
 };
 
