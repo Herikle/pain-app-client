@@ -14,7 +14,7 @@ export const getOnlyDateFromIsoDate = (date: string | undefined) => {
   return format(new Date(date), "yyyy-MM-dd");
 };
 
-export const getDateAndTimeFromIsoDate = (date: string | undefined) => {
+export const getDateAndTimeFromIsoDate = (date: string | Date | undefined) => {
   if (!date) {
     return "";
   }
@@ -38,7 +38,7 @@ export const dateAndTimeFormat = (date: string | undefined) => {
   return format(new Date(date), "dd/MM/yy 'at' HH:mm");
 };
 
-export const getDateFromString = (date: string | undefined) => {
+export const getDateFromString = (date: string | Date | undefined) => {
   if (!date) {
     return undefined;
   }

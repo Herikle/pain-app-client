@@ -2,7 +2,10 @@ import { ISegment } from "types";
 import { SegmentPageForm } from "../../SegmentPage";
 import { useCallback, useState } from "react";
 import _ from "lodash";
-import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
+import {
+  getDateAndTimeFromIsoDate,
+  getDateFromString,
+} from "@utils/helpers/date";
 import { normalizeString } from "@utils/helpers/string";
 
 export const useSegmentPageForm = (segment: ISegment) => {
@@ -12,7 +15,7 @@ export const useSegmentPageForm = (segment: ISegment) => {
     end: segment.end,
     estimative_type: segment.estimative_type,
     pain_type: segment.pain_type,
-    start_date: getDateAndTimeFromIsoDate(segment.start_date),
+    start_date: getDateFromString(segment.start_date),
     time_unit: segment.time_unit,
     comment: normalizeString(segment.comment),
   });
@@ -34,7 +37,12 @@ export const useSegmentPageForm = (segment: ISegment) => {
       comment: normalizeString(segment.comment),
     };
 
-    const isEqual = _.isEqual(segmentPageForm, segmentValues);
+    const pageFormFixed = {
+      ...segmentPageForm,
+      start_date: getDateAndTimeFromIsoDate(segmentPageForm.start_date),
+    };
+
+    const isEqual = _.isEqual(pageFormFixed, segmentValues);
 
     return !isEqual;
   };

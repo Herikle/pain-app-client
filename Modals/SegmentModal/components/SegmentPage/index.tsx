@@ -9,18 +9,17 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { CommonSegmentModalProps } from "../..";
 import { media, useMatchMediaUp } from "@styles/media-query";
-import { DateTimePicker } from "@components/DateTimePicker";
+import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const SegmentPageSchema = z.object({
   name: z.string().optional(),
   start: z.number().nonnegative().optional(),
   end: z.number().nonnegative().optional(),
   time_unit: z.enum(["minutes", "hours", "days"]),
-  start_date: z.string().optional(),
+  start_date: z.date().optional(),
   estimative_type: z.enum(["reported", "measured", "inferred"]),
   pain_type: z.enum(["acute", "chronic"]),
   comment: z.string().optional(),
@@ -118,8 +117,9 @@ export const SegmentPage = ({
               name="start_date"
               control={control}
               render={({ field }) => (
-                <DateTimePicker
-                  label="Date and time of start"
+                <DateAndTimePicker
+                  dateLabel="Start Date"
+                  timeLabel="Start Time"
                   {...field}
                   error={errors.start_date?.message}
                 />

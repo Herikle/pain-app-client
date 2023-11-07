@@ -20,7 +20,7 @@ import { DateTimePicker } from "@components/DateTimePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const SymptomSchema = zod.object({
-  name: zod.string().nonempty(),
+  name: zod.string().min(1),
   datetime: zod.date().optional(),
 });
 
