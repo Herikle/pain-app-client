@@ -20,7 +20,6 @@ export default function CreatePatient() {
     <LoggedLayout>
       <Container>
         <BackButton href={RoutesPath.profile} text="Return to your profile" />
-        <Badge label="Add new patient" iconPath={IconsPath.Patient} />
         <NewPatientForm />
       </Container>
     </LoggedLayout>

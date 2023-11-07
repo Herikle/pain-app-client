@@ -80,7 +80,12 @@ export default function Patient() {
       <Container>
         <BackButton href={RoutesPath.profile} text="Return to your profile" />
         <UserBadgeContainer justify="space-between">
-          <Badge label={patient?.name} iconPath={IconsPath.Patient} />
+          <Badge
+            label={patient?.name}
+            iconPath={
+              patient?.type === "animal" ? IconsPath.Animal : IconsPath.Patient
+            }
+          />
           <Trash
             size={24}
             color={theme.colors.text_switched}

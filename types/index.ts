@@ -71,6 +71,9 @@ export type IPatient = {
   createdAt: string;
   updatedAt: string;
   type: "human" | "animal";
+  location?: string;
+  common_name?: string;
+  scientific_name?: string;
   production_system?: string;
   life_fate?: string;
   episodes_count?: number;

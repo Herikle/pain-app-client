@@ -37,7 +37,6 @@ export const IntensitiesPage = ({
   onChange,
   onValidChange,
 }: Props) => {
-  console.log(intensities);
   const { register, getValues, formState, watch, setValue } =
     useForm<IntensitiesPageForm>({
       resolver: zodResolver(IntensitiesPageSchema),

@@ -15,6 +15,8 @@ import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DatePicker } from "@components/DatePicker";
 import { Select } from "@components/Select";
 import { PatientTypeOptions } from "@page-components/NewPatientForm";
+import { Text } from "@components/Text";
+import { Radio } from "@components/Radio";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -22,9 +24,12 @@ const newPatientSchema = z.object({
     required_error: "Date of birth is required",
   }),
   about: z.string().optional(),
+  common_name: z.string().optional(),
+  scientific_name: z.string().optional(),
   production_system: z.string().optional(),
   life_fate: z.string().optional(),
   type: z.enum(["animal", "human"]),
+  location: z.string().optional(),
 });
 
 type PatientSchema = z.infer<typeof newPatientSchema>;
@@ -40,10 +45,13 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       defaultValues: {
         name: patient.name,
         birth_date: getDateFromString(patient.birth_date),
-        about: patient.about,
-        production_system: patient.production_system,
-        life_fate: patient.life_fate,
         type: patient.type,
+        about: patient.about ?? "",
+        production_system: patient.production_system ?? "",
+        life_fate: patient.life_fate ?? "",
+        location: patient.location ?? "",
+        common_name: patient.common_name ?? "",
+        scientific_name: patient.scientific_name ?? "",
       },
     });
 
@@ -68,7 +76,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
-          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
+          <Grid xl={12} lg={12} md={12} sm={12} xs={12}>
             <TextField
               label="Name"
               placeholder="Choose a name"
@@ -89,18 +97,31 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
               )}
             />
           </Grid>
-          <Grid xs={12}>
-            <Select
-              options={PatientTypeOptions}
-              getLabel={(option) => option.label}
-              getValue={(option) => option.id}
-              id="patient-type"
-              label="Patient type *"
-              {...register("type")}
-            />
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
+            <FlexColumn height="100%" gap={1.5}>
+              <Text variant="body2Bold">Patient Type</Text>
+              <FlexRow gap={6}>
+                <Radio label="Human" value="human" {...register("type")} />
+                <Radio label="Animal" value="animal" {...register("type")} />
+              </FlexRow>
+            </FlexColumn>
           </Grid>
           {watch("type") === "animal" && (
             <>
+              <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
+                <TextField
+                  label="Common name"
+                  placeholder="Name of the species"
+                  {...register("common_name")}
+                />
+              </Grid>
+              <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
+                <TextField
+                  label="Scientific name"
+                  placeholder="Scientific name of the subject"
+                  {...register("scientific_name")}
+                />
+              </Grid>
               <Grid xs={12}>
                 <TextField
                   label="Production system"
@@ -150,4 +171,11 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
 const Container = styled(FlexColumn)`
   gap: 1rem;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
 `;
