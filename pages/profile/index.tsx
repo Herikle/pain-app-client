@@ -35,7 +35,11 @@ export default function ProfilePage() {
     [getPatients.data]
   );
 
-  const renderAge = (birth_date: string) => {
+  const renderAge = (birth_date: string | undefined) => {
+    if (!birth_date) {
+      return "-";
+    }
+
     const age = getAgeByBirthDate(birth_date);
 
     return age;
