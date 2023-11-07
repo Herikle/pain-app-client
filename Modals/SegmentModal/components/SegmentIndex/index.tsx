@@ -393,7 +393,7 @@ const Container = styled(FlexColumn)`
   padding: 2rem;
   ${LightScrollBar};
   ${media.up.laptopL`
-    min-height: 80vh;    
+    min-height: 95vh;    
   `}
 
   ${media.up.tablet`

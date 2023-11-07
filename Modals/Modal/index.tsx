@@ -86,7 +86,7 @@ const Container = styled.div<ContainerProps>`
   z-index: 1000;
   background-color: ${theme.colors.pure_white};
   padding: ${({ $removePadding }) => ($removePadding ? 0 : "2rem")};
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
   ${LightScrollBar};
 
