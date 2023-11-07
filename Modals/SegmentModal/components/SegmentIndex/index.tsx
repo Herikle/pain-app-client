@@ -141,14 +141,18 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     setValue(newValue);
   };
 
-  const close = () => {
-    if (
+  const isDirty = () => {
+    return (
       isDirtySegmentPageForm() ||
       isDirtyIntensitiesPageForm() ||
       isDirtyQualityPageForm() ||
       isDirtyInterventionPageForm() ||
       isDirtySymptomPageForm()
-    ) {
+    );
+  };
+
+  const close = () => {
+    if (isDirty()) {
       setConfirmClose(true);
     } else {
       onClose();
@@ -313,7 +317,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
           <Button
             onClick={() => onSubmit()}
             width="160px"
-            disabled={!isValid()}
+            disabled={!isValid() || !isDirty()}
             loading={updateSegment.isLoading}
           >
             Save changes

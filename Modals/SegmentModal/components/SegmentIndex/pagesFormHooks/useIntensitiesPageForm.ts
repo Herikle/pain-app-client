@@ -44,7 +44,7 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
       type: segment.intensities.type,
       justification: normalizeString(segment.intensities.justification),
       draw: segment.intensities.draw,
-      values: undefined,
+      values: cleanUndefined(segment.intensities.values),
     };
 
     const pageForm = {

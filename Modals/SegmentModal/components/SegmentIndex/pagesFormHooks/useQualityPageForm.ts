@@ -26,7 +26,9 @@ export const useQualityPageForm = (segment: ISegment) => {
       texture: segment.quality?.texture,
     };
 
-    return !_.isEqual(qualityValues, qualityPageForm);
+    const isEqual = _.isEqual(qualityPageForm, qualityValues);
+
+    return !isEqual;
   };
 
   return {

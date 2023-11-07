@@ -34,7 +34,9 @@ export const useSegmentPageForm = (segment: ISegment) => {
       comment: normalizeString(segment.comment),
     };
 
-    return !_.isEqual(segmentValues, segmentPageForm);
+    const isEqual = _.isEqual(segmentPageForm, segmentValues);
+
+    return !isEqual;
   };
 
   return {

@@ -7,7 +7,6 @@ export const useInterventionPageForm = (segment: ISegment) => {
   >(segment.interventions);
 
   const [isDirty, setIsDirty] = useState(false);
-
   const onChangeInterventionPageForm = useCallback((data: IIntervetion[]) => {
     setInterventionPageForm(data);
     setIsDirty(true);
