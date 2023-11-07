@@ -20,9 +20,7 @@ import { Radio } from "@components/Radio";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  birth_date: z.date({
-    required_error: "Date of birth is required",
-  }),
+  birth_date: z.date().optional(),
   about: z.string().optional(),
   common_name: z.string().optional(),
   scientific_name: z.string().optional(),
