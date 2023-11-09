@@ -1,7 +1,7 @@
 import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { Button } from "@components/Button";
-import { useSetChangePasswordModal } from "Modals/ChangePasswordModal/hooks";
+import { useSetChangePasswordModal } from "Modals/ChangePasswordModal/hook";
 
 export const PasswordSettingsForm = () => {
   const setChangePassword = useSetChangePasswordModal();

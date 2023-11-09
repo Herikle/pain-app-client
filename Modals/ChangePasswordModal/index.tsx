@@ -1,6 +1,6 @@
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Modal } from "../Modal";
-import { useChangePasswordModalState } from "./hooks";
+import { useChangePasswordModalState } from "./hook";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

@@ -1,4 +1,5 @@
 import { AttributesConfigModal } from "./AttributesConfigModal";
+import { ChangeAccountInformationModal } from "./ChangeAccountInformationModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
 import { DeletePatientModal } from "./DeletePatientModal";
@@ -22,6 +23,7 @@ export const Modals = () => {
       <SegmentModal />
       <TrackModal />
       <ChangePasswordModal />
+      <ChangeAccountInformationModal />
     </>
   );
 };

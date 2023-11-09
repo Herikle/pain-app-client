@@ -13,7 +13,7 @@ import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 const accountFormSchema = z.object({
-  name: z.string().nonempty("Name is required"),
+  name: z.string().min(1, "Name is required"),
 });
 
 type AccountFormType = z.infer<typeof accountFormSchema>;
@@ -47,14 +47,18 @@ export const AccountForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
-        <Text variant="h1">Account info</Text>
+        <Text variant="h1">Change name</Text>
         <Grid container spacing={4}>
           <Grid xs={6}>
-            <TextField label="Display name" required {...register("name")} />
+            <TextField
+              label="Which name should be displayed?"
+              required
+              {...register("name")}
+            />
           </Grid>
         </Grid>
         <Button
-          width="340px"
+          width="140px"
           loading={updateAccount.isLoading}
           disabled={!isDirty}
         >
@@ -67,4 +71,6 @@ export const AccountForm = () => {
 
 const Container = styled(FlexColumn)`
   gap: 2rem;
+  justify-content: flex-start;
+  width: 500px;
 `;
