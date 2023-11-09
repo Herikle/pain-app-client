@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const Footer = () => {
   return (
     <Container className={inter.className}>
-      <Text variant="h3" fontSize="20px" fontWeight="400" color="pure_white">
+      <Text variant="h2" fontWeight="400" color="pure_white">
         Pain<strong>Track</strong>
       </Text>
       <FooterLinks>

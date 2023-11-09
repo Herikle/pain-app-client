@@ -100,9 +100,6 @@ export default function ProfilePage() {
           }}
         />
         <FormContainer>
-          <AccountForm />
-        </FormContainer>
-        <FormContainer>
           <PasswordSettingsForm />
         </FormContainer>
       </Container>
