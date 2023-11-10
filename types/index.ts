@@ -25,6 +25,7 @@ export type IMe = {
   super: boolean;
   createdAt: string;
   updatedAt: string;
+  noPassword: boolean;
   role?: IRole;
 };
 

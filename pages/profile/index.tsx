@@ -110,9 +110,11 @@ export default function ProfilePage() {
             },
           }}
         />
-        <FormContainer>
-          <PasswordSettingsForm />
-        </FormContainer>
+        {!user?.noPassword && (
+          <FormContainer>
+            <PasswordSettingsForm />
+          </FormContainer>
+        )}
       </Container>
     </LoggedLayout>
   );
