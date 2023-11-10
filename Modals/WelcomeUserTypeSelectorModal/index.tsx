@@ -12,6 +12,7 @@ import { IRole } from "types";
 import { useSetUserRole } from "@queries/account/useAccount";
 import { Fireworks } from "@fireworks-js/react";
 import { Portal } from "@components/Portal";
+import { ImagesPath } from "@utils/icons";
 
 type ChildProps = {
   onClose: () => void;
@@ -43,7 +44,7 @@ const Child = ({ onClose }: ChildProps) => {
               {"Your account was created. We're happy to have you with us."}
             </Text>
             <Image
-              src="/assets/ok-bro.svg"
+              src={ImagesPath.OkBro}
               alt="Doctor"
               width={250}
               height={250}
@@ -94,7 +95,7 @@ const Child = ({ onClose }: ChildProps) => {
             onClick={() => setSelected("doctor")}
           >
             <Image
-              src="/assets/doctor.svg"
+              src={ImagesPath.DoctorIllustration}
               alt="Doctor"
               width={250}
               height={250}
@@ -109,7 +110,7 @@ const Child = ({ onClose }: ChildProps) => {
             onClick={() => setSelected("veterinarian")}
           >
             <Image
-              src="/assets/vet.svg"
+              src={ImagesPath.VetIllustration}
               alt="Veterinarian"
               width={250}
               height={250}

@@ -29,4 +29,9 @@ export const IconsPath = {
 
 export const ImagesPath = {
   WelfareLogo: "/images/welfare-logo.png",
+  DoctorIllustration: "/assets/doctor.svg",
+  OkBro: "/assets/ok-bro.svg",
+  VetIllustration: "/assets/vet.svg",
+  MailSentBro: "/assets/mail-sent-bro.png",
+  PieceOfMindoBro: "/assets/piece-of-mind-bro.png",
 };

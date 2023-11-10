@@ -51,7 +51,7 @@ export const ForgotPassword = ({ onSubmit, defaultEmail, loading }: Props) => {
           {"Forgot your password? Dont't worry."}
           <br />
           <br />
-          {"Enter your e-mail and well send you a link."}
+          {"Enter your e-mail and we'll send you a link."}
         </Text>
         <TextField
           type="email"
@@ -72,6 +72,7 @@ export const ForgotPassword = ({ onSubmit, defaultEmail, loading }: Props) => {
               fullWidth
               color="pure_white"
               textColor="pure_black"
+              borderColor="pure_black"
             >
               Return to login
             </Button>

@@ -8,10 +8,16 @@ import {
   ResetPasswordPayload,
 } from "@page-components/ResetPasswordForm";
 import validator from "validator";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useResetPassword } from "@queries/account/useAccount";
 import { RoutesPath } from "@utils/routes";
+import { FlexColumn } from "@design-components/Flex";
+import { Text } from "@components/Text";
+import Image from "next/image";
+import { ImagesPath } from "@utils/icons";
+import { Button } from "@components/Button";
+import Link from "next/link";
 
 export default function ResetPassword() {
   useGuest();
@@ -19,6 +25,8 @@ export default function ResetPassword() {
   const router = useRouter();
 
   const { token } = router.query as { token: string };
+
+  const [isSubmited, setIsSubmited] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -40,17 +48,40 @@ export default function ResetPassword() {
         token,
       },
     });
-    Router.push(RoutesPath.login);
+    setIsSubmited(true);
   };
 
   return (
     <GuestLayout>
       <Container>
         <FormContainer>
-          <ResetPasswordForm
-            onSubmit={onSubmit}
-            loading={resetPassword.isLoading}
-          />
+          {isSubmited ? (
+            <FlexColumn
+              gap={2}
+              align="center"
+              width="300px"
+              marginInline="auto"
+            >
+              <Text variant="h1">All set!</Text>
+              <Text variant="body2">You can use your new password now.</Text>
+              <Image
+                width={250}
+                height={250}
+                alt="All set"
+                src={ImagesPath.PieceOfMindoBro}
+              />
+              <Link href={RoutesPath.login} style={{ width: "100%" }}>
+                <Button variant="contained" color="primary" fullWidth>
+                  Access your account
+                </Button>
+              </Link>
+            </FlexColumn>
+          ) : (
+            <ResetPasswordForm
+              onSubmit={onSubmit}
+              loading={resetPassword.isLoading}
+            />
+          )}
         </FormContainer>
       </Container>
     </GuestLayout>

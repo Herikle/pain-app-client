@@ -20,6 +20,7 @@ type ButtonProps = {
   textVariant?: TextVariant;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   textColor?: ThemeColors;
+  borderColor?: ThemeColors;
   noPadding?: boolean;
 };
 
@@ -50,6 +51,7 @@ export const Button = ({
   type,
   textColor,
   noPadding,
+  borderColor,
 }: ButtonProps) => {
   const getTextColors = () => {
     if (textColor) {
@@ -75,6 +77,7 @@ export const Button = ({
       $width={width}
       $disabled={disabled || loading}
       $noPadding={noPadding}
+      $borderColor={borderColor ? theme.colors[borderColor] : undefined}
       disabled={disabled || loading}
     >
       {loading ? (
@@ -109,6 +112,7 @@ type ButtonContainerProps = {
   $width?: string;
   $disabled?: boolean;
   $noPadding?: boolean;
+  $borderColor?: string;
 };
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
@@ -148,4 +152,10 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
         `}
 
   ${({ $variant }) => variants[$variant]};
+
+  ${({ $borderColor }) =>
+    $borderColor &&
+    css`
+      border-color: ${$borderColor};
+    `}
 `;
