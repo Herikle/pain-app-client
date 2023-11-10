@@ -11,6 +11,7 @@ import { z } from "zod";
 import { useUpdateAccount } from "@queries/account/useAccount";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
+import { media } from "@styles/media-query";
 
 const accountFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -44,11 +45,11 @@ export const AccountForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Text variant="h1">Change name</Text>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} width="100%">
           <Grid xs={6}>
             <TextField
               label="Which name should be displayed?"
@@ -73,4 +74,8 @@ const Container = styled(FlexColumn)`
   gap: 2rem;
   justify-content: flex-start;
   width: 500px;
+
+  ${media.up.tablet`
+    width: 100%;     
+  `}
 `;

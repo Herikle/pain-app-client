@@ -1,6 +1,7 @@
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { PencilSimpleLine } from "@phosphor-icons/react";
+import { media } from "@styles/media-query";
 import { theme } from "@styles/theme";
 import Image from "next/image";
 import styled from "styled-components";
@@ -52,6 +53,10 @@ const EditCircleIcon = styled.div`
     background-color: ${theme.colors.text_switched};
   }
   opacity: 0;
+
+  ${media.up.tablet`
+    opacity: 1;
+  `}
 `;
 
 const DescriptionContainer = styled(FlexColumn)``;

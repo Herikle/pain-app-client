@@ -10,6 +10,7 @@ import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import { TextField } from "@components/TextField";
+import { media } from "@styles/media-query";
 
 const PasswordSettingsSchema = z
   .object({
@@ -115,11 +116,19 @@ const FormContainer = styled(FlexColumn)`
   width: 400px;
   justify-content: flex-start;
   gap: 2rem;
+  ${media.up.tablet`
+    width: 100%; 
+  `}
 `;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
   width: 700px;
+
+  ${media.up.tablet`
+    width: 100%; 
+    min-width: 70vw;
+  `}
 `;
 
 export const ChangePasswordModal = () => {
