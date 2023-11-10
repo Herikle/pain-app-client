@@ -2,16 +2,18 @@ import { Badge } from "@components/Badge";
 import { CallToAction } from "@components/CallToAction";
 import { Table } from "@components/Table";
 import { Text } from "@components/Text";
-import { FlexColumn } from "@design-components/Flex";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import { AccountForm } from "@page-components/AccountForm";
 import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
+import { PencilSimpleLine } from "@phosphor-icons/react";
 import { useGetPatients } from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
+import { useSetChangeAccountInformationModal } from "Modals/ChangeAccountInformationModal/hook";
 import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
@@ -49,15 +51,24 @@ export default function ProfilePage() {
     return RoutesPath.patient.replace("[id]", patient._id);
   };
 
+  const setChangeAccountInfo = useSetChangeAccountInformationModal();
+
+  const openAccountInfoModal = () => {
+    setChangeAccountInfo({});
+  };
+
   return (
     <LoggedLayout>
       <Container>
         <Text variant="h1">Your profile</Text>
+
         <Badge
           label={user?.name}
           description={user?.email}
           iconPath={IconsPath.Doctor}
+          onClickEdit={openAccountInfoModal}
         />
+
         <Table
           columns={[
             {
@@ -99,12 +110,11 @@ export default function ProfilePage() {
             },
           }}
         />
-        <FormContainer>
-          <AccountForm />
-        </FormContainer>
-        <FormContainer>
-          <PasswordSettingsForm />
-        </FormContainer>
+        {!user?.noPassword && (
+          <FormContainer>
+            <PasswordSettingsForm />
+          </FormContainer>
+        )}
       </Container>
     </LoggedLayout>
   );

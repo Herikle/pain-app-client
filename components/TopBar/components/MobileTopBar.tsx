@@ -9,15 +9,7 @@ import { IconsPath } from "utils/icons";
 import { MenuLink } from "@components/MenuLink";
 import { IMe } from "types";
 import { TOP_BAR_HEIGHT_PIXELS } from "../consts";
-import {
-  ChatsCircle,
-  List,
-  Notebook,
-  Question,
-  SignOut,
-  UserCircle,
-  UserList,
-} from "@phosphor-icons/react";
+import { List, SignOut, UserCircle, X } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@utils/hooks/useAuth";
 
@@ -172,12 +164,21 @@ export const MobileTopBar = ({ user }: DesktopTopBarProps) => {
   return (
     <>
       <Container>
-        <List
-          size={32}
-          color={theme.colors.pure_white}
-          height="100%"
-          onClick={toggle}
-        />
+        {isOpen ? (
+          <X
+            size={32}
+            color={theme.colors.pure_white}
+            height="100%"
+            onClick={toggle}
+          />
+        ) : (
+          <List
+            size={32}
+            color={theme.colors.pure_white}
+            height="100%"
+            onClick={toggle}
+          />
+        )}
         <HomeLinkContainer>
           <Link href={RoutesPath.home}>
             <Image

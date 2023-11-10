@@ -4,6 +4,7 @@ import { NextFont } from "next/dist/compiled/@next/font";
 
 export type TextVariant =
   | "h1"
+  | "h2"
   | "h3"
   | "body1"
   | "body1Bold"
@@ -14,11 +15,15 @@ type TextAlign = "left" | "center" | "right";
 
 const variants: Record<TextVariant, any> = {
   h1: css`
+    font-size: 24px;
+    font-weight: 700;
+  `,
+  h2: css`
     font-size: 20px;
     font-weight: 700;
   `,
   h3: css`
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
   `,
   body1: css`
