@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { RecoilRoot } from "recoil";
 import "react-toastify/dist/ReactToastify.css";
 import "@styles/global.css";
+import "@styles/toasty.css";
+
 import { Modals } from "Modals";
 import { FiltersController } from "@logic-components/FiltersController";
 import { Analytics } from "@vercel/analytics/react";

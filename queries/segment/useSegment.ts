@@ -1,5 +1,5 @@
 import { RequestService, request } from "@queries/request";
-import { ToastError, ToastSuccess } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toasts";
 import { useMutation } from "react-query";
 import { IIntervetion, ISegment, ISymptom } from "types";
 import { useUpdateSegmentOnCache } from "./hooks/useUpdateSegmentOnCache";

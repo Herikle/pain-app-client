@@ -1,5 +1,5 @@
 import { request } from "@queries/request";
-import { ToastError } from "@utils/toats";
+import { ToastError } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
 

@@ -4,7 +4,7 @@ import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
 import { storeToken } from "utils/localStorage/token";
 import { AxiosError } from "axios";
-import { ToastError } from "utils/toats";
+import { ToastError } from "@utils/toasts";
 
 type AuthenticatedResponse = {
   user: IMe;

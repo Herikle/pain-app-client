@@ -1,7 +1,7 @@
 import { QueryKeys } from "@queries/keys";
 import { RequestService, request } from "@queries/request";
 import { hasToken } from "@utils/localStorage/token";
-import { ToastError, ToastSuccess } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IEpisode } from "types";

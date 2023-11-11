@@ -1,6 +1,6 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { ToastError, ToastSuccess } from "@utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IPatient } from "types";
