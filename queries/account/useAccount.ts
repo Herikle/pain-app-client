@@ -3,7 +3,7 @@ import { request } from "@queries/request";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IMe, IRole } from "types";
-import { ToastError, ToastSuccess } from "utils/toats";
+import { ToastError, ToastSuccess } from "@utils/toasts";
 
 type SetUserRolePayload = {
   body: {
