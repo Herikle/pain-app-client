@@ -4,7 +4,7 @@ import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
 import { storeToken } from "utils/localStorage/token";
 import { AxiosError } from "axios";
-import { ToastError } from "@utils/toasts";
+import { StyledToastError, ToastError } from "@utils/toasts";
 
 type AuthenticatedResponse = {
   user: IMe;
@@ -71,7 +71,12 @@ export const useLogIn = () => {
       queryClient.invalidateQueries([QueryKeys.Auth.Me]);
     },
     onError: (error: AxiosError) => {
-      ToastError(error);
+      const status = error.response?.status;
+      if (status === 401) {
+        StyledToastError("Invalid email or password");
+      } else {
+        ToastError(error);
+      }
     },
   });
 };
