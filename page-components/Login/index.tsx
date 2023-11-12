@@ -12,6 +12,7 @@ import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
+import { PasswordInput } from "@page-components/PasswordField";
 
 const LoginSchema = z.object({
   email: z.string().email().nonempty(),
@@ -68,11 +69,8 @@ export const Login = ({ onSubmit, loading }: Props) => {
           {...register("email")}
           error={errors.email?.message}
         />
-        <TextField
-          label="Your password"
-          type="password"
-          required
-          {...register("password")}
+        <PasswordInput
+          register={register("password")}
           error={errors.password?.message}
         />
         <Checkbox label="Remember your info" {...register("remember")} />

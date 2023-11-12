@@ -43,7 +43,7 @@ export default function ResetPassword() {
   const onSubmit = async (payload: ResetPasswordPayload) => {
     await resetPassword.mutateAsync({
       body: {
-        password_confirm: payload.confirmPassword,
+        password_confirm: payload.password_confirm,
         password: payload.password,
         token,
       },

@@ -8,15 +8,16 @@ import { TextField } from "@components/TextField";
 import { RoutesPath } from "utils/routes";
 import Link from "next/link";
 import { media } from "@styles/media-query";
+import { PasswordInput } from "@page-components/PasswordField";
 
 const ResetPasswordSchema = z
   .object({
     password: z.string().min(8).nonempty(),
-    confirmPassword: z.string().min(8).nonempty(),
+    password_confirm: z.string().min(8).nonempty(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.password_confirm, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ["password_confirm"],
   });
 
 export type ResetPasswordPayload = z.infer<typeof ResetPasswordSchema>;
@@ -48,19 +49,22 @@ export const ResetPasswordForm = ({ onSubmit, loading }: Props) => {
         <Text align="left" variant="body2">
           Choose a strong, new password for you.
         </Text>
-        <TextField
-          type="password"
-          label="Your new password"
-          required
-          {...register("password")}
+        <PasswordInput
+          customLabel="Your new password"
+          register={register("password")}
           error={errors.password?.message}
+        />
+    <PasswordInput
+          customLabel="Confirm your new password"
+          register={register("password_confirm")}
+          error={errors.password_confirm?.message}
         />
         <TextField
           type="password"
           label="Confirm your new password"
           required
-          {...register("confirmPassword")}
-          error={errors.confirmPassword?.message}
+          {...register("password_confirm")}
+          error={errors.password_confirm?.message}
         />
         <Buttons>
           <Button fullWidth type="submit" loading={loading}>

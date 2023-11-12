@@ -12,6 +12,7 @@ import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
 import { GoogleLogo } from "@phosphor-icons/react";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
+import { PasswordInput } from "@page-components/PasswordField";
 
 const RegisterSchema = z
   .object({
@@ -78,20 +79,16 @@ export const Register = ({ onSubmit, loading }: Props) => {
           {...register("email")}
           error={errors.email?.message}
         />
-        <TextField
-          label="Your password"
-          type="password"
-          required
-          {...register("password")}
+        <PasswordInput
+          register={register("password")}
           error={errors.password?.message}
         />
-        <TextField
-          label="Confirm your password"
-          type="password"
-          required
-          {...register("password_confirm")}
+        <PasswordInput
+          customLabel="Confirm your password"
+          register={register("password_confirm")}
           error={errors.password_confirm?.message}
         />
+
         <Checkbox
           label="I agree to all Terms and Privacy Policy"
           required
