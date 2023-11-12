@@ -1,5 +1,5 @@
-import React from "react";
-import { Question } from "@phosphor-icons/react";
+import React, { useState } from "react";
+import { Eye, EyeClosed, Question } from "@phosphor-icons/react";
 import { Tooltip } from "react-tooltip";
 import styled, { css } from "styled-components";
 import { Text } from "@components/Text";
@@ -19,6 +19,8 @@ export const TextField = React.forwardRef(
     { label, fullWidth, width, error, helperText, noPadding, ...rest }: Props,
     ref: any
   ) => {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
       <Container $fullWidth={fullWidth} $width={width}>
         {label && (
@@ -40,7 +42,29 @@ export const TextField = React.forwardRef(
             )}
           </Label>
         )}
-        <Input $noPadding={noPadding} ref={ref} {...rest} />
+        {rest.type === "password" ? (
+          <InputContainer>
+            <Input
+              $noPadding={noPadding}
+              ref={ref}
+              {...rest}
+              type={showPassword ? "text" : "password"}
+            />
+            <EyeContainer
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <EyeClosed size={22} weight="bold" />
+              ) : (
+                <Eye size={22} weight="bold" />
+              )}
+            </EyeContainer>
+          </InputContainer>
+        ) : (
+          <Input $noPadding={noPadding} ref={ref} {...rest} />
+        )}
+
         {error && (
           <Text variant="caption" color="red_danger">
             {error}
@@ -158,4 +182,21 @@ const Container = styled.div<ContainerProps>`
   display:flex;
   flex-direction: column;
   gap: 12px;
+`;
+
+const InputContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const EyeContainer = styled.button`
+  border: none;
+  background: none;
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
 `;
