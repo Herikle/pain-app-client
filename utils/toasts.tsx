@@ -15,7 +15,7 @@ type ValidationError = {
   message?: string;
 };
 
-const StyledToastError = (message: string) => {
+export const StyledToastError = (message: string) => {
   toast.error(message, {
     icon: ({}) => {
       return <XCircle size={48} color={theme.colors.red_danger} />;
@@ -46,7 +46,7 @@ export const ToastError = (error: AxiosError<any>) => {
         StyledToastError("Something went wrong!");
       }
     }
-  } else {
+  }else {
     StyledToastError("Something went wrong!");
   }
 };
