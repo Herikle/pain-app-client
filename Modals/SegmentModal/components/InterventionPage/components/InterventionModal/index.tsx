@@ -101,7 +101,7 @@ export const InterventionModal = ({
                 getLabel={(option) => option.label}
                 getValue={(option) => option.id}
                 id="select-dose"
-                register={register("dose")}
+                {...register("dose")}
                 error={errors.dose?.message}
               />
             </Grid>

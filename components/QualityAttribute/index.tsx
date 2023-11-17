@@ -2,18 +2,18 @@ import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
 import Image from "next/image";
+import { UseFormRegisterReturn } from "react-hook-form";
 import styled, { css } from "styled-components";
 
 type QualityAttributeProps = {
   iconPath: string;
   label: string;
   description: string;
-  onClick?: () => void;
+  value: string;
   isSelected?: boolean;
   isNotSelected?: boolean;
   iconSize?: number;
-  register?: any;
-  value?: any;
+  onClick: (value: any) => void;
 };
 
 export const QualityAttribute = ({
@@ -24,14 +24,17 @@ export const QualityAttribute = ({
   isSelected = false,
   isNotSelected = false,
   iconSize = 32,
-  register = {},
   value,
 }: QualityAttributeProps) => {
+  const handleClick = () => {
+    onClick(value);
+  };
+
   return (
     <Container
       $isSelected={isSelected}
       $isNotSelected={isNotSelected}
-      onClick={isSelected ? onClick : undefined}
+      onClick={handleClick}
     >
       <Image
         src={iconPath}
@@ -43,7 +46,6 @@ export const QualityAttribute = ({
         <Text variant="body2Bold">{label}</Text>
         <Text variant="body2">{description}</Text>
       </FlexColumn>
-      <input type="radio" value={value} {...register} hidden />
     </Container>
   );
 };

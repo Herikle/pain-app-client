@@ -16,7 +16,6 @@ interface SelectProps extends React.ComponentPropsWithoutRef<"select"> {
   helperText?: string;
   noPadding?: boolean;
   error?: string;
-  register?: any;
 }
 
 export const Select = React.forwardRef(
@@ -30,7 +29,6 @@ export const Select = React.forwardRef(
       helperText,
       noPadding,
       error,
-      register,
       ...rest
     }: SelectProps,
     ref: any
@@ -59,7 +57,6 @@ export const Select = React.forwardRef(
         <SelectStyled
           defaultValue={""}
           $noPadding={noPadding}
-          {...(register ?? {})}
           {...rest}
           ref={ref}
         >

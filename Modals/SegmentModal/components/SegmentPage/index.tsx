@@ -108,7 +108,7 @@ export const SegmentPage = ({
               ]}
               getLabel={(option) => option.label}
               getValue={(option) => option.id}
-              register={register("time_unit")}
+              {...register("time_unit")}
               error={errors.time_unit?.message}
             />
           </Grid>
@@ -146,7 +146,7 @@ export const SegmentPage = ({
               ]}
               getLabel={(option) => option.label}
               getValue={(option) => option.id}
-              register={register("estimative_type")}
+              {...register("estimative_type")}
               error={errors.estimative_type?.message}
             />
           </Grid>

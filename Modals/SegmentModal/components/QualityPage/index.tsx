@@ -20,8 +20,8 @@ import { useForm, z, zodResolver } from "@utils/helpers/form-validation";
 import { media } from "@styles/media-query";
 
 const QualitySchema = z.object({
-  texture: z.enum(qualityTextureEnum).optional(),
-  depth: z.enum(qualityDepthEnum).optional(),
+  texture: z.enum(qualityTextureEnum).optional().nullable(),
+  depth: z.enum(qualityDepthEnum).optional().nullable(),
   anatomy: z.string().optional(),
   comment: z.string().optional(),
 });
@@ -41,15 +41,16 @@ export const QualityPage = ({
   onValidChange,
   qualityValues,
 }: Props) => {
-  const { formState, register, getValues, watch } = useForm<QualityFormValues>({
-    resolver: zodResolver(QualitySchema),
-    defaultValues: {
-      texture: qualityValues?.texture,
-      depth: qualityValues?.depth,
-      anatomy: qualityValues?.anatomy,
-      comment: qualityValues?.comment,
-    },
-  });
+  const { formState, register, getValues, watch, setValue } =
+    useForm<QualityFormValues>({
+      resolver: zodResolver(QualitySchema),
+      defaultValues: {
+        texture: qualityValues?.texture ?? undefined,
+        depth: qualityValues?.depth ?? undefined,
+        anatomy: qualityValues?.anatomy ?? "",
+        comment: qualityValues?.comment ?? "",
+      },
+    });
 
   const textureIsNotSelected = (texture: IQualityTexture) => {
     const textureId = watch("texture");
@@ -71,6 +72,30 @@ export const QualityPage = ({
     onValidChange(true);
   }, [onValidChange]);
 
+  const onClickTexture = (value: QualityFormValues["texture"]) => {
+    const texture = getValues("texture");
+
+    if (texture === value) {
+      setValue("texture", undefined);
+    } else {
+      setValue("texture", value);
+    }
+
+    onUpdate();
+  };
+
+  const onClickDepth = (value: QualityFormValues["depth"]) => {
+    const depth = getValues("depth");
+
+    if (depth === value) {
+      setValue("depth", undefined);
+    } else {
+      setValue("depth", value);
+    }
+
+    onUpdate();
+  };
+
   return (
     <form onChange={onUpdate}>
       <Container>
@@ -84,8 +109,8 @@ export const QualityPage = ({
                     iconPath={texture.iconPath}
                     label={texture.label}
                     description={texture.description}
-                    register={register("texture")}
                     isSelected={watch("texture") === texture.id}
+                    onClick={onClickTexture}
                     isNotSelected={textureIsNotSelected(texture.id)}
                     value={texture.id}
                   />
@@ -103,8 +128,8 @@ export const QualityPage = ({
                     label={depth.label}
                     description={depth.description}
                     iconSize={36}
-                    register={register("depth")}
                     isSelected={watch("depth") === depth.id}
+                    onClick={onClickDepth}
                     isNotSelected={depthIsNotSelected(depth.id)}
                     value={depth.id}
                   />
