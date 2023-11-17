@@ -140,8 +140,8 @@ export const qualityDepthEnum = [
 export type IQualityDepth = (typeof qualityDepthEnum)[number];
 
 export type ISegmentQuality = {
-  texture?: IQualityTexture;
-  depth?: IQualityDepth;
+  texture?: IQualityTexture | null;
+  depth?: IQualityDepth | null;
   anatomy?: string;
   comment?: string;
 };

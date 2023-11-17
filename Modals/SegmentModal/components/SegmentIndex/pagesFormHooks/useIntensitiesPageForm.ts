@@ -50,7 +50,7 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
     const pageForm = {
       ...intensitiesPageForm,
       draw: intensitiesPageForm.draw ?? [],
-      values: undefined,
+      values: intensitiesPageForm.values,
     };
 
     const isEqualsWithoutValues = _.isEqual(pageForm, intensitiesValues);
@@ -63,6 +63,8 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
     const segmentValue = cleanUndefined(segment.intensities.values) ?? {};
 
     const isEqualsValues = _.isEqual(pageFormValue, segmentValue);
+
+    console.log(isEqualsValues);
 
     return !isEqualsValues;
   };
