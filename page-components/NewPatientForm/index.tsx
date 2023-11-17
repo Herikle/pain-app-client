@@ -99,6 +99,7 @@ export const NewPatientForm = () => {
                 render={({ field }) => (
                   <DatePicker
                     {...field}
+                    disableFuture
                     label="Date of birth"
                     error={errors.birth_date?.message}
                   />

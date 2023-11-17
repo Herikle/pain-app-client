@@ -89,6 +89,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
               render={({ field }) => (
                 <DatePicker
                   {...field}
+                  disableFuture
                   label="Date of birth"
                   error={errors.birth_date?.message}
                 />
