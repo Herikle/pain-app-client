@@ -8,17 +8,15 @@ import {
   GetPublicAttributesResponse,
   getPublicAttributes,
 } from "@queries/public/useGetPublic";
-import { useGenerateResponse } from "@queries/public/usePublic";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { CommonKeyStringPair, EmptyAttributesConfig } from "types";
+import { EmptyAttributesConfig } from "types";
 import ReCAPTCHA from "react-google-recaptcha";
 import { TextField } from "@components/TextField";
-import Image from "next/image";
 import { ImagesPath } from "@utils/icons";
 import { Box } from "@mui/material";
 
@@ -41,19 +39,6 @@ const parseData = (data: string) => {
   const text = parsed?.choices?.[0]?.delta?.content;
 
   return text;
-};
-
-const getStreamText = (chunk: string) => {
-  try {
-    const allChunks = chunk.split("\n");
-    let text = "";
-    for (const chunk of allChunks) {
-      text += parseData(chunk);
-    }
-    return text;
-  } catch (e) {
-    return "";
-  }
 };
 
 const scrollBottom = () => {
@@ -99,22 +84,20 @@ export default function GeneratePage({
     setIsRunning(true);
 
     if (response?.status !== 200) {
-      // throw error
+      setIsRunning(false);
       return;
     }
+
     scrollBottom();
-    // const interval = setInterval(scrollBottom, 500);
     const reader = response?.body?.getReader();
     const decoder = new TextDecoder("utf-8");
     while (true) {
       const { value, done } = (await reader?.read()) || {};
       if (done) {
         setIsRunning(false);
-        // clearInterval(interval);
         break;
       }
-      const chunk = decoder.decode(value);
-      const pieceOfText = getStreamText(chunk);
+      const pieceOfText = decoder.decode(value);
       setGptResponse((prev) => prev + pieceOfText);
     }
   };
