@@ -15,6 +15,7 @@ import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { TrackIntensityOverTrackPage } from "./TrackIntensityOverTrackPage";
 import { media } from "@styles/media-query";
+import { DeleteTracKModal } from "Modals/DeleteTrackModal";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -60,6 +61,8 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
   const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
   const [trackDetailsValid, setTrackDetailsValid] = useState(false);
 
+  const updateTrack = useUpdateTrack();
+
   const [confirmDeleteTrack, setConfirmDeleteTrack] = useState(false);
 
   const openConfirmDelete = () => {
@@ -67,20 +70,6 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
   };
 
   const closeConfirmDelete = () => {
-    setConfirmDeleteTrack(false);
-  };
-
-  const updateTrack = useUpdateTrack();
-
-  const deleteTrack = useDeleteTrack();
-
-  const onDelete = async () => {
-    await deleteTrack.mutateAsync({
-      params: {
-        track_id: track._id,
-      },
-    });
-    onClose();
     setConfirmDeleteTrack(false);
   };
 
@@ -177,23 +166,7 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
         </FlexRow>
       </Container>
       {confirmDeleteTrack && (
-        <ConfirmActionModal
-          onClose={closeConfirmDelete}
-          title="Are you sure you want to delete this track?"
-          description="All segments will be lost. This action cannot be undone."
-          confirmText="Yes, delete it"
-          writeConfirmation={{
-            label: (
-              <>
-                To delete this track, type the track name{" "}
-                <strong>{track.name}</strong>
-              </>
-            ),
-            testText: track.name,
-          }}
-          onConfirm={onDelete}
-          loading={deleteTrack.isLoading}
-        />
+        <DeleteTracKModal onClose={closeConfirmDelete} track={track} />
       )}
     </>
   );

@@ -4,7 +4,7 @@ import { SEGMENT_SECTION_HEIGHT } from "./components/Segment/const";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
-import { Pencil } from "@phosphor-icons/react";
+import { ChartBar, Pencil, Trash } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "Modals/SegmentModal/hook";
 import { useSetTrackModal } from "Modals/TrackModal/hook";
 import { ISegment, ITrack } from "types";
@@ -12,6 +12,8 @@ import { Element } from "react-scroll";
 import { SegmentModalTabs } from "Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
 import { media } from "@styles/media-query";
+import { useState } from "react";
+import { DeleteTracKModal } from "Modals/DeleteTrackModal";
 
 export const SegmentsTitleComponent = () => {
   return (
@@ -63,6 +65,16 @@ export const Track = ({ track }: TrackProps) => {
 
   const setTrackModal = useSetTrackModal();
 
+  const [confirmDeleteTrack, setConfirmDeleteTrack] = useState(false);
+
+  const openConfirmDelete = () => {
+    setConfirmDeleteTrack(true);
+  };
+
+  const closeConfirmDelete = () => {
+    setConfirmDeleteTrack(false);
+  };
+
   const onClickSegment = (
     segment: ISegment,
     tab: SegmentModalTabs = "segment"
@@ -87,15 +99,23 @@ export const Track = ({ track }: TrackProps) => {
   return (
     <Element name={`track_${track._id}`}>
       <Wrapper gap={2}>
-        <FlexRow justify="flex-start">
+        <FlexRow justify="space-between">
           <Text variant="body1Bold">{track.name}</Text>
-          <Pencil
-            size={16}
-            color={theme.colors.font_color}
-            weight="fill"
-            cursor="pointer"
-            onClick={onClickTrackEdit}
-          />
+          <FlexRow gap={2}>
+            <Pencil
+              size={16}
+              color={theme.colors.font_color}
+              cursor="pointer"
+              onClick={onClickTrackEdit}
+            />
+            <Trash
+              size={16}
+              color={theme.colors.font_color}
+              cursor="pointer"
+              onClick={openConfirmDelete}
+            />
+            <ChartBar size={16} color={theme.colors.font_color} />
+          </FlexRow>
         </FlexRow>
         <Container>
           <SegmentsTitleComponent />
@@ -113,6 +133,9 @@ export const Track = ({ track }: TrackProps) => {
           </CommentContainer>
         )}
       </Wrapper>
+      {confirmDeleteTrack && (
+        <DeleteTracKModal onClose={closeConfirmDelete} track={track} />
+      )}
     </Element>
   );
 };
