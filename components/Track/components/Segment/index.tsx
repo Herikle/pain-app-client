@@ -4,7 +4,7 @@ import { ISegment } from "types";
 import { SEGMENT_WIDTH } from "./const";
 import { SegmentDraw } from "./components/SegmentDraw";
 import { SegmentValues, onChangeValueProps } from "./components/SegmentValues";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
@@ -15,30 +15,38 @@ import { getTimeUnitAbbreviation } from "@utils/helpers/segmentHelpers";
 import { DrawObject } from "@components/Paint";
 
 type SegmentProps = {
+  segment: ISegment;
   hasDraw?: boolean;
   readOnly?: boolean;
   onClick?: (tab?: SegmentModalTabs) => void;
   backgroundColor?: string;
   isSolitary?: boolean;
-  segment: ISegment;
   onChangeValues?: (data: onChangeValueProps) => void;
   onChangeDraw?: (data: DrawObject[]) => void;
   showFooterDetails?: boolean;
+  cumulativePainMode?: boolean;
 };
 
 export const Segment = ({
+  segment,
   hasDraw = false,
   readOnly = false,
   onClick,
   backgroundColor,
   isSolitary = false,
-  segment,
   onChangeValues,
   onChangeDraw,
-  showFooterDetails,
+  showFooterDetails = false,
+  cumulativePainMode = false,
 }: SegmentProps) => {
   const { name, intensities } = segment;
   const { type } = intensities;
+
+  const shouldShowFooter = () => {
+    if (cumulativePainMode) return false;
+
+    return showFooterDetails;
+  };
 
   return (
     <Wrapper $isSolitary={isSolitary}>
@@ -68,7 +76,11 @@ export const Segment = ({
         )}
       </Container>
       {showFooterDetails && (
-        <SegmentFooter mt={1} align="center">
+        <SegmentFooter
+          mt={1}
+          align="center"
+          $cumulativePainMode={cumulativePainMode}
+        >
           {(!!segment.start || !!segment.end) && (
             <TimeSegment>
               {segment.start ?? "?"}~{segment.end ?? "?"}
@@ -168,6 +180,16 @@ const QualityIcons = styled(FlexRow)`
 
 const TimeSegment = styled.div``;
 
-const SegmentFooter = styled(FlexColumn)`
+type SegmentFooterProps = {
+  $cumulativePainMode: boolean;
+};
+
+const SegmentFooter = styled(FlexColumn)<SegmentFooterProps>`
   min-height: 49px;
+
+  ${({ $cumulativePainMode }) =>
+    $cumulativePainMode &&
+    css`
+      opacity: 0;
+    `}
 `;

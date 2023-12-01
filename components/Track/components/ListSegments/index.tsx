@@ -12,13 +12,15 @@ import { useRef } from "react";
 type ListSegmentsProps = {
   onClickSegment: (segment: ISegment, tab?: SegmentModalTabs) => void;
   track: ITrack;
+  cumulativePainMode?: boolean;
   enableAddNewSegment?: boolean;
 };
 
 export const ListSegments = ({
   onClickSegment,
   track,
-  enableAddNewSegment,
+  cumulativePainMode = false,
+  enableAddNewSegment = false,
 }: ListSegmentsProps) => {
   const segmentsListRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +57,7 @@ export const ListSegments = ({
             readOnly
             onClick={(tab) => onClickSegment(segment, tab)}
             showFooterDetails
+            cumulativePainMode={cumulativePainMode}
           />
         ))}
       </SegmentsContainer>
