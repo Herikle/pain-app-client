@@ -3,6 +3,13 @@ import { Input } from "./style";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
 import { theme } from "@styles/theme";
 import { Controller } from "react-hook-form";
+import { Text } from "@components/Text";
+import { FlexRow } from "@design-components/Flex";
+import { ISegment } from "types";
+import {
+  convertTimeToHours,
+  getTimeUnitAbbreviation,
+} from "@utils/helpers/segmentHelpers";
 
 export const SegmentValuesSchema = z
   .object({
@@ -66,14 +73,23 @@ export type onChangeValueProps = {
 
 type ValuesSectionProps = {
   readOnly: boolean;
-  values?: SegmentValuesForm;
+  segmentTime: {
+    min: number | undefined;
+    max: number | undefined;
+  };
+  values: SegmentValuesForm | undefined;
   onChange?: (data: onChangeValueProps) => void;
+  cumulativePainMode: boolean;
+  timeUnit: ISegment["time_unit"];
 };
 
 export const SegmentValues = ({
   readOnly,
   values,
   onChange,
+  segmentTime,
+  cumulativePainMode,
+  timeUnit,
 }: ValuesSectionProps) => {
   const { getValues, control } = useForm<SegmentValuesForm>({
     resolver: zodResolver(SegmentValuesSchema),
@@ -105,20 +121,42 @@ export const SegmentValues = ({
     });
   };
 
+  const getRawValue = (value: keyof SegmentValuesForm) => {
+    return values?.[value] ? `${values?.[value]}%` : "";
+  };
+
+  const getCumulativeValue = (value: keyof SegmentValuesForm) => {
+    const percentValue = values?.[value] ?? 0;
+
+    if (percentValue === 0) return "";
+
+    const min = convertTimeToHours(segmentTime.min, timeUnit);
+    const max = convertTimeToHours(segmentTime.max, timeUnit);
+    if (min === 0 && max === 0) return "";
+    const percentage = percentValue / 100;
+    const duration_min = min * percentage;
+    const duration_max = max * percentage;
+    return `${duration_min.toFixed(1)} - ${duration_max.toFixed(
+      1
+    )} ${getTimeUnitAbbreviation("hours")}`;
+  };
+
   return (
     <form onChange={onUpdate}>
       {valuesArray.map((value) => (
         <Section key={value}>
           {readOnly ? (
-            <Input
-              value={values?.[value] ?? ""}
-              disabled={true}
-              suffix="%"
-              style={{
-                color: theme.pain_level_colors[value],
-                pointerEvents: "none",
-              }}
-            />
+            <FlexRow width="100%" height="100%">
+              <Text
+                variant="body1Bold"
+                align="center"
+                customColor={theme.pain_level_colors[value]}
+              >
+                {cumulativePainMode
+                  ? getCumulativeValue(value)
+                  : getRawValue(value)}
+              </Text>
+            </FlexRow>
           ) : (
             <Controller
               control={control}

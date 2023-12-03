@@ -28,8 +28,8 @@ export const useSegmentPageForm = (segment: ISegment) => {
   const isDirtySegmentPageForm = () => {
     const segmentValues = {
       name: normalizeString(segment.name),
-      start: segment.start,
-      end: segment.end,
+      start: segment.start ?? 0,
+      end: segment.end ?? 0,
       estimative_type: segment.estimative_type,
       pain_type: segment.pain_type,
       start_date: getDateAndTimeFromIsoDate(segment.start_date),

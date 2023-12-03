@@ -14,16 +14,27 @@ import { CommonSegmentModalProps } from "../..";
 import { media, useMatchMediaUp } from "@styles/media-query";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
-const SegmentPageSchema = z.object({
-  name: z.string().optional(),
-  start: z.number().nonnegative().optional(),
-  end: z.number().nonnegative().optional(),
-  time_unit: z.enum(["minutes", "hours", "days"]),
-  start_date: z.date().optional(),
-  estimative_type: z.enum(["reported", "measured", "inferred"]),
-  pain_type: z.enum(["acute", "chronic"]),
-  comment: z.string().optional(),
-});
+const SegmentPageSchema = z
+  .object({
+    name: z.string().optional(),
+    start: z.number().nonnegative().optional(),
+    end: z.number().nonnegative().optional(),
+    time_unit: z.enum(["minutes", "hours", "days"]),
+    start_date: z.date().optional(),
+    estimative_type: z.enum(["reported", "measured", "inferred"]),
+    pain_type: z.enum(["acute", "chronic"]),
+    comment: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      const { start, end } = data;
+      return (start ?? 0) <= (end ?? 0);
+    },
+    {
+      path: ["end"],
+      message: "End must be greater than start",
+    }
+  );
 
 export type SegmentPageForm = z.infer<typeof SegmentPageSchema>;
 
@@ -46,7 +57,13 @@ export const SegmentPage = ({
   });
 
   const onUpdate = () => {
-    onChange(getValues());
+    const values = getValues();
+
+    onChange({
+      ...values,
+      start: values.start ?? 0,
+      end: values.end ?? 0,
+    });
   };
 
   const { errors, isValid } = formState;
@@ -74,6 +91,7 @@ export const SegmentPage = ({
               type="number"
               {...register("start", {
                 setValueAs: setValueAsNumber,
+                deps: ["end"],
               })}
               error={errors.start?.message}
             />
@@ -84,6 +102,7 @@ export const SegmentPage = ({
               type="number"
               {...register("end", {
                 setValueAs: setValueAsNumber,
+                deps: ["start"],
               })}
               error={errors.end?.message}
             />

@@ -14,6 +14,11 @@ import { ListSegments } from "./components/ListSegments";
 import { media } from "@styles/media-query";
 import { useState } from "react";
 import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import {
+  PainType,
+  calculateCumulativeTime,
+} from "@utils/helpers/segmentHelpers";
+import v from "voca";
 
 type Props = {
   cumulativePainMode?: {
@@ -28,6 +33,22 @@ type Props = {
   };
 };
 
+const pains: PainType[] = [
+  "excruciating",
+  "disabling",
+  "hurful",
+  "annoying",
+  "no_pain",
+];
+
+const painsAbbreviation: { [key in PainType]: string } = {
+  excruciating: "e",
+  disabling: "d",
+  hurful: "h",
+  annoying: "a",
+  no_pain: "n",
+};
+
 export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
   const isCumulativePainMode = !!cumulativePainMode?.active;
 
@@ -35,61 +56,27 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
 
   return (
     <SegmentsTitle>
-      <SegmentName>
-        <Text variant="h3" customColor={theme.pain_level_colors.excruciating}>
+      {pains.map((pain) => (
+        <SegmentName key={pain}>
           {isCumulativePainMode ? (
-            <FlexRow justify="start" gap={1}>
-              <span>E</span> <span>{hours?.e}</span>
+            <FlexRow justify="start" align="center" gap={1} height="100%">
+              <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
+                {v.upperCase(painsAbbreviation[pain])}
+              </Text>{" "}
+              <Text
+                variant="body1Bold"
+                customColor={theme.pain_level_colors[pain]}
+              >
+                {hours?.[painsAbbreviation[pain]]}
+              </Text>
             </FlexRow>
           ) : (
-            "Excruciating"
+            <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
+              {v.capitalize(pain.replace("_", " "))}
+            </Text>
           )}
-        </Text>
-      </SegmentName>
-      <SegmentName>
-        <Text variant="h3" customColor={theme.pain_level_colors.disabling}>
-          {isCumulativePainMode ? (
-            <FlexRow justify="start" gap={1}>
-              <span>D</span> <span>{hours?.d}</span>
-            </FlexRow>
-          ) : (
-            "Disabling"
-          )}
-        </Text>
-      </SegmentName>
-      <SegmentName>
-        <Text variant="h3" customColor={theme.pain_level_colors.hurful}>
-          {isCumulativePainMode ? (
-            <FlexRow justify="start" gap={1}>
-              <span>H</span> <span>{hours?.h}</span>
-            </FlexRow>
-          ) : (
-            "Hurful"
-          )}
-        </Text>
-      </SegmentName>
-      <SegmentName>
-        <Text variant="h3" customColor={theme.pain_level_colors.annoying}>
-          {isCumulativePainMode ? (
-            <FlexRow justify="start" gap={1}>
-              <span>A</span> <span>{hours?.a}</span>
-            </FlexRow>
-          ) : (
-            "Annoying"
-          )}
-        </Text>
-      </SegmentName>
-      <SegmentName>
-        <Text variant="h3" customColor={theme.pain_level_colors.no_pain}>
-          {isCumulativePainMode ? (
-            <FlexRow justify="start" gap={1}>
-              <span>N</span> <span>{hours?.n}</span>
-            </FlexRow>
-          ) : (
-            "No pain"
-          )}
-        </Text>
-      </SegmentName>
+        </SegmentName>
+      ))}
     </SegmentsTitle>
   );
 };
@@ -164,13 +151,7 @@ export const Track = ({ track }: TrackProps) => {
           <SegmentsTitleComponent
             cumulativePainMode={{
               active: cumulativePainMode,
-              hours: {
-                e: "12.5 - 15hr",
-                d: "6 - 12hr",
-                h: "3 - 6hr",
-                a: "1 - 1.5hr",
-                n: "0.5 - 0.75hr",
-              },
+              hours: calculateCumulativeTime(segments),
             }}
           />
           {hasSegments && (
@@ -235,7 +216,7 @@ const SegmentName = styled.div`
   }
   display: flex;
   flex-direction: column;
-  min-width: 120px;
+  min-width: 180px;
 `;
 
 const SegmentsTitle = styled(FlexColumn)`

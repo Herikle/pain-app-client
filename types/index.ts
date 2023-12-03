@@ -112,6 +112,7 @@ export type ISegmentValues = {
   disabling?: number | null;
   hurful?: number | null;
   annoying?: number | null;
+  no_pain?: number | null;
 };
 
 export type ISegmentIntensities = {

@@ -71,6 +71,12 @@ export const Segment = ({
             readOnly={readOnly}
             values={intensities.values}
             onChange={onChangeValues}
+            segmentTime={{
+              min: segment.start,
+              max: segment.end,
+            }}
+            cumulativePainMode={cumulativePainMode}
+            timeUnit={segment.time_unit}
           />
         )}
       </Container>
