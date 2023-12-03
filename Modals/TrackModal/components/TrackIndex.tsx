@@ -8,13 +8,11 @@ import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
-import { notImplemented } from "@utils/helpers/dev";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
-import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
-import { TrackIntensityOverTrackPage } from "./TrackIntensityOverTrackPage";
 import { media } from "@styles/media-query";
+import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import { useUpdateTrack } from "@queries/track/useTrack";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -60,6 +58,8 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
   const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
   const [trackDetailsValid, setTrackDetailsValid] = useState(false);
 
+  const updateTrack = useUpdateTrack();
+
   const [confirmDeleteTrack, setConfirmDeleteTrack] = useState(false);
 
   const openConfirmDelete = () => {
@@ -68,20 +68,7 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
 
   const closeConfirmDelete = () => {
     setConfirmDeleteTrack(false);
-  };
-
-  const updateTrack = useUpdateTrack();
-
-  const deleteTrack = useDeleteTrack();
-
-  const onDelete = async () => {
-    await deleteTrack.mutateAsync({
-      params: {
-        track_id: track._id,
-      },
-    });
     onClose();
-    setConfirmDeleteTrack(false);
   };
 
   const onChangeTrackDetails = useCallback((data: TrackEditType) => {
@@ -177,23 +164,7 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
         </FlexRow>
       </Container>
       {confirmDeleteTrack && (
-        <ConfirmActionModal
-          onClose={closeConfirmDelete}
-          title="Are you sure you want to delete this track?"
-          description="All segments will be lost. This action cannot be undone."
-          confirmText="Yes, delete it"
-          writeConfirmation={{
-            label: (
-              <>
-                To delete this track, type the track name{" "}
-                <strong>{track.name}</strong>
-              </>
-            ),
-            testText: track.name,
-          }}
-          onConfirm={onDelete}
-          loading={deleteTrack.isLoading}
-        />
+        <DeleteTracKModal onClose={closeConfirmDelete} track={track} />
       )}
     </>
   );
