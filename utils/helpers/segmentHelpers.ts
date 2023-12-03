@@ -159,23 +159,23 @@ export const calculateCumulativeTime = (segments: ISegment[] | undefined) => {
 
   return {
     e: `${excrutiating_durations.min.toFixed(
-      2
-    )} - ${excrutiating_durations.max.toFixed(2)} ${getTimeUnitAbbreviation(
+      1
+    )} - ${excrutiating_durations.max.toFixed(1)} ${getTimeUnitAbbreviation(
       "hours"
     )}`,
     d: `${disabling_durations.min.toFixed(
-      2
-    )} - ${disabling_durations.max.toFixed(2)} ${getTimeUnitAbbreviation(
+      1
+    )} - ${disabling_durations.max.toFixed(1)} ${getTimeUnitAbbreviation(
       "hours"
     )}`,
-    h: `${hurful_durations.min.toFixed(2)} - ${hurful_durations.max.toFixed(
-      2
+    h: `${hurful_durations.min.toFixed(1)} - ${hurful_durations.max.toFixed(
+      1
     )} ${getTimeUnitAbbreviation("hours")}`,
-    a: `${annoying_durations.min.toFixed(2)} - ${annoying_durations.max.toFixed(
-      2
+    a: `${annoying_durations.min.toFixed(1)} - ${annoying_durations.max.toFixed(
+      1
     )} ${getTimeUnitAbbreviation("hours")}`,
-    n: `${no_pain_durations.min.toFixed(2)} - ${no_pain_durations.max.toFixed(
-      2
+    n: `${no_pain_durations.min.toFixed(1)} - ${no_pain_durations.max.toFixed(
+      1
     )} ${getTimeUnitAbbreviation("hours")}`,
   };
 };
