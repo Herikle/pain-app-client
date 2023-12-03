@@ -8,14 +8,11 @@ import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
 import { Trash } from "@phosphor-icons/react";
-import { notImplemented } from "@utils/helpers/dev";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
-import { useDeleteTrack, useUpdateTrack } from "@queries/track/useTrack";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
-import { TrackIntensityOverTrackPage } from "./TrackIntensityOverTrackPage";
 import { media } from "@styles/media-query";
 import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import { useUpdateTrack } from "@queries/track/useTrack";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -71,6 +68,7 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
 
   const closeConfirmDelete = () => {
     setConfirmDeleteTrack(false);
+    onClose();
   };
 
   const onChangeTrackDetails = useCallback((data: TrackEditType) => {

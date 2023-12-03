@@ -42,16 +42,15 @@ export const Segment = ({
   const { name, intensities } = segment;
   const { type } = intensities;
 
-  const shouldShowFooter = () => {
-    if (cumulativePainMode) return false;
-
-    return showFooterDetails;
-  };
-
   return (
     <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
-        <Text align="center" textElipsis maxWidth={`${SEGMENT_WIDTH}px`}>
+        <Text
+          variant="body1Bold"
+          align="center"
+          textElipsis
+          maxWidth={`${SEGMENT_WIDTH}px`}
+        >
           {name ?? ""}
         </Text>
       </SegmentName>
@@ -83,8 +82,10 @@ export const Segment = ({
         >
           {(!!segment.start || !!segment.end) && (
             <TimeSegment>
-              {segment.start ?? "?"}~{segment.end ?? "?"}
-              {getTimeUnitAbbreviation(segment.time_unit)}
+              <Text variant="h3">
+                {segment.start ?? "?"}~{segment.end ?? "?"}
+                {getTimeUnitAbbreviation(segment.time_unit)}
+              </Text>
             </TimeSegment>
           )}
           <QualityIcons>

@@ -36,10 +36,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
   return (
     <SegmentsTitle>
       <SegmentName>
-        <Text
-          variant="body2Bold"
-          customColor={theme.pain_level_colors.excruciating}
-        >
+        <Text variant="h3" customColor={theme.pain_level_colors.excruciating}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" gap={1}>
               <span>E</span> <span>{hours?.e}</span>
@@ -50,10 +47,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
         </Text>
       </SegmentName>
       <SegmentName>
-        <Text
-          variant="body2Bold"
-          customColor={theme.pain_level_colors.disabling}
-        >
+        <Text variant="h3" customColor={theme.pain_level_colors.disabling}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" gap={1}>
               <span>D</span> <span>{hours?.d}</span>
@@ -64,7 +58,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
         </Text>
       </SegmentName>
       <SegmentName>
-        <Text variant="body2Bold" customColor={theme.pain_level_colors.hurful}>
+        <Text variant="h3" customColor={theme.pain_level_colors.hurful}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" gap={1}>
               <span>H</span> <span>{hours?.h}</span>
@@ -75,10 +69,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
         </Text>
       </SegmentName>
       <SegmentName>
-        <Text
-          variant="body2Bold"
-          customColor={theme.pain_level_colors.annoying}
-        >
+        <Text variant="h3" customColor={theme.pain_level_colors.annoying}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" gap={1}>
               <span>A</span> <span>{hours?.a}</span>
@@ -89,7 +80,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
         </Text>
       </SegmentName>
       <SegmentName>
-        <Text variant="body2Bold" customColor={theme.pain_level_colors.no_pain}>
+        <Text variant="h3" customColor={theme.pain_level_colors.no_pain}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" gap={1}>
               <span>N</span> <span>{hours?.n}</span>
@@ -149,7 +140,7 @@ export const Track = ({ track }: TrackProps) => {
     <Element name={`track_${track._id}`}>
       <Wrapper gap={2}>
         <FlexRow justify="space-between">
-          <Text variant="body1Bold">
+          <Text variant="h3">
             {cumulativePainMode && "Cumulative pain for "}
             {track.name}
           </Text>

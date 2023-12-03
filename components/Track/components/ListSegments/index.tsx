@@ -29,7 +29,7 @@ export const ListSegments = ({
   const createSegment = useCreateSegment();
 
   const onClickAddNewSegment = async () => {
-    const segment_created = await createSegment.mutateAsync({
+    await createSegment.mutateAsync({
       body: {
         track_id: track._id,
       },

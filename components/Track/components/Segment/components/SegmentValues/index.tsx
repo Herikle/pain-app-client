@@ -2,8 +2,9 @@ import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { Section } from "../shared-style";
 import { Input } from "./style";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
-import { useEffect, useState } from "react";
+import { PatternFormat } from "react-number-format";
 import { theme } from "@styles/theme";
+import { Controller } from "react-hook-form";
 
 const parseNumber = (value: number | undefined) => {
   if (value === undefined) return "";
@@ -15,31 +16,36 @@ export const SegmentValuesSchema = z
     excruciating: z
       .number()
       .nonnegative("Excruciating must be a positive number")
-      .optional(),
+      .optional()
+      .nullable(),
     disabling: z
       .number()
       .nonnegative("Disabling must be a positive number")
-      .optional(),
+      .optional()
+      .nullable(),
     hurful: z
       .number()
       .nonnegative("Hurful must be a positive number")
-      .optional(),
+      .optional()
+      .nullable(),
     annoying: z
       .number()
       .nonnegative("Annoying must be a positive number")
-      .optional(),
+      .optional()
+      .nullable(),
     no_pain: z
       .number()
       .nonnegative("No pain must be a positive number")
-      .optional(),
+      .optional()
+      .nullable(),
   })
   .refine(
     (data) => {
       const sum = Object.values(data).reduce(
-        (acc, curr: number | undefined) => acc + (curr ?? 0),
+        (acc: number, curr: number | undefined | null) => acc + (curr ?? 0),
         0
       );
-      return sum <= 100;
+      return (sum ?? 0) <= 100;
     },
     {
       message: "The sum of all values must be less or equal to 100",
@@ -76,7 +82,7 @@ export const SegmentValues = ({
   values,
   onChange,
 }: ValuesSectionProps) => {
-  const { register, getValues } = useForm<SegmentValuesForm>({
+  const { getValues, control } = useForm<SegmentValuesForm>({
     resolver: zodResolver(SegmentValuesSchema),
     mode: "onChange",
     defaultValues: {
@@ -112,23 +118,32 @@ export const SegmentValues = ({
         <Section key={value}>
           {readOnly ? (
             <Input
-              type="number"
-              readOnly={true}
-              value={parseNumber(values?.[value])}
+              value={values?.[value] ?? ""}
+              disabled={true}
+              suffix="%"
               style={{
                 color: theme.pain_level_colors[value],
+                pointerEvents: "none",
               }}
             />
           ) : (
-            <Input
-              type="number"
-              autoComplete="off"
-              {...register(value, {
-                setValueAs: setValueAsNumber,
-              })}
-              style={{
-                color: theme.pain_level_colors[value],
-              }}
+            <Controller
+              control={control}
+              name={value}
+              render={({ field }) => (
+                <Input
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value.floatValue ?? null);
+                  }}
+                  onBlur={field.onBlur}
+                  getInputRef={field.ref}
+                  suffix="%"
+                  style={{
+                    color: theme.pain_level_colors[value],
+                  }}
+                />
+              )}
             />
           )}
         </Section>

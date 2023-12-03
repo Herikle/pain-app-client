@@ -108,10 +108,10 @@ type ISegmentEstimativeType = "reported" | "measured" | "inferred";
 type ISegmentPainType = "acute" | "chronic";
 
 export type ISegmentValues = {
-  excruciating?: number;
-  disabling?: number;
-  hurful?: number;
-  annoying?: number;
+  excruciating?: number | null;
+  disabling?: number | null;
+  hurful?: number | null;
+  annoying?: number | null;
 };
 
 export type ISegmentIntensities = {
