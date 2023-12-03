@@ -1,15 +1,8 @@
-import { setValueAsNumber } from "@utils/helpers/zodValidation";
 import { Section } from "../shared-style";
 import { Input } from "./style";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
-import { PatternFormat } from "react-number-format";
 import { theme } from "@styles/theme";
 import { Controller } from "react-hook-form";
-
-const parseNumber = (value: number | undefined) => {
-  if (value === undefined) return "";
-  return value;
-};
 
 export const SegmentValuesSchema = z
   .object({

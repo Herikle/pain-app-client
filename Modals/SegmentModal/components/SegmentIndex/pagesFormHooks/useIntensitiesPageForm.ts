@@ -12,7 +12,7 @@ const cleanUndefined = (values: ISegmentValues | undefined) => {
   const newValues = {};
 
   Object.keys(values).forEach((key) => {
-    if (values[key] !== undefined) {
+    if (values[key] !== undefined && values[key] !== null) {
       newValues[key] = values[key];
     }
   });
