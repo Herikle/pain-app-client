@@ -104,7 +104,7 @@ export type ISymptom = {
 
 type IIntensityType = "draw" | "values";
 export type ISegmentTimeUnit = "minutes" | "hours" | "days";
-type ISegmentEstimativeType = "reported" | "measured" | "inferred";
+type ISegmentEstimativeType = "reported" | "measured" | "inferred" | "";
 type ISegmentPainType = "acute" | "chronic";
 
 export type ISegmentValues = {

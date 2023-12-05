@@ -21,7 +21,9 @@ const SegmentPageSchema = z
     end: z.number().nonnegative().optional(),
     time_unit: z.enum(["minutes", "hours", "days"]),
     start_date: z.date().optional(),
-    estimative_type: z.enum(["reported", "measured", "inferred"]),
+    estimative_type: z
+      .enum(["reported", "measured", "inferred", ""])
+      .optional(),
     pain_type: z.enum(["acute", "chronic"]),
     comment: z.string().optional(),
   })
@@ -51,6 +53,7 @@ export const SegmentPage = ({
     resolver: zodResolver(SegmentPageSchema),
     defaultValues: {
       ...segmentPageForm,
+      estimative_type: segmentPageForm?.estimative_type ?? "",
       start_date: segmentPageForm?.start_date,
     },
     mode: "onChange",
