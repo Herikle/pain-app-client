@@ -19,6 +19,8 @@ import {
   calculateCumulativeTime,
 } from "@utils/helpers/segmentHelpers";
 import v from "voca";
+import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
+import { Tooltip } from "react-tooltip";
 
 type Props = {
   cumulativePainMode?: {
@@ -139,12 +141,29 @@ export const Track = ({ track }: TrackProps) => {
               </>
             )}
 
-            <ChartBarIcon
-              size={16}
-              color={cumulativePainMode ? theme.colors.primary : undefined}
-              weight={cumulativePainMode ? "fill" : undefined}
-              onClick={() => setCumulativePainMode(!cumulativePainMode)}
-            />
+            {checkIfTrackHasEnoughData(track) ? (
+              <ChartBarIcon
+                size={16}
+                color={cumulativePainMode ? theme.colors.primary : undefined}
+                weight={cumulativePainMode ? "fill" : undefined}
+                onClick={() => setCumulativePainMode(!cumulativePainMode)}
+              />
+            ) : (
+              <>
+                <ChartBarIcon
+                  size={16}
+                  color={cumulativePainMode ? theme.colors.primary : undefined}
+                  weight={cumulativePainMode ? "fill" : undefined}
+                  id={`cumulative-button-${track._id}`}
+                  cursor="default"
+                />
+                <Tooltip anchorSelect={`#cumulative-button-${track._id}`}>
+                  {
+                    "This track doesn’t have enough time data to calculate the cumulative pain."
+                  }
+                </Tooltip>
+              </>
+            )}
           </FlexRow>
         </FlexRow>
         <Container>
@@ -200,8 +219,18 @@ const TrashIcon = styled(Trash)`
   ${IconCommonStyle}
 `;
 
-const ChartBarIcon = styled(ChartBar)`
+type ChartBarProps = {
+  cursor?: string;
+};
+
+const ChartBarIcon = styled(ChartBar)<ChartBarProps>`
   ${IconCommonStyle}
+
+  ${({ cursor }) =>
+    cursor &&
+    css`
+      cursor: ${cursor};
+    `}
 `;
 
 const CommentContainer = styled.div`

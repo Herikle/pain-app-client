@@ -64,6 +64,14 @@ const getCumulativeValue = (
   };
 };
 
+export const convertNumberToFixed = (value: number) => {
+  const number = value.toFixed(1);
+
+  if (number === "0.0") return "0";
+
+  return number;
+};
+
 export const calculateCumulativeTime = (segments: ISegment[] | undefined) => {
   if (!segments)
     return {
@@ -158,24 +166,26 @@ export const calculateCumulativeTime = (segments: ISegment[] | undefined) => {
   }
 
   return {
-    e: `${excrutiating_durations.min.toFixed(
-      1
-    )} - ${excrutiating_durations.max.toFixed(1)} ${getTimeUnitAbbreviation(
-      "hours"
-    )}`,
-    d: `${disabling_durations.min.toFixed(
-      1
-    )} - ${disabling_durations.max.toFixed(1)} ${getTimeUnitAbbreviation(
-      "hours"
-    )}`,
-    h: `${hurful_durations.min.toFixed(1)} - ${hurful_durations.max.toFixed(
-      1
+    e: `${convertNumberToFixed(
+      excrutiating_durations.min
+    )} - ${convertNumberToFixed(
+      excrutiating_durations.max
     )} ${getTimeUnitAbbreviation("hours")}`,
-    a: `${annoying_durations.min.toFixed(1)} - ${annoying_durations.max.toFixed(
-      1
+    d: `${convertNumberToFixed(
+      disabling_durations.min
+    )} - ${convertNumberToFixed(
+      disabling_durations.max
     )} ${getTimeUnitAbbreviation("hours")}`,
-    n: `${no_pain_durations.min.toFixed(1)} - ${no_pain_durations.max.toFixed(
-      1
+    h: `${convertNumberToFixed(hurful_durations.min)} - ${convertNumberToFixed(
+      hurful_durations.max
+    )} ${getTimeUnitAbbreviation("hours")}`,
+    a: `${convertNumberToFixed(
+      annoying_durations.min
+    )} - ${convertNumberToFixed(
+      annoying_durations.max
+    )} ${getTimeUnitAbbreviation("hours")}`,
+    n: `${convertNumberToFixed(no_pain_durations.min)} - ${convertNumberToFixed(
+      no_pain_durations.max
     )} ${getTimeUnitAbbreviation("hours")}`,
   };
 };

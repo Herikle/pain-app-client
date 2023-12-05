@@ -7,6 +7,7 @@ import { Text } from "@components/Text";
 import { FlexRow } from "@design-components/Flex";
 import { ISegment } from "types";
 import {
+  convertNumberToFixed,
   convertTimeToHours,
   getTimeUnitAbbreviation,
 } from "@utils/helpers/segmentHelpers";
@@ -136,8 +137,8 @@ export const SegmentValues = ({
     const percentage = percentValue / 100;
     const duration_min = min * percentage;
     const duration_max = max * percentage;
-    return `${duration_min.toFixed(1)} - ${duration_max.toFixed(
-      1
+    return `${convertNumberToFixed(duration_min)} - ${convertNumberToFixed(
+      duration_max
     )} ${getTimeUnitAbbreviation("hours")}`;
   };
 
