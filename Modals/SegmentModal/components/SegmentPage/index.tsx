@@ -89,6 +89,7 @@ export const SegmentPage = ({
             <TextField
               label="Between"
               type="number"
+              min={0}
               {...register("start", {
                 setValueAs: setValueAsNumber,
                 deps: ["end"],
@@ -100,6 +101,7 @@ export const SegmentPage = ({
             <TextField
               label="And"
               type="number"
+              min={0}
               {...register("end", {
                 setValueAs: setValueAsNumber,
                 deps: ["start"],
