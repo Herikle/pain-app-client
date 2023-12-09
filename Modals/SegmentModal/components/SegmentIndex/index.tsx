@@ -214,7 +214,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
           loading={updateSegment.isLoading}
         />
       )}
-      <Container id="batata">
+      <Container>
         <Content>
           <TabsContainer>
             <Tabs
@@ -272,57 +272,59 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
               />
             </Tabs>
           </TabsContainer>
-          <CustomTabPanel value={value} index={0}>
-            <SegmentPage
-              segmentPageForm={segmentPageForm}
-              onChange={onChangeSsegmentPageForm}
-              onValidChange={setSegmentPageFormIsValid}
+          <BodyContent>
+            <CustomTabPanel value={value} index={0}>
+              <SegmentPage
+                segmentPageForm={segmentPageForm}
+                onChange={onChangeSsegmentPageForm}
+                onValidChange={setSegmentPageFormIsValid}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+              <IntensitiesPage
+                segment={segment}
+                intensities={intensitiesPageForm}
+                onChange={onChangeIntensitiesPageForm}
+                onValidChange={setIntensitiesPageFormIsValid}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+              <QualityPage
+                qualityValues={qualityPageForm}
+                onChange={onChangeQualityPageForm}
+                onValidChange={setQualityPageFormIsValid}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
+              <InterventionPage
+                interventions={interventionPageForm}
+                onChange={onChangeInterventionPageForm}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={4}>
+              <SymptomsPage
+                symptoms={symptomPageForm}
+                onChange={onChangeSymptomPageForm}
+              />
+            </CustomTabPanel>
+          </BodyContent>
+          <ButtonsFooter>
+            <Trash
+              onClick={() => setConfirmDeleteSegment(true)}
+              size={32}
+              color={theme.colors.text_switched}
+              cursor="pointer"
             />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <IntensitiesPage
-              segment={segment}
-              intensities={intensitiesPageForm}
-              onChange={onChangeIntensitiesPageForm}
-              onValidChange={setIntensitiesPageFormIsValid}
-            />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            <QualityPage
-              qualityValues={qualityPageForm}
-              onChange={onChangeQualityPageForm}
-              onValidChange={setQualityPageFormIsValid}
-            />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={3}>
-            <InterventionPage
-              interventions={interventionPageForm}
-              onChange={onChangeInterventionPageForm}
-            />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={4}>
-            <SymptomsPage
-              symptoms={symptomPageForm}
-              onChange={onChangeSymptomPageForm}
-            />
-          </CustomTabPanel>
+            <Button
+              onClick={() => onSubmit()}
+              width="160px"
+              disabled={!isValid() || !isDirty()}
+              loading={updateSegment.isLoading}
+            >
+              Save changes
+            </Button>
+          </ButtonsFooter>
         </Content>
-        <FlexRow justify="space-between">
-          <Trash
-            onClick={() => setConfirmDeleteSegment(true)}
-            size={32}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-          />
-          <Button
-            onClick={() => onSubmit()}
-            width="160px"
-            disabled={!isValid() || !isDirty()}
-            loading={updateSegment.isLoading}
-          >
-            Save changes
-          </Button>
-        </FlexRow>
         <XContainer>
           <X
             size={24}
@@ -349,6 +351,13 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   );
 };
 
+const ButtonsFooter = styled(FlexRow)`
+  justify-content: space-between;
+  ${media.up.tablet`
+    padding-inline: 2rem;
+  `}
+`;
+
 const XContainer = styled.div`
   position: absolute;
   top: 1.5rem;
@@ -370,7 +379,19 @@ const ModalOverlay = styled.div`
   opacity: 0.5;
 `;
 
-const Content = styled.div``;
+const BodyContent = styled.div`
+  overflow: auto;
+  margin-bottom: 1rem;
+  height: 100%;
+  ${LightScrollBar};
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  height: 100%;
+`;
 
 const CustomTabPanel = styled(TabPanel)`
   & .MuiBox-root {
@@ -383,23 +404,17 @@ const TabsContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   width: 950px;
-  min-height: 750px;
-  height: fit-content;
+  height: 80vh;
   max-width: 80vw;
-  max-height: 80vh;
-  justify-content: space-between;
   position: relative;
-  overflow: auto;
   padding: 2rem;
-  ${LightScrollBar};
   ${media.up.laptopL`
-    min-height: 95vh;    
+    height: 95vh;
   `}
-
+  justify-content: space-between;
   ${media.up.tablet`
     min-width: 100vw;
     max-width: 100vw;
-    max-height: 100vh;
     min-height: 100vh;   
     padding: 1rem; 
   `}
@@ -407,6 +422,6 @@ const Container = styled(FlexColumn)`
   ${media.up.mobileL`
     padding: 0;
     padding-bottom: 1rem;
-    padding-top:2rem;  
+    padding-top: 1rem;  
   `}
 `;

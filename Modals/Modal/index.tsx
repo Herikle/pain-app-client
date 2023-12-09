@@ -12,6 +12,7 @@ type Props = {
   removeOverlay?: boolean;
   removePadding?: boolean;
   fullScreenOnMobile?: boolean;
+  height?: string;
 };
 
 export const Modal = ({
@@ -22,6 +23,7 @@ export const Modal = ({
   removeOverlay = false,
   removePadding = false,
   fullScreenOnMobile = false,
+  height,
 }: Props) => {
   const isOpen = open ?? true;
 
@@ -33,6 +35,7 @@ export const Modal = ({
           <Container
             $removePadding={removePadding}
             $fullScreenOnMobile={fullScreenOnMobile}
+            $height={height}
           >
             {children}
             {hasCloseButton && (
@@ -76,6 +79,7 @@ const ModalOverlay = styled.div`
 type ContainerProps = {
   $removePadding: boolean;
   $fullScreenOnMobile: boolean;
+  $height?: string;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -87,9 +91,11 @@ const Container = styled.div<ContainerProps>`
   background-color: ${theme.colors.pure_white};
   padding: ${({ $removePadding }) => ($removePadding ? 0 : "2rem")};
   max-height: 95vh;
-  overflow-y: auto;
-  ${LightScrollBar};
-
+  ${({ $height }) =>
+    $height &&
+    css`
+      height: ${$height};
+    `}
   ${({ $fullScreenOnMobile }) =>
     $fullScreenOnMobile &&
     css`
