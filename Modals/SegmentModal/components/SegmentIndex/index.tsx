@@ -381,9 +381,8 @@ const ModalOverlay = styled.div`
 
 const BodyContent = styled.div`
   overflow: auto;
-
-  max-height: 1px;
-  min-height: 100%;
+  margin-bottom: 1rem;
+  height: 100%;
   ${LightScrollBar};
 `;
 
@@ -408,10 +407,10 @@ const Container = styled(FlexColumn)`
   height: 80vh;
   max-width: 80vw;
   position: relative;
-  /* padding: 2rem; */
-  /* ${media.up.laptopL`
-    min-height: 95vh;    
-  `} */
+  padding: 2rem;
+  ${media.up.laptopL`
+    height: 95vh;
+  `}
   justify-content: space-between;
   ${media.up.tablet`
     min-width: 100vw;
