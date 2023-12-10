@@ -25,6 +25,7 @@ type SegmentProps = {
   onChangeDraw?: (data: DrawObject[]) => void;
   showFooterDetails?: boolean;
   cumulativePainMode?: boolean;
+  hideSegmentName?: boolean;
 };
 
 export const Segment = ({
@@ -38,6 +39,7 @@ export const Segment = ({
   onChangeDraw,
   showFooterDetails = false,
   cumulativePainMode = false,
+  hideSegmentName = false,
 }: SegmentProps) => {
   const { name, intensities } = segment;
   const { type } = intensities;
@@ -45,14 +47,16 @@ export const Segment = ({
   return (
     <Wrapper $isSolitary={isSolitary}>
       <SegmentName>
-        <Text
-          variant="body1Bold"
-          align="center"
-          textElipsis
-          maxWidth={`${SEGMENT_WIDTH}px`}
-        >
-          {name ?? ""}
-        </Text>
+        {!hideSegmentName && (
+          <Text
+            variant="body1Bold"
+            align="center"
+            textElipsis
+            maxWidth={`${SEGMENT_WIDTH}px`}
+          >
+            {name ?? ""}
+          </Text>
+        )}
       </SegmentName>
       <Container
         $hasClick={!!onClick}

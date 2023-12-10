@@ -5,7 +5,7 @@ import Link from "next/link";
 import styled from "styled-components";
 
 type AddButtonProps = {
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   href?: string;
   loading?: boolean;
   id?: string;

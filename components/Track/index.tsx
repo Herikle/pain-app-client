@@ -33,6 +33,7 @@ type Props = {
       n: string;
     };
   };
+  removeExtraSpace?: boolean;
 };
 
 const pains: PainType[] = [
@@ -51,7 +52,10 @@ const painsAbbreviation: { [key in PainType]: string } = {
   no_pain: "n",
 };
 
-export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
+export const SegmentsTitleComponent = ({
+  cumulativePainMode,
+  removeExtraSpace,
+}: Props) => {
   const isCumulativePainMode = !!cumulativePainMode?.active;
 
   const hours = cumulativePainMode?.hours;
@@ -59,7 +63,7 @@ export const SegmentsTitleComponent = ({ cumulativePainMode }: Props) => {
   return (
     <SegmentsTitle>
       {pains.map((pain) => (
-        <SegmentName key={pain}>
+        <SegmentName key={pain} $removeExtraSpace={removeExtraSpace}>
           {isCumulativePainMode ? (
             <FlexRow justify="start" align="center" gap={1} height="100%">
               <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
@@ -238,14 +242,25 @@ const CommentContainer = styled.div`
   margin-bottom: 2rem;
 `;
 
-const SegmentName = styled.div`
+type SegmentProps = {
+  $removeExtraSpace?: boolean;
+};
+
+const SegmentName = styled.div<SegmentProps>`
   height: ${SEGMENT_SECTION_HEIGHT}px;
   > span {
     margin-block: auto;
   }
   display: flex;
   flex-direction: column;
-  min-width: 180px;
+  ${({ $removeExtraSpace }) =>
+    $removeExtraSpace
+      ? css`
+          width: fit-content;
+        `
+      : css`
+          min-width: 180px;
+        `}
 `;
 
 const SegmentsTitle = styled(FlexColumn)`

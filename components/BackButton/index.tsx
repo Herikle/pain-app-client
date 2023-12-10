@@ -6,20 +6,27 @@ import React from "react";
 import styled from "styled-components";
 
 type BackButtonProps = {
-  href: string;
+  href?: string;
+  onClick?: () => void;
   text: React.ReactNode;
 };
 
-export const BackButton = ({ href, text }: BackButtonProps) => {
-  return (
-    <Link href={href}>
-      <BackButtonStyled>
-        <BackIcon>
-          <CaretLeft size={12} weight="bold" color={theme.colors.font_color} />
-        </BackIcon>
-        <Text color="text_switched">{text}</Text>
-      </BackButtonStyled>
-    </Link>
+export const BackButton = ({ href, text, onClick }: BackButtonProps) => {
+  const render = (children: JSX.Element) => {
+    if (href) {
+      return <Link href={href}>{children}</Link>;
+    }
+
+    return children;
+  };
+
+  return render(
+    <BackButtonStyled onClick={onClick}>
+      <BackIcon>
+        <CaretLeft size={12} weight="bold" color={theme.colors.font_color} />
+      </BackIcon>
+      <Text color="text_switched">{text}</Text>
+    </BackButtonStyled>
   );
 };
 

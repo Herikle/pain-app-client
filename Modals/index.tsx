@@ -4,6 +4,7 @@ import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
 import { DeletePatientModal } from "./DeletePatientModal";
 import { DeletePromptModal } from "./DeletePromptModal";
+import { JustificationModalWrapper } from "./JustificationModal";
 import { PromptOptionsModal } from "./PromptOptionsModal";
 import { SegmentModal } from "./SegmentModal";
 import { SetMainPromptModal } from "./SetMainPromptModal";
@@ -24,6 +25,7 @@ export const Modals = () => {
       <TrackModal />
       <ChangePasswordModal />
       <ChangeAccountInformationModal />
+      <JustificationModalWrapper />
     </>
   );
 };

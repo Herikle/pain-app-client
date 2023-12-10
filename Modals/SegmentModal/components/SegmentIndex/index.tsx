@@ -27,6 +27,7 @@ import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageFor
 import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 import { SegmentModalTabs } from "../..";
 import { media } from "@styles/media-query";
+import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -85,7 +86,14 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
 
   const [confirmDeleteSegment, setConfirmDeleteSegment] = useState(false);
 
+  const setJustifcationModal = useSetJustificationModal();
+
   const deleteSegment = useDeleteSegment();
+
+  const closeSegmentModal = () => {
+    setJustifcationModal(null);
+    onClose();
+  };
 
   const onDeleteSegment = async () => {
     await deleteSegment.mutateAsync({
@@ -96,7 +104,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
         episode_id,
       },
     });
-    onClose();
+    closeSegmentModal();
   };
 
   const {
@@ -155,7 +163,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     if (isDirty()) {
       setConfirmClose(true);
     } else {
-      onClose();
+      closeSegmentModal();
     }
   };
 
@@ -194,7 +202,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     });
 
     if (closeAfterSave) {
-      onClose();
+      closeSegmentModal();
     } else {
       setSegmentState(updatedSegment);
     }
@@ -206,7 +214,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
         <ConfirmActionModal
           onClose={() => setConfirmClose(false)}
           onConfirm={() => onSubmit(true)}
-          onCancel={onClose}
+          onCancel={closeSegmentModal}
           title="Unsaved Changes"
           description="You have unsaved changes. Save them before closing?"
           confirmText="Save"

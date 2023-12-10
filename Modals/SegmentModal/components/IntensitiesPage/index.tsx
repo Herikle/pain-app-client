@@ -16,6 +16,7 @@ import {
 } from "@components/Track/components/Segment/components/SegmentValues";
 import { DrawObject } from "@components/Paint";
 import { media } from "@styles/media-query";
+import { JustificationList } from "./components/JustificationList";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
@@ -82,55 +83,50 @@ export const IntensitiesPage = ({
 
   return (
     <form onChange={onUpdate}>
-      <Container gap={3} align="flex-start">
-        <FlexRow gap={6} pl={3}>
-          <Radio label="Draw" value="draw" {...register("type")} />
-          <Radio label="Percentage" value="values" {...register("type")} />
-        </FlexRow>
-        <FlexColumn width="100%">
-          <DrawAndJustificationContainer>
-            <FlexRow gap={0} justify="flex-start">
-              <SegmentsTitleComponent />
-              <Segment
-                segment={{
-                  ...segment,
-                  intensities: {
-                    ...intensities,
-                    type: watch("type"),
-                  },
-                }}
-                hasDraw
-                backgroundColor={theme.colors.pastel}
-                onChangeValues={onUpdateSegmentValues}
-                onChangeDraw={onUpdateSegmentDraw}
-                isSolitary
-              />
-            </FlexRow>
-            <TextArea
-              fullWidth
-              label="Justification"
-              placeholder="Write something"
-              minRows={15}
-              maxRows={15}
-              {...register("justification")}
-              error={errors.justification?.message}
-            />
-          </DrawAndJustificationContainer>
-          {watch("type") === "draw" ? (
-            <Text maxWidth="300px">
-              Tip: try to measure your pain drawing a line with the mouse
-              between the indicators.
-            </Text>
-          ) : (
-            <>
-              {segmentErrors?.map((error) => (
-                <Text variant="body2" key={error} color="dark_red_danger">
-                  {error}
-                </Text>
-              ))}
-            </>
-          )}
+      <Container>
+        <FlexColumn>
+          <FlexRow gap={6} pl={3}>
+            <Radio label="Draw" value="draw" {...register("type")} />
+            <Radio label="Percentage" value="values" {...register("type")} />
+          </FlexRow>
+          <FlexColumn width="100%">
+            <DrawAndJustificationContainer>
+              <FlexRow gap={0}>
+                <SegmentsTitleComponent removeExtraSpace />
+                <Segment
+                  segment={{
+                    ...segment,
+                    intensities: {
+                      ...intensities,
+                      type: watch("type"),
+                    },
+                  }}
+                  hasDraw
+                  backgroundColor={theme.colors.pastel}
+                  onChangeValues={onUpdateSegmentValues}
+                  onChangeDraw={onUpdateSegmentDraw}
+                  isSolitary
+                  hideSegmentName
+                />
+              </FlexRow>
+            </DrawAndJustificationContainer>
+            {watch("type") === "draw" ? (
+              <Text maxWidth="300px">
+                Tip: try to measure your pain drawing a line with the mouse
+                between the indicators.
+              </Text>
+            ) : (
+              <>
+                {segmentErrors?.map((error) => (
+                  <Text variant="body2" key={error} color="dark_red_danger">
+                    {error}
+                  </Text>
+                ))}
+              </>
+            )}
+          </FlexColumn>
         </FlexColumn>
+        <JustificationList />
       </Container>
     </form>
   );
@@ -140,10 +136,14 @@ const DrawAndJustificationContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4rem;
-
+  margin-top: 2rem;
   ${media.up.mobileL`
     flex-direction: column;
   `}
 `;
 
-const Container = styled(FlexColumn)``;
+const Container = styled(FlexRow)`
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6rem;
+`;

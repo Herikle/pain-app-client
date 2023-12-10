@@ -147,6 +147,21 @@ export type ISegmentQuality = {
   comment?: string;
 };
 
+export type ISegmentJustification = {
+  _id: string;
+  title: string;
+  type_of_evidence: string;
+  description: string;
+  sources: string;
+  ranking: {
+    excruting: number;
+    disabling: number;
+    hurful: number;
+    annoying: number;
+    no_pain: number;
+  };
+};
+
 export type ISegment = {
   _id: string;
   name?: string;
@@ -162,6 +177,7 @@ export type ISegment = {
   interventions: IIntervetion[];
   track_id: string;
   symptoms: ISymptom[];
+  justifications: ISegmentJustification[];
   createdAt: string;
   updatedAt: string;
 };
