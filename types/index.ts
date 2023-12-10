@@ -154,7 +154,7 @@ export type ISegmentJustification = {
   description: string;
   sources: string;
   ranking: {
-    excruting: number;
+    excruciating: number;
     disabling: number;
     hurful: number;
     annoying: number;

@@ -12,11 +12,21 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   error?: string;
   helperText?: string;
   noPadding?: boolean;
+  inputSize?: "small" | "medium" | "large";
 }
 
 export const TextField = React.forwardRef(
   (
-    { label, fullWidth, width, error, helperText, noPadding, ...rest }: Props,
+    {
+      label,
+      fullWidth,
+      width,
+      error,
+      helperText,
+      noPadding,
+      inputSize,
+      ...rest
+    }: Props,
     ref: any
   ) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -46,6 +56,7 @@ export const TextField = React.forwardRef(
           <InputContainer>
             <Input
               $noPadding={noPadding}
+              $inputSize={inputSize}
               ref={ref}
               {...rest}
               type={showPassword ? "text" : "password"}
@@ -62,7 +73,12 @@ export const TextField = React.forwardRef(
             </EyeContainer>
           </InputContainer>
         ) : (
-          <Input $noPadding={noPadding} ref={ref} {...rest} />
+          <Input
+            $noPadding={noPadding}
+            $inputSize={inputSize}
+            ref={ref}
+            {...rest}
+          />
         )}
 
         {error && (
@@ -95,13 +111,15 @@ const TooltipContainer = styled.div`
   max-width: 300px;
 `;
 
-type InputProps = {
-  $noPadding?: boolean;
-};
-
 const TrackCSS = css`
   background: ${theme.colors.light_grey};
   height: 0.5rem;
+  border-radius: 4px;
+`;
+
+const SmallTrackCss = css`
+  background: ${theme.colors.light_grey};
+  height: 2px;
   border-radius: 4px;
 `;
 
@@ -114,6 +132,21 @@ const ThumbCSS = css`
   width: 1rem;
   border-radius: 8px;
 `;
+
+const SmallThumbCss = css`
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -4px; /* Centers thumb on the track */
+  background-color: ${theme.colors.pure_black};
+  height: 0.6rem;
+  width: 1rem;
+  border-radius: 8px;
+`;
+
+type InputProps = {
+  $noPadding?: boolean;
+  $inputSize?: "small" | "medium" | "large";
+};
 
 const Input = styled.input<InputProps>`
   border-radius: 2px;
@@ -139,24 +172,23 @@ const Input = styled.input<InputProps>`
     -webkit-appearance: none;
     appearance: none;
     border: none;
-    margin-top: 1rem;
     &:focus {
       border: none;
     }
     outline: none;
     &::-webkit-slider-runnable-track {
-      ${TrackCSS}
+      ${({ $inputSize }) => ($inputSize === "small" ? SmallTrackCss : TrackCSS)}
     }
     &::-moz-range-track {
-      ${TrackCSS}
+      ${({ $inputSize }) => ($inputSize === "small" ? SmallTrackCss : TrackCSS)}
     }
 
     &::-webkit-slider-thumb {
-      ${ThumbCSS}
+      ${({ $inputSize }) => ($inputSize === "small" ? SmallThumbCss : ThumbCSS)}
     }
 
     &::-moz-range-thumb {
-      ${ThumbCSS}
+      ${({ $inputSize }) => ($inputSize === "small" ? SmallThumbCss : ThumbCSS)}
     }
   }
 `;
