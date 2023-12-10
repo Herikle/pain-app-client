@@ -10,7 +10,7 @@ import { TextArea } from "@components/TextArea";
 import styled from "styled-components";
 import { media } from "@styles/media-query";
 import { BackButton } from "@components/BackButton";
-import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { FlexColumn } from "@design-components/Flex";
 
 const justificationSchema = z.object({
   title: z.string().optional(),
@@ -98,10 +98,13 @@ const JustificationModal = ({
               <TextField label="Sources" {...register("sources")} />
             </Grid>
           </Grid>
+          <FlexColumn>
+            <Text variant="body1Bold">
+              How this information supports each level of pain
+            </Text>
+          </FlexColumn>
+          <Text variant="h2">Working in progress...</Text>
         </FlexColumn>
-        <FlexRow align="center" justify="center" mt={4}>
-          <Text variant="h1">Working in progress...</Text>
-        </FlexRow>
       </Container>
     </Modal>
   );
