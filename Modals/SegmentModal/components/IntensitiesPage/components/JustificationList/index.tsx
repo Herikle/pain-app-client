@@ -19,7 +19,7 @@ export const JustificationList = () => {
       description: "",
       sources: "",
       ranking: {
-        excruting: 0,
+        excruciating: 0,
         disabling: 0,
         hurful: 0,
         annoying: 0,
