@@ -101,15 +101,20 @@ const JustificationModal = ({
       height="fit-content"
     >
       <Container>
-        <FlexColumn gap={2}>
+        <FlexColumn gap={2} height="100%">
           <BackButton text="Return to intensities menu" onClick={onClose} />
           <Text variant="h1">Evidence</Text>
-          <BodyContent>
-            <Grid container spacing={2}>
-              <Grid xs={10}>
+          <BodyContent gap={1}>
+            <Grid container spacing={2} margin="0">
+              <Grid
+                xs={10}
+                padding="0"
+                paddingBlock="0.5rem"
+                paddingRight="1rem"
+              >
                 <TextField label="Title" {...register("title")} />
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} padding="0" paddingBlock="0.5rem">
                 <Select
                   label="Type of evidence"
                   options={[
@@ -136,14 +141,14 @@ const JustificationModal = ({
                   id="type_of_evidence"
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid xs={12} padding="0" paddingBlock="0.5rem">
                 <TextArea
                   label="Description"
                   {...register("description")}
                   minRows={5}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid xs={12} padding="0" paddingBlock="0.5rem">
                 <TextField label="Sources" {...register("sources")} />
               </Grid>
             </Grid>
@@ -190,24 +195,23 @@ const JustificationModal = ({
               ))}
             </PainLevelsSwitch>
           </BodyContent>
+          <ButtonsFooter>
+            <Trash
+              onClick={notImplemented}
+              size={32}
+              color={theme.colors.text_switched}
+              cursor="pointer"
+            />
+            <Button
+              onClick={notImplemented}
+              width="160px"
+              disabled={!isDirty}
+              // loading={updateSegment.isLoading}
+            >
+              Save changes
+            </Button>
+          </ButtonsFooter>
         </FlexColumn>
-        working in progress...
-        <ButtonsFooter>
-          <Trash
-            onClick={notImplemented}
-            size={32}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-          />
-          <Button
-            onClick={notImplemented}
-            width="160px"
-            disabled={!isDirty}
-            // loading={updateSegment.isLoading}
-          >
-            Save changes
-          </Button>
-        </ButtonsFooter>
       </Container>
     </Modal>
   );
@@ -215,7 +219,9 @@ const JustificationModal = ({
 
 const BodyContent = styled(FlexColumn)`
   ${LightScrollBar};
-  overflow-y: auto;
+  overflow: auto;
+  height: 100%;
+  padding-right: 1rem;
 `;
 
 const ButtonsFooter = styled(FlexRow)`
@@ -232,6 +238,7 @@ const PainLevelRow = styled(FlexRow)`
 const PainLevelsSwitch = styled(FlexColumn)`
   margin-inline: auto;
   width: 500px;
+  margin-top: 1rem;
 `;
 
 const Container = styled.div`

@@ -115,11 +115,27 @@ export type ISegmentValues = {
   no_pain?: number | null;
 };
 
+export type ISegmentJustification = {
+  _id: string;
+  title: string;
+  type_of_evidence: string;
+  description: string;
+  sources: string;
+  ranking: {
+    excruciating: number;
+    disabling: number;
+    hurful: number;
+    annoying: number;
+    no_pain: number;
+  };
+};
+
 export type ISegmentIntensities = {
   type: IIntensityType;
   draw?: DrawObject[];
   values?: ISegmentValues;
   justification?: string;
+  justifications: ISegmentJustification[];
 };
 
 export const qualityTextureEnum = [
@@ -147,21 +163,6 @@ export type ISegmentQuality = {
   comment?: string;
 };
 
-export type ISegmentJustification = {
-  _id: string;
-  title: string;
-  type_of_evidence: string;
-  description: string;
-  sources: string;
-  ranking: {
-    excruciating: number;
-    disabling: number;
-    hurful: number;
-    annoying: number;
-    no_pain: number;
-  };
-};
-
 export type ISegment = {
   _id: string;
   name?: string;
@@ -177,7 +178,6 @@ export type ISegment = {
   interventions: IIntervetion[];
   track_id: string;
   symptoms: ISymptom[];
-  justifications: ISegmentJustification[];
   createdAt: string;
   updatedAt: string;
 };

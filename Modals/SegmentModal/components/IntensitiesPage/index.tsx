@@ -7,7 +7,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ISegment, ISegmentValues } from "types";
+import { ISegment, ISegmentJustification, ISegmentValues } from "types";
 import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
 import { CommonSegmentModalProps } from "../..";
 import {
@@ -23,6 +23,7 @@ const IntensitiesPageSchema = z.object({
   justification: z.string().optional(),
   values: SegmentValuesSchema.optional(),
   draw: z.any().optional(),
+  justifications: z.custom<ISegmentJustification[]>(),
 });
 
 export type IntensitiesPageForm = z.infer<typeof IntensitiesPageSchema>;
@@ -38,6 +39,7 @@ export const IntensitiesPage = ({
   onChange,
   onValidChange,
 }: Props) => {
+  console.log(segment);
   const { register, getValues, formState, watch, setValue } =
     useForm<IntensitiesPageForm>({
       resolver: zodResolver(IntensitiesPageSchema),
@@ -46,6 +48,7 @@ export const IntensitiesPage = ({
         type: intensities.type,
         values: intensities.values,
         draw: intensities.draw,
+        justifications: intensities.justifications,
       },
       mode: "onChange",
     });
@@ -126,7 +129,12 @@ export const IntensitiesPage = ({
             )}
           </FlexColumn>
         </FlexColumn>
-        <JustificationList />
+        <JustificationList
+          justifications={watch("justifications")}
+          onUpdateJustifications={(justifications) => {
+            setValue("justifications", justifications);
+          }}
+        />
       </Container>
     </form>
   );

@@ -27,6 +27,7 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
       justification: normalizeString(segment.intensities.justification),
       values: cleanUndefined(segment.intensities.values),
       draw: segment.intensities.draw,
+      justifications: segment.intensities.justifications,
     });
 
   const [intensitiesPageFormIsValid, setIntensitiesPageFormIsValid] =
@@ -44,12 +45,14 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
       type: segment.intensities.type,
       justification: normalizeString(segment.intensities.justification),
       draw: segment.intensities.draw ?? [],
+      justifications: segment.intensities.justifications,
     };
 
     const pageForm = {
       type: intensitiesPageForm.type,
       justification: normalizeString(intensitiesPageForm.justification),
       draw: intensitiesPageForm.draw ?? [],
+      justifications: segment.intensities.justifications ?? [],
     };
 
     const isEqualsWithoutValues = _.isEqual(pageForm, intensitiesValues);

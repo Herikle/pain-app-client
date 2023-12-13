@@ -6,11 +6,15 @@ import { ISegmentJustification } from "types";
 import { v4 as uuidv4 } from "uuid";
 import { Justification } from "./components/Justification";
 
-export const JustificationList = () => {
-  const [justifications, setJustifications] = useState<ISegmentJustification[]>(
-    []
-  );
+type Props = {
+  justifications: ISegmentJustification[];
+  onUpdateJustifications?: (justifications: ISegmentJustification[]) => void;
+};
 
+export const JustificationList = ({
+  justifications,
+  onUpdateJustifications,
+}: Props) => {
   const addJustification = () => {
     const newJustification: ISegmentJustification = {
       _id: uuidv4(),
@@ -27,7 +31,7 @@ export const JustificationList = () => {
       },
     };
 
-    setJustifications([...justifications, newJustification]);
+    onUpdateJustifications?.([...justifications, newJustification]);
   };
 
   return (
