@@ -28,6 +28,7 @@ import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 import { SegmentModalTabs } from "../..";
 import { media } from "@styles/media-query";
 import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
+import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
 
 const TabSx = {
   "&.MuiTab-root": {

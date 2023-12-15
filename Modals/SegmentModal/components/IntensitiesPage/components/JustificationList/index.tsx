@@ -1,44 +1,41 @@
 import { AddButton } from "@components/AddButton";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { useState } from "react";
-import { ISegmentJustification } from "types";
-import { v4 as uuidv4 } from "uuid";
+import { useMemo } from "react";
 import { Justification } from "./components/Justification";
+import { useGetSegmentJustificationList } from "@queries/segment-justification/useGetSegmentJustification";
+import { useCreateSegmentJustification } from "@queries/segment-justification/useSegmentJustification";
 
 type Props = {
-  justifications: ISegmentJustification[];
-  onUpdateJustifications?: (justifications: ISegmentJustification[]) => void;
+  segment_id: string;
 };
 
-export const JustificationList = ({
-  justifications,
-  onUpdateJustifications,
-}: Props) => {
-  const addJustification = () => {
-    const newJustification: ISegmentJustification = {
-      _id: uuidv4(),
-      title: `New justification ${justifications.length + 1}`,
-      type_of_evidence: "",
-      description: "",
-      sources: "",
-      ranking: {
-        excruciating: 0,
-        disabling: 0,
-        hurful: 0,
-        annoying: 0,
-        no_pain: 0,
-      },
-    };
+export const JustificationList = ({ segment_id }: Props) => {
+  const getJustifications = useGetSegmentJustificationList({ segment_id });
 
-    onUpdateJustifications?.([...justifications, newJustification]);
+  const createJustification = useCreateSegmentJustification();
+
+  const justifications = useMemo(
+    () => getJustifications.data ?? [],
+    [getJustifications.data]
+  );
+
+  const addJustification = () => {
+    createJustification.mutateAsync({
+      params: {
+        segment_id,
+      },
+    });
   };
 
   return (
     <FlexColumn width="100%" align="flex-start">
       <FlexRow justify="space-between" width="100%">
         <Text variant="h3">Justification</Text>
-        <AddButton onClick={addJustification} />
+        <AddButton
+          onClick={addJustification}
+          loading={createJustification.isLoading}
+        />
       </FlexRow>
       <FlexColumn mt={1.5} gap={1.5}>
         {justifications.map((justification) => (

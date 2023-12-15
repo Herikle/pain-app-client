@@ -12,7 +12,8 @@ export type RequestService =
   | "track"
   | "track-guest"
   | "segment"
-  | "segment-guest";
+  | "segment-guest"
+  | "segment-justification";
 
 type IRequest = {
   method: Method;

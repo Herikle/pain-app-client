@@ -128,14 +128,13 @@ export type ISegmentJustification = {
     annoying: number;
     no_pain: number;
   };
+  segment_id: string;
 };
 
 export type ISegmentIntensities = {
   type: IIntensityType;
   draw?: DrawObject[];
   values?: ISegmentValues;
-  justification?: string;
-  justifications: ISegmentJustification[];
 };
 
 export const qualityTextureEnum = [

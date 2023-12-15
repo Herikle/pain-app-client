@@ -19,4 +19,7 @@ export const QueryKeys = {
   Track: {
     List: "track/list",
   },
+  SegmentJustification: {
+    List: "segment-justification/list",
+  },
 };

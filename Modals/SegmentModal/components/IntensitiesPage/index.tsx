@@ -20,10 +20,8 @@ import { JustificationList } from "./components/JustificationList";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
-  justification: z.string().optional(),
   values: SegmentValuesSchema.optional(),
   draw: z.any().optional(),
-  justifications: z.custom<ISegmentJustification[]>(),
 });
 
 export type IntensitiesPageForm = z.infer<typeof IntensitiesPageSchema>;
@@ -39,16 +37,13 @@ export const IntensitiesPage = ({
   onChange,
   onValidChange,
 }: Props) => {
-  console.log(segment);
   const { register, getValues, formState, watch, setValue } =
     useForm<IntensitiesPageForm>({
       resolver: zodResolver(IntensitiesPageSchema),
       defaultValues: {
-        justification: intensities.justification ?? "",
         type: intensities.type,
         values: intensities.values,
         draw: intensities.draw,
-        justifications: intensities.justifications,
       },
       mode: "onChange",
     });
@@ -129,12 +124,7 @@ export const IntensitiesPage = ({
             )}
           </FlexColumn>
         </FlexColumn>
-        <JustificationList
-          justifications={watch("justifications")}
-          onUpdateJustifications={(justifications) => {
-            setValue("justifications", justifications);
-          }}
-        />
+        <JustificationList segment_id={segment._id} />
       </Container>
     </form>
   );
