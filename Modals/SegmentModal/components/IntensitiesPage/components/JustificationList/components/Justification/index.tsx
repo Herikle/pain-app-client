@@ -1,9 +1,11 @@
 import { Text } from "@components/Text";
 import { FlexRow } from "@design-components/Flex";
+import { CaretRight } from "@phosphor-icons/react";
+import { theme } from "@styles/theme";
+import { Evidences } from "Modals/JustificationModal";
 import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
 import styled from "styled-components";
 import { ISegmentJustification } from "types";
-import { useForm, z, zodResolver } from "utils/helpers/form-validation";
 
 type JustificationProps = {
   justification: ISegmentJustification;
@@ -24,7 +26,18 @@ export const Justification = ({ justification }: JustificationProps) => {
         {" "}
         {justification.title}
       </Text>
-      <Text variant="body1Bold">{justification.type_of_evidence}</Text>
+      {!!justification.type_of_evidence && (
+        <FlexRow>
+          <Text variant="body1Bold">
+            {
+              Evidences.find(
+                (evidence) => evidence.value === justification.type_of_evidence
+              )?.label
+            }
+          </Text>
+          <CaretRight weight="bold" color={theme.colors.text_switched} />
+        </FlexRow>
+      )}
     </Container>
   );
 };

@@ -37,7 +37,7 @@ export const JustificationList = ({ segment_id }: Props) => {
           loading={createJustification.isLoading}
         />
       </FlexRow>
-      <FlexColumn mt={1.5} gap={1.5}>
+      <FlexColumn mt={1.5} gap={1.5} width="100%">
         {justifications.map((justification) => (
           <Justification
             key={justification._id}

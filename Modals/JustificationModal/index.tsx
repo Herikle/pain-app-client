@@ -8,13 +8,38 @@ import { TextField } from "@components/TextField";
 import { Select } from "@components/Select";
 import { TextArea } from "@components/TextArea";
 import styled from "styled-components";
-import { media } from "@styles/media-query";
+import { media, useMatchMediaUp } from "@styles/media-query";
 import { BackButton } from "@components/BackButton";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Trash } from "@phosphor-icons/react";
 import { Button } from "@components/Button";
 import { notImplemented } from "@utils/helpers/dev";
+import {
+  useDeleteSegmentJustification,
+  useUpdateSegmentJustification,
+} from "@queries/segment-justification/useSegmentJustification";
+import { useState } from "react";
+import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+
+export const Evidences = [
+  {
+    label: "Behavioral",
+    value: "behavioral",
+  },
+  {
+    label: "Neurological",
+    value: "neurological",
+  },
+  {
+    label: "Physiological",
+    value: "physiological",
+  },
+  {
+    label: "Pharmacological",
+    value: "pharmacological",
+  },
+];
 
 const painLevels = [
   {
@@ -47,17 +72,26 @@ const levelsResult = {
   4: "(Ω) Confirm",
 };
 
+export type IJustificationType =
+  | "behavioral"
+  | "neurological"
+  | "physiological"
+  | "pharmacological";
+
 const justificationSchema = z.object({
   title: z.string().optional(),
-  type_of_evidence: z.string().optional(),
+  type_of_evidence: z
+    .enum(["behavioral", "neurological", "physiological", "pharmacological"])
+    .optional()
+    .nullable(),
   description: z.string().optional(),
   sources: z.string().optional(),
   ranking: z.object({
-    excruciating: z.number().optional(),
-    disabling: z.number().optional(),
-    hurful: z.number().optional(),
-    annoying: z.number().optional(),
-    no_pain: z.number().optional(),
+    excruciating: z.number(),
+    disabling: z.number(),
+    hurful: z.number(),
+    annoying: z.number(),
+    no_pain: z.number(),
   }),
 });
 
@@ -72,12 +106,18 @@ const JustificationModal = ({
   justification,
   onClose,
 }: JustificationModalProps) => {
-  const { register, handleSubmit, formState, watch } =
+  const updateJustification = useUpdateSegmentJustification();
+
+  const deleteJustification = useDeleteSegmentJustification();
+
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const { register, formState, watch, reset, handleSubmit } =
     useForm<JustificationFormValues>({
       resolver: zodResolver(justificationSchema),
       defaultValues: {
         title: justification.title ?? "",
-        type_of_evidence: justification.type_of_evidence ?? "",
+        type_of_evidence: justification.type_of_evidence ?? null,
         description: justification.description ?? "",
         sources: justification.sources ?? "",
         ranking: {
@@ -90,130 +130,173 @@ const JustificationModal = ({
       },
     });
 
+  const confirmDelete = async () => {
+    await deleteJustification.mutateAsync({
+      params: {
+        justification_id: justification._id,
+      },
+      helpers: {
+        segment_id: justification.segment_id,
+      },
+    });
+    onClose();
+  };
+
   const { isDirty } = formState;
 
+  const onSubmit = async (values: JustificationFormValues) => {
+    await updateJustification.mutateAsync({
+      params: {
+        justification_id: justification._id,
+      },
+      body: {
+        title: values.title,
+        type_of_evidence: values.type_of_evidence ?? undefined,
+        description: values.description,
+        sources: values.sources,
+        ranking: values.ranking,
+      },
+    });
+
+    reset(values);
+  };
+
+  const isMobile = useMatchMediaUp("tablet");
+
   return (
-    <Modal
-      onClose={onClose}
-      removePadding
-      removeOverlay
-      fullScreenOnMobile
-      height="fit-content"
-    >
-      <Container>
-        <FlexColumn gap={2} height="100%">
-          <BackButton text="Return to intensities menu" onClick={onClose} />
-          <Text variant="h1">Evidence</Text>
-          <BodyContent gap={1}>
-            <Grid container spacing={2} margin="0">
-              <Grid
-                xs={10}
-                padding="0"
-                paddingBlock="0.5rem"
-                paddingRight="1rem"
-              >
-                <TextField label="Title" {...register("title")} />
-              </Grid>
-              <Grid xs={2} padding="0" paddingBlock="0.5rem">
-                <Select
-                  label="Type of evidence"
-                  options={[
-                    {
-                      label: "Behavioral",
-                      value: "behavioral",
-                    },
-                    {
-                      label: "Neurological",
-                      value: "neurological",
-                    },
-                    {
-                      label: "Physiological",
-                      value: "physiological",
-                    },
-                    {
-                      label: "Pharmacological",
-                      value: "pharmacological",
-                    },
-                  ]}
-                  {...register("type_of_evidence")}
-                  getLabel={(option) => option.label}
-                  getValue={(option) => option.value}
-                  id="type_of_evidence"
-                />
-              </Grid>
-              <Grid xs={12} padding="0" paddingBlock="0.5rem">
-                <TextArea
-                  label="Description"
-                  {...register("description")}
-                  minRows={5}
-                />
-              </Grid>
-              <Grid xs={12} padding="0" paddingBlock="0.5rem">
-                <TextField label="Sources" {...register("sources")} />
-              </Grid>
-            </Grid>
-            <FlexColumn>
-              <Text variant="body1Bold">
-                How this information supports each level of pain
-              </Text>
-            </FlexColumn>
-            <PainLevelsSwitch>
-              {painLevels.map((painLevel) => (
-                <PainLevelRow
-                  key={painLevel.value}
-                  align="center"
-                  justify="flex-start"
-                  gap={1}
-                >
-                  <Text
-                    variant="h3"
-                    customColor={theme.pain_level_colors[painLevel.value]}
-                    minWidth="110px"
+    <>
+      <Modal
+        onClose={onClose}
+        removePadding
+        removeOverlay
+        fullScreenOnMobile
+        height="fit-content"
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Container>
+            <FlexColumn gap={2} height="100%">
+              <BackButton text="Return to intensities menu" onClick={onClose} />
+              <Text variant="h1">Evidence</Text>
+              <BodyContent gap={1}>
+                <Grid container spacing={2} margin="0">
+                  <Grid
+                    xl={10}
+                    lg={10}
+                    md={10}
+                    sm={12}
+                    xs={12}
+                    padding="0"
+                    paddingBlock="0.5rem"
+                    paddingRight={isMobile ? undefined : "1rem"}
                   >
-                    {painLevel.label}
+                    <TextField fullWidth label="Title" {...register("title")} />
+                  </Grid>
+                  <Grid
+                    xl={2}
+                    lg={2}
+                    md={2}
+                    sm={12}
+                    xs={12}
+                    padding="0"
+                    paddingBlock="0.5rem"
+                  >
+                    <Select
+                      label="Type of evidence"
+                      options={Evidences}
+                      {...register("type_of_evidence")}
+                      getLabel={(option) => option.label}
+                      getValue={(option) => option.value}
+                      id="type_of_evidence"
+                    />
+                  </Grid>
+                  <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                    <TextArea
+                      label="Description"
+                      {...register("description")}
+                      minRows={5}
+                    />
+                  </Grid>
+                  <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                    <TextField label="Sources" {...register("sources")} />
+                  </Grid>
+                </Grid>
+                <FlexColumn>
+                  <Text variant="body1Bold">
+                    How this information supports each level of pain
                   </Text>
-                  <TextField
-                    inputSize="small"
-                    noPadding
-                    type="range"
-                    min={0}
-                    max={4}
-                    step={1}
-                    fullWidth
-                    id={`ranking.${painLevel.value}`}
-                    {...register(`ranking.${painLevel.value}` as any, {
-                      valueAsNumber: true,
-                    })}
-                    style={{
-                      marginTop: "5px",
-                    }}
-                  />
-                  <Text variant="h3" whiteSpace="nowrap" minWidth="120px">
-                    {levelsResult[watch(`ranking.${painLevel.value}` as any)]}
-                  </Text>
-                </PainLevelRow>
-              ))}
-            </PainLevelsSwitch>
-          </BodyContent>
-          <ButtonsFooter>
-            <Trash
-              onClick={notImplemented}
-              size={32}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-            />
-            <Button
-              onClick={notImplemented}
-              width="160px"
-              disabled={!isDirty}
-              // loading={updateSegment.isLoading}
-            >
-              Save changes
-            </Button>
-          </ButtonsFooter>
-        </FlexColumn>
-      </Container>
-    </Modal>
+                </FlexColumn>
+                <PainLevelsSwitch>
+                  {painLevels.map((painLevel) => (
+                    <PainLevelRow
+                      key={painLevel.value}
+                      align="center"
+                      justify="flex-start"
+                      gap={1}
+                    >
+                      <Text
+                        variant="h3"
+                        customColor={theme.pain_level_colors[painLevel.value]}
+                        minWidth="110px"
+                      >
+                        {painLevel.label}
+                      </Text>
+                      <TextField
+                        inputSize="small"
+                        noPadding
+                        type="range"
+                        min={0}
+                        max={4}
+                        step={1}
+                        fullWidth
+                        id={`ranking.${painLevel.value}`}
+                        {...register(`ranking.${painLevel.value}` as any, {
+                          valueAsNumber: true,
+                        })}
+                        style={{
+                          marginTop: "5px",
+                        }}
+                      />
+                      <Text variant="h3" whiteSpace="nowrap" minWidth="120px">
+                        {
+                          levelsResult[
+                            watch(`ranking.${painLevel.value}` as any)
+                          ]
+                        }
+                      </Text>
+                    </PainLevelRow>
+                  ))}
+                </PainLevelsSwitch>
+              </BodyContent>
+              <ButtonsFooter>
+                <Trash
+                  onClick={() => setDeleteModal(true)}
+                  size={32}
+                  color={theme.colors.text_switched}
+                  cursor="pointer"
+                />
+                <Button
+                  type="submit"
+                  width="160px"
+                  disabled={!isDirty}
+                  loading={updateJustification.isLoading}
+                >
+                  Save changes
+                </Button>
+              </ButtonsFooter>
+            </FlexColumn>
+          </Container>
+        </form>
+      </Modal>
+      {deleteModal && (
+        <ConfirmActionModal
+          title="Delete justification"
+          description={`Are you sure you want to delete the justification "${justification.title}"?`}
+          onClose={() => setDeleteModal(false)}
+          onConfirm={confirmDelete}
+          loading={deleteJustification.isLoading}
+        />
+      )}
+    </>
   );
 };
 
@@ -264,6 +347,7 @@ const Container = styled.div`
     padding: 0;
     padding-bottom: 1rem;
     padding-top: 1rem;  
+    padding-inline: 1rem;
   `}
 `;
 

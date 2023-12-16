@@ -115,10 +115,16 @@ export type ISegmentValues = {
   no_pain?: number | null;
 };
 
+export type IJustificationType =
+  | "behavioral"
+  | "neurological"
+  | "physiological"
+  | "pharmacological";
+
 export type ISegmentJustification = {
   _id: string;
   title: string;
-  type_of_evidence: string;
+  type_of_evidence: IJustificationType | undefined;
   description: string;
   sources: string;
   ranking: {
