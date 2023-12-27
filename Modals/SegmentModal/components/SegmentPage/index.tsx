@@ -49,7 +49,7 @@ export const SegmentPage = ({
   onChange,
   onValidChange,
 }: Props) => {
-  const { register, getValues, formState, control } = useForm<SegmentPageForm>({
+  const { register, formState, control, watch } = useForm<SegmentPageForm>({
     resolver: zodResolver(SegmentPageSchema),
     defaultValues: {
       ...segmentPageForm,
@@ -59,26 +59,29 @@ export const SegmentPage = ({
     mode: "onChange",
   });
 
-  const onUpdate = () => {
-    const values = getValues();
-
-    onChange({
-      ...values,
-      start: values.start ?? 0,
-      end: values.end ?? 0,
-    });
-  };
-
-  const { errors, isValid } = formState;
+  const { errors, isValid, isDirty } = formState;
 
   useEffect(() => {
     onValidChange(isValid);
   }, [isValid, onValidChange]);
 
+  useEffect(() => {
+    const subscription = watch((value) => {
+      onChange({
+        ...value,
+        start: value.start ?? 0,
+        end: value.end ?? 0,
+      });
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch, onChange]);
+
   const isMobileL = useMatchMediaUp("mobileL");
 
   return (
-    <form onChange={onUpdate}>
+    <form>
       <Container>
         <Grid container spacing={4} width={isMobileL ? "100%" : "50%"}>
           <Grid xs={12}>

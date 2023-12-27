@@ -1,10 +1,61 @@
 import { IIntervetion, ISegment } from "types";
 import { useCallback, useEffect, useState } from "react";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { useUpdateSegment } from "@queries/segment/useSegment";
+import { CommonUseHookPageForm } from "..";
 
-export const useInterventionPageForm = (segment: ISegment) => {
+export const useInterventionPageForm = ({
+  episode_id,
+  segment,
+  setSegment,
+}: CommonUseHookPageForm) => {
+  const updateSegment = useUpdateSegment();
+
   const [interventionPageForm, setInterventionPageForm] = useState<
     IIntervetion[]
   >(segment.interventions);
+
+  const debouncedInterventionPageForm = useDebounce(interventionPageForm, 500);
+
+  const [firstLoad, setFirstLoad] = useState(false);
+
+  const getValuesToSend = () => {
+    if (!isDirty) return undefined;
+    return interventionPageForm.map((intervention) => ({
+      name: intervention.name,
+      datetime: intervention.datetime,
+      dose: intervention.dose,
+      effective: intervention.effective,
+      observation: intervention.observation,
+    }));
+  };
+
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      return;
+    }
+
+    const update = async () => {
+      const updatedSegment = await updateSegment.mutateAsync({
+        params: {
+          segment_id: segment._id,
+        },
+        body: {
+          interventions: getValuesToSend(),
+        },
+        extra: {
+          episode_id: episode_id,
+        },
+      });
+
+      setSegment(updatedSegment);
+    };
+
+    update();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedInterventionPageForm]);
 
   const [isDirty, setIsDirty] = useState(false);
   const onChangeInterventionPageForm = useCallback((data: IIntervetion[]) => {
@@ -20,21 +71,11 @@ export const useInterventionPageForm = (segment: ISegment) => {
     return isDirty;
   };
 
-  const getValuesToSend = () => {
-    if (!isDirty) return undefined;
-    return interventionPageForm.map((intervention) => ({
-      name: intervention.name,
-      datetime: intervention.datetime,
-      dose: intervention.dose,
-      effective: intervention.effective,
-      observation: intervention.observation,
-    }));
-  };
-
   return {
     interventionPageForm,
     onChangeInterventionPageForm,
     isDirtyInterventionPageForm,
     getValuesToSend,
+    isSyncing: updateSegment.isLoading,
   };
 };

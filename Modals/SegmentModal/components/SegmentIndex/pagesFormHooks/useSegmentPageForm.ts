@@ -1,14 +1,23 @@
 import { ISegment } from "types";
 import { SegmentPageForm } from "../../SegmentPage";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import {
   getDateAndTimeFromIsoDate,
   getDateFromString,
 } from "@utils/helpers/date";
 import { normalizeString } from "@utils/helpers/string";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { useUpdateSegment } from "@queries/segment/useSegment";
+import { CommonUseHookPageForm } from "..";
 
-export const useSegmentPageForm = (segment: ISegment) => {
+export const useSegmentPageForm = ({
+  episode_id,
+  segment,
+  setSegment,
+}: CommonUseHookPageForm) => {
+  const updateSegment = useUpdateSegment();
+
   const [segmentPageForm, setSegmentPageForm] = useState<SegmentPageForm>({
     name: normalizeString(segment.name),
     start: segment.start ?? 0,
@@ -19,39 +28,48 @@ export const useSegmentPageForm = (segment: ISegment) => {
     time_unit: segment.time_unit,
     comment: normalizeString(segment.comment),
   });
+
+  const debouncedSegmentPageForm = useDebounce(segmentPageForm, 500);
+
+  const [firstLoad, setFirstLoad] = useState(false);
+
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      return;
+    }
+
+    const update = async () => {
+      const updatedSegment = await updateSegment.mutateAsync({
+        params: {
+          segment_id: segment._id,
+        },
+        body: {
+          ...debouncedSegmentPageForm,
+        },
+        extra: {
+          episode_id: episode_id,
+        },
+      });
+
+      setSegment(updatedSegment);
+    };
+
+    update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSegmentPageForm]);
+
   const [segmentPageFormIsValid, setSegmentPageFormIsValid] = useState(true);
 
   const onChangeSsegmentPageForm = useCallback((data: SegmentPageForm) => {
     setSegmentPageForm(data);
   }, []);
 
-  const isDirtySegmentPageForm = () => {
-    const segmentValues = {
-      name: normalizeString(segment.name),
-      start: segment.start ?? 0,
-      end: segment.end ?? 0,
-      estimative_type: normalizeString(segment.estimative_type) as any,
-      pain_type: segment.pain_type,
-      start_date: getDateAndTimeFromIsoDate(segment.start_date),
-      time_unit: segment.time_unit,
-      comment: normalizeString(segment.comment),
-    };
-
-    const pageFormFixed = {
-      ...segmentPageForm,
-      start_date: getDateAndTimeFromIsoDate(segmentPageForm.start_date),
-    };
-
-    const isEqual = _.isEqual(pageFormFixed, segmentValues);
-
-    return !isEqual;
-  };
-
   return {
-    segmentPageForm,
     segmentPageFormIsValid,
     onChangeSsegmentPageForm,
     setSegmentPageFormIsValid,
-    isDirtySegmentPageForm,
+    isSyncing: updateSegment.isLoading,
+    segmentPageForm,
   };
 };

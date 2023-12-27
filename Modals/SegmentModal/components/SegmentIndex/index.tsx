@@ -29,6 +29,7 @@ import { SegmentModalTabs } from "../..";
 import { media } from "@styles/media-query";
 import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
 import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
+import { SyncingIndicator } from "@components/SyncingIndicator";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -63,6 +64,12 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
+export type CommonUseHookPageForm = {
+  segment: ISegment;
+  episode_id: string;
+  setSegment: (segment: ISegment) => void;
+};
+
 const tabs_index: { [key in SegmentModalTabs]: number } = {
   segment: 0,
   intensities: 1,
@@ -82,8 +89,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   const [value, setValue] = useState(tabs_index[tab]);
 
   const [segmentState, setSegmentState] = useState<ISegment>(segment);
-
-  const [confirmClose, setConfirmClose] = useState(false);
 
   const [confirmDeleteSegment, setConfirmDeleteSegment] = useState(false);
 
@@ -109,63 +114,56 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   };
 
   const {
+    isSyncing: isSyncingSegmentPageForm,
     segmentPageForm,
-    segmentPageFormIsValid,
     onChangeSsegmentPageForm,
     setSegmentPageFormIsValid,
-    isDirtySegmentPageForm,
-  } = useSegmentPageForm(segmentState);
+  } = useSegmentPageForm({
+    segment,
+    episode_id,
+    setSegment: setSegmentState,
+  });
 
   const {
+    isSyncing: isSyncingIntensitiesPageForm,
     intensitiesPageForm,
-    intensitiesPageFormIsValid,
     onChangeIntensitiesPageForm,
     setIntensitiesPageFormIsValid,
-    isDirtyIntensitiesPageForm,
-  } = useIntensitiesPageForm(segmentState);
+  } = useIntensitiesPageForm({
+    segment,
+    episode_id,
+    setSegment: setSegmentState,
+  });
 
   const {
+    isSyncing: isSyncingQualityPageForm,
     qualityPageForm,
-    qualityPageFormIsValid,
     onChangeQualityPageForm,
     setQualityPageFormIsValid,
-    isDirtyQualityPageForm,
-  } = useQualityPageForm(segmentState);
+  } = useQualityPageForm({ segment, episode_id, setSegment: setSegmentState });
 
   const {
+    isSyncing: isSyncingInterventionPageForm,
     interventionPageForm,
     onChangeInterventionPageForm,
-    isDirtyInterventionPageForm,
-    getValuesToSend,
-  } = useInterventionPageForm(segmentState);
+  } = useInterventionPageForm({
+    segment,
+    episode_id,
+    setSegment: setSegmentState,
+  });
 
   const {
+    isSyncing: isSyncingSymptomPageForm,
     symptomPageForm,
     onChangeSymptomPageForm,
-    isDirtySymptomPageForm,
-    getValuesToSend: getSymptomValues,
-  } = useSymptomPageForm(segmentState);
+  } = useSymptomPageForm({ segment, episode_id, setSegment: setSegmentState });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const isDirty = () => {
-    return (
-      isDirtySegmentPageForm() ||
-      isDirtyIntensitiesPageForm() ||
-      isDirtyQualityPageForm() ||
-      isDirtyInterventionPageForm() ||
-      isDirtySymptomPageForm()
-    );
-  };
-
   const close = () => {
-    if (isDirty()) {
-      setConfirmClose(true);
-    } else {
-      closeSegmentModal();
-    }
+    closeSegmentModal();
   };
 
   const getColor = (index: number) => {
@@ -175,54 +173,33 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     return "text_switched";
   };
 
-  const isValid = () => {
-    return (
-      segmentPageFormIsValid &&
-      intensitiesPageFormIsValid &&
-      qualityPageFormIsValid
-    );
-  };
-
   const updateSegment = useUpdateSegment();
 
-  const onSubmit = async (closeAfterSave = false) => {
-    const updatedSegment = await updateSegment.mutateAsync({
-      params: {
-        segment_id: segment._id,
-      },
-      body: {
-        ...segmentPageForm,
-        intensities: intensitiesPageForm,
-        quality: qualityPageForm,
-        interventions: getValuesToSend(),
-        symptoms: getSymptomValues(),
-      },
-      extra: {
-        episode_id,
-      },
-    });
-
-    if (closeAfterSave) {
-      closeSegmentModal();
-    } else {
-      setSegmentState(updatedSegment);
-    }
+  const onSubmit = async () => {
+    // const updatedSegment = await updateSegment.mutateAsync({
+    //   params: {
+    //     segment_id: segment._id,
+    //   },
+    //   body: {
+    //     ...segmentPageForm,
+    //     intensities: intensitiesPageForm,
+    //     quality: qualityPageForm,
+    //     interventions: getValuesToSend(),
+    //     symptoms: getSymptomValues(),
+    //   },
+    //   extra: {
+    //     episode_id,
+    //   },
+    // });
+    // if (closeAfterSave) {
+    //   closeSegmentModal();
+    // } else {
+    //   setSegmentState(updatedSegment);
+    // }
   };
 
   return (
     <>
-      {confirmClose && (
-        <ConfirmActionModal
-          onClose={() => setConfirmClose(false)}
-          onConfirm={() => onSubmit(true)}
-          onCancel={closeSegmentModal}
-          title="Unsaved Changes"
-          description="You have unsaved changes. Save them before closing?"
-          confirmText="Save"
-          cancelText="No, close without saving"
-          loading={updateSegment.isLoading}
-        />
-      )}
       <Container>
         <Content>
           <TabsContainer>
@@ -324,23 +301,26 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
               color={theme.colors.text_switched}
               cursor="pointer"
             />
-            <Button
-              onClick={() => onSubmit()}
-              width="160px"
-              disabled={!isValid() || !isDirty()}
-              loading={updateSegment.isLoading}
-            >
-              Save changes
-            </Button>
           </ButtonsFooter>
         </Content>
         <XContainer>
-          <X
-            size={24}
-            color={theme.colors.font_color}
-            onClick={close}
-            cursor="pointer"
-          />
+          <FlexRow>
+            <SyncingIndicator
+              isSyncing={
+                isSyncingSegmentPageForm ||
+                isSyncingIntensitiesPageForm ||
+                isSyncingQualityPageForm ||
+                isSyncingInterventionPageForm ||
+                isSyncingSymptomPageForm
+              }
+            />
+            <X
+              size={24}
+              color={theme.colors.font_color}
+              onClick={close}
+              cursor="pointer"
+            />
+          </FlexRow>
         </XContainer>
       </Container>
       <Portal>

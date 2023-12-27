@@ -46,8 +46,6 @@ export const useUpdateSegment = () => {
   const { updateSegmentOnCache } = useUpdateSegmentOnCache();
   return useMutation(updateSegment, {
     onSuccess: (data, { extra }) => {
-      ToastSuccess("Segment Updated");
-
       updateSegmentOnCache({
         segment: data,
         episode_id: extra.episode_id,

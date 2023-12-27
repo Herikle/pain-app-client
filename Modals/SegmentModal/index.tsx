@@ -4,7 +4,7 @@ import { SegmentIndex } from "./components/SegmentIndex";
 import { ISegment } from "types";
 
 export type CommonSegmentModalProps<T> = {
-  onChange: (data: T) => void;
+  onChange: (data: Partial<T>) => void;
   onValidChange: (valid: boolean) => void;
 };
 

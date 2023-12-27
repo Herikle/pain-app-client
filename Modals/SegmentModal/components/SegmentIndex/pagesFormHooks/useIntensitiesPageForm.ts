@@ -1,8 +1,11 @@
 import { ISegment, ISegmentValues } from "types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IntensitiesPageForm } from "../../IntensitiesPage";
 import _ from "lodash";
 import { normalizeString } from "@utils/helpers/string";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { useUpdateSegment } from "@queries/segment/useSegment";
+import { CommonUseHookPageForm } from "..";
 
 const cleanUndefined = (values: ISegmentValues | undefined) => {
   if (!values) {
@@ -20,7 +23,13 @@ const cleanUndefined = (values: ISegmentValues | undefined) => {
   return newValues;
 };
 
-export const useIntensitiesPageForm = (segment: ISegment) => {
+export const useIntensitiesPageForm = ({
+  segment,
+  episode_id,
+  setSegment,
+}: CommonUseHookPageForm) => {
+  const updateSegment = useUpdateSegment();
+
   const [intensitiesPageForm, setIntensitiesPageForm] =
     useState<IntensitiesPageForm>({
       type: segment.intensities.type,
@@ -30,6 +39,36 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
 
   const [intensitiesPageFormIsValid, setIntensitiesPageFormIsValid] =
     useState(true);
+
+  const debouncedIntensitiesPageForm = useDebounce(intensitiesPageForm, 500);
+  const [firstLoad, setFirstLoad] = useState(false);
+
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      return;
+    }
+
+    const update = async () => {
+      const updatedSegment = await updateSegment.mutateAsync({
+        params: {
+          segment_id: segment._id,
+        },
+        body: {
+          intensities: debouncedIntensitiesPageForm,
+        },
+        extra: {
+          episode_id: episode_id,
+        },
+      });
+
+      setSegment(updatedSegment);
+    };
+
+    update();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedIntensitiesPageForm]);
 
   const onChangeIntensitiesPageForm = useCallback(
     (data: IntensitiesPageForm) => {
@@ -69,5 +108,6 @@ export const useIntensitiesPageForm = (segment: ISegment) => {
     onChangeIntensitiesPageForm,
     setIntensitiesPageFormIsValid,
     isDirtyIntensitiesPageForm,
+    isSyncing: updateSegment.isLoading,
   };
 };

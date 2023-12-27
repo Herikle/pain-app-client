@@ -73,6 +73,15 @@ export const IntensitiesPage = ({
     onChange(getValues());
   };
 
+  useEffect(() => {
+    const subscription = watch((value) => {
+      onChange(value);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch, onChange]);
+
   const { errors, isValid } = formState;
 
   useEffect(() => {
@@ -80,7 +89,7 @@ export const IntensitiesPage = ({
   }, [isValid, onValidChange, hasError]);
 
   return (
-    <form onChange={onUpdate}>
+    <form>
       <Container>
         <FlexColumn>
           <FlexRow gap={6} pl={3}>
