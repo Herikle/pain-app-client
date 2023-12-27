@@ -73,7 +73,6 @@ export const useUpdatePatient = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(QueryKeys.Patients.ByID);
       queryClient.invalidateQueries(QueryKeys.Patients.List);
-      ToastSuccess("Patient updated successfully");
     },
     onError: (error: AxiosError) => {
       ToastError(error);

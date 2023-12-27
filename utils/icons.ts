@@ -25,6 +25,9 @@ export const IconsPath = {
   Symptom: "/icons/symptom.svg",
   Publish: "/icons/pub.svg",
   PubMain: "/icons/pub-main.svg",
+  Syncing: "/icons/syncing.svg",
+  Synced: "/icons/synced.svg",
+  Unavailable: "/icons/unavailable.svg",
 };
 
 export const ImagesPath = {

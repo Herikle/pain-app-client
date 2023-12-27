@@ -7,7 +7,7 @@ import { RoutesPath } from "@utils/routes";
 import styled from "styled-components";
 import Router, { useRouter } from "next/router";
 import { useGetPatientById } from "@queries/patient/useGetPatients";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { UpdatePatientForm } from "@page-components/UpdatePatientForm";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import { Table } from "@components/Table";
@@ -20,11 +20,14 @@ import { useSetDeletePatientModal } from "Modals/DeletePatientModal/hook";
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { media } from "@styles/media-query";
+import { SyncingIndicator } from "@components/SyncingIndicator";
 
 export default function Patient() {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
+
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const setSelectedPatient = useSetSelectedPatient();
 
@@ -86,15 +89,23 @@ export default function Patient() {
               patient?.type === "animal" ? IconsPath.Animal : IconsPath.Patient
             }
           />
-          <Trash
-            size={24}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-            onClick={onDelete}
-          />
+          <FlexRow>
+            <SyncingIndicator isSyncing={isSyncing} />
+            <Trash
+              size={24}
+              color={theme.colors.text_switched}
+              cursor="pointer"
+              onClick={onDelete}
+            />
+          </FlexRow>
         </UserBadgeContainer>
         <Wrapper>
-          {patient && <UpdatePatientForm patient={patient} />}
+          {patient && (
+            <UpdatePatientForm
+              patient={patient}
+              onIsSyncingChange={setIsSyncing}
+            />
+          )}
           <Table
             header={{
               title: "Pain Episodes list",

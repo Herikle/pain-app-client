@@ -17,6 +17,8 @@ import { Select } from "@components/Select";
 import { PatientTypeOptions } from "@page-components/NewPatientForm";
 import { Text } from "@components/Text";
 import { Radio } from "@components/Radio";
+import { useEffect, useRef, useState } from "react";
+import { useDebounce } from "@utils/hooks/useDebounce";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,10 +36,18 @@ type PatientSchema = z.infer<typeof newPatientSchema>;
 
 type UpdatePatientFormProps = {
   patient: IPatient;
+  onIsSyncingChange?: (isSyncing: boolean) => void;
 };
 
-export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
-  const { register, handleSubmit, formState, reset, control, watch } =
+export const UpdatePatientForm = ({
+  patient,
+  onIsSyncingChange,
+}: UpdatePatientFormProps) => {
+  const [formData, setFormData] = useState<Partial<PatientSchema> | null>(null);
+
+  const debouncedFormValue = useDebounce(formData, 500);
+
+  const { register, formState, handleSubmit, reset, control, watch } =
     useForm<PatientSchema>({
       resolver: zodResolver(newPatientSchema),
       defaultValues: {
@@ -51,6 +61,7 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
         common_name: patient.common_name ?? "",
         scientific_name: patient.scientific_name ?? "",
       },
+      mode: "onChange",
     });
 
   const updatePatient = useUpdatePatient();
@@ -59,7 +70,8 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
 
   useFormPrompt(isDirty);
 
-  const onSubmit = async (data: PatientSchema) => {
+  const onSubmit = async (data: Partial<PatientSchema>) => {
+    if (!isDirty) return;
     await updatePatient.mutateAsync({
       params: {
         patient_id: patient._id,
@@ -69,8 +81,35 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
     reset(data);
   };
 
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setFormData(value);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
+
+  useEffect(() => {
+    if (debouncedFormValue) {
+      const isValid = newPatientSchema.safeParse(debouncedFormValue);
+
+      if (!isValid.success) {
+        return;
+      }
+
+      handleSubmit(onSubmit)(debouncedFormValue as any);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFormValue]);
+
+  useEffect(() => {
+    onIsSyncingChange?.(updatePatient.isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatePatient.isLoading]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
@@ -154,15 +193,6 @@ export const UpdatePatientForm = ({ patient }: UpdatePatientFormProps) => {
             />
           </Grid>
         </Grid>
-        <FlexRow justify="space-between">
-          <Button
-            width="160px"
-            loading={updatePatient.isLoading}
-            disabled={!isDirty}
-          >
-            Save changes
-          </Button>
-        </FlexRow>
       </Container>
     </form>
   );
