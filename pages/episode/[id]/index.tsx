@@ -29,6 +29,7 @@ import { Badge } from "@components/Badge";
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { useDeleteEpisode } from "@queries/episode/useEpisode";
+import { SyncingIndicator } from "@components/SyncingIndicator";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -44,6 +45,8 @@ export default function EpisodePage() {
   const setSelectedEpisode = useSetSelectedEpisode();
 
   const deleteEpisode = useDeleteEpisode();
+
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const [saveModal, setSaveModal] = useState(false);
 
@@ -126,15 +129,20 @@ export default function EpisodePage() {
         <EpisodeBadgeContainer justify="space-between">
           <Badge label={episode?.name} iconPath={IconsPath.Episode} />
           {isLogged && (
-            <Trash
-              size={24}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-              onClick={() => setConfirmDelete(true)}
-            />
+            <FlexRow>
+              <SyncingIndicator isSyncing={isSyncing} />
+              <Trash
+                size={24}
+                color={theme.colors.text_switched}
+                cursor="pointer"
+                onClick={() => setConfirmDelete(true)}
+              />
+            </FlexRow>
           )}
         </EpisodeBadgeContainer>
-        {!!episode && <EpisodeForm episode={episode} />}
+        {!!episode && (
+          <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
+        )}
         <TrackContainer>
           <FlexColumn gap={4}>
             <FlexRow gap={0} justify="space-between">

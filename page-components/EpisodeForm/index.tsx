@@ -1,26 +1,20 @@
-import { Button } from "@components/Button";
 import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
-import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { FlexColumn } from "@design-components/Flex";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
 import { IEpisode } from "types";
-import { getDateAndTimeFromIsoDate } from "@utils/helpers/date";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
-import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
-import { DateTimePicker } from "@components/DateTimePicker";
-import { theme } from "@styles/theme";
-import { Text } from "@components/Text";
-import { TimePicker } from "@components/TimePicker";
-import { DatePicker } from "@components/DatePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@utils/hooks/useDebounce";
 
 const episodeSchema = z.object({
-  name: z.string().nonempty("Name is required"),
+  name: z.string().min(1, "Name is required"),
   location: z.string().optional(),
   diagnosis: z.string().optional(),
   start_date: z.date().optional(),
@@ -31,10 +25,18 @@ type EpisodeSchema = z.infer<typeof episodeSchema>;
 
 type EpisodeFormProps = {
   episode: IEpisode;
+  onIsSyncingChange?: (isSyncing: boolean) => void;
 };
 
-export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
-  const { register, handleSubmit, formState, reset, setValue, watch, control } =
+export const EpisodeForm = ({
+  episode,
+  onIsSyncingChange,
+}: EpisodeFormProps) => {
+  const [formData, setFormData] = useState<Partial<EpisodeSchema> | null>(null);
+
+  const debouncedFormValue = useDebounce(formData, 500);
+
+  const { register, handleSubmit, formState, reset, watch, control } =
     useForm<EpisodeSchema>({
       resolver: zodResolver(episodeSchema),
       defaultValues: {
@@ -52,9 +54,8 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
 
   const { errors, isDirty } = formState;
 
-  useFormPrompt(isDirty);
-
   const onSubmit = async (data: EpisodeSchema) => {
+    if (!isDirty) return;
     await updateEpisode.mutateAsync({
       params: {
         episode_id: episode._id,
@@ -65,8 +66,35 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
     reset(data);
   };
 
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setFormData(value);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
+
+  useEffect(() => {
+    if (debouncedFormValue) {
+      const isValid = episodeSchema.safeParse(debouncedFormValue);
+
+      if (!isValid.success) {
+        return;
+      }
+
+      handleSubmit(onSubmit)(debouncedFormValue as any);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFormValue]);
+
+  useEffect(() => {
+    onIsSyncingChange?.(updateEpisode.isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateEpisode.isLoading]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
@@ -115,13 +143,6 @@ export const EpisodeForm = ({ episode }: EpisodeFormProps) => {
             />
           </Grid>
         </Grid>
-        <Button
-          width="160px"
-          loading={updateEpisode.isLoading}
-          disabled={!isDirty}
-        >
-          Save
-        </Button>
       </Container>
     </form>
   );

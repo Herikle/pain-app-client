@@ -1,4 +1,3 @@
-import { Button } from "@components/Button";
 import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
@@ -10,11 +9,8 @@ import styled from "styled-components";
 import { IPatient } from "types";
 import { getDateFromString } from "@utils/helpers/date";
 import { useUpdatePatient } from "@queries/patient/usePatient";
-import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DatePicker } from "@components/DatePicker";
-import { Select } from "@components/Select";
-import { PatientTypeOptions } from "@page-components/NewPatientForm";
 import { Text } from "@components/Text";
 import { Radio } from "@components/Radio";
 import { useEffect, useRef, useState } from "react";
@@ -67,8 +63,6 @@ export const UpdatePatientForm = ({
   const updatePatient = useUpdatePatient();
 
   const { errors, isDirty } = formState;
-
-  useFormPrompt(isDirty);
 
   const onSubmit = async (data: Partial<PatientSchema>) => {
     if (!isDirty) return;
