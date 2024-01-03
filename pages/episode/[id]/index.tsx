@@ -99,7 +99,7 @@ export default function EpisodePage() {
     });
 
     if (!!episode?.patient_id) {
-      Router.push(RoutesPath.patient.replace("[id]", episode.patient_id));
+      Router.replace(RoutesPath.patient.replace("[id]", episode.patient_id));
     }
   };
 
