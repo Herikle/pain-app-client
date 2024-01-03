@@ -187,7 +187,7 @@ export const Track = ({ track }: TrackProps) => {
           )}
         </Container>
         {!!track.comment && (
-          <CommentContainer>
+          <CommentContainer $cumulativePainMode={cumulativePainMode}>
             <Text>{track.comment}</Text>
           </CommentContainer>
         )}
@@ -237,9 +237,14 @@ const ChartBarIcon = styled(ChartBar)<ChartBarProps>`
     `}
 `;
 
-const CommentContainer = styled.div`
+type CommentContainerProps = {
+  $cumulativePainMode: boolean;
+};
+
+const CommentContainer = styled.div<CommentContainerProps>`
   max-width: 900px;
   margin-bottom: 2rem;
+  opacity: ${({ $cumulativePainMode }) => ($cumulativePainMode ? 0 : 1)};
 `;
 
 type SegmentProps = {
