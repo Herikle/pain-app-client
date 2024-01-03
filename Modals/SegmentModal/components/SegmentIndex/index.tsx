@@ -67,7 +67,6 @@ const TabPanelContainer = styled.div``;
 export type CommonUseHookPageForm = {
   segment: ISegment;
   episode_id: string;
-  setSegment: (segment: ISegment) => void;
 };
 
 const tabs_index: { [key in SegmentModalTabs]: number } = {
@@ -87,8 +86,6 @@ type Props = {
 
 export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   const [value, setValue] = useState(tabs_index[tab]);
-
-  const [segmentState, setSegmentState] = useState<ISegment>(segment);
 
   const [confirmDeleteSegment, setConfirmDeleteSegment] = useState(false);
 
@@ -121,7 +118,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   } = useSegmentPageForm({
     segment,
     episode_id,
-    setSegment: setSegmentState,
   });
 
   const {
@@ -132,7 +128,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   } = useIntensitiesPageForm({
     segment,
     episode_id,
-    setSegment: setSegmentState,
   });
 
   const {
@@ -140,7 +135,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     qualityPageForm,
     onChangeQualityPageForm,
     setQualityPageFormIsValid,
-  } = useQualityPageForm({ segment, episode_id, setSegment: setSegmentState });
+  } = useQualityPageForm({ segment, episode_id });
 
   const {
     isSyncing: isSyncingInterventionPageForm,
@@ -149,14 +144,13 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
   } = useInterventionPageForm({
     segment,
     episode_id,
-    setSegment: setSegmentState,
   });
 
   const {
     isSyncing: isSyncingSymptomPageForm,
     symptomPageForm,
     onChangeSymptomPageForm,
-  } = useSymptomPageForm({ segment, episode_id, setSegment: setSegmentState });
+  } = useSymptomPageForm({ segment, episode_id });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -171,31 +165,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
       return "font_color";
     }
     return "text_switched";
-  };
-
-  const updateSegment = useUpdateSegment();
-
-  const onSubmit = async () => {
-    // const updatedSegment = await updateSegment.mutateAsync({
-    //   params: {
-    //     segment_id: segment._id,
-    //   },
-    //   body: {
-    //     ...segmentPageForm,
-    //     intensities: intensitiesPageForm,
-    //     quality: qualityPageForm,
-    //     interventions: getValuesToSend(),
-    //     symptoms: getSymptomValues(),
-    //   },
-    //   extra: {
-    //     episode_id,
-    //   },
-    // });
-    // if (closeAfterSave) {
-    //   closeSegmentModal();
-    // } else {
-    //   setSegmentState(updatedSegment);
-    // }
   };
 
   return (

@@ -10,7 +10,6 @@ import { CommonUseHookPageForm } from "..";
 export const useQualityPageForm = ({
   episode_id,
   segment,
-  setSegment,
 }: CommonUseHookPageForm) => {
   const updateSegment = useUpdateSegment();
 
@@ -34,7 +33,7 @@ export const useQualityPageForm = ({
     }
 
     const update = async () => {
-      const updatedSegment = await updateSegment.mutateAsync({
+      await updateSegment.mutateAsync({
         params: {
           segment_id: segment._id,
         },
@@ -45,8 +44,6 @@ export const useQualityPageForm = ({
           episode_id: episode_id,
         },
       });
-
-      setSegment(updatedSegment);
     };
 
     update();

@@ -26,7 +26,6 @@ const cleanUndefined = (values: ISegmentValues | undefined) => {
 export const useIntensitiesPageForm = ({
   segment,
   episode_id,
-  setSegment,
 }: CommonUseHookPageForm) => {
   const updateSegment = useUpdateSegment();
 
@@ -50,7 +49,7 @@ export const useIntensitiesPageForm = ({
     }
 
     const update = async () => {
-      const updatedSegment = await updateSegment.mutateAsync({
+      await updateSegment.mutateAsync({
         params: {
           segment_id: segment._id,
         },
@@ -61,8 +60,6 @@ export const useIntensitiesPageForm = ({
           episode_id: episode_id,
         },
       });
-
-      setSegment(updatedSegment);
     };
 
     update();

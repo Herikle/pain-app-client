@@ -70,7 +70,6 @@ export const useUpdateTrack = () => {
       updateTrackOnCache({
         track: data,
       });
-      ToastSuccess("Track updated successfully");
     },
     onError: (error: AxiosError) => {
       ToastError(error);

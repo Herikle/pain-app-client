@@ -7,7 +7,6 @@ import { CommonUseHookPageForm } from "..";
 export const useInterventionPageForm = ({
   episode_id,
   segment,
-  setSegment,
 }: CommonUseHookPageForm) => {
   const updateSegment = useUpdateSegment();
 
@@ -37,7 +36,7 @@ export const useInterventionPageForm = ({
     }
 
     const update = async () => {
-      const updatedSegment = await updateSegment.mutateAsync({
+      await updateSegment.mutateAsync({
         params: {
           segment_id: segment._id,
         },
@@ -48,8 +47,6 @@ export const useInterventionPageForm = ({
           episode_id: episode_id,
         },
       });
-
-      setSegment(updatedSegment);
     };
 
     update();

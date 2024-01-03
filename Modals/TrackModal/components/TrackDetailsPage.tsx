@@ -22,16 +22,14 @@ export type TrackEditType = z.infer<typeof schema>;
 
 type TrackDetailsPageProps = {
   track: ITrack;
-  onChange: (data: TrackEditType) => void;
-  onValidChange: (valid: boolean) => void;
+  onChange: (data: Partial<TrackEditType>) => void;
 };
 
 export const TrackDetailsPage = ({
   track,
   onChange,
-  onValidChange,
 }: TrackDetailsPageProps) => {
-  const { register, formState, getValues } = useForm<TrackEditType>({
+  const { register, formState, getValues, watch } = useForm<TrackEditType>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: track.name,
@@ -41,20 +39,21 @@ export const TrackDetailsPage = ({
     mode: "onChange",
   });
 
-  const { errors, isValid } = formState;
-
-  const onUpdate = () => {
-    onChange(getValues());
-  };
+  const { errors } = formState;
 
   useEffect(() => {
-    onValidChange(isValid);
-  }, [isValid, onValidChange]);
+    const subscription = watch((value) => {
+      onChange(value);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch, onChange]);
 
   const isMobileL = useMatchMediaUp("mobileL");
 
   return (
-    <form onChange={onUpdate}>
+    <form>
       <Container>
         <Grid container spacing={4} width={isMobileL ? "100%" : "50%"}>
           <Grid xs={12}>

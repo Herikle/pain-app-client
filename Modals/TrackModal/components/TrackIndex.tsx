@@ -2,17 +2,20 @@ import styled from "styled-components";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Button } from "@components/Button";
-import { Trash } from "@phosphor-icons/react";
+import { Trash, X } from "@phosphor-icons/react";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
 import { media } from "@styles/media-query";
 import { DeleteTracKModal } from "Modals/DeleteTrackModal";
 import { useUpdateTrack } from "@queries/track/useTrack";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { SyncingIndicator } from "@components/SyncingIndicator";
+import { Portal } from "@components/Portal";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -56,11 +59,14 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
   const [value, setValue] = useState(0);
 
   const [trackDetails, setTrackDetails] = useState<TrackEditType>(track);
-  const [trackDetailsValid, setTrackDetailsValid] = useState(false);
+
+  const debouncedTrackDetails = useDebounce(trackDetails, 500);
 
   const updateTrack = useUpdateTrack();
 
   const [confirmDeleteTrack, setConfirmDeleteTrack] = useState(false);
+
+  const [firstLoad, setFirstLoad] = useState(false);
 
   const openConfirmDelete = () => {
     setConfirmDeleteTrack(true);
@@ -86,18 +92,24 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
     return "text_switched";
   };
 
-  const onSave = async () => {
-    await updateTrack.mutateAsync({
-      params: {
-        track_id: track._id,
-      },
-      body: trackDetails,
-    });
-  };
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      return;
+    }
 
-  const isValid = () => {
-    return trackDetailsValid;
-  };
+    const update = async () => {
+      await updateTrack.mutateAsync({
+        params: {
+          track_id: track._id,
+        },
+        body: debouncedTrackDetails,
+      });
+    };
+
+    update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedTrackDetails]);
 
   return (
     <>
@@ -125,26 +137,14 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
                 }
                 sx={TabSx}
               />
-              {/* <Tab
-                label={
-                  <Text variant="body1Bold" color={getColor(1)}>
-                    Intensity over track
-                  </Text>
-                }
-                sx={TabSx}
-              /> */}
             </Tabs>
           </TabsContainer>
           <CustomTabPanel value={value} index={0}>
             <TrackDetailsPage
               track={{ ...track, ...trackDetails }}
               onChange={onChangeTrackDetails}
-              onValidChange={setTrackDetailsValid}
             />
           </CustomTabPanel>
-          {/* <CustomTabPanel value={value} index={1}>
-            <TrackIntensityOverTrackPage track={track} />
-          </CustomTabPanel> */}
         </Content>
         <FlexRow justify="space-between">
           <Trash
@@ -153,24 +153,51 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
             color={theme.colors.text_switched}
             cursor="pointer"
           />
-          <Button
-            onClick={onSave}
-            width="160px"
-            loading={updateTrack.isLoading}
-            disabled={!isValid()}
-          >
-            Save changes
-          </Button>
         </FlexRow>
+        <XContainer>
+          <FlexRow>
+            <SyncingIndicator isSyncing={updateTrack.isLoading} />
+            <X
+              size={24}
+              color={theme.colors.font_color}
+              onClick={onClose}
+              cursor="pointer"
+            />
+          </FlexRow>
+        </XContainer>
       </Container>
       {confirmDeleteTrack && (
         <DeleteTracKModal onClose={closeConfirmDelete} track={track} />
       )}
+      <Portal>
+        <ModalOverlay onClick={onClose} />
+      </Portal>
     </>
   );
 };
 
 const Content = styled.div``;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${theme.colors.pure_black};
+  opacity: 0.5;
+`;
+
+const XContainer = styled.div`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  ${media.up.mobileL`
+    top: 0.5rem;
+    right: 0.5rem;
+  `}
+`;
 
 const CustomTabPanel = styled(TabPanel)`
   & .MuiBox-root {
