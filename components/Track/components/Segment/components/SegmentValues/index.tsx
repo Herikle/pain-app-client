@@ -11,6 +11,10 @@ import {
   convertTimeToHours,
   getTimeUnitAbbreviation,
 } from "@utils/helpers/segmentHelpers";
+import { Trash } from "@phosphor-icons/react";
+import { Tooltip } from "react-tooltip";
+import styled from "styled-components";
+import { transparentize } from "polished";
 
 export const SegmentValuesSchema = z
   .object({
@@ -92,7 +96,7 @@ export const SegmentValues = ({
   cumulativePainMode,
   timeUnit,
 }: ValuesSectionProps) => {
-  const { getValues, control } = useForm<SegmentValuesForm>({
+  const { getValues, control, reset } = useForm<SegmentValuesForm>({
     resolver: zodResolver(SegmentValuesSchema),
     mode: "onChange",
     defaultValues: {
@@ -142,44 +146,87 @@ export const SegmentValues = ({
     )} ${getTimeUnitAbbreviation("hours")}`;
   };
 
+  const clearValues = () => {
+    reset({
+      annoying: null,
+      disabling: null,
+      excruciating: null,
+      hurful: null,
+      no_pain: null,
+    });
+
+    onUpdate();
+  };
+
   return (
-    <form onChange={onUpdate}>
-      {valuesArray.map((value) => (
-        <Section key={value}>
-          {readOnly ? (
-            <FlexRow width="100%" height="100%">
-              <Text
-                variant="body1Bold"
-                align="center"
-                customColor={theme.pain_level_colors[value]}
-              >
-                {cumulativePainMode
-                  ? getCumulativeValue(value)
-                  : getRawValue(value)}
-              </Text>
-            </FlexRow>
-          ) : (
-            <Controller
-              control={control}
-              name={value}
-              render={({ field }) => (
-                <Input
-                  value={field.value}
-                  onValueChange={(value) => {
-                    field.onChange(value.floatValue ?? null);
-                  }}
-                  onBlur={field.onBlur}
-                  getInputRef={field.ref}
-                  suffix="%"
-                  style={{
-                    color: theme.pain_level_colors[value],
-                  }}
-                />
-              )}
+    <>
+      <form onChange={onUpdate}>
+        {valuesArray.map((value) => (
+          <Section key={value}>
+            {readOnly ? (
+              <FlexRow width="100%" height="100%">
+                <Text
+                  variant="body1Bold"
+                  align="center"
+                  customColor={theme.pain_level_colors[value]}
+                >
+                  {cumulativePainMode
+                    ? getCumulativeValue(value)
+                    : getRawValue(value)}
+                </Text>
+              </FlexRow>
+            ) : (
+              <Controller
+                control={control}
+                name={value}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      value={field.value ?? ""}
+                      onValueChange={(value) => {
+                        field.onChange(value.floatValue ?? null);
+                      }}
+                      onBlur={field.onBlur}
+                      getInputRef={field.ref}
+                      suffix="%"
+                      style={{
+                        color: theme.pain_level_colors[value],
+                      }}
+                    />
+                  );
+                }}
+              />
+            )}
+          </Section>
+        ))}
+      </form>
+      {!readOnly && (
+        <>
+          <Clear id="clear-values">
+            <Trash
+              size={16}
+              color={theme.colors.pure_black}
+              onClick={clearValues}
             />
-          )}
-        </Section>
-      ))}
-    </form>
+          </Clear>
+          <Tooltip anchorSelect="#clear-values">Clear values</Tooltip>
+        </>
+      )}
+    </>
   );
 };
+
+const Clear = styled.div`
+  position: absolute;
+  top: 1.5rem;
+  right: 0;
+  background-color: ${theme.colors.hover_state};
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  cursor: pointer;
+  transform: translate(calc(100% + 0.5rem), -100%);
+  box-shadow: 0px 4px 4px 0px ${transparentize(0.75, theme.colors.pure_black)};
+`;
