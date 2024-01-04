@@ -22,12 +22,11 @@ type CreatePatientsPayload = {
 
 type CreatePatientResponse = Omit<IPatient, "creator">;
 
-const createPatient = async ({ body }: CreatePatientsPayload) => {
+const createPatient = async () => {
   const { data } = await request({
     service: "patient",
     url: "/",
     method: "POST",
-    data: body,
   });
 
   return data as CreatePatientResponse;

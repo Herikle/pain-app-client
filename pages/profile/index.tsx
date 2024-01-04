@@ -2,11 +2,10 @@ import { Badge } from "@components/Badge";
 import { CallToAction } from "@components/CallToAction";
 import { Table } from "@components/Table";
 import { Text } from "@components/Text";
-import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
-import { AccountForm } from "@page-components/AccountForm";
+import Router from "next/router";
 import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
-import { PencilSimpleLine } from "@phosphor-icons/react";
 import { useGetPatients } from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
@@ -18,6 +17,7 @@ import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
+import { useCreatePatient } from "@queries/patient/usePatient";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -57,6 +57,13 @@ export default function ProfilePage() {
     setChangeAccountInfo({});
   };
 
+  const createPatient = useCreatePatient();
+
+  const onCreatePatient = async () => {
+    const created_patient = await createPatient.mutateAsync();
+    Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
+  };
+
   return (
     <LoggedLayout>
       <Container>
@@ -92,13 +99,15 @@ export default function ProfilePage() {
           data={patients}
           header={{
             title: "Patient List",
-            plusHref: RoutesPath.new_patient,
+            onPlusClick: onCreatePatient,
+            loading: createPatient.isLoading,
           }}
           CallToAction={
             <CallToAction
               text1="There are no patients registered yet."
               text2="to create a patient."
-              href={RoutesPath.new_patient}
+              onClick={onCreatePatient}
+              loading={createPatient.isLoading}
             />
           }
           mountHref={mountPatientHref}
