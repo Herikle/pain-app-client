@@ -8,7 +8,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import styled from "styled-components";
 import { IEpisode } from "types";
 import { useUpdateEpisode } from "@queries/episode/useEpisode";
-import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
@@ -17,7 +16,7 @@ const episodeSchema = z.object({
   name: z.string().min(1, "Name is required"),
   location: z.string().optional(),
   diagnosis: z.string().optional(),
-  start_date: z.date().optional(),
+  start_date: z.date().optional().nullable(),
   comment: z.string().optional(),
 });
 
@@ -36,19 +35,27 @@ export const EpisodeForm = ({
 
   const debouncedFormValue = useDebounce(formData, 500);
 
-  const { register, handleSubmit, formState, reset, watch, control } =
-    useForm<EpisodeSchema>({
-      resolver: zodResolver(episodeSchema),
-      defaultValues: {
-        name: episode.name,
-        location: episode.location,
-        diagnosis: episode.diagnosis,
-        start_date: !!episode?.start_date
-          ? new Date(episode?.start_date)
-          : undefined,
-        comment: episode.comment,
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    formState,
+    reset,
+    watch,
+    control,
+    setValue,
+    getValues,
+  } = useForm<EpisodeSchema>({
+    resolver: zodResolver(episodeSchema),
+    defaultValues: {
+      name: episode.name,
+      location: episode.location,
+      diagnosis: episode.diagnosis,
+      start_date: !!episode?.start_date
+        ? new Date(episode?.start_date)
+        : undefined,
+      comment: episode.comment,
+    },
+  });
 
   const updateEpisode = useUpdateEpisode();
 
@@ -64,6 +71,17 @@ export const EpisodeForm = ({
     });
 
     reset(data);
+  };
+
+  const clearDate = async () => {
+    setValue("start_date", null);
+    const values = getValues();
+    await updateEpisode.mutateAsync({
+      params: {
+        episode_id: episode._id,
+      },
+      body: values,
+    });
   };
 
   useEffect(() => {
@@ -95,7 +113,6 @@ export const EpisodeForm = ({
 
   return (
     <form>
-      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
@@ -129,6 +146,7 @@ export const EpisodeForm = ({
                   dateLabel="Date of start"
                   value={value}
                   onChange={onChange}
+                  onClear={clearDate}
                 />
               )}
             />

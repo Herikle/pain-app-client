@@ -202,12 +202,8 @@ export const SegmentValues = ({
       </form>
       {!readOnly && (
         <>
-          <Clear id="clear-values">
-            <Trash
-              size={16}
-              color={theme.colors.pure_black}
-              onClick={clearValues}
-            />
+          <Clear id="clear-values" onClick={clearValues}>
+            <Trash size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-values">Clear values</Tooltip>
         </>

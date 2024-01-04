@@ -18,7 +18,7 @@ import { useDebounce } from "@utils/hooks/useDebounce";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  birth_date: z.date().optional(),
+  birth_date: z.date().optional().nullable(),
   about: z.string().optional(),
   common_name: z.string().optional(),
   scientific_name: z.string().optional(),
@@ -104,7 +104,6 @@ export const UpdatePatientForm = ({
 
   return (
     <form>
-      <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
         <Grid container spacing={4}>
           <Grid xl={12} lg={12} md={12} sm={12} xs={12}>

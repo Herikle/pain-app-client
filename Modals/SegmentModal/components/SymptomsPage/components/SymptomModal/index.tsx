@@ -21,7 +21,7 @@ import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const SymptomSchema = zod.object({
   name: zod.string().min(1),
-  datetime: zod.date().optional(),
+  datetime: zod.date().optional().nullable(),
 });
 
 export type CreateSymptom = zod.infer<typeof SymptomSchema>;
@@ -39,13 +39,14 @@ export const SymptomModal = ({
   onAdd,
   defaultValues,
 }: InterventionModalProps) => {
-  const { register, handleSubmit, reset, control } = useForm<CreateSymptom>({
-    resolver: zodResolver(SymptomSchema),
-    defaultValues: {
-      name: defaultValues?.name,
-      datetime: defaultValues?.datetime,
-    },
-  });
+  const { register, handleSubmit, reset, control, setValue } =
+    useForm<CreateSymptom>({
+      resolver: zodResolver(SymptomSchema),
+      defaultValues: {
+        name: defaultValues?.name,
+        datetime: defaultValues?.datetime,
+      },
+    });
 
   const close = () => {
     reset();
@@ -64,14 +65,24 @@ export const SymptomModal = ({
         <Container>
           <Grid container spacing={2}>
             <Grid xs={12}>
-              <TextField placeholder="Symptom" {...register("name")} required />
+              <TextField
+                placeholder="Symptom*"
+                {...register("name")}
+                required
+              />
             </Grid>
             <Grid xs={12}>
               <Controller
                 name="datetime"
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <DateAndTimePicker value={value} onChange={onChange} />
+                  <DateAndTimePicker
+                    value={value}
+                    onChange={onChange}
+                    onClear={() => {
+                      setValue("datetime", null);
+                    }}
+                  />
                 )}
               />
             </Grid>

@@ -42,7 +42,7 @@ type UpdatePatientPayload = {
   };
   body: {
     name?: string;
-    birth_date?: Date;
+    birth_date?: Date | null;
     type?: IPatient["type"];
     production_system?: string;
     life_fate?: string;

@@ -1,8 +1,6 @@
 import { AddButton } from "@components/AddButton";
 import { BackButton } from "@components/BackButton";
-import { Paint } from "@components/Paint";
 import { Text } from "@components/Text";
-import { Track } from "@components/Track";
 import { ListTrack } from "@components/Track/components/ListTracks";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
@@ -20,7 +18,6 @@ import { Button } from "@components/Button";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { useAuth } from "@utils/hooks/useAuth";
-import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
@@ -114,7 +111,6 @@ export default function EpisodePage() {
 
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
-      <UnsavedChangesDialog shouldConfirmLeave={!isLogged && !saveModal} />
       <Container>
         {!!episode?.patient_id && (
           <BackButton

@@ -35,7 +35,7 @@ export const useCreateEpisode = () => {
 type UpdateEpisode = Partial<
   Omit<IEpisode, "_id" | "patient_id" | "creator_id" | "start_date">
 > & {
-  start_date?: Date;
+  start_date?: Date | null;
 };
 
 type UpdateEpisodePayload = {

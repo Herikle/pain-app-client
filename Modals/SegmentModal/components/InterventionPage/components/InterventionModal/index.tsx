@@ -20,8 +20,8 @@ import { DateTimePicker } from "@components/DateTimePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const InterventionSchema = zod.object({
-  name: zod.string().nonempty(),
-  datetime: zod.date().optional(),
+  name: zod.string().min(1),
+  datetime: zod.date().optional().nullable(),
   dose: zod.string().optional(),
   effective: zod.boolean(),
 });
@@ -48,6 +48,7 @@ export const InterventionModal = ({
     formState: { errors },
     watch,
     control,
+    setValue,
   } = useForm<CreateIntervention>({
     resolver: zodResolver(InterventionSchema),
     defaultValues: {
@@ -76,7 +77,7 @@ export const InterventionModal = ({
           <Grid container spacing={2}>
             <Grid xs={12}>
               <TextField
-                placeholder="Intervention"
+                placeholder="Intervention*"
                 {...register("name")}
                 required
               />
@@ -86,7 +87,11 @@ export const InterventionModal = ({
                 name="datetime"
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <DateAndTimePicker value={value} onChange={onChange} />
+                  <DateAndTimePicker
+                    value={value}
+                    onChange={onChange}
+                    onClear={() => [setValue("datetime", null)]}
+                  />
                 )}
               />
             </Grid>
