@@ -12,7 +12,7 @@ type GetPatientsPayload = {
   };
 };
 
-type GetPatientsResponse = {
+export type GetPatientsResponse = {
   results: IPatient[];
   meta: Meta;
 };

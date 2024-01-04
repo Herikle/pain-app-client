@@ -4,6 +4,7 @@ import { ToastError, ToastSuccess } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IPatient } from "types";
+import { useUpdatePatientOnCache } from "./hooks/useUpdatePatientOnCache";
 
 type CreatePatientsPayload = {
   body: {
@@ -98,9 +99,13 @@ const deletePatient = async ({ params }: DeletePatientPayload) => {
 
 export const useDeletePatient = () => {
   const queryClient = useQueryClient();
-
+  const { deletePatientOnCache } = useUpdatePatientOnCache();
   return useMutation(deletePatient, {
-    onSuccess: () => {
+    onSuccess: (_, { params }) => {
+      deletePatientOnCache({
+        id: params.patient_id,
+      });
+
       queryClient.invalidateQueries(QueryKeys.Patients.ByID);
       queryClient.invalidateQueries(QueryKeys.Patients.List);
       ToastSuccess("Patient deleted successfully");

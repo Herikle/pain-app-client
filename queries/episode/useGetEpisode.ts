@@ -13,7 +13,7 @@ type GetEpisodsListPayload = {
   };
 };
 
-type GetEpisodesListResponse = {
+export type GetEpisodesListResponse = {
   results: IEpisode[];
   meta: Meta;
 };

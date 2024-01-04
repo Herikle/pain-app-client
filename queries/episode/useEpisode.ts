@@ -5,6 +5,7 @@ import { ToastError, ToastSuccess } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IEpisode } from "types";
+import { useUpdateEpisodeOnCache } from "./hooks/useUpdateEpisodeOnCache";
 
 export const getEpisodeService = (): RequestService => {
   return hasToken() ? "episode" : "episode-guest";
@@ -85,8 +86,13 @@ const deleteEpisode = async ({ params }: DeleteEpisodePayload) => {
 export const useDeleteEpisode = () => {
   const queryClient = useQueryClient();
 
+  const { deleteEpisodeOnCache } = useUpdateEpisodeOnCache();
+
   return useMutation(deleteEpisode, {
-    onSuccess: () => {
+    onSuccess: (_, { params }) => {
+      deleteEpisodeOnCache({
+        id: params.episode_id,
+      });
       queryClient.invalidateQueries([QueryKeys.Episode.ByID]);
       ToastSuccess("Episode deleted successfully");
     },
