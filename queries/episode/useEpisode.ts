@@ -101,3 +101,22 @@ export const useDeleteEpisode = () => {
     },
   });
 };
+
+type ExportEpisodePayload = {
+  params: {
+    episode_id: string;
+  };
+};
+
+const exportEpisode = async ({ params }: ExportEpisodePayload) => {
+  const { data } = await request({
+    method: "GET",
+    service: "episode",
+    url: `/export/${params.episode_id}`,
+  });
+  return data;
+};
+
+export const useExportEpisode = () => {
+  return useMutation(exportEpisode);
+};

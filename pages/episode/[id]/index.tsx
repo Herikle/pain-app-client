@@ -23,10 +23,14 @@ import { media } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { IconsPath } from "@utils/icons";
 import { Badge } from "@components/Badge";
-import { Trash } from "@phosphor-icons/react";
+import { Export, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
-import { useDeleteEpisode } from "@queries/episode/useEpisode";
+import {
+  useDeleteEpisode,
+  useExportEpisode,
+} from "@queries/episode/useEpisode";
 import { SyncingIndicator } from "@components/SyncingIndicator";
+import fileDownload from "js-file-download";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -43,11 +47,15 @@ export default function EpisodePage() {
 
   const deleteEpisode = useDeleteEpisode();
 
+  const exportEpisode = useExportEpisode();
+
   const [isSyncing, setIsSyncing] = useState(false);
 
   const [saveModal, setSaveModal] = useState(false);
 
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const [confirmExportEpisode, setConfirmExportEpisode] = useState(false);
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -100,6 +108,29 @@ export default function EpisodePage() {
     }
   };
 
+  const onClickExport = async () => {
+    const episodeExported = await exportEpisode.mutateAsync({
+      params: {
+        episode_id: id,
+      },
+    });
+
+    const first05PatientName = episode?.patient?.name.slice(0, 5);
+
+    const first10EpisodeName = episode?.name.slice(0, 10);
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    const fileName = `Episode_${first05PatientName}_${first10EpisodeName}_${currentDate}`;
+    const json = JSON.stringify(episodeExported, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+
+    fileDownload(blob, `${fileName}.json`);
+
+    setConfirmExportEpisode(false);
+  };
+
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
@@ -127,6 +158,14 @@ export default function EpisodePage() {
           {isLogged && (
             <FlexRow>
               <SyncingIndicator isSyncing={isSyncing} />
+              <Export
+                size={24}
+                color={theme.colors.text_switched}
+                onClick={() => {
+                  setConfirmExportEpisode(true);
+                }}
+                cursor="pointer"
+              />
               <Trash
                 size={24}
                 color={theme.colors.text_switched}
@@ -185,6 +224,19 @@ export default function EpisodePage() {
           }}
           loading={deleteEpisode.isLoading}
           description="Are you sure you want to delete this episode? This action cannot be undone."
+        />
+      )}
+      {confirmExportEpisode && (
+        <ConfirmActionModal
+          onConfirm={onClickExport}
+          onClose={() => {
+            setConfirmExportEpisode(false);
+          }}
+          loading={exportEpisode.isLoading}
+          title="Export Episode"
+          description="Would you like to export this episode as a JSON file?"
+          confirmText="Export"
+          cancelText="Cancel"
         />
       )}
     </LoggedLayout>
