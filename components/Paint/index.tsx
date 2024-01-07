@@ -89,37 +89,39 @@ export const Paint = ({
   }, [initialDrawValue, firstRenderHasPassed, readOnly]);
 
   const drawObjects = async (toDraw: DrawObject[]) => {
-    for (const object of toDraw) {
-      ctxRef.current?.beginPath();
-      ctxRef.current?.moveTo(object.position.x, object.position.y);
-      for (const point of object.points) {
-        ctxRef.current?.lineTo(
-          object.position.x + point[0],
-          object.position.y + point[1]
-        );
-        ctxRef.current?.stroke();
-        // await sleep(1);
+    try {
+      for (const object of toDraw) {
+        ctxRef.current?.beginPath();
+        ctxRef.current?.moveTo(object.position.x, object.position.y);
+        for (const point of object.points) {
+          ctxRef.current?.lineTo(
+            object.position.x + point[0],
+            object.position.y + point[1]
+          );
+          ctxRef.current?.stroke();
+          // await sleep(1);
+        }
+        ctxRef.current?.closePath();
       }
-      ctxRef.current?.closePath();
+      setObjects(toDraw);
+    } catch (error) {
+      console.error(error);
     }
-    setObjects(toDraw);
   };
 
-  // Function for starting the drawing
-  const startDrawing = (e) => {
+  const startDrawing = (x, y) => {
     if (readOnly) return;
     if (ctxRef.current) {
       ctxRef.current.beginPath();
-      ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      ctxRef.current.moveTo(x, y);
       setIsDrawing(true);
       setCurrentStartPosition({
-        x: e.nativeEvent.offsetX,
-        y: e.nativeEvent.offsetY,
+        x,
+        y,
       });
     }
   };
 
-  // Function for ending the drawing
   const endDrawing = () => {
     if (readOnly) return;
     if (isDrawing && currentStartPosition) {
@@ -143,15 +145,12 @@ export const Paint = ({
     setIsDrawing(false);
   };
 
-  const draw = (e) => {
+  const draw = (x, y) => {
     if (readOnly) return;
     if (!isDrawing) {
       return;
     }
     if (ctxRef?.current) {
-      const x = e.nativeEvent.offsetX;
-      const y = e.nativeEvent.offsetY;
-
       if (currentStartPosition && canvasRef?.current) {
         ctxRef.current.lineTo(x, y);
 
@@ -164,6 +163,33 @@ export const Paint = ({
         setCurrentPoints((prev) => [...prev, points]);
       }
     }
+  };
+
+  const captureStartDrawingMouse = (e) => {
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+
+    startDrawing(x, y);
+  };
+
+  const captureDrawMouse = (e) => {
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+
+    draw(x, y);
+  };
+
+  const captureStartDrawingTouch = (e) => {
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+
+    startDrawing(x, y);
+  };
+
+  const captureDrawTouch = (e) => {
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    draw(x, y);
   };
 
   const clearWithoutUpdate = () => {
@@ -193,11 +219,11 @@ export const Paint = ({
           cursor: readOnly ? "default" : `url(${PencilIcon.src}) 5 22, auto`,
         }}
       >
-        <canvas
-          onMouseDown={startDrawing}
-          onMouseLeave={endDrawing}
-          onMouseUp={endDrawing}
-          onMouseMove={draw}
+        <Canvas
+          onPointerDown={captureStartDrawingMouse}
+          onPointerMove={captureDrawMouse}
+          onPointerUp={endDrawing}
+          onPointerLeave={endDrawing}
           ref={canvasRef}
           width={width}
           height={height}
@@ -214,6 +240,10 @@ export const Paint = ({
     </Container>
   );
 };
+
+const Canvas = styled.canvas`
+  touch-action: none;
+`;
 
 const Clear = styled.div`
   position: absolute;

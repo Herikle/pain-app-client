@@ -78,12 +78,12 @@ export const SegmentPage = ({
     };
   }, [watch, onChange]);
 
-  const isMobileL = useMatchMediaUp("mobileL");
+  const isTablet = useMatchMediaUp("tablet");
 
   return (
     <form>
       <Container>
-        <Grid container spacing={4} width={isMobileL ? "100%" : "50%"}>
+        <Grid container spacing={4} width={isTablet ? "100%" : "50%"}>
           <Grid xs={12}>
             <TextField
               label="Segment Name"
@@ -179,7 +179,7 @@ export const SegmentPage = ({
           </Grid>
         </Grid>
         <FlexColumn
-          width={isMobileL ? "100%" : "50%"}
+          width={isTablet ? "100%" : "50%"}
           gap={4}
           justify="flex-start"
         >
@@ -206,7 +206,7 @@ const Container = styled.div`
   gap: 4rem;
   align-items: center;
 
-  ${media.up.mobileL`
+  ${media.up.tablet`
     flex-direction: column;
   `}
 `;

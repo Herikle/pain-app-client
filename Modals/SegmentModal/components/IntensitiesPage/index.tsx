@@ -144,13 +144,17 @@ const DrawAndJustificationContainer = styled.div`
   align-items: center;
   gap: 4rem;
   margin-top: 2rem;
-  ${media.up.mobileL`
+  ${media.up.tablet`
     flex-direction: column;
   `}
 `;
 
-const Container = styled(FlexRow)`
+const Container = styled.div`
+  display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 6rem;
+  ${media.up.tablet`
+    flex-direction: column;
+  `}
 `;

@@ -169,14 +169,14 @@ const Section = styled(FlexColumn)``;
 const CommentSection = styled(FlexColumn)`
   width: 40%;
 
-  ${media.up.mobileL`
+  ${media.up.tablet`
     width: 100%;
   `}
 `;
 
 const SelectionSession = styled(FlexColumn)`
   width: 60%;
-  ${media.up.mobileL`
+  ${media.up.tablet`
     width: 100%;
   `}
 `;
@@ -186,7 +186,7 @@ const Container = styled.div`
   gap: 4rem;
   align-items: center;
 
-  ${media.up.mobileL`
+  ${media.up.tablet`
     flex-direction: column;
   `}
 `;
