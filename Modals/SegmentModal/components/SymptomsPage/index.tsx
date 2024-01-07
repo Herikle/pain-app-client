@@ -183,14 +183,14 @@ const AddTitle = styled(FlexRow)`
 
 const Observation = styled(FlexColumn)`
   width: 50%;
-  ${media.up.mobileL`
+  ${media.up.tablet`
     width: 100%;   
   `}
 `;
 
 const ListSymptom = styled(FlexColumn)`
   width: 50%;
-  ${media.up.mobileL`
+  ${media.up.tablet`
     width: 100%;
     max-height: 40vh;
     overflow: auto;
@@ -204,7 +204,7 @@ const Container = styled.div`
   gap: 4rem;
   align-items: flex-start;
 
-  ${media.up.mobileL`
+  ${media.up.tablet`
     flex-direction: column;
   `}
 `;
