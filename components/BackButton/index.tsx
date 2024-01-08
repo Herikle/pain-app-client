@@ -47,4 +47,5 @@ const BackButtonStyled = styled.button`
   align-items: center;
   cursor: pointer;
   gap: 0.5rem;
+  width: fit-content;
 `;

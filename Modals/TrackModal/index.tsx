@@ -10,7 +10,13 @@ export type TrackModalChildProps = {
 
 const Child = ({ onClose, track }: TrackModalChildProps) => {
   return (
-    <Modal removePadding fullScreenOnMobile removeOverlay height="fit-content">
+    <Modal
+      removePadding
+      fullScreenOnMobile
+      removeOverlay
+      height="fit-content"
+      onClose={onClose}
+    >
       <TrackIndex track={track} onClose={onClose} />
     </Modal>
   );

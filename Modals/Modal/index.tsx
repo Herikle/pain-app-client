@@ -2,6 +2,7 @@ import { Portal } from "@components/Portal";
 import { X } from "@phosphor-icons/react";
 import { media } from "@styles/media-query";
 import { LightScrollBar, theme } from "@styles/theme";
+import { useEffect } from "react";
 import styled, { css } from "styled-components";
 
 type Props = {
@@ -26,6 +27,22 @@ export const Modal = ({
   height,
 }: Props) => {
   const isOpen = open ?? true;
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        console.log("escape");
+        onClose && onClose();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Portal>

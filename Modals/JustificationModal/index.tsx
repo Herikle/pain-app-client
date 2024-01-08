@@ -13,16 +13,15 @@ import { BackButton } from "@components/BackButton";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Trash } from "@phosphor-icons/react";
-import { Button } from "@components/Button";
-import { notImplemented } from "@utils/helpers/dev";
 import {
   useDeleteSegmentJustification,
   useUpdateSegmentJustification,
 } from "@queries/segment-justification/useSegmentJustification";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { SyncingIndicator } from "@components/SyncingIndicator";
+import _ from "lodash";
 
 export const Evidences = [
   {
@@ -221,6 +220,7 @@ const JustificationModal = ({
   const beforeClose = async () => {
     onClose();
     if (form) {
+      if (_.isEqual(form, debouncedForm)) return;
       onSubmit(form);
     }
   };
@@ -360,7 +360,11 @@ const JustificationModal = ({
   );
 };
 
-const SyncContainer = styled.div``;
+const SyncContainer = styled.div`
+  position: absolute;
+  top: 1.65rem;
+  right: 3.5rem;
+`;
 
 const BodyContent = styled(FlexColumn)`
   ${LightScrollBar};
