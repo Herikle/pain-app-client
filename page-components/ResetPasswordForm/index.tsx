@@ -11,8 +11,10 @@ import { media } from "@styles/media-query";
 
 const ResetPasswordSchema = z
   .object({
-    password: z.string().min(8).nonempty(),
-    confirmPassword: z.string().min(8).nonempty(),
+    password: z.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters long"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -51,14 +53,12 @@ export const ResetPasswordForm = ({ onSubmit, loading }: Props) => {
         <TextField
           type="password"
           label="Your new password"
-          required
           {...register("password")}
           error={errors.password?.message}
         />
         <TextField
           type="password"
           label="Confirm your new password"
-          required
           {...register("confirmPassword")}
           error={errors.confirmPassword?.message}
         />

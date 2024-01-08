@@ -23,7 +23,7 @@ export const FlexRow = styled.div<FlexProps>`
   display: flex;
   align-items: ${(props) => props.align ?? "center"};
   justify-content: ${(props) => props.justify ?? "center"};
-  gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
+  gap: ${(props) => (props.gap !== undefined ? `${props.gap}rem` : "0.5rem")};
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => writeSizeProperty(props.mt)};
@@ -42,7 +42,7 @@ export const FlexColumn = styled.div<FlexProps>`
   align-items: ${(props) => props.align ?? "unset"};
   flex-direction: column;
   justify-content: ${(props) => props.justify ?? "flex-start"};
-  gap: ${(props) => (props.gap ? `${props.gap}rem` : "0.5rem")};
+  gap: ${(props) => (props.gap !== undefined ? `${props.gap}rem` : "0.5rem")};
   width: ${(props) => props.width ?? "unset"};
   margin-inline: ${(props) => props.marginInline ?? "unset"};
   margin-top: ${(props) => writeSizeProperty(props.mt)};

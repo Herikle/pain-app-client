@@ -15,13 +15,20 @@ import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 
 const RegisterSchema = z
   .object({
-    name: z.string(),
-    email: z.string().email(),
+    name: z.string().min(1, "Name is required"),
+    email: z
+      .string()
+      .email("Invalid email address")
+      .min(1, "Email is required to register"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
     password_confirm: z
       .string()
       .min(6, "Password must be at least 6 characters long"),
-    terms: z.boolean(),
+    terms: z.literal<boolean>(true, {
+      errorMap: () => ({
+        message: "Terms and Privacy Policy must be accepted",
+      }),
+    }),
   })
   .refine((data) => data.password === data.password_confirm, {
     message: "Passwords don't match",
@@ -70,32 +77,33 @@ export const Register = ({ onSubmit, loading }: Props) => {
             <Text decoration="underline"> login here.</Text>
           </Link>
         </Text>
-        <TextField label="Your name" required {...register("name")} />
+        <TextField
+          label="Your name"
+          {...register("name")}
+          error={errors.name?.message}
+        />
         <TextField
           label="Your e-mail"
           type="email"
-          required
           {...register("email")}
           error={errors.email?.message}
         />
         <TextField
           label="Your password"
           type="password"
-          required
           {...register("password")}
           error={errors.password?.message}
         />
         <TextField
           label="Confirm your password"
           type="password"
-          required
           {...register("password_confirm")}
           error={errors.password_confirm?.message}
         />
         <Checkbox
           label="I agree to all Terms and Privacy Policy"
-          required
           {...register("terms")}
+          error={errors.terms?.message}
         />
         <Buttons>
           <Button loading={loading} fullWidth>

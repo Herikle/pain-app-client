@@ -3,27 +3,36 @@ import { Text } from "@components/Text";
 import { CheckFat } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import styled, { keyframes } from "styled-components";
+import { FlexColumn } from "@design-components/Flex";
 
 interface Props extends React.ComponentPropsWithoutRef<"input"> {
   label: string;
+  error?: string;
 }
 
 export const Checkbox = React.forwardRef(
-  ({ label, ...rest }: Props, ref: any) => {
+  ({ label, error, ...rest }: Props, ref: any) => {
     return (
-      <Label>
-        <Text variant="body2">{label}</Text>
-        <Input type="checkbox" ref={ref} {...rest} />
-        <CheckMark>
-          <CheckMarkChecked>
-            <CheckFat
-              size={12}
-              color={theme.colors.hover_state}
-              weight="fill"
-            />
-          </CheckMarkChecked>
-        </CheckMark>
-      </Label>
+      <FlexColumn>
+        <Label>
+          <Text variant="body2">{label}</Text>
+          <Input type="checkbox" ref={ref} {...rest} />
+          <CheckMark>
+            <CheckMarkChecked>
+              <CheckFat
+                size={12}
+                color={theme.colors.hover_state}
+                weight="fill"
+              />
+            </CheckMarkChecked>
+          </CheckMark>
+        </Label>
+        {error && (
+          <Text variant="caption" color="red_danger">
+            {error}
+          </Text>
+        )}
+      </FlexColumn>
     );
   }
 );
