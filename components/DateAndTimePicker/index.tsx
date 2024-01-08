@@ -47,8 +47,9 @@ export const DateAndTimePicker = ({
     newDate: Date,
     context: PickerChangeHandlerContext<DateValidationError>
   ) => {
+    console.log(newDate, context);
     if (!!context.validationError) {
-      onChange(null);
+      onChange("");
       return;
     }
 
@@ -65,7 +66,7 @@ export const DateAndTimePicker = ({
     context: PickerChangeHandlerContext<TimeValidationError>
   ) => {
     if (!!context.validationError) {
-      onChange(null);
+      onChange("");
       return;
     }
 

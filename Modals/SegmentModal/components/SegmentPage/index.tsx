@@ -20,7 +20,18 @@ const SegmentPageSchema = z
     start: z.number().nonnegative().optional(),
     end: z.number().nonnegative().optional(),
     time_unit: z.enum(["minutes", "hours", "days"]),
-    start_date: z.date().optional(),
+    start_date: z
+      .date({
+        errorMap: (issue) => {
+          if (issue.code === "invalid_type") {
+            return { message: "Date is incomplete. Please select a date" };
+          }
+
+          return { message: "Invalid date" };
+        },
+      })
+      .optional()
+      .nullable(),
     estimative_type: z
       .enum(["reported", "measured", "inferred", ""])
       .optional(),
