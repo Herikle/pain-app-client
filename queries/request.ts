@@ -13,7 +13,8 @@ export type RequestService =
   | "track-guest"
   | "segment"
   | "segment-guest"
-  | "segment-justification";
+  | "segment-justification"
+  | "segment-justification-guest";
 
 type IRequest = {
   method: Method;

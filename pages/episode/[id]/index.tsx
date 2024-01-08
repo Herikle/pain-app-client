@@ -37,8 +37,6 @@ export default function EpisodePage() {
 
   const { isLogged } = useAuth();
 
-  useFormPrompt(!isLogged);
-
   const { id } = router.query as { id: string };
 
   const setSelectedPatient = useSetSelectedPatient();

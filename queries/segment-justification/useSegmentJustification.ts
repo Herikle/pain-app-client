@@ -2,6 +2,7 @@ import { request } from "@queries/request";
 import { useMutation } from "react-query";
 import { IJustificationType, ISegmentJustification } from "types";
 import { useUpdateJustificationSegmentOnCache } from "./hooks/useUpdateSegmentJustificationOnCache";
+import { getSegmentJustificationService } from "./useGetSegmentJustification";
 
 type CreateSegmentJustificationPayload = {
   params: {
@@ -15,7 +16,7 @@ const createSegmentJustification = async ({
   const { data } = await request({
     method: "POST",
     url: `${params.segment_id}`,
-    service: "segment-justification",
+    service: getSegmentJustificationService(),
   });
 
   return data as ISegmentJustification;
@@ -58,7 +59,7 @@ const updateSegmentJustification = async ({
   const { data } = await request({
     method: "PATCH",
     url: `${params.justification_id}`,
-    service: "segment-justification",
+    service: getSegmentJustificationService(),
     data: body,
   });
 
@@ -91,7 +92,7 @@ const deleteSegmentJustification = async ({
   const { data } = await request({
     method: "DELETE",
     url: `${params.justification_id}`,
-    service: "segment-justification",
+    service: getSegmentJustificationService(),
   });
 
   return data as ISegmentJustification;

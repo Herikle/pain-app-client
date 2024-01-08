@@ -1,8 +1,13 @@
 import { useReactQueryCache } from "@queries/getByIdFromCache";
 import { QueryKeys } from "@queries/keys";
-import { request } from "@queries/request";
+import { RequestService, request } from "@queries/request";
+import { hasToken } from "@utils/localStorage/token";
 import { useQuery } from "react-query";
-import { ISegmentJustification, ITrack, Meta } from "types";
+import { ISegmentJustification } from "types";
+
+export const getSegmentJustificationService = (): RequestService => {
+  return hasToken() ? "segment-justification" : "segment-justification-guest";
+};
 
 type GetSegmentJustificationListPayload = {
   params: {
@@ -16,7 +21,7 @@ const getSegmentJustificationList = async ({
   const { data } = await request({
     method: "GET",
     url: `${params.segment_id}`,
-    service: "segment-justification",
+    service: getSegmentJustificationService(),
   });
 
   return data as ISegmentJustification[];
