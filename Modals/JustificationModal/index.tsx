@@ -19,8 +19,10 @@ import {
   useDeleteSegmentJustification,
   useUpdateSegmentJustification,
 } from "@queries/segment-justification/useSegmentJustification";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { useDebounce } from "@utils/hooks/useDebounce";
+import { SyncingIndicator } from "@components/SyncingIndicator";
 
 export const Evidences = [
   {
@@ -87,11 +89,11 @@ const justificationSchema = z.object({
   description: z.string().optional(),
   sources: z.string().optional(),
   ranking: z.object({
-    excruciating: z.number(),
-    disabling: z.number(),
-    hurful: z.number(),
-    annoying: z.number(),
-    no_pain: z.number(),
+    excruciating: z.number().optional(),
+    disabling: z.number().optional(),
+    hurful: z.number().optional(),
+    annoying: z.number().optional(),
+    no_pain: z.number().optional(),
   }),
 });
 
@@ -111,6 +113,14 @@ const JustificationModal = ({
   const deleteJustification = useDeleteSegmentJustification();
 
   const [deleteModal, setDeleteModal] = useState(false);
+
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  const [form, setForm] = useState<Partial<JustificationFormValues> | null>(
+    null
+  );
+
+  const debouncedForm = useDebounce(form, 500);
 
   const { register, formState, watch, reset, handleSubmit } =
     useForm<JustificationFormValues>({
@@ -142,9 +152,7 @@ const JustificationModal = ({
     onClose();
   };
 
-  const { isDirty } = formState;
-
-  const onSubmit = async (values: JustificationFormValues) => {
+  const onSubmit = async (values: Partial<JustificationFormValues>) => {
     await updateJustification.mutateAsync({
       params: {
         justification_id: justification._id,
@@ -154,14 +162,68 @@ const JustificationModal = ({
         type_of_evidence: values.type_of_evidence ?? undefined,
         description: values.description,
         sources: values.sources,
-        ranking: values.ranking,
+        ranking: {
+          excruciating: values.ranking?.excruciating,
+          disabling: values.ranking?.disabling,
+          hurful: values.ranking?.hurful,
+          annoying: values.ranking?.annoying,
+          no_pain: values.ranking?.no_pain,
+        },
       },
     });
-
-    reset(values);
   };
 
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      return;
+    }
+
+    const update = async () => {
+      if (!debouncedForm) return;
+
+      await updateJustification.mutateAsync({
+        params: {
+          justification_id: justification._id,
+        },
+        body: {
+          title: debouncedForm.title,
+          type_of_evidence: debouncedForm.type_of_evidence ?? undefined,
+          description: debouncedForm.description,
+          sources: debouncedForm.sources,
+          ranking: {
+            excruciating: debouncedForm.ranking?.excruciating,
+            disabling: debouncedForm.ranking?.disabling,
+            hurful: debouncedForm.ranking?.hurful,
+            annoying: debouncedForm.ranking?.annoying,
+            no_pain: debouncedForm.ranking?.no_pain,
+          },
+        },
+      });
+    };
+
+    update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedForm]);
+
   const isMobile = useMatchMediaUp("tablet");
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setForm(value);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch]);
+
+  const beforeClose = async () => {
+    onClose();
+    if (form) {
+      onSubmit(form);
+    }
+  };
 
   return (
     <>
@@ -174,8 +236,14 @@ const JustificationModal = ({
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container>
+            <SyncContainer>
+              <SyncingIndicator isSyncing={updateJustification.isLoading} />
+            </SyncContainer>
             <FlexColumn gap={2} height="100%">
-              <BackButton text="Return to intensities menu" onClick={onClose} />
+              <BackButton
+                text="Return to intensities menu"
+                onClick={beforeClose}
+              />
               <Text variant="h1">Evidence</Text>
               <BodyContent gap={1}>
                 <Grid container spacing={2} margin="0">
@@ -274,14 +342,6 @@ const JustificationModal = ({
                   color={theme.colors.text_switched}
                   cursor="pointer"
                 />
-                <Button
-                  type="submit"
-                  width="160px"
-                  disabled={!isDirty}
-                  loading={updateJustification.isLoading}
-                >
-                  Save changes
-                </Button>
               </ButtonsFooter>
             </FlexColumn>
           </Container>
@@ -299,6 +359,8 @@ const JustificationModal = ({
     </>
   );
 };
+
+const SyncContainer = styled.div``;
 
 const BodyContent = styled(FlexColumn)`
   ${LightScrollBar};

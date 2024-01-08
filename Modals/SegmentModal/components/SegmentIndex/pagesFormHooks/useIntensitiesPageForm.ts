@@ -1,8 +1,7 @@
-import { ISegment, ISegmentValues } from "types";
+import { ISegmentValues } from "types";
 import { useCallback, useEffect, useState } from "react";
 import { IntensitiesPageForm } from "../../IntensitiesPage";
 import _ from "lodash";
-import { normalizeString } from "@utils/helpers/string";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { useUpdateSegment } from "@queries/segment/useSegment";
 import { CommonUseHookPageForm } from "..";

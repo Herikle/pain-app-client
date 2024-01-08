@@ -42,11 +42,11 @@ type UpdateSegmentJustificationPayload = {
     sources?: string;
     type_of_evidence?: IJustificationType;
     ranking?: {
-      excruciating: number;
-      disabling: number;
-      hurful: number;
-      annoying: number;
-      no_pain: number;
+      excruciating: number | undefined;
+      disabling: number | undefined;
+      hurful: number | undefined;
+      annoying: number | undefined;
+      no_pain: number | undefined;
     };
   };
 };
