@@ -155,7 +155,6 @@ export default function EpisodePage() {
           <Badge label={episode?.name} iconPath={IconsPath.Episode} />
           {isLogged && (
             <FlexRow>
-              <SyncingIndicator isSyncing={isSyncing} />
               <Export
                 size={24}
                 color={theme.colors.text_switched}
@@ -164,6 +163,7 @@ export default function EpisodePage() {
                 }}
                 cursor="pointer"
               />
+              <SyncingIndicator isSyncing={isSyncing} />
               <Trash
                 size={24}
                 color={theme.colors.text_switched}
