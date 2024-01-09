@@ -28,6 +28,9 @@ export const IconsPath = {
   Syncing: "/icons/syncing.svg",
   Synced: "/icons/synced.svg",
   Unavailable: "/icons/unavailable.svg",
+  Web: "/icons/web.svg",
+  Linkedin: "/icons/linkedin.svg",
+  Mail: "/icons/mail.svg",
 };
 
 export const ImagesPath = {
