@@ -9,12 +9,11 @@ import {
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { transparentize } from "polished";
-import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import styled from "styled-components";
 
 type DateAndTimePickerProps = {
-  onChange: (date: Date | null) => void;
+  onChange: (date: Date | null | string) => void;
   timeLabel?: string;
   dateLabel?: string;
   value?: Date | null;
@@ -47,7 +46,6 @@ export const DateAndTimePicker = ({
     newDate: Date,
     context: PickerChangeHandlerContext<DateValidationError>
   ) => {
-    console.log(newDate, context);
     if (!!context.validationError) {
       onChange("");
       return;

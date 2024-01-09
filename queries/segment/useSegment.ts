@@ -21,9 +21,10 @@ type UpdateSegmentPayload = {
     segment_id: string;
   };
   body: Partial<
-    Omit<ISegment, "interventions" | "symptoms"> & {
+    Omit<ISegment, "interventions" | "symptoms" | "start_date"> & {
       interventions: CreationInterventions;
       symptoms: CreationSymptoms;
+      start_date: undefined | null | Date;
     }
   >;
   extra: {
