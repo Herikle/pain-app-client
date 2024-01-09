@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PencilIcon from "public/icons/pencil.svg";
 import update from "immutability-helper";
-import { Trash } from "@phosphor-icons/react";
+import { Eraser } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { Tooltip } from "react-tooltip";
 import { transparentize } from "polished";
@@ -232,7 +232,7 @@ export const Paint = ({
       {!readOnly && (
         <>
           <Clear id="clear-drawing" onClick={clear}>
-            <Trash size={16} color={theme.colors.pure_black} />
+            <Eraser size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-drawing">Clear drawing</Tooltip>
         </>

@@ -82,7 +82,7 @@ export const IntensitiesPage = ({
     };
   }, [watch, onChange]);
 
-  const { errors, isValid } = formState;
+  const { isValid } = formState;
 
   useEffect(() => {
     onValidChange(isValid && !hasError);

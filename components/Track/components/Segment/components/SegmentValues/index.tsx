@@ -11,7 +11,7 @@ import {
   convertTimeToHours,
   getTimeUnitAbbreviation,
 } from "@utils/helpers/segmentHelpers";
-import { Trash } from "@phosphor-icons/react";
+import { Eraser } from "@phosphor-icons/react";
 import { Tooltip } from "react-tooltip";
 import styled from "styled-components";
 import { transparentize } from "polished";
@@ -203,7 +203,7 @@ export const SegmentValues = ({
       {!readOnly && (
         <>
           <Clear id="clear-values" onClick={clearValues}>
-            <Trash size={16} color={theme.colors.pure_black} />
+            <Eraser size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-values">Clear values</Tooltip>
         </>
