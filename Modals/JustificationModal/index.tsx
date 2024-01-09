@@ -285,7 +285,11 @@ const JustificationModal = ({
                     />
                   </Grid>
                   <Grid xs={12} padding="0" paddingBlock="0.5rem">
-                    <TextField label="Sources" {...register("sources")} />
+                    <TextArea
+                      label="Sources"
+                      {...register("sources")}
+                      minRows={5}
+                    />
                   </Grid>
                 </Grid>
                 <FlexColumn>
