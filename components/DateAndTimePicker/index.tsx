@@ -6,7 +6,7 @@ import {
   PickerChangeHandlerContext,
   TimeValidationError,
 } from "@mui/x-date-pickers";
-import { Trash } from "@phosphor-icons/react";
+import { Eraser } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { transparentize } from "polished";
 import { Tooltip } from "react-tooltip";
@@ -88,7 +88,7 @@ export const DateAndTimePicker = ({
       {!!onClear && (
         <>
           <Clear id="clear-episode-data" onClick={onClear}>
-            <Trash size={16} color={theme.colors.pure_black} />
+            <Eraser size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-episode-data">Clear date</Tooltip>
         </>
