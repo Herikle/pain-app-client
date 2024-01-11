@@ -21,7 +21,7 @@ import { ImagesPath } from "@utils/icons";
 import { Box } from "@mui/material";
 
 export const getStaticProps: GetStaticProps<{
-  attributes: GetPublicAttributesResponse;
+  attributes: GetPublicAttributesResponse | undefined;
 }> = async () => {
   const attributes = await getPublicAttributes();
   return {
@@ -52,7 +52,7 @@ export default function GeneratePage({
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  if (!attributes) return <></>;
+  if (!attributes?.attributes) return <></>;
 
   const attributesList = Object.keys(attributes.attributes);
   const attributesConfig = attributes.attributesConfig ?? EmptyAttributesConfig;
