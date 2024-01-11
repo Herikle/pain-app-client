@@ -122,7 +122,6 @@ export default function EpisodePage() {
     const fileName = `Episode_${first05PatientName}_${first10EpisodeName}_${currentDate}`;
     const json = JSON.stringify(episodeExported, null, 2);
     const blob = new Blob([json], { type: "application/json" });
-    const href = URL.createObjectURL(blob);
 
     fileDownload(blob, `${fileName}.json`);
 

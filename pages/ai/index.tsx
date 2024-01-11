@@ -32,15 +32,6 @@ export const getStaticProps: GetStaticProps<{
   };
 };
 
-const parseData = (data: string) => {
-  const replacedData = data.replace("data: ", "");
-  if (!replacedData) return "";
-  const parsed = JSON.parse(replacedData);
-  const text = parsed?.choices?.[0]?.delta?.content;
-
-  return text;
-};
-
 const scrollBottom = () => {
   window.scrollTo({
     top: document.body.scrollHeight,
@@ -51,8 +42,6 @@ const scrollBottom = () => {
 export default function GeneratePage({
   attributes,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const attributesList = Object.keys(attributes.attributes);
-  const attributesConfig = attributes.attributesConfig ?? EmptyAttributesConfig;
   const [gptResponse, setGptResponse] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +49,13 @@ export default function GeneratePage({
   const [isRunning, setIsRunning] = useState(false);
 
   const { register, handleSubmit } = useForm();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  if (!attributes) return <></>;
+
+  const attributesList = Object.keys(attributes.attributes);
+  const attributesConfig = attributes.attributesConfig ?? EmptyAttributesConfig;
 
   const onSubmit = async (attributes: any) => {
     setGptResponse("");
@@ -103,8 +99,6 @@ export default function GeneratePage({
   };
 
   const recaptchaRef = React.createRef<ReCAPTCHA>();
-
-  const formRef = useRef<HTMLFormElement>(null);
 
   const rerun = () => {
     if (isRunning) {
