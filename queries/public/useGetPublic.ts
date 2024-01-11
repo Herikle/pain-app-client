@@ -13,5 +13,5 @@ export const getPublicAttributes = async () => {
     url: "/attributes",
   });
 
-  return data as GetPublicAttributesResponse;
+  return data as GetPublicAttributesResponse | undefined;
 };
