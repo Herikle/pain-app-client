@@ -85,19 +85,24 @@ export default function Patient() {
         <UserBadgeContainer justify="space-between">
           <Badge
             label={patient?.name}
+            description={patient?.type}
+            descriptionVariant="h2"
+            descriptionWeight="400"
             iconPath={
               patient?.type === "animal" ? IconsPath.Animal : IconsPath.Patient
             }
           />
-          <FlexRow>
+          <FlexColumn gap={1.5}>
             <SyncingIndicator isSyncing={isSyncing} />
-            <Trash
-              size={24}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-              onClick={onDelete}
-            />
-          </FlexRow>
+            <FlexRow>
+              <Trash
+                size={24}
+                color={theme.colors.text_switched}
+                cursor="pointer"
+                onClick={onDelete}
+              />
+            </FlexRow>
+          </FlexColumn>
         </UserBadgeContainer>
         <Wrapper>
           {patient && (

@@ -1,4 +1,4 @@
-import { Text } from "@components/Text";
+import { Text, TextVariant } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { PencilSimpleLine } from "@phosphor-icons/react";
 import { media } from "@styles/media-query";
@@ -10,16 +10,25 @@ type Props = {
   iconPath: string;
   label?: string;
   description?: string;
+  descriptionVariant?: TextVariant;
+  descriptionWeight?: string;
   onClickEdit?: () => void;
 };
 
-export const Badge = ({ label, iconPath, description, onClickEdit }: Props) => {
+export const Badge = ({
+  label,
+  iconPath,
+  description,
+  descriptionVariant = "body2",
+  descriptionWeight,
+  onClickEdit,
+}: Props) => {
   return (
     <Container>
       <ImageBox>
         <Image src={iconPath} alt="UserIcon" width={40} height={45} />
       </ImageBox>
-      <DescriptionContainer>
+      <DescriptionContainer gap={1}>
         <FlexRow gap={1}>
           <Text variant="h1" color="font_color">
             {label}
@@ -31,7 +40,11 @@ export const Badge = ({ label, iconPath, description, onClickEdit }: Props) => {
           )}
         </FlexRow>
         {description && (
-          <Text variant="body2" color="font_color">
+          <Text
+            variant={descriptionVariant}
+            color="font_color"
+            fontWeight={descriptionWeight}
+          >
             {description}
           </Text>
         )}
