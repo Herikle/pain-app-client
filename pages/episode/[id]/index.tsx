@@ -154,23 +154,25 @@ export default function EpisodePage() {
         <EpisodeBadgeContainer justify="space-between">
           <Badge label={episode?.name} iconPath={IconsPath.Episode} />
           {isLogged && (
-            <FlexRow>
-              <Export
-                size={24}
-                color={theme.colors.text_switched}
-                onClick={() => {
-                  setConfirmExportEpisode(true);
-                }}
-                cursor="pointer"
-              />
+            <FlexColumn gap={1.5} align="flex-end">
               <SyncingIndicator isSyncing={isSyncing} />
-              <Trash
-                size={24}
-                color={theme.colors.text_switched}
-                cursor="pointer"
-                onClick={() => setConfirmDelete(true)}
-              />
-            </FlexRow>
+              <FlexRow>
+                <Export
+                  size={24}
+                  color={theme.colors.text_switched}
+                  onClick={() => {
+                    setConfirmExportEpisode(true);
+                  }}
+                  cursor="pointer"
+                />
+                <Trash
+                  size={24}
+                  color={theme.colors.text_switched}
+                  cursor="pointer"
+                  onClick={() => setConfirmDelete(true)}
+                />
+              </FlexRow>
+            </FlexColumn>
           )}
         </EpisodeBadgeContainer>
         {!!episode && (
