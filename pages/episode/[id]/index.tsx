@@ -14,16 +14,14 @@ import { useSetSelectedEpisode } from "state/useSelectedEpisode";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
-import { Button } from "@components/Button";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
-import { useFormPrompt } from "@utils/hooks/useFormPrompt";
 import { useAuth } from "@utils/hooks/useAuth";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { IconsPath } from "@utils/icons";
 import { Badge } from "@components/Badge";
-import { Export, Trash } from "@phosphor-icons/react";
+import { Export, Question, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import {
   useDeleteEpisode,
@@ -31,6 +29,8 @@ import {
 } from "@queries/episode/useEpisode";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 import fileDownload from "js-file-download";
+import Link from "next/link";
+import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -140,6 +140,7 @@ export default function EpisodePage() {
 
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
+      <UnsavedChangesDialog shouldConfirmLeave={!isLogged} />
       <Container>
         {!!episode?.patient_id && (
           <BackButton
@@ -151,11 +152,37 @@ export default function EpisodePage() {
             }
           />
         )}
+        {!isLogged && (
+          <FlexRow>
+            <Question
+              size={16}
+              weight="fill"
+              cursor="pointer"
+              onClick={openSaveModal}
+            />
+            <Text variant="body1">
+              To save this episode and tracks, you gonna need an account.{" "}
+              <Link
+                href={RoutesPath.register}
+                style={{ textDecoration: "underline" }}
+              >
+                Create an account
+              </Link>{" "}
+              or{" "}
+              <Link
+                href={RoutesPath.login}
+                style={{ textDecoration: "underline" }}
+              >
+                login
+              </Link>
+            </Text>
+          </FlexRow>
+        )}
         <EpisodeBadgeContainer justify="space-between">
           <Badge label={episode?.name} iconPath={IconsPath.Episode} />
-          {isLogged && (
-            <FlexColumn gap={1.5} align="flex-end">
-              <SyncingIndicator isSyncing={isSyncing} />
+          <FlexColumn gap={1.5} align="flex-end">
+            <SyncingIndicator isSyncing={isSyncing} />
+            {isLogged && (
               <FlexRow>
                 <Export
                   size={24}
@@ -172,8 +199,8 @@ export default function EpisodePage() {
                   onClick={() => setConfirmDelete(true)}
                 />
               </FlexRow>
-            </FlexColumn>
-          )}
+            )}
+          </FlexColumn>
         </EpisodeBadgeContainer>
         {!!episode && (
           <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
@@ -191,24 +218,27 @@ export default function EpisodePage() {
           </FlexColumn>
         </TrackContainer>
       </Container>
-      {!isLogged && (
+      {/* {!isLogged && (
         <SaveButtonContainer>
           <Button onClick={openSaveModal} width="150px">
             Save
           </Button>
         </SaveButtonContainer>
-      )}
+      )} */}
       {saveModal && (
         <ConfirmActionModal
           description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
           confirmText="Create an account now"
           cancelText={
-            <>
+            <Text variant="body2">
               Or if you already have an account,{" "}
-              <Text variant="body2Bold" decoration="underline">
+              <Link
+                href={RoutesPath.login}
+                style={{ textDecoration: "underline" }}
+              >
                 login here
-              </Text>
-            </>
+              </Link>
+            </Text>
           }
           onClose={closeSaveModal}
           onConfirm={goToRegister}

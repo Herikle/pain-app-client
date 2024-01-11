@@ -1,4 +1,5 @@
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 
@@ -16,19 +17,19 @@ export const UnsavedChangesDialog = ({
   );
 
   const Router = useRouter();
-
+  const pathname = usePathname();
   const onRouteChangeStart = React.useCallback(
     (nextPath: string) => {
       if (!shouldConfirmLeave) {
         return;
       }
-
-      setShouldShowLeaveConfirmDialog(true);
-      setNextRouterPath(nextPath);
-
-      throw "cancelRouteChange";
+      if (pathname !== nextPath) {
+        setShouldShowLeaveConfirmDialog(true);
+        setNextRouterPath(nextPath);
+        throw "cancelRouteChange";
+      }
     },
-    [shouldConfirmLeave]
+    [pathname, shouldConfirmLeave]
   );
 
   const onRejectRouteChange = () => {
@@ -38,8 +39,7 @@ export const UnsavedChangesDialog = ({
 
   const onConfirmRouteChange = () => {
     setShouldShowLeaveConfirmDialog(false);
-    // simply remove the listener here so that it doesn't get triggered when we push the new route.
-    // This assumes that the component will be removed anyway as the route changes
+
     removeListener();
     if (!nextRouterPath) return;
 
@@ -60,6 +60,7 @@ export const UnsavedChangesDialog = ({
     <ConfirmActionModal
       title="You have unsaved changes"
       description="Leaving this page will discard unsaved changes. Are you sure?"
+      confirmText="Yes, I want to exit"
       onConfirm={onConfirmRouteChange}
       onCancel={onRejectRouteChange}
       onClose={onRejectRouteChange}
