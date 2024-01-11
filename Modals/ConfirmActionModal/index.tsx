@@ -60,22 +60,24 @@ export const ConfirmActionModal = ({
             />
           </>
         )}
-        <Button
-          fullWidth
-          onClick={confirm}
-          loading={loading}
-          disabled={writeConfirmation && !isValid}
-        >
-          {confirmText}
-        </Button>
-        <Button
-          onClick={onCancel ?? onClose}
-          fullWidth
-          color="pure_white"
-          textColor="pure_black"
-        >
-          {cancelText}
-        </Button>
+        <FlexColumn width="100%" gap={1}>
+          <Button
+            fullWidth
+            onClick={confirm}
+            loading={loading}
+            disabled={writeConfirmation && !isValid}
+          >
+            {confirmText}
+          </Button>
+          <Button
+            onClick={onCancel ?? onClose}
+            fullWidth
+            color="pure_white"
+            textColor="pure_black"
+          >
+            {cancelText}
+          </Button>
+        </FlexColumn>
       </Container>
     </Modal>
   );
