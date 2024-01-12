@@ -58,23 +58,32 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
 
     if (!file) return;
 
+    if (file.size === 0) {
+      setErrors([{ path: ["file"], message: "File is empty", code: "custom" }]);
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = async (e) => {
-      const json = e.target?.result;
+      try {
+        const json = e.target?.result;
 
-      if (!json) return;
+        if (!json) return;
 
-      const episode = JSON.parse(json as string);
+        const episode = JSON.parse(json as string);
 
-      const validation = checkValidity(episode);
+        const validation = checkValidity(episode);
 
-      if (validation.success) {
-        setImportedEpisode(episode);
-        setArchive(file);
-        setErrors(null);
-      } else {
-        setErrors(validation.error.issues);
+        if (validation.success) {
+          setImportedEpisode(episode);
+          setArchive(file);
+          setErrors(null);
+        } else {
+          setErrors(validation.error.issues);
+        }
+      } catch (e) {
+        console.log(e);
       }
     };
 
