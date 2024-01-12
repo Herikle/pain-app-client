@@ -2,6 +2,7 @@ import { AttributesConfigModal } from "./AttributesConfigModal";
 import { ChangeAccountInformationModal } from "./ChangeAccountInformationModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
+import { CreateEpisodeModal } from "./CreateEpisodeModal";
 import { DeletePatientModal } from "./DeletePatientModal";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { JustificationModalWrapper } from "./JustificationModal";
@@ -26,6 +27,7 @@ export const Modals = () => {
       <ChangePasswordModal />
       <ChangeAccountInformationModal />
       <JustificationModalWrapper />
+      <CreateEpisodeModal />
     </>
   );
 };

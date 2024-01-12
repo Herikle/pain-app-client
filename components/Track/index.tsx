@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { Segment } from "./components/Segment";
 import { SEGMENT_SECTION_HEIGHT } from "./components/Segment/const";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Text } from "@components/Text";
@@ -20,7 +19,7 @@ import {
 } from "@utils/helpers/segmentHelpers";
 import v from "voca";
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
-import { Tooltip } from "react-tooltip";
+import { TooltipContent } from "@components/TooltipContent";
 
 type Props = {
   cumulativePainMode?: {
@@ -140,33 +139,33 @@ export const Track = ({ track }: TrackProps) => {
           <FlexRow gap={1}>
             {!cumulativePainMode && (
               <>
-                <PencilIcon size={16} onClick={onClickTrackEdit} />
-                <TrashIcon size={16} onClick={openConfirmDelete} />
+                <TooltipContent tooltip="Edit track">
+                  <PencilIcon size={16} onClick={onClickTrackEdit} />
+                </TooltipContent>
+                <TooltipContent tooltip="Delete track">
+                  <TrashIcon size={16} onClick={openConfirmDelete} />
+                </TooltipContent>
               </>
             )}
 
             {checkIfTrackHasEnoughData(track) ? (
-              <ChartBarIcon
-                size={16}
-                color={cumulativePainMode ? theme.colors.primary : undefined}
-                weight={cumulativePainMode ? "fill" : undefined}
-                onClick={() => setCumulativePainMode(!cumulativePainMode)}
-              />
-            ) : (
-              <>
+              <TooltipContent tooltip="Cumulative pain">
                 <ChartBarIcon
                   size={16}
                   color={cumulativePainMode ? theme.colors.primary : undefined}
                   weight={cumulativePainMode ? "fill" : undefined}
-                  id={`cumulative-button-${track._id}`}
+                  onClick={() => setCumulativePainMode(!cumulativePainMode)}
+                />
+              </TooltipContent>
+            ) : (
+              <TooltipContent tooltip="This track doesn’t have enough time data to calculate the cumulative pain.">
+                <ChartBarIcon
+                  size={16}
+                  color={cumulativePainMode ? theme.colors.primary : undefined}
+                  weight={cumulativePainMode ? "fill" : undefined}
                   cursor="default"
                 />
-                <Tooltip anchorSelect={`#cumulative-button-${track._id}`}>
-                  {
-                    "This track doesn’t have enough time data to calculate the cumulative pain."
-                  }
-                </Tooltip>
-              </>
+              </TooltipContent>
             )}
           </FlexRow>
         </FlexRow>

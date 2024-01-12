@@ -8,6 +8,7 @@ export const IconsPath = {
   Patient: "/icons/patient.svg",
   Animal: "/icons/animal.svg",
   Episode: "/icons/episode.svg",
+  EpisodeBlack: "/icons/episode-black.svg",
   texture: {
     stretching: "/texture/stretching.svg",
     stinging: "/texture/stinging.svg",

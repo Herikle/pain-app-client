@@ -31,6 +31,7 @@ import { SyncingIndicator } from "@components/SyncingIndicator";
 import fileDownload from "js-file-download";
 import Link from "next/link";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
+import { TooltipContent } from "@components/TooltipContent";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -183,20 +184,24 @@ export default function EpisodePage() {
             <SyncingIndicator isSyncing={isSyncing} />
             {isLogged && (
               <FlexRow>
-                <Export
-                  size={24}
-                  color={theme.colors.text_switched}
-                  onClick={() => {
-                    setConfirmExportEpisode(true);
-                  }}
-                  cursor="pointer"
-                />
-                <Trash
-                  size={24}
-                  color={theme.colors.text_switched}
-                  cursor="pointer"
-                  onClick={() => setConfirmDelete(true)}
-                />
+                <TooltipContent tooltip="Export episode">
+                  <Export
+                    size={24}
+                    color={theme.colors.text_switched}
+                    onClick={() => {
+                      setConfirmExportEpisode(true);
+                    }}
+                    cursor="pointer"
+                  />
+                </TooltipContent>
+                <TooltipContent tooltip="Delete episode">
+                  <Trash
+                    size={24}
+                    color={theme.colors.text_switched}
+                    cursor="pointer"
+                    onClick={() => setConfirmDelete(true)}
+                  />
+                </TooltipContent>
               </FlexRow>
             )}
           </FlexColumn>
@@ -217,13 +222,6 @@ export default function EpisodePage() {
           </FlexColumn>
         </TrackContainer>
       </Container>
-      {/* {!isLogged && (
-        <SaveButtonContainer>
-          <Button onClick={openSaveModal} width="150px">
-            Save
-          </Button>
-        </SaveButtonContainer>
-      )} */}
       {saveModal && (
         <ConfirmActionModal
           description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
@@ -262,10 +260,10 @@ export default function EpisodePage() {
             setConfirmExportEpisode(false);
           }}
           loading={exportEpisode.isLoading}
-          title="Export Episode"
+          title="Exporting"
           description="Would you like to export this episode as a JSON file?"
-          confirmText="Export"
-          cancelText="Cancel"
+          confirmText="Export now"
+          cancelText="Go back"
         />
       )}
     </LoggedLayout>

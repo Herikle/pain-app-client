@@ -4,7 +4,7 @@ import { hasToken } from "@utils/localStorage/token";
 import { ToastError, ToastSuccess } from "@utils/toasts";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { IEpisode } from "types";
+import { IEpisode, ISegment, ISegmentJustification, ITrack } from "types";
 import { useUpdateEpisodeOnCache } from "./hooks/useUpdateEpisodeOnCache";
 
 export const getEpisodeService = (): RequestService => {
@@ -119,4 +119,49 @@ const exportEpisode = async ({ params }: ExportEpisodePayload) => {
 
 export const useExportEpisode = () => {
   return useMutation(exportEpisode);
+};
+
+type ImportSegmentJustificationStructure = Omit<
+  ISegmentJustification,
+  "segment_id" | "_id"
+>;
+
+type ImportSegmentStructure = Omit<ISegment, "track_id" | "_id"> & {
+  justifications?: ImportSegmentJustificationStructure[];
+};
+
+type ImportTrackStructure = Omit<ITrack, "episode_id" | "_id"> & {
+  segments?: ImportSegmentStructure[];
+};
+
+export type ImportEpisodeStructure = Omit<
+  IEpisode,
+  "patient_id" | "creator_id" | "_id"
+> & {
+  tracks?: ImportTrackStructure[];
+};
+
+type ImportEpisodePayload = {
+  params: {
+    patient_id: string;
+  };
+  body: ImportEpisodeStructure;
+};
+
+const importEpisode = async ({ params, body }: ImportEpisodePayload) => {
+  const { data } = await request({
+    method: "POST",
+    service: "episode",
+    url: `/import/${params.patient_id}`,
+    data: body,
+  });
+  return data as IEpisode;
+};
+
+export const useImportEpisode = () => {
+  return useMutation(importEpisode, {
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
 };
