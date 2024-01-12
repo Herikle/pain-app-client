@@ -104,8 +104,8 @@ export type ISymptom = {
 
 type IIntensityType = "draw" | "values";
 export type ISegmentTimeUnit = "minutes" | "hours" | "days";
-type ISegmentEstimativeType = "reported" | "measured" | "inferred" | "";
-type ISegmentPainType = "acute" | "chronic";
+export type ISegmentEstimativeType = "reported" | "measured" | "inferred" | "";
+export type ISegmentPainType = "acute" | "chronic";
 
 export type ISegmentValues = {
   excruciating?: number | null;
@@ -213,4 +213,24 @@ export type IEpisode = {
   start_date?: string;
   creator_id?: string;
   patient?: IPatient;
+};
+
+type ImportSegmentJustificationStructure = Omit<
+  ISegmentJustification,
+  "segment_id" | "_id"
+>;
+
+type ImportSegmentStructure = Omit<ISegment, "track_id" | "_id"> & {
+  justifications?: ImportSegmentJustificationStructure[];
+};
+
+type ImportTrackStructure = Omit<ITrack, "episode_id" | "_id"> & {
+  segments?: ImportSegmentStructure[];
+};
+
+export type ImportEpisodeStructure = Omit<
+  IEpisode,
+  "patient_id" | "creator_id" | "_id"
+> & {
+  tracks?: ImportTrackStructure[];
 };

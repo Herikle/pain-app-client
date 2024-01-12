@@ -17,6 +17,8 @@ export const useUpdateEpisodeOnCache = () => {
     queryClient.setQueriesData(
       [QueryKeys.Episode.List],
       (old: GetEpisodesListResponse) => {
+        if (!old) return old;
+
         const episodeIndex = old.results.findIndex(
           (episode: IEpisode) => episode._id === id
         );
