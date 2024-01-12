@@ -21,11 +21,16 @@ import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { media } from "@styles/media-query";
 import { SyncingIndicator } from "@components/SyncingIndicator";
+import { TooltipContent } from "@components/TooltipContent";
+import { useSetCreateEpisodeModal } from "Modals/CreateEpisodeModal/hook";
+import { useAuth } from "@utils/hooks/useAuth";
 
 export default function Patient() {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
+
+  const { isLogged } = useAuth();
 
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -42,7 +47,7 @@ export default function Patient() {
     !!id
   );
 
-  const createEpisode = useCreateEpisode();
+  const setEpisodeModal = useSetCreateEpisodeModal();
 
   const patient = useMemo(() => getPatientById.data, [getPatientById.data]);
 
@@ -57,14 +62,23 @@ export default function Patient() {
     }
   }, [patient, setSelectedPatient]);
 
-  const createEpisodeHandler = async () => {
+  const createEpisode = useCreateEpisode();
+
+  const createEpisodeDirectHandler = async () => {
     const episode_created = await createEpisode.mutateAsync({
       body: {
-        patient_id: id,
+        patient_id: patient?._id,
       },
     });
 
     Router.push(RoutesPath.episode.replace("[id]", episode_created._id));
+  };
+
+  const createEpisodeHandler = async () => {
+    if (!patient) return;
+    setEpisodeModal({
+      patient_id: patient?._id,
+    });
   };
 
   const setDeletePatientModal = useSetDeletePatientModal();
@@ -95,12 +109,14 @@ export default function Patient() {
           <FlexColumn gap={1.5}>
             <SyncingIndicator isSyncing={isSyncing} />
             <FlexRow>
-              <Trash
-                size={24}
-                color={theme.colors.text_switched}
-                cursor="pointer"
-                onClick={onDelete}
-              />
+              <TooltipContent tooltip="Delete patient">
+                <Trash
+                  size={24}
+                  color={theme.colors.text_switched}
+                  cursor="pointer"
+                  onClick={onDelete}
+                />
+              </TooltipContent>
             </FlexRow>
           </FlexColumn>
         </UserBadgeContainer>
@@ -114,8 +130,9 @@ export default function Patient() {
           <Table
             header={{
               title: "Pain Episodes list",
-              onPlusClick: createEpisodeHandler,
-              loading: createEpisode.isLoading,
+              onPlusClick: isLogged
+                ? createEpisodeHandler
+                : createEpisodeDirectHandler,
             }}
             columns={[
               {
@@ -141,8 +158,9 @@ export default function Patient() {
               <CallToAction
                 text1="There are no episodes registered yet."
                 text2="to create an episode."
-                onClick={createEpisodeHandler}
-                loading={createEpisode.isLoading}
+                onClick={
+                  isLogged ? createEpisodeHandler : createEpisodeDirectHandler
+                }
               />
             }
           />

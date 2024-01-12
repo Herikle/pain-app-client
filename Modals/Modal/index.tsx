@@ -108,6 +108,7 @@ const Container = styled.div<ContainerProps>`
   background-color: ${theme.colors.pure_white};
   padding: ${({ $removePadding }) => ($removePadding ? 0 : "2rem")};
   max-height: 95vh;
+  border-radius: 4px;
   ${({ $height }) =>
     $height &&
     css`

@@ -1,6 +1,7 @@
+import { TooltipContent } from "@components/TooltipContent";
 import { IconsPath } from "@utils/icons";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type SyncingIndicatorProps = {
   isSyncing: boolean;
@@ -33,15 +34,34 @@ export const SyncingIndicator = ({ isSyncing }: SyncingIndicatorProps) => {
     };
   }, []);
 
-  if (!isOnline)
-    return (
-      <Image src={unavaibleSrc} width={20} height={20} alt="unavailable" />
-    );
+  const src = useMemo(() => {
+    if (!isOnline) return unavaibleSrc;
 
-  if (isSyncing)
-    return (
-      <Image src={IconsPath.Syncing} width={20} height={20} alt="syncing" />
-    );
+    if (isSyncing) return IconsPath.Syncing;
 
-  return <Image src={IconsPath.Synced} width={20} height={20} alt="synced" />;
+    return IconsPath.Synced;
+  }, [isOnline, isSyncing]);
+
+  const alt = useMemo(() => {
+    if (!isOnline) return "unavailable";
+
+    if (isSyncing) return "syncing";
+
+    return "synced";
+  }, [isOnline, isSyncing]);
+
+  const tooltip = useMemo(() => {
+    if (!isOnline) return "No connection. Please check and retry.";
+
+    if (isSyncing) return "Syncing data. Please wait a moment.";
+
+    return "Data synced and saved successfully.";
+  }, [isOnline, isSyncing]);
+
+  return (
+    <TooltipContent tooltip={tooltip}>
+      {" "}
+      <Image src={src} width={20} height={20} alt={alt} />
+    </TooltipContent>
+  );
 };
