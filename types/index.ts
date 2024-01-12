@@ -187,7 +187,7 @@ export type ISegment = {
   updatedAt: string;
 };
 
-type ITrackPainType = "psychological" | "physical";
+export type ITrackPainType = "psychological" | "physical";
 
 export type ITrack = {
   _id: string;
