@@ -18,6 +18,8 @@ import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { ImportEpisodeStructure } from "types";
 import { checkValidity } from "./helpers/checkEpisodeValidity";
+import { ZodIssue } from "zod";
+import { transparentize } from "polished";
 
 type ImportFromArchiveProps = {
   patient_id: string;
@@ -29,6 +31,8 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
     useState<ImportEpisodeStructure | null>(null);
 
   const [archive, setArchive] = useState<File | null>(null);
+
+  const [errors, setErrors] = useState<ZodIssue[] | null>(null);
 
   const importEpisode = useImportEpisode();
 
@@ -63,18 +67,18 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
 
       const episode = JSON.parse(json as string);
 
-      const error = checkValidity(episode);
+      const validation = checkValidity(episode);
 
-      if (error) {
-        alert(error);
-        return;
+      if (validation.success) {
+        setImportedEpisode(episode);
+        setArchive(file);
+        setErrors(null);
+      } else {
+        setErrors(validation.error.issues);
       }
-
-      setImportedEpisode(episode);
     };
 
     reader.readAsText(file);
-    setArchive(file);
 
     // @ts-ignore
     e.target.value = null;
@@ -92,6 +96,26 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
           icon={<DownloadSimple size={40} color={theme.colors.pure_black} />}
           alt="Download Icon"
         />
+        {!!errors && (
+          <FlexColumn>
+            <Text variant="body1Bold">
+              There are some errors in the archive, please fix them and try
+              again
+            </Text>
+            <ErrorsContainer>
+              {errors?.map((error) => (
+                <ErrorContainer key={error.path.join("")}>
+                  <Text variant="body2" color="red_danger">
+                    path: {error.path.join(" > ")}
+                  </Text>
+                  <Text variant="body2" color="red_danger">
+                    message: {error.message}
+                  </Text>
+                </ErrorContainer>
+              ))}
+            </ErrorsContainer>
+          </FlexColumn>
+        )}
         {!archive ? (
           <label ref={labelRef}>
             <input type="file" accept=".json" onChange={onChangeInput} hidden />
@@ -114,6 +138,20 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
     </>
   );
 };
+
+const ErrorContainer = styled(FlexColumn)`
+  gap: 0.2rem;
+
+  &:hover {
+    background-color: ${transparentize(0.9, theme.colors.pure_black)};
+  }
+`;
+
+const ErrorsContainer = styled(FlexColumn)`
+  padding: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+`;
 
 export type ChildPropsCreateEpisodeModal = {
   onClose: () => void;
