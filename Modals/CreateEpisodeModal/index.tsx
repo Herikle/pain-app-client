@@ -16,6 +16,8 @@ import { Option } from "./components/Option";
 import { useRef, useState } from "react";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
+import { ImportEpisodeStructure } from "types";
+import { checkValidity } from "./helpers/checkEpisodeValidity";
 
 type ImportFromArchiveProps = {
   patient_id: string;
@@ -23,11 +25,33 @@ type ImportFromArchiveProps = {
 };
 
 const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
-  const [file, setFile] = useState<File | null>(null);
+  const [importedEpisode, setImportedEpisode] =
+    useState<ImportEpisodeStructure | null>(null);
+
+  const [archive, setArchive] = useState<File | null>(null);
 
   const importEpisode = useImportEpisode();
 
-  const runImport = () => {
+  const runImport = async () => {
+    if (!importedEpisode) return;
+
+    const episodeCreated = await importEpisode.mutateAsync({
+      params: {
+        patient_id,
+      },
+      body: importedEpisode,
+    });
+
+    Router.push(RoutesPath.episode.replace("[id]", episodeCreated._id));
+
+    onClose();
+  };
+
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filesInput = e.target.files;
+
+    const file = filesInput?.[0];
+
     if (!file) return;
 
     const reader = new FileReader();
@@ -39,29 +63,18 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
 
       const episode = JSON.parse(json as string);
 
-      const episodeCreated = await importEpisode.mutateAsync({
-        params: {
-          patient_id,
-        },
-        body: episode,
-      });
+      const error = checkValidity(episode);
 
-      Router.push(RoutesPath.episode.replace("[id]", episodeCreated._id));
+      if (error) {
+        alert(error);
+        return;
+      }
 
-      onClose();
+      setImportedEpisode(episode);
     };
 
     reader.readAsText(file);
-  };
-
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filesInput = e.target.files;
-
-    const file = filesInput?.[0];
-
-    if (!file) return;
-
-    setFile(file);
+    setArchive(file);
 
     // @ts-ignore
     e.target.value = null;
@@ -75,11 +88,11 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
       <FlexColumn width="100%">
         <Option
           title="Import from archive"
-          description={!!file ? file.name : undefined}
+          description={!!archive ? archive.name : undefined}
           icon={<DownloadSimple size={40} color={theme.colors.pure_black} />}
           alt="Download Icon"
         />
-        {!file ? (
+        {!archive ? (
           <label ref={labelRef}>
             <input type="file" accept=".json" onChange={onChangeInput} hidden />
             <Button
