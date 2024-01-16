@@ -32,6 +32,7 @@ import fileDownload from "js-file-download";
 import Link from "next/link";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { TooltipContent } from "@components/TooltipContent";
+import { Error404 } from "@page-components/errors/404";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -140,131 +141,137 @@ export default function EpisodePage() {
 
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
-      <UnsavedChangesDialog shouldConfirmLeave={!isLogged} />
-      <Container>
-        {!!episode?.patient_id && (
-          <BackButton
-            href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
-            text={
-              <>
-                Return to <strong>{episode?.patient?.name}</strong> profile
-              </>
-            }
-          />
-        )}
-        {!isLogged && (
-          <FlexRow>
-            <Question
-              size={16}
-              weight="fill"
-              cursor="pointer"
-              onClick={openSaveModal}
-            />
-            <Text variant="body1">
-              To save this episode and tracks, you gonna need an account.{" "}
-              <Link
-                href={RoutesPath.register}
-                style={{ textDecoration: "underline" }}
-              >
-                Create an account
-              </Link>{" "}
-              or{" "}
-              <Link
-                href={RoutesPath.login}
-                style={{ textDecoration: "underline" }}
-              >
-                login
-              </Link>
-            </Text>
-          </FlexRow>
-        )}
-        <EpisodeBadgeContainer justify="space-between">
-          <Badge label={episode?.name} iconPath={IconsPath.Episode} />
-          <FlexColumn gap={1.5} align="flex-end">
-            <SyncingIndicator isSyncing={isSyncing} />
-            {isLogged && (
+      {getEpisodeById.isError ? (
+        <Error404 />
+      ) : (
+        <>
+          <UnsavedChangesDialog shouldConfirmLeave={!isLogged} />
+          <Container>
+            {!!episode?.patient_id && (
+              <BackButton
+                href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
+                text={
+                  <>
+                    Return to <strong>{episode?.patient?.name}</strong> profile
+                  </>
+                }
+              />
+            )}
+            {!isLogged && (
               <FlexRow>
-                <TooltipContent tooltip="Export episode">
-                  <Export
-                    size={24}
-                    color={theme.colors.text_switched}
-                    onClick={() => {
-                      setConfirmExportEpisode(true);
-                    }}
-                    cursor="pointer"
-                  />
-                </TooltipContent>
-                <TooltipContent tooltip="Delete episode">
-                  <Trash
-                    size={24}
-                    color={theme.colors.text_switched}
-                    cursor="pointer"
-                    onClick={() => setConfirmDelete(true)}
-                  />
-                </TooltipContent>
+                <Question
+                  size={16}
+                  weight="fill"
+                  cursor="pointer"
+                  onClick={openSaveModal}
+                />
+                <Text variant="body1">
+                  To save this episode and tracks, you gonna need an account.{" "}
+                  <Link
+                    href={RoutesPath.register}
+                    style={{ textDecoration: "underline" }}
+                  >
+                    Create an account
+                  </Link>{" "}
+                  or{" "}
+                  <Link
+                    href={RoutesPath.login}
+                    style={{ textDecoration: "underline" }}
+                  >
+                    login
+                  </Link>
+                </Text>
               </FlexRow>
             )}
-          </FlexColumn>
-        </EpisodeBadgeContainer>
-        {!!episode && (
-          <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
-        )}
-        <TrackContainer>
-          <FlexColumn gap={4}>
-            <FlexRow gap={0} justify="space-between">
-              <Text variant="h1">Pain Tracks</Text>
-              <AddButton
-                onClick={onCreateTrack}
-                loading={createTrack.isLoading}
-              />
-            </FlexRow>
-            <ListTrack episode_id={id} />
-          </FlexColumn>
-        </TrackContainer>
-      </Container>
-      {saveModal && (
-        <ConfirmActionModal
-          description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
-          confirmText="Create an account now"
-          cancelText={
-            <Text variant="body2">
-              Or if you already have an account,{" "}
-              <Link
-                href={RoutesPath.login}
-                style={{ textDecoration: "underline" }}
-              >
-                login here
-              </Link>
-            </Text>
-          }
-          onClose={closeSaveModal}
-          onConfirm={goToRegister}
-          onCancel={goToLogin}
-          title={false}
-        />
-      )}
-      {confirmDelete && (
-        <ConfirmActionModal
-          onConfirm={onDeleteEpisode}
-          onClose={() => {
-            setConfirmDelete(false);
-          }}
-          loading={deleteEpisode.isLoading}
-          description="Are you sure you want to delete this episode? This action cannot be undone."
-        />
-      )}
-      {confirmExportEpisode && (
-        <ConfirmActionModal
-          onConfirm={onClickExport}
-          onClose={() => {
-            setConfirmExportEpisode(false);
-          }}
-          loading={exportEpisode.isLoading}
-          title="Exporting"
-          description="Would you like to export this episode as a JSON file?"
-          confirmText="Export now"
-          cancelText="Go back"
-        />
+            <EpisodeBadgeContainer justify="space-between">
+              <Badge label={episode?.name} iconPath={IconsPath.Episode} />
+              <FlexColumn gap={1.5} align="flex-end">
+                <SyncingIndicator isSyncing={isSyncing} />
+                {isLogged && (
+                  <FlexRow>
+                    <TooltipContent tooltip="Export episode">
+                      <Export
+                        size={24}
+                        color={theme.colors.text_switched}
+                        onClick={() => {
+                          setConfirmExportEpisode(true);
+                        }}
+                        cursor="pointer"
+                      />
+                    </TooltipContent>
+                    <TooltipContent tooltip="Delete episode">
+                      <Trash
+                        size={24}
+                        color={theme.colors.text_switched}
+                        cursor="pointer"
+                        onClick={() => setConfirmDelete(true)}
+                      />
+                    </TooltipContent>
+                  </FlexRow>
+                )}
+              </FlexColumn>
+            </EpisodeBadgeContainer>
+            {!!episode && (
+              <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
+            )}
+            <TrackContainer>
+              <FlexColumn gap={4}>
+                <FlexRow gap={0} justify="space-between">
+                  <Text variant="h1">Pain Tracks</Text>
+                  <AddButton
+                    onClick={onCreateTrack}
+                    loading={createTrack.isLoading}
+                  />
+                </FlexRow>
+                <ListTrack episode_id={id} />
+              </FlexColumn>
+            </TrackContainer>
+          </Container>
+          {saveModal && (
+            <ConfirmActionModal
+              description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
+              confirmText="Create an account now"
+              cancelText={
+                <Text variant="body2">
+                  Or if you already have an account,{" "}
+                  <Link
+                    href={RoutesPath.login}
+                    style={{ textDecoration: "underline" }}
+                  >
+                    login here
+                  </Link>
+                </Text>
+              }
+              onClose={closeSaveModal}
+              onConfirm={goToRegister}
+              onCancel={goToLogin}
+              title={false}
+            />
+          )}
+          {confirmDelete && (
+            <ConfirmActionModal
+              onConfirm={onDeleteEpisode}
+              onClose={() => {
+                setConfirmDelete(false);
+              }}
+              loading={deleteEpisode.isLoading}
+              description="Are you sure you want to delete this episode? This action cannot be undone."
+            />
+          )}
+          {confirmExportEpisode && (
+            <ConfirmActionModal
+              onConfirm={onClickExport}
+              onClose={() => {
+                setConfirmExportEpisode(false);
+              }}
+              loading={exportEpisode.isLoading}
+              title="Exporting"
+              description="Would you like to export this episode as a JSON file?"
+              confirmText="Export now"
+              cancelText="Go back"
+            />
+          )}
+        </>
       )}
     </LoggedLayout>
   );
