@@ -12,6 +12,22 @@ const nextConfig = withBundleAnalyzer({
       transform: "@phosphor-icons/react/dist/icons/{{member}}",
     },
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            svgo: false,
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
 });
 
 module.exports = nextConfig;

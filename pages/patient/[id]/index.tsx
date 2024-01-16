@@ -24,6 +24,7 @@ import { SyncingIndicator } from "@components/SyncingIndicator";
 import { TooltipContent } from "@components/TooltipContent";
 import { useSetCreateEpisodeModal } from "Modals/CreateEpisodeModal/hook";
 import { useAuth } from "@utils/hooks/useAuth";
+import { Error404 } from "@page-components/errors/404";
 
 export default function Patient() {
   const router = useRouter();
@@ -94,78 +95,84 @@ export default function Patient() {
 
   return (
     <LoggedLayout>
-      <Container>
-        <BackButton href={RoutesPath.profile} text="Return to your profile" />
-        <UserBadgeContainer justify="space-between">
-          <Badge
-            label={patient?.name}
-            description={patient?.type}
-            descriptionVariant="h2"
-            descriptionWeight="400"
-            iconPath={
-              patient?.type === "animal" ? IconsPath.Animal : IconsPath.Patient
-            }
-          />
-          <FlexColumn gap={1.5}>
-            <SyncingIndicator isSyncing={isSyncing} />
-            <FlexRow>
-              <TooltipContent tooltip="Delete patient">
-                <Trash
-                  size={24}
-                  color={theme.colors.text_switched}
-                  cursor="pointer"
-                  onClick={onDelete}
-                />
-              </TooltipContent>
-            </FlexRow>
-          </FlexColumn>
-        </UserBadgeContainer>
-        <Wrapper>
-          {patient && (
-            <UpdatePatientForm
-              patient={patient}
-              onIsSyncingChange={setIsSyncing}
+      {getPatientById.isError ? (
+        <Error404 />
+      ) : (
+        <Container>
+          <BackButton href={RoutesPath.profile} text="Return to your profile" />
+          <UserBadgeContainer justify="space-between">
+            <Badge
+              label={patient?.name}
+              description={patient?.type}
+              descriptionVariant="h2"
+              descriptionWeight="400"
+              iconPath={
+                patient?.type === "animal"
+                  ? IconsPath.Animal
+                  : IconsPath.Patient
+              }
             />
-          )}
-          <Table
-            header={{
-              title: "Pain Episodes list",
-              onPlusClick: isLogged
-                ? createEpisodeHandler
-                : createEpisodeDirectHandler,
-            }}
-            columns={[
-              {
-                accessor: "name",
-                label: "Name",
-              },
-              {
-                accessor: "createdAt",
-                label: "Date",
-                render: getDotDateFormat,
-              },
-              {
-                accessor: "tracks_count",
-                label: "N° of tracks",
-              },
-            ]}
-            mountHref={(episode: IEpisode) =>
-              RoutesPath.episode.replace("[id]", episode._id)
-            }
-            isLoading={getPatientEpisodes.isLoading}
-            data={episodes}
-            CallToAction={
-              <CallToAction
-                text1="There are no episodes registered yet."
-                text2="to create an episode."
-                onClick={
-                  isLogged ? createEpisodeHandler : createEpisodeDirectHandler
-                }
+            <FlexColumn gap={1.5}>
+              <SyncingIndicator isSyncing={isSyncing} />
+              <FlexRow>
+                <TooltipContent tooltip="Delete patient">
+                  <Trash
+                    size={24}
+                    color={theme.colors.text_switched}
+                    cursor="pointer"
+                    onClick={onDelete}
+                  />
+                </TooltipContent>
+              </FlexRow>
+            </FlexColumn>
+          </UserBadgeContainer>
+          <Wrapper>
+            {patient && (
+              <UpdatePatientForm
+                patient={patient}
+                onIsSyncingChange={setIsSyncing}
               />
-            }
-          />
-        </Wrapper>
-      </Container>
+            )}
+            <Table
+              header={{
+                title: "Pain Episodes list",
+                onPlusClick: isLogged
+                  ? createEpisodeHandler
+                  : createEpisodeDirectHandler,
+              }}
+              columns={[
+                {
+                  accessor: "name",
+                  label: "Name",
+                },
+                {
+                  accessor: "createdAt",
+                  label: "Date",
+                  render: getDotDateFormat,
+                },
+                {
+                  accessor: "tracks_count",
+                  label: "N° of tracks",
+                },
+              ]}
+              mountHref={(episode: IEpisode) =>
+                RoutesPath.episode.replace("[id]", episode._id)
+              }
+              isLoading={getPatientEpisodes.isLoading}
+              data={episodes}
+              CallToAction={
+                <CallToAction
+                  text1="There are no episodes registered yet."
+                  text2="to create an episode."
+                  onClick={
+                    isLogged ? createEpisodeHandler : createEpisodeDirectHandler
+                  }
+                />
+              }
+            />
+          </Wrapper>
+        </Container>
+      )}
     </LoggedLayout>
   );
 }
