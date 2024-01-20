@@ -21,7 +21,11 @@ export const AddButton = ({
 }: AddButtonProps) => {
   const render = (children) => {
     if (href) {
-      return <Link href={href}>{children}</Link>;
+      return (
+        <Link data-testid="link" href={href}>
+          {children}
+        </Link>
+      );
     }
 
     return children;
@@ -36,7 +40,7 @@ export const AddButton = ({
   };
 
   return render(
-    <Container id={id}>
+    <Container id={id} data-testid="add-button">
       <LoadingWrapper loading={!!loading} overContainer size={16} />
       <PlusCircle
         onClick={onClick}
@@ -44,6 +48,7 @@ export const AddButton = ({
         size={32}
         weight="fill"
         color={getButtonColor()}
+        data-testid="plus-circle"
       />
     </Container>
   );

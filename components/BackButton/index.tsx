@@ -14,16 +14,25 @@ type BackButtonProps = {
 export const BackButton = ({ href, text, onClick }: BackButtonProps) => {
   const render = (children: JSX.Element) => {
     if (href) {
-      return <Link href={href}>{children}</Link>;
+      return (
+        <Link href={href} data-testid="back-button-link">
+          {children}
+        </Link>
+      );
     }
 
     return children;
   };
 
   return render(
-    <BackButtonStyled onClick={onClick}>
+    <BackButtonStyled onClick={onClick} data-testid="back-button">
       <BackIcon>
-        <CaretLeft size={12} weight="bold" color={theme.colors.font_color} />
+        <CaretLeft
+          size={12}
+          weight="bold"
+          color={theme.colors.font_color}
+          data-testid="back-button-icon"
+        />
       </BackIcon>
       <Text color="text_switched">{text}</Text>
     </BackButtonStyled>
