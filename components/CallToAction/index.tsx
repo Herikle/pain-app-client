@@ -20,7 +20,11 @@ export const CallToAction = ({
 }: CallToActionProps) => {
   const renderActionButton = (children) => {
     if (href) {
-      return <Link href={href}>{children}</Link>;
+      return (
+        <Link href={href} data-testid="call-to-action-link">
+          {children}
+        </Link>
+      );
     }
 
     return children;
@@ -34,7 +38,10 @@ export const CallToAction = ({
       <Row>
         <Text>Click</Text>{" "}
         {renderActionButton(
-          <PlusContainer onClick={onClick}>
+          <PlusContainer
+            onClick={onClick}
+            data-testid="call-to-action-plus-container"
+          >
             <AddButton loading={loading} />
           </PlusContainer>
         )}

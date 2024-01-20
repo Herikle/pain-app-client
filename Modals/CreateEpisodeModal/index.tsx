@@ -10,7 +10,7 @@ import {
 import { RoutesPath } from "@utils/routes";
 import { IconsPath } from "@utils/icons";
 import { theme } from "@styles/theme";
-import { CaretLeft, DownloadSimple } from "@phosphor-icons/react";
+import { CaretLeft, DownloadSimple, XCircle } from "@phosphor-icons/react";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { Option } from "./components/Option";
 import { useRef, useState } from "react";
@@ -99,31 +99,43 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
     <>
       <LoadingWrapper loading={importEpisode.isLoading} overContainer />
       <FlexColumn width="100%">
-        <Option
-          title="Import from archive"
-          description={!!archive ? archive.name : undefined}
-          icon={<DownloadSimple size={40} color={theme.colors.pure_black} />}
-          alt="Download Icon"
-        />
-        {!!errors && (
+        {!!errors ? (
           <FlexColumn>
-            <Text variant="body1Bold">
-              There are some errors in the archive, please fix them and try
-              again
-            </Text>
+            <ErrorBadge>
+              <XCircle
+                size={44}
+                color={theme.colors.pure_black}
+                weight="bold"
+              />
+              <FlexColumn>
+                <Text variant="h1">Import failed</Text>
+                <Text variant="h3" fontWeight="400">
+                  Please ensure you are using a valid archive.
+                  <br />
+                  Check log for details.
+                </Text>
+              </FlexColumn>
+            </ErrorBadge>
             <ErrorsContainer>
               {errors?.map((error) => (
                 <ErrorContainer key={error.path.join("")}>
-                  <Text variant="body2" color="red_danger">
+                  <Text variant="body2" color="pure_white" fontWeight="500">
                     path: {error.path.join(" > ")}
                   </Text>
-                  <Text variant="body2" color="red_danger">
+                  <Text variant="body2" color="pure_white" fontWeight="500">
                     message: {error.message}
                   </Text>
                 </ErrorContainer>
               ))}
             </ErrorsContainer>
           </FlexColumn>
+        ) : (
+          <Option
+            title="Import from archive"
+            description={!!archive ? archive.name : undefined}
+            icon={<DownloadSimple size={40} color={theme.colors.pure_black} />}
+            alt="Download Icon"
+          />
         )}
         {!archive ? (
           <label ref={labelRef}>
@@ -148,12 +160,21 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
   );
 };
 
+const ErrorBadge = styled(FlexRow)`
+  gap: 2rem;
+  background-color: ${theme.colors.disabled_color};
+  padding: 0.5rem;
+  padding-inline: 1rem;
+  justify-content: flex-start;
+`;
+
 const ErrorContainer = styled(FlexColumn)`
   gap: 0.2rem;
-
-  &:hover {
+  background-color: ${theme.colors.font_color};
+  padding: 0.5rem;
+  /* &:hover {
     background-color: ${transparentize(0.9, theme.colors.pure_black)};
-  }
+  } */
 `;
 
 const ErrorsContainer = styled(FlexColumn)`

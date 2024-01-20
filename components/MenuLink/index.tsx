@@ -1,5 +1,5 @@
 import { Text } from "@components/Text";
-import { FlexColumn, FlexRow } from "design-components/Flex";
+import { FlexColumn, FlexRow } from "@design-components/Flex";
 import Image from "next/image";
 import Link from "next/link";
 import styled, { css } from "styled-components";
@@ -40,9 +40,11 @@ export const MenuLink = ({
     if (href && !notAllowed) {
       return (
         <Link
+          data-testid="menu-link-link"
           href={href}
           style={{
             width: fullWidth && !isTabletUp ? "100%" : "auto",
+            flex: 1,
           }}
         >
           {children}
@@ -55,6 +57,7 @@ export const MenuLink = ({
 
   return render(
     <Container
+      data-testid="menu-link-container"
       onClick={onClick}
       $fullWidth={!!fullWidth}
       $disabled={disabled}
@@ -64,10 +67,14 @@ export const MenuLink = ({
       }}
     >
       {PhosphorIcon ? (
-        <PhosphorIcon size={36} color={theme.colors.pure_white} />
+        <PhosphorIcon
+          data-testid="menu-link-phosporicon"
+          size={36}
+          color={theme.colors.pure_white}
+        />
       ) : (
         iconPath && (
-          <Image src={iconPath} alt="Chat GPT icon" width="36" height="36" />
+          <Image src={iconPath} alt="MenuLinkIcon" width="36" height="36" />
         )
       )}
       <DescriptionContainer>
@@ -109,6 +116,7 @@ const Container = styled(FlexRow)<ContainerProps>`
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
+  flex: 1;
   ${({ $disabled }) =>
     $disabled
       ? css`
@@ -135,11 +143,9 @@ const Container = styled(FlexRow)<ContainerProps>`
       width: ${$fullWidth ? "100%" : "fit-content"};
       justify-content: center;     
       border-radius: 8px;
-      padding: 0.5rem;
-      padding-inline: 1rem; 
+      padding: 0.5rem;      
     `}    
 
-    ${media.up.mobileM`
-      padding-inline:0.5rem;      
+    ${media.up.mobileM`        
     `}
 `;

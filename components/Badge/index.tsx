@@ -24,9 +24,15 @@ export const Badge = ({
   onClickEdit,
 }: Props) => {
   return (
-    <Container>
+    <Container data-testid="badge-container">
       <ImageBox>
-        <Image src={iconPath} alt="UserIcon" width={40} height={45} />
+        <Image
+          src={iconPath}
+          alt="UserIcon"
+          width={40}
+          height={45}
+          data-testid="badge-icon"
+        />
       </ImageBox>
       <DescriptionContainer gap={1}>
         <FlexRow gap={1}>
@@ -34,7 +40,7 @@ export const Badge = ({
             {label}
           </Text>
           {!!onClickEdit && (
-            <EditCircleIcon onClick={onClickEdit}>
+            <EditCircleIcon onClick={onClickEdit} data-testid="badge-edit-icon">
               <PencilSimpleLine size={16} color={theme.colors.font_color} />
             </EditCircleIcon>
           )}

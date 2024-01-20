@@ -67,6 +67,7 @@ export const Button = ({
 
   return (
     <ButtonContainer
+      data-testid="button-container"
       className={font?.className}
       onClick={onClick}
       type={type}
@@ -81,7 +82,7 @@ export const Button = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <LoadingWrapper>
+        <LoadingWrapper data-testid="button-container-loading">
           <Oval
             height="20"
             color={theme.colors.pure_white}
