@@ -13,6 +13,7 @@ import { FiltersController } from "@logic-components/FiltersController";
 import { Analytics } from "@vercel/analytics/react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AxiosError } from "axios";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -50,7 +51,7 @@ const Application = ({ children }: ApplicationProps) => {
             href="/favicon/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg"/>
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" />
           <meta
             name="description"
             content="A scientific tool for the description and analysis of the pain experience"
@@ -69,7 +70,23 @@ const Application = ({ children }: ApplicationProps) => {
 };
 
 function MyApp({ Component, pageProps }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: (count, error: AxiosError) => {
+              const status = error?.response?.status;
+              if (status === 404) return false;
+
+              if (count >= 2) return false;
+
+              return true;
+            },
+          },
+        },
+      })
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
