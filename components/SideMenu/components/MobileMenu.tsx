@@ -90,4 +90,5 @@ const Container = styled.div`
     gap: 0;
   `}
   z-index: 50;
+  padding-inline: 0.5rem;
 `;

@@ -19,9 +19,13 @@ export const LoadingWrapper = ({
 }: LoadingWrapperProps) => {
   return loading ? (
     <>
-      {overContainer && <Overlay />}
+      {overContainer && <Overlay data-testid="loading-wrapper-overlay" />}
 
-      <Container $fullScreen={fullScreen} $overContainer={overContainer}>
+      <Container
+        $fullScreen={fullScreen}
+        $overContainer={overContainer}
+        data-testid="loading-wrapper"
+      >
         <Oval
           color={theme.colors.primary}
           strokeWidth={5}
