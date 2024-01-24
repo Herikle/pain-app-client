@@ -9,9 +9,11 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
 
 export const Radio = React.forwardRef(({ label, ...rest }: Props, ref: any) => {
   return (
-    <Label>
-      <Input type="radio" ref={ref} {...rest} />
-      <Text variant="body2">{label}</Text>
+    <Label data-testid="radio-label">
+      <Input type="radio" ref={ref} {...rest} data-testid="radio-input" />
+      <Text variant="body2" data-testid="radio-text">
+        {label}
+      </Text>
     </Label>
   );
 });
@@ -43,6 +45,10 @@ const Input = styled.input`
   cursor: pointer;
   &:checked::before {
     transform: scale(1);
+  }
+
+  &:checked {
+    --is-checked: 1;
   }
 `;
 

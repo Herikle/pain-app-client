@@ -16,8 +16,6 @@ export type DrawObject = {
   points: Line;
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 type PaintProps = {
   width: number;
   height: number;
@@ -150,6 +148,8 @@ export const Paint = ({
     if (!isDrawing) {
       return;
     }
+    console.log(ctxRef?.current);
+    console.log(canvasRef.current);
     if (ctxRef?.current) {
       if (currentStartPosition && canvasRef?.current) {
         ctxRef.current.lineTo(x, y);
@@ -176,19 +176,6 @@ export const Paint = ({
     const x = e.nativeEvent.offsetX;
     const y = e.nativeEvent.offsetY;
 
-    draw(x, y);
-  };
-
-  const captureStartDrawingTouch = (e) => {
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
-
-    startDrawing(x, y);
-  };
-
-  const captureDrawTouch = (e) => {
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
     draw(x, y);
   };
 
@@ -220,6 +207,7 @@ export const Paint = ({
         }}
       >
         <Canvas
+          data-testid="paint-canvas"
           onPointerDown={captureStartDrawingMouse}
           onPointerMove={captureDrawMouse}
           onPointerUp={endDrawing}
@@ -231,7 +219,7 @@ export const Paint = ({
       </CanvasContainer>
       {!readOnly && (
         <>
-          <Clear id="clear-drawing" onClick={clear}>
+          <Clear id="clear-drawing" onClick={clear} data-testid="clear-drawing">
             <Eraser size={16} color={theme.colors.pure_black} />
           </Clear>
           <Tooltip anchorSelect="#clear-drawing">Clear drawing</Tooltip>
