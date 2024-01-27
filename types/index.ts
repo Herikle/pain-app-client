@@ -104,7 +104,12 @@ export type ISymptom = {
 
 type IIntensityType = "draw" | "values";
 export type ISegmentTimeUnit = "minutes" | "hours" | "days";
-export type ISegmentEstimativeType = "reported" | "measured" | "inferred" | "";
+export type ISegmentEstimativeType =
+  | "reported"
+  | "measured"
+  | "inferred"
+  | "inferred_from_evidence"
+  | "";
 export type ISegmentPainType = "acute" | "chronic";
 
 export type ISegmentValues = {
@@ -119,7 +124,8 @@ export type IJustificationType =
   | "behavioral"
   | "neurological"
   | "physiological"
-  | "pharmacological";
+  | "pharmacological"
+  | "evolutionary";
 
 export type ISegmentJustification = {
   _id: string;

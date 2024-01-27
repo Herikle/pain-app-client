@@ -19,7 +19,7 @@ const config: Config = {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
@@ -232,6 +232,8 @@ const config: Config = {
     "next/font/(.*)": `<rootDir>/__mocks__/nextFontMock.js`,
     // Disable server-only
     "server-only": `<rootDir>/__mocks__/empty.js`,
+    // Handle SVG imports
+    "^.+\\.(svg)$": "<rootDir>/__mocks__/svgMock.tsx",
   },
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

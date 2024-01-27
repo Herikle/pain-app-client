@@ -35,16 +35,22 @@ export const QualityAttribute = ({
       $isSelected={isSelected}
       $isNotSelected={isNotSelected}
       onClick={handleClick}
+      data-testid="quality-attribute-container"
     >
       <Image
         src={iconPath}
         width={iconSize}
         height={iconSize}
         alt={`Attribute ${label} Icon`}
+        data-testid="quality-attribute-icon"
       />
       <FlexColumn>
-        <Text variant="body2Bold">{label}</Text>
-        <Text variant="body2">{description}</Text>
+        <Text variant="body2Bold" data-testid="quality-attribute-label">
+          {label}
+        </Text>
+        <Text variant="body2" data-testid="quality-attribute-description">
+          {description}
+        </Text>
       </FlexColumn>
     </Container>
   );
@@ -77,10 +83,10 @@ const Container = styled.label<Props>`
     $isNotSelected &&
     css`
       opacity: 0.5;
-    `}
 
-    &:hover {
-    background-color: ${theme.colors.hover_state};
-    opacity: 1;
-  }
+      &:hover {
+        background-color: ${theme.colors.hover_state};
+        opacity: 1;
+      }
+    `}
 `;

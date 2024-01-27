@@ -153,7 +153,7 @@ export const EpisodeForm = ({
           </Grid>
           <Grid xl={10} lg={10} md={10} sm={12} xs={12}>
             <TextArea
-              label="Comment"
+              label="Comments"
               minRows={7}
               maxRows={7}
               {...register("comment")}

@@ -101,7 +101,7 @@ export const QualityPage = ({
       <Container>
         <SelectionSession gap={2}>
           <Section gap={1}>
-            <Text variant="body1Bold">Texture</Text>
+            <Text variant="body1Bold">Pain Texture</Text>
             <Grid container spacing={1}>
               {textures.map((texture) => (
                 <Grid xl={6} lg={6} md={6} sm={12} xs={12} key={texture.id}>
@@ -119,7 +119,7 @@ export const QualityPage = ({
             </Grid>
           </Section>
           <Section gap={1}>
-            <Text variant="body1Bold">Depth</Text>
+            <Text variant="body1Bold">Pain Depth</Text>
             <Grid container spacing={1}>
               {depths.map((depth) => (
                 <Grid xl={6} lg={6} md={6} sm={12} xs={12} key={depth.id}>
@@ -138,7 +138,7 @@ export const QualityPage = ({
             </Grid>
           </Section>
           <Section gap={1}>
-            <Text variant="body1Bold">Anatomy</Text>
+            <Text variant="body1Bold">Anatomical Location of Pain</Text>
             <FlexRow justify="flex-start">
               <Image
                 src={IconsPath.depth.anatomy}
@@ -152,8 +152,7 @@ export const QualityPage = ({
         </SelectionSession>
         <CommentSection justify="flex-start">
           <TextArea
-            label="Comment"
-            placeholder="Write something..."
+            label="Comments"
             minRows={25}
             maxRows={25}
             {...register("comment")}
