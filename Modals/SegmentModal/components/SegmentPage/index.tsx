@@ -104,7 +104,7 @@ export const SegmentPage = ({
           </Grid>
           <Grid xs={4}>
             <TextField
-              label="Between"
+              label="Duration (min)"
               type="number"
               min={0}
               {...register("start", {
@@ -116,7 +116,7 @@ export const SegmentPage = ({
           </Grid>
           <Grid xs={4}>
             <TextField
-              label="And"
+              label="Duration (max)"
               type="number"
               min={0}
               {...register("end", {
