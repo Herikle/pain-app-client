@@ -167,7 +167,7 @@ export const SegmentPage = ({
           <Grid xs={12}>
             <Select
               id="select-estimative-type"
-              label="Estimative type"
+              label="How was duration estimated?"
               options={[
                 {
                   label: "Reported by patient",
