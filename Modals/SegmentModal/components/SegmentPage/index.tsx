@@ -33,7 +33,7 @@ const SegmentPageSchema = z
       .optional()
       .nullable(),
     estimative_type: z
-      .enum(["reported", "measured", "inferred", ""])
+      .enum(["reported", "measured", "inferred", "inferred_from_evidence", ""])
       .optional(),
     pain_type: z.enum(["acute", "chronic"]),
     comment: z.string().optional(),
@@ -180,6 +180,10 @@ export const SegmentPage = ({
                 {
                   label: "Inferred by algorithm",
                   id: "inferred",
+                },
+                {
+                  label: "Inferred from evidence",
+                  id: "inferred_from_evidence",
                 },
               ]}
               getLabel={(option) => option.label}
