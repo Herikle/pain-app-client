@@ -255,7 +255,7 @@ const JustificationModal = ({
                 text="Return to intensities menu"
                 onClick={beforeClose}
               />
-              <Text variant="h1">Evidence</Text>
+              <Text variant="h1">Evidence to justify probabilities</Text>
               <BodyContent gap={1}>
                 <Grid container spacing={2} margin="0">
                   <Grid

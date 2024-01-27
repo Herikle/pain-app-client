@@ -31,7 +31,7 @@ export const JustificationList = ({ segment_id }: Props) => {
   return (
     <FlexColumn width="100%" align="flex-start">
       <FlexRow justify="space-between" width="100%">
-        <Text variant="h3">Evidence</Text>
+        <Text variant="h3">Evidence to justify probabilities</Text>
         <AddButton
           onClick={addJustification}
           loading={createJustification.isLoading}
