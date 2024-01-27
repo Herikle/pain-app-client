@@ -119,7 +119,8 @@ export type IJustificationType =
   | "behavioral"
   | "neurological"
   | "physiological"
-  | "pharmacological";
+  | "pharmacological"
+  | "evolutionary";
 
 export type ISegmentJustification = {
   _id: string;

@@ -40,6 +40,10 @@ export const Evidences = [
     label: "Pharmacological",
     value: "pharmacological",
   },
+  {
+    label: "Evolutionary",
+    value: "evolutionary",
+  },
 ];
 
 const painLevels = [
@@ -77,12 +81,19 @@ export type IJustificationType =
   | "behavioral"
   | "neurological"
   | "physiological"
-  | "pharmacological";
+  | "pharmacological"
+  | "evolutionary";
 
 const justificationSchema = z.object({
   title: z.string().optional(),
   type_of_evidence: z
-    .enum(["behavioral", "neurological", "physiological", "pharmacological"])
+    .enum([
+      "behavioral",
+      "neurological",
+      "physiological",
+      "pharmacological",
+      "evolutionary",
+    ])
     .optional()
     .nullable(),
   description: z.string().optional(),
