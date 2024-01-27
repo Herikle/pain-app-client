@@ -199,7 +199,7 @@ export const SegmentPage = ({
             <Radio label="Chronic" value="chronic" {...register("pain_type")} />
           </RadioContainer>
           <TextArea
-            label="Comment"
+            label="Comments"
             minRows={12}
             maxRows={12}
             {...register("comment")}

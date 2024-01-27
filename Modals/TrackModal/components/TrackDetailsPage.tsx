@@ -88,7 +88,7 @@ export const TrackDetailsPage = ({
           justify="flex-start"
         >
           <TextArea
-            label="Comment"
+            label="Comments"
             minRows={12}
             maxRows={12}
             {...register("comment")}

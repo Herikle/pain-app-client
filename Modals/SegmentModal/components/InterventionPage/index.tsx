@@ -142,7 +142,6 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
           {!!selected && (
             <TextArea
               label={`Observation about '${selected.name}'`}
-              placeholder="Write something..."
               minRows={15}
               maxRows={15}
               onChange={(e) => setObservation(e.target.value)}

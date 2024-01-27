@@ -152,8 +152,7 @@ export const QualityPage = ({
         </SelectionSession>
         <CommentSection justify="flex-start">
           <TextArea
-            label="Comment"
-            placeholder="Write something..."
+            label="Comments"
             minRows={25}
             maxRows={25}
             {...register("comment")}
