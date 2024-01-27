@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Paint, DrawObject } from ".";
+import { Paint } from ".";
 
 describe("Paint component", () => {
   const defaultProps = {

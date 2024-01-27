@@ -44,7 +44,7 @@ export const MenuLink = ({
           href={href}
           style={{
             width: fullWidth && !isTabletUp ? "100%" : "auto",
-            flex: 1,
+            flex: fullWidth ? 1 : "unset",
           }}
         >
           {children}

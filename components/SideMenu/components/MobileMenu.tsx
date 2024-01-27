@@ -25,7 +25,7 @@ export const MobileMenu = ({
       {isLogged ? (
         <>
           <MenuLink
-            label={capitalize(user?.role) ?? "Doctor"}
+            label="User"
             href={RoutesPath.profile}
             description={user?.name}
             iconPath={IconsPath.Doctor}
