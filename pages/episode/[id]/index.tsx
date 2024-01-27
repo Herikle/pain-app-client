@@ -297,9 +297,7 @@ const SaveButtonContainer = styled.div`
   `}
 `;
 
-const TrackContainer = styled.div`
-  margin-top: 5rem;
-`;
+const TrackContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
