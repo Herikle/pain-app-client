@@ -101,7 +101,21 @@ export const Register = ({ onSubmit, loading }: Props) => {
           error={errors.password_confirm?.message}
         />
         <Checkbox
-          label="I agree to all Terms and Privacy Policy"
+          label={
+            <>
+              I agree to all{" "}
+              <a
+                href="https://docs.google.com/document/d/1nbNcmvYXXyf3UprAsH33pDF-iKkXFrKp5aalJBugwVY/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: "underline",
+                }}
+              >
+                Terms and Privacy Policy
+              </a>
+            </>
+          }
           {...register("terms")}
           error={errors.terms?.message}
         />

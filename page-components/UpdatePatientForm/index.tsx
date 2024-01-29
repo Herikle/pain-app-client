@@ -130,7 +130,7 @@ export const UpdatePatientForm = ({
           </Grid>
           <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <FlexColumn height="100%" gap={1.5}>
-              <Text variant="body2Bold">Patient Type</Text>
+              <Text variant="body2Bold">Subject Type</Text>
               <FlexRow gap={6}>
                 <Radio label="Human" value="human" {...register("type")} />
                 <Radio label="Animal" value="animal" {...register("type")} />
@@ -177,8 +177,8 @@ export const UpdatePatientForm = ({
           )}
           <Grid xs={12}>
             <TextArea
-              label="About the patient"
-              placeholder="Write something about that patient..."
+              label="About the subject"
+              placeholder="Any comments about the subject"
               minRows={7}
               maxRows={14}
               {...register("about")}

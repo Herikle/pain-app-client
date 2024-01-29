@@ -98,14 +98,14 @@ export default function ProfilePage() {
           ]}
           data={patients}
           header={{
-            title: "Patient List",
+            title: "Subject List",
             onPlusClick: onCreatePatient,
             loading: createPatient.isLoading,
           }}
           CallToAction={
             <CallToAction
-              text1="There are no patients registered yet."
-              text2="to create a patient."
+              text1="There are no subjects registered yet."
+              text2="to create a subject."
               onClick={onCreatePatient}
               loading={createPatient.isLoading}
             />

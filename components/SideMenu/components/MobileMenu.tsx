@@ -33,7 +33,7 @@ export const MobileMenu = ({
             fullWidth
           />
           <MenuLink
-            label="Patient"
+            label="Subject"
             description={selectedPatient?.name}
             href={patientLinkHref()}
             iconPath={IconsPath.Patient}
