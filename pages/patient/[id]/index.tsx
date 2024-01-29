@@ -115,7 +115,7 @@ export default function Patient() {
             <FlexColumn gap={1.5}>
               <SyncingIndicator isSyncing={isSyncing} />
               <FlexRow>
-                <TooltipContent tooltip="Delete patient">
+                <TooltipContent tooltip="Delete subject">
                   <Trash
                     size={24}
                     color={theme.colors.text_switched}
