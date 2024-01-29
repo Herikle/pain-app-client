@@ -178,7 +178,7 @@ export const UpdatePatientForm = ({
           <Grid xs={12}>
             <TextArea
               label="About the patient"
-              placeholder="Write something about that patient..."
+              placeholder="ANy comments about the patient"
               minRows={7}
               maxRows={14}
               {...register("about")}
