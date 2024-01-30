@@ -155,7 +155,7 @@ export const UpdatePatientForm = ({
               </Grid>
               <Grid xs={12}>
                 <TextField
-                  label="Production system"
+                  label="Production System or Living Conditions"
                   placeholder="(e.g intensive, organic),"
                   {...register("production_system")}
                   error={errors.production_system?.message}
