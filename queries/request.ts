@@ -14,7 +14,8 @@ export type RequestService =
   | "segment"
   | "segment-guest"
   | "segment-justification"
-  | "segment-justification-guest";
+  | "segment-justification-guest"
+  | "sugestion";
 
 type IRequest = {
   method: Method;

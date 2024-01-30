@@ -13,6 +13,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   helperText?: string;
   noPadding?: boolean;
   inputSize?: "small" | "medium" | "large";
+  noBorder?: boolean;
 }
 
 export const TextField = React.forwardRef(
@@ -25,6 +26,7 @@ export const TextField = React.forwardRef(
       helperText,
       noPadding,
       inputSize,
+      noBorder,
       ...rest
     }: Props,
     ref: any
@@ -57,6 +59,7 @@ export const TextField = React.forwardRef(
             <Input
               $noPadding={noPadding}
               $inputSize={inputSize}
+              $noBorder={noBorder}
               ref={ref}
               {...rest}
               type={showPassword ? "text" : "password"}
@@ -74,6 +77,7 @@ export const TextField = React.forwardRef(
           </InputContainer>
         ) : (
           <Input
+            $noBorder={noBorder}
             $noPadding={noPadding}
             $inputSize={inputSize}
             ref={ref}
@@ -146,11 +150,14 @@ const SmallThumbCss = css`
 type InputProps = {
   $noPadding?: boolean;
   $inputSize?: "small" | "medium" | "large";
+  $noBorder?: boolean;
 };
 
 const Input = styled.input<InputProps>`
   border-radius: 2px;
+
   border: 1px solid ${theme.colors.secondary_font};
+
   width: 100%;
   outline: none;
   font-family: inherit;
@@ -191,6 +198,14 @@ const Input = styled.input<InputProps>`
       ${({ $inputSize }) => ($inputSize === "small" ? SmallThumbCss : ThumbCSS)}
     }
   }
+
+  ${({ $noBorder }) =>
+    $noBorder &&
+    css`
+      border: none;
+      background: none;
+      font-style: italic;
+    `}
 `;
 
 type ContainerProps = {
