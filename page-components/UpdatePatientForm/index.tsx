@@ -9,11 +9,10 @@ import styled from "styled-components";
 import { IPatient } from "types";
 import { getDateFromString } from "@utils/helpers/date";
 import { useUpdatePatient } from "@queries/patient/usePatient";
-import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DatePicker } from "@components/DatePicker";
 import { Text } from "@components/Text";
 import { Radio } from "@components/Radio";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { useGetScientificNameBySpecie } from "@queries/sugestion/useGetSugestion";
 
@@ -44,22 +43,30 @@ export const UpdatePatientForm = ({
 
   const debouncedFormValue = useDebounce(formData, 500);
 
-  const { register, formState, handleSubmit, reset, control, watch } =
-    useForm<PatientSchema>({
-      resolver: zodResolver(newPatientSchema),
-      defaultValues: {
-        name: patient.name,
-        birth_date: getDateFromString(patient.birth_date),
-        type: patient.type,
-        about: patient.about ?? "",
-        production_system: patient.production_system ?? "",
-        life_fate: patient.life_fate ?? "",
-        location: patient.location ?? "",
-        common_name: patient.common_name ?? "",
-        scientific_name: patient.scientific_name ?? "",
-      },
-      mode: "onChange",
-    });
+  const {
+    register,
+    formState,
+    handleSubmit,
+    reset,
+    control,
+    watch,
+    setValue,
+    getValues,
+  } = useForm<PatientSchema>({
+    resolver: zodResolver(newPatientSchema),
+    defaultValues: {
+      name: patient.name,
+      birth_date: getDateFromString(patient.birth_date),
+      type: patient.type,
+      about: patient.about ?? "",
+      production_system: patient.production_system ?? "",
+      life_fate: patient.life_fate ?? "",
+      location: patient.location ?? "",
+      common_name: patient.common_name ?? "",
+      scientific_name: patient.scientific_name ?? "",
+    },
+    mode: "onChange",
+  });
 
   const updatePatient = useUpdatePatient();
 
@@ -77,15 +84,31 @@ export const UpdatePatientForm = ({
   };
   const useGetScientificName = useGetScientificNameBySpecie();
 
-  const getScientificName = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      useGetScientificName.mutate(event.currentTarget.value);
-    }
-  };
+  const [commonNameHelper, setCommonNameHelper] = useState<string | null>(null);
+  const commmon_name_debounce = useDebounce(commonNameHelper, 1000);
 
   useEffect(() => {
-    const subscription = watch((value) => {
-      setFormData(value);
+    const fetch = async () => {
+      if (!commmon_name_debounce) return;
+
+      const specieName = await useGetScientificName.mutateAsync(
+        commmon_name_debounce
+      );
+      setValue("scientific_name", specieName.scientific_name);
+      const values = getValues();
+      setFormData(values);
+    };
+    fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commmon_name_debounce]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === "common_name" && value.common_name) {
+        setCommonNameHelper(value.common_name);
+      } else {
+        setFormData(value);
+      }
     });
     return () => {
       subscription.unsubscribe();
@@ -152,11 +175,16 @@ export const UpdatePatientForm = ({
                   label="Common name"
                   placeholder="Name of the species"
                   {...register("common_name")}
-                  onKeyDown={(event) => getScientificName(event)}
                 />
               </Grid>
               <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
-                <h1>{useGetScientificName?.data?.scientific_name || ""}</h1>
+                <TextField
+                  label="Scientifc Name"
+                  placeholder="Name of the species"
+                  disabled
+                  noBorder={true}
+                  {...register("scientific_name")}
+                />
               </Grid>
               <Grid xs={12}>
                 <TextField

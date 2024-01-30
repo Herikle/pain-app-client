@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { request } from "@queries/request";
 import { IMe, IPrompt } from "types";
 import { QueryKeys } from "@queries/keys";
@@ -18,12 +18,7 @@ const getScientificNameBySpecie = async (specie: string) => {
 };
 
 export const useGetScientificNameBySpecie = () => {
-  const queryClient = useQueryClient();
-
   return useMutation(getScientificNameBySpecie, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Auth.Me]);
-    },
     onError: (error: AxiosError) => {
       ToastError(error);
     },
