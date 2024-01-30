@@ -118,6 +118,7 @@ export const EpisodeForm = ({
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
               label="Episode name"
+              placeholder="Examples: Headache, Depression crisis, Tooth ache, Sunburn"
               {...register("name")}
               error={errors.name?.message}
             />
