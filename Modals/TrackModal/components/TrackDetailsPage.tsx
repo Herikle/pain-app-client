@@ -67,7 +67,7 @@ export const TrackDetailsPage = ({
           <Grid xs={12}>
             <FlexColumn gap={2} align="flex-start">
               <Text variant="body2Bold">Type of pain</Text>
-              <FlexRow gap={6}>
+              <FlexColumn>
                 <Radio
                   label="Psychological"
                   {...register("pain_type")}
@@ -78,7 +78,7 @@ export const TrackDetailsPage = ({
                   {...register("pain_type")}
                   value="physical"
                 />
-              </FlexRow>
+              </FlexColumn>
             </FlexColumn>
           </Grid>
         </Grid>
@@ -88,7 +88,7 @@ export const TrackDetailsPage = ({
           justify="flex-start"
         >
           <TextArea
-            label="Comment"
+            label="Comments"
             minRows={12}
             maxRows={12}
             {...register("comment")}

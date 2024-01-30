@@ -25,7 +25,7 @@ export const MobileMenu = ({
       {isLogged ? (
         <>
           <MenuLink
-            label={capitalize(user?.role) ?? "Doctor"}
+            label="User"
             href={RoutesPath.profile}
             description={user?.name}
             iconPath={IconsPath.Doctor}
@@ -33,7 +33,7 @@ export const MobileMenu = ({
             fullWidth
           />
           <MenuLink
-            label="Patient"
+            label="Subject"
             description={selectedPatient?.name}
             href={patientLinkHref()}
             iconPath={IconsPath.Patient}
@@ -90,4 +90,5 @@ const Container = styled.div`
     gap: 0;
   `}
   z-index: 50;
+  padding-inline: 0.5rem;
 `;

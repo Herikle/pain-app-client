@@ -1,8 +1,5 @@
-import { FlexColumn } from "@design-components/Flex";
 import { useDeletePatientModalState } from "./hook";
-import styled from "styled-components";
-import { useDeletePrompt } from "@queries/prompt/usePrompt";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import { RoutesPath } from "@utils/routes";
 import { ConfirmActionModal } from "../ConfirmActionModal";
 import { useDeletePatient } from "@queries/patient/usePatient";

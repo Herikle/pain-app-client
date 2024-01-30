@@ -48,9 +48,8 @@ const variants: Record<TextVariant, any> = {
   `,
 };
 
-type TextProps = {
+interface TextProps extends React.ComponentPropsWithoutRef<"span"> {
   children: React.ReactNode;
-
   customColor?: string;
   variant?: TextVariant;
   color?: ThemeColors;
@@ -67,7 +66,7 @@ type TextProps = {
   minWidth?: string;
   fontFamily?: NextFont;
   transition?: CSSProperties["transition"];
-};
+}
 
 export const Text = ({
   children,
@@ -87,6 +86,7 @@ export const Text = ({
   minWidth,
   fontFamily,
   transition,
+  ...rest
 }: TextProps) => {
   return (
     <TextStyled
@@ -108,6 +108,7 @@ export const Text = ({
       $minWidth={minWidth}
       $transition={transition}
       title={textElipsis ? (children as string) : undefined}
+      {...rest}
     >
       {children}
     </TextStyled>

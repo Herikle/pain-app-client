@@ -6,7 +6,7 @@ import styled, { keyframes } from "styled-components";
 import { FlexColumn } from "@design-components/Flex";
 
 interface Props extends React.ComponentPropsWithoutRef<"input"> {
-  label: string;
+  label: React.ReactNode;
   error?: string;
 }
 

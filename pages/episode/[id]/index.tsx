@@ -103,6 +103,8 @@ export default function EpisodePage() {
       },
     });
 
+    setSelectedEpisode(null);
+
     if (!!episode?.patient_id) {
       Router.replace(RoutesPath.patient.replace("[id]", episode.patient_id));
     }
@@ -295,9 +297,7 @@ const SaveButtonContainer = styled.div`
   `}
 `;
 
-const TrackContainer = styled.div`
-  margin-top: 5rem;
-`;
+const TrackContainer = styled.div``;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

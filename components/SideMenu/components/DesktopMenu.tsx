@@ -37,7 +37,7 @@ export const DesktopMenu = ({
         {isLogged ? (
           <>
             <MenuLink
-              label={capitalize(user?.role) ?? "Doctor"}
+              label="User"
               href={RoutesPath.profile}
               description={user?.name}
               iconPath={IconsPath.Doctor}
@@ -45,7 +45,7 @@ export const DesktopMenu = ({
               fullWidth
             />
             <MenuLink
-              label="Patient"
+              label="Subject"
               description={selectedPatient?.name}
               href={patientLinkHref()}
               iconPath={IconsPath.Patient}

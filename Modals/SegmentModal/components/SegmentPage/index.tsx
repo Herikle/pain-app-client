@@ -33,7 +33,7 @@ const SegmentPageSchema = z
       .optional()
       .nullable(),
     estimative_type: z
-      .enum(["reported", "measured", "inferred", ""])
+      .enum(["reported", "measured", "inferred", "inferred_from_evidence", ""])
       .optional(),
     pain_type: z.enum(["acute", "chronic"]),
     comment: z.string().optional(),
@@ -104,7 +104,7 @@ export const SegmentPage = ({
           </Grid>
           <Grid xs={4}>
             <TextField
-              label="Between"
+              label="Duration (min)"
               type="number"
               min={0}
               {...register("start", {
@@ -116,7 +116,7 @@ export const SegmentPage = ({
           </Grid>
           <Grid xs={4}>
             <TextField
-              label="And"
+              label="Duration (max)"
               type="number"
               min={0}
               {...register("end", {
@@ -167,7 +167,7 @@ export const SegmentPage = ({
           <Grid xs={12}>
             <Select
               id="select-estimative-type"
-              label="Estimative type"
+              label="How was duration estimated?"
               options={[
                 {
                   label: "Reported by patient",
@@ -180,6 +180,10 @@ export const SegmentPage = ({
                 {
                   label: "Inferred by algorithm",
                   id: "inferred",
+                },
+                {
+                  label: "Inferred from evidence",
+                  id: "inferred_from_evidence",
                 },
               ]}
               getLabel={(option) => option.label}
@@ -199,7 +203,7 @@ export const SegmentPage = ({
             <Radio label="Chronic" value="chronic" {...register("pain_type")} />
           </RadioContainer>
           <TextArea
-            label="Comment"
+            label="Comments"
             minRows={12}
             maxRows={12}
             {...register("comment")}
