@@ -168,7 +168,7 @@ export default function EpisodePage() {
                   onClick={openSaveModal}
                 />
                 <Text variant="body1">
-                  To save this episode and tracks, you gonna need an account.{" "}
+                  To save any information, you need to{" "}
                   <Link
                     href={RoutesPath.register}
                     style={{ textDecoration: "underline" }}
