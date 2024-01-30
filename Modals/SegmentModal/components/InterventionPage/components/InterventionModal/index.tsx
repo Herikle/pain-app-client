@@ -77,7 +77,7 @@ export const InterventionModal = ({
           <Grid container spacing={2}>
             <Grid xs={12}>
               <TextField
-                placeholder="Intervention*"
+                placeholder="Intervation name*"
                 {...register("name")}
                 required
               />
