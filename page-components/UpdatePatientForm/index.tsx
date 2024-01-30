@@ -13,8 +13,9 @@ import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { DatePicker } from "@components/DatePicker";
 import { Text } from "@components/Text";
 import { Radio } from "@components/Radio";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
+import { useGetScientificNameBySpecie } from "@queries/sugestion/useGetSugestion";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -73,6 +74,13 @@ export const UpdatePatientForm = ({
       body: data,
     });
     reset(data);
+  };
+  const useGetScientificName = useGetScientificNameBySpecie();
+
+  const getScientificName = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      useGetScientificName.mutate(event.currentTarget.value);
+    }
   };
 
   useEffect(() => {
@@ -144,14 +152,11 @@ export const UpdatePatientForm = ({
                   label="Common name"
                   placeholder="Name of the species"
                   {...register("common_name")}
+                  onKeyDown={(event) => getScientificName(event)}
                 />
               </Grid>
               <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
-                <TextField
-                  label="Scientific name"
-                  placeholder="Scientific name of the subject"
-                  {...register("scientific_name")}
-                />
+                <h1>{useGetScientificName?.data?.scientific_name || ""}</h1>
               </Grid>
               <Grid xs={12}>
                 <TextField
