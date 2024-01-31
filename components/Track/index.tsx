@@ -20,6 +20,7 @@ import {
 import v from "voca";
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
 import { TooltipContent } from "@components/TooltipContent";
+import { PAIN_DEFITIONS } from "./const";
 
 type Props = {
   cumulativePainMode?: {
@@ -62,25 +63,32 @@ export const SegmentsTitleComponent = ({
   return (
     <SegmentsTitle>
       {pains.map((pain) => (
-        <SegmentName key={pain} $removeExtraSpace={removeExtraSpace}>
-          {isCumulativePainMode ? (
-            <FlexRow justify="start" align="center" gap={1} height="100%">
+        <TooltipContent
+          key={pain}
+          tooltip={PAIN_DEFITIONS[pain]}
+          place="top-start"
+          minWidth={"500px"}
+        >
+          <SegmentName key={pain} $removeExtraSpace={removeExtraSpace}>
+            {isCumulativePainMode ? (
+              <FlexRow justify="start" align="center" gap={1} height="100%">
+                <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
+                  {v.upperCase(painsAbbreviation[pain])}
+                </Text>{" "}
+                <Text
+                  variant="body1Bold"
+                  customColor={theme.pain_level_colors[pain]}
+                >
+                  {hours?.[painsAbbreviation[pain]]}
+                </Text>
+              </FlexRow>
+            ) : (
               <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
-                {v.upperCase(painsAbbreviation[pain])}
-              </Text>{" "}
-              <Text
-                variant="body1Bold"
-                customColor={theme.pain_level_colors[pain]}
-              >
-                {hours?.[painsAbbreviation[pain]]}
+                {v.capitalize(pain.replace("_", " "))}
               </Text>
-            </FlexRow>
-          ) : (
-            <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
-              {v.capitalize(pain.replace("_", " "))}
-            </Text>
-          )}
-        </SegmentName>
+            )}
+          </SegmentName>
+        </TooltipContent>
       ))}
     </SegmentsTitle>
   );
