@@ -1,3 +1,4 @@
+import { Doses } from "Modals/SegmentModal/components/InterventionPage/const";
 import {
   IEpisode,
   IIntervetion,
@@ -58,6 +59,7 @@ const justificationSchema = z.object({
         "neurological",
         "pharmacological",
         "physiological",
+        "evolutionary",
       ];
 
       if (!allTypes.includes(type_of_evidence)) {
@@ -102,6 +104,7 @@ const segmentSchema = z.object({
           "inferred",
           "measured",
           "reported",
+          "inferred_from_evidence",
         ];
 
         if (!allTypes.includes(estimative_type)) {
@@ -130,7 +133,30 @@ const segmentSchema = z.object({
     z.object({
       name: z.string().min(1),
       effective: z.boolean().optional().nullable(),
-      dose: z.string().optional().nullable(),
+      dose: z
+        .custom<Doses>()
+        .optional()
+        .nullable()
+        .refine((dose) => {
+          if (!dose) {
+            return true;
+          }
+
+          const allTypes: Doses[] = [
+            "analgesics",
+            "local-anesthetics",
+            "physical-therapy",
+            "corrective-surgery",
+            "dietary-changes",
+            "others",
+          ];
+
+          if (!allTypes.includes(dose)) {
+            return false;
+          }
+
+          return true;
+        }),
       datetime: z.string().optional().nullable().refine(checkIfDateIsValid, {
         message: "Invalid date format",
       }),

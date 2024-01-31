@@ -1,4 +1,5 @@
 import { DrawObject } from "@components/Paint";
+import { Doses } from "Modals/SegmentModal/components/InterventionPage/const";
 
 export type Meta = {
   current_count: number;
@@ -86,7 +87,7 @@ export type IIntervetion = {
   _id: string;
   name: string;
   effective: boolean;
-  dose?: string;
+  dose?: Doses | null;
   datetime?: string;
   observation?: string;
   createdAt: string;
