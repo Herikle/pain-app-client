@@ -9,7 +9,7 @@ import { useGetEpisodeById } from "@queries/episode/useGetEpisode";
 import { useCreateTrack } from "@queries/track/useTrack";
 import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
@@ -37,7 +37,7 @@ import { Error404 } from "@page-components/errors/404";
 export default function EpisodePage() {
   const router = useRouter();
 
-  const { isLogged } = useAuth();
+  const { isLogged, isLoading } = useAuth();
 
   const { id } = router.query as { id: string };
 
@@ -78,9 +78,9 @@ export default function EpisodePage() {
     }, 250);
   };
 
-  const saveGuestEpisode = () => {
+  const saveGuestEpisode = useCallback(() => {
     storeGuestEpisodeId(id);
-  };
+  }, [id]);
 
   const goToRegister = () => {
     saveGuestEpisode();
@@ -132,6 +132,14 @@ export default function EpisodePage() {
     setConfirmExportEpisode(false);
   };
 
+  const ignorePaths = useMemo(() => {
+    if (isLogged) {
+      return [];
+    }
+
+    return [RoutesPath.login, RoutesPath.register];
+  }, [isLogged]);
+
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
@@ -141,13 +149,22 @@ export default function EpisodePage() {
     }
   }, [episode, setSelectedPatient, setSelectedEpisode]);
 
+  useEffect(() => {
+    if (!isLoading && !isLogged) {
+      saveGuestEpisode();
+    }
+  }, [isLoading, isLogged, saveGuestEpisode]);
+
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
       {getEpisodeById.isError ? (
         <Error404 />
       ) : (
         <>
-          <UnsavedChangesDialog shouldConfirmLeave={!isLogged} />
+          <UnsavedChangesDialog
+            shouldConfirmLeave={!isLogged}
+            pathnamesToIgnore={ignorePaths}
+          />
           <Container>
             {!!episode?.patient_id && (
               <BackButton
