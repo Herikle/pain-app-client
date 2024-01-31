@@ -14,12 +14,14 @@ import { media } from "@styles/media-query";
 
 const PasswordSettingsSchema = z
   .object({
-    current_password: z.string().nonempty("Current password is required"),
+    current_password: z.string().min(1, "Current password is required"),
     new_password: z
       .string()
+      .min(1, "New password is required")
       .min(6, "Password must be at least 6 characters long"),
     confirm_password: z
       .string()
+      .min(1, "Confirm password is required")
       .min(6, "Password must be at least 6 characters long"),
   })
   .refine(
@@ -74,7 +76,6 @@ const Child = ({ onClose }: ChildPropsChangePasswordModal) => {
                 <TextField
                   type="password"
                   label="Enter your actual password"
-                  required
                   {...register("current_password")}
                   error={errors.current_password?.message}
                 />
@@ -83,7 +84,6 @@ const Child = ({ onClose }: ChildPropsChangePasswordModal) => {
                 <TextField
                   type="password"
                   label="Enter your new password"
-                  required
                   {...register("new_password")}
                   error={errors.new_password?.message}
                 />
@@ -92,7 +92,6 @@ const Child = ({ onClose }: ChildPropsChangePasswordModal) => {
                 <TextField
                   type="password"
                   label="Confirm your new password"
-                  required
                   {...register("confirm_password")}
                   error={errors.confirm_password?.message}
                 />

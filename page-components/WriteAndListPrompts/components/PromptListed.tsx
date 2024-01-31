@@ -25,7 +25,7 @@ import { IconsPath } from "@utils/icons";
 import { Tooltip } from "react-tooltip";
 
 const schema = z.object({
-  title: z.string().nonempty("Title is required"),
+  title: z.string().min(1, "Title is required"),
 });
 
 type PromptFormType = z.infer<typeof schema>;
@@ -41,12 +41,14 @@ export const PromptListed = ({
   selected,
   onPublishClick,
 }: PromptListedProps) => {
-  const { handleSubmit, register, reset } = useForm<PromptFormType>({
+  const { handleSubmit, register, reset, formState } = useForm<PromptFormType>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: prompt.title,
     },
   });
+
+  const { errors } = formState;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -112,7 +114,6 @@ export const PromptListed = ({
           <TextField
             noPadding
             fullWidth
-            required
             autoFocus
             style={{
               backgroundColor: "transparent",
@@ -122,6 +123,7 @@ export const PromptListed = ({
               borderBottom: `1px solid ${theme.colors[textColor]}`,
               padding: 0,
             }}
+            error={errors.title?.message}
             {...register("title")}
           />
           <LoadingWrapper

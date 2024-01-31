@@ -20,7 +20,7 @@ import { DateTimePicker } from "@components/DateTimePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 
 const InterventionSchema = zod.object({
-  name: zod.string().min(1),
+  name: zod.string().min(1, "Intervention name is required"),
   datetime: zod.date().optional().nullable(),
   dose: zod.string().optional(),
   effective: zod.boolean(),
@@ -78,8 +78,8 @@ export const InterventionModal = ({
             <Grid xs={12}>
               <TextField
                 placeholder="Intervation name*"
+                error={errors.name?.message}
                 {...register("name")}
-                required
               />
             </Grid>
             <Grid xs={12}>

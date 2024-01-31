@@ -33,7 +33,7 @@ export const AccountForm = () => {
     }
   );
 
-  const { isDirty } = formState;
+  const { isDirty, errors } = formState;
 
   useFormPrompt(isDirty);
 
@@ -53,7 +53,7 @@ export const AccountForm = () => {
           <Grid xs={6}>
             <TextField
               label="Which name should be displayed?"
-              required
+              error={errors.name?.message}
               {...register("name")}
             />
           </Grid>
