@@ -11,18 +11,13 @@ import styled from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  getDateAndTimeFromIsoDate,
-  getDateFromString,
-} from "@utils/helpers/date";
-import { theme } from "@styles/theme";
-import { DateTimePicker } from "@components/DateTimePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
+import { ALL_DOSES, Doses } from "../../const";
 
 const InterventionSchema = zod.object({
-  name: zod.string().min(1),
+  name: zod.string().min(1, "Intervention name is required"),
   datetime: zod.date().optional().nullable(),
-  dose: zod.string().optional(),
+  dose: zod.custom<Doses>().optional().nullable(),
   effective: zod.boolean(),
 });
 
@@ -78,8 +73,8 @@ export const InterventionModal = ({
             <Grid xs={12}>
               <TextField
                 placeholder="Intervation name*"
+                error={errors.name?.message}
                 {...register("name")}
-                required
               />
             </Grid>
             <Grid xs={12}>
@@ -97,14 +92,9 @@ export const InterventionModal = ({
             </Grid>
             <Grid xs={6}>
               <Select
-                options={
-                  Array.from({ length: 10 }, (_, i) => ({
-                    id: i + 1,
-                    label: i,
-                  })) ?? []
-                }
+                options={ALL_DOSES}
                 getLabel={(option) => option.label}
-                getValue={(option) => option.id}
+                getValue={(option) => option.value}
                 id="select-dose"
                 {...register("dose")}
                 error={errors.dose?.message}

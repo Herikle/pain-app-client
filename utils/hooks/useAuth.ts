@@ -48,6 +48,7 @@ export const useAuth = (options?: UseAuthOptions) => {
   return {
     user: user,
     isLogged: !!user,
+    isLoading: loggedUser.isLoading,
     logOut,
   };
 };

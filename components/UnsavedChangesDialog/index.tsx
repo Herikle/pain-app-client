@@ -5,10 +5,12 @@ import React, { useCallback } from "react";
 
 export interface UnsavedChangesDialogProps {
   shouldConfirmLeave: boolean;
+  pathnamesToIgnore?: string[];
 }
 
 export const UnsavedChangesDialog = ({
   shouldConfirmLeave,
+  pathnamesToIgnore,
 }: UnsavedChangesDialogProps): React.ReactElement<UnsavedChangesDialogProps> => {
   const [shouldShowLeaveConfirmDialog, setShouldShowLeaveConfirmDialog] =
     React.useState(false);
@@ -24,12 +26,16 @@ export const UnsavedChangesDialog = ({
         return;
       }
       if (pathname !== nextPath) {
+        if (pathnamesToIgnore?.includes(nextPath)) {
+          return;
+        }
+
         setShouldShowLeaveConfirmDialog(true);
         setNextRouterPath(nextPath);
         throw "cancelRouteChange";
       }
     },
-    [pathname, shouldConfirmLeave]
+    [pathname, shouldConfirmLeave, pathnamesToIgnore]
   );
 
   const onRejectRouteChange = () => {

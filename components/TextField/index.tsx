@@ -37,7 +37,9 @@ export const TextField = React.forwardRef(
       <Container $fullWidth={fullWidth} $width={width}>
         {label && (
           <Label htmlFor={rest?.id}>
-            <Text variant="body2Bold">{label}</Text>
+            <Text variant="body2Bold" whiteSpace="nowrap">
+              {label}
+            </Text>
             {helperText && rest?.id && (
               <>
                 <Question size={16} weight="fill" id={`${rest?.id}-helper`} />

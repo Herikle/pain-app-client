@@ -374,12 +374,12 @@ const Container = styled(FlexColumn)`
     min-width: 100vw;
     max-width: 100vw;
     min-height: 100vh;   
-    padding: 1rem; 
+    padding: 1rem;     
   `}
 
   ${media.up.mobileL`
     padding: 0;
     padding-bottom: 1rem;
-    padding-top: 1rem;  
+    padding-top: 2rem;  
   `}
 `;

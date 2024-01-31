@@ -14,7 +14,7 @@ import { GoogleLogo } from "@phosphor-icons/react";
 import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 
 const LoginSchema = z.object({
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string(),
   remember: z.boolean(),
 });
@@ -62,7 +62,6 @@ export const Login = ({ onSubmit, loading }: Props) => {
           </Link>
         </Text>
         <TextField
-          type="email"
           label="Your e-mail"
           {...register("email")}
           error={errors.email?.message}

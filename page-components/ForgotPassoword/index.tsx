@@ -3,18 +3,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/Button";
-import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { RoutesPath } from "utils/routes";
 import Link from "next/link";
 import { media } from "@styles/media-query";
-import { FlexRow } from "@design-components/Flex";
-import { GoogleLogo } from "@phosphor-icons/react";
-import { useGetGoogleOAuthUrl } from "@queries/auth/useAuth";
 
 const ForgotPasswordSchema = z.object({
-  email: z.string().email().nonempty(),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
 });
 
 export type ForgotPasswordPayload = z.infer<typeof ForgotPasswordSchema>;
@@ -56,7 +52,6 @@ export const ForgotPassword = ({ onSubmit, defaultEmail, loading }: Props) => {
         <TextField
           type="email"
           label="Your e-mail"
-          required
           {...register("email")}
           error={errors.email?.message}
         />

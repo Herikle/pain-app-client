@@ -39,7 +39,7 @@ export const SymptomModal = ({
   onAdd,
   defaultValues,
 }: InterventionModalProps) => {
-  const { register, handleSubmit, reset, control, setValue } =
+  const { register, handleSubmit, reset, control, setValue, formState } =
     useForm<CreateSymptom>({
       resolver: zodResolver(SymptomSchema),
       defaultValues: {
@@ -47,6 +47,8 @@ export const SymptomModal = ({
         datetime: defaultValues?.datetime,
       },
     });
+
+  const { errors } = formState;
 
   const close = () => {
     reset();
@@ -68,7 +70,7 @@ export const SymptomModal = ({
               <TextField
                 placeholder="Symptom*"
                 {...register("name")}
-                required
+                error={errors.name?.message}
               />
             </Grid>
             <Grid xs={12}>

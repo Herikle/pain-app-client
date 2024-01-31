@@ -18,8 +18,8 @@ const RegisterSchema = z
     name: z.string().min(1, "Name is required"),
     email: z
       .string()
-      .email("Invalid email address")
-      .min(1, "Email is required to register"),
+      .min(1, "Email is required to register")
+      .email("Invalid email address"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
     password_confirm: z
       .string()
@@ -84,7 +84,6 @@ export const Register = ({ onSubmit, loading }: Props) => {
         />
         <TextField
           label="Your e-mail"
-          type="email"
           {...register("email")}
           error={errors.email?.message}
         />
