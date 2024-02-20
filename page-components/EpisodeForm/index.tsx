@@ -132,9 +132,10 @@ export const EpisodeForm = ({
           </Grid>
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
             <TextField
-              label="Diagnosis/harm"
+              label="Diagnosis"
               {...register("diagnosis")}
               error={errors.diagnosis?.message}
+              placeholder="Examples: Gastritis, Clinical depression, Influenza, Hip fracture"
             />
           </Grid>
           <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
