@@ -33,6 +33,7 @@ import Link from "next/link";
 import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { TooltipContent } from "@components/TooltipContent";
 import { Error404 } from "@page-components/errors/404";
+import { useEpisodeStateValue } from "state/useEpisodeState";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -48,6 +49,8 @@ export default function EpisodePage() {
   const deleteEpisode = useDeleteEpisode();
 
   const exportEpisode = useExportEpisode();
+
+  const episodeState = useEpisodeStateValue(id);
 
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -203,7 +206,10 @@ export default function EpisodePage() {
               </FlexRow>
             )}
             <EpisodeBadgeContainer justify="space-between">
-              <Badge label={episode?.name} iconPath={IconsPath.Episode} />
+              <Badge
+                label={episodeState?.name ?? episode?.name}
+                iconPath={IconsPath.Episode}
+              />
               <FlexColumn gap={1.5} align="flex-end">
                 <SyncingIndicator isSyncing={isSyncing} />
                 {isLogged && (

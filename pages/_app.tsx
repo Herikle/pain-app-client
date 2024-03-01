@@ -1,4 +1,4 @@
-import { Raleway } from "next/font/google";
+import { Roboto } from "next/font/google";
 import Head from "next/head";
 import { useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
@@ -15,7 +15,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { AxiosError } from "axios";
 
-const raleway = Raleway({ subsets: ["latin"] });
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+});
 
 type ApplicationProps = {
   children: React.ReactNode;
@@ -26,7 +29,7 @@ const Application = ({ children }: ApplicationProps) => {
     <>
       <style jsx global>{`
         html {
-          font-family: ${raleway.style.fontFamily};
+          font-family: ${roboto.style.fontFamily};
         }
       `}</style>
       <main>

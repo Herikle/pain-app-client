@@ -22,6 +22,8 @@ import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 import _ from "lodash";
+import { TooltipContent } from "@components/TooltipContent";
+import { PAIN_DEFITIONS } from "@components/Track/const";
 
 export const Evidences = [
   {
@@ -71,7 +73,7 @@ const painLevels = [
 
 const levelsResult = {
   0: "(Ψ) Reject",
-  1: "(-) Contradict",
+  1: "(-) Inconsistent",
   2: "(Ο) Neutral",
   3: "(+) Support",
   4: "(Ω) Confirm",
@@ -305,7 +307,9 @@ const JustificationModal = ({
                 </Grid>
                 <FlexColumn>
                   <Text variant="body1Bold">
-                    How this information supports each level of pain
+                    How does this information support each level of pain
+                    intensity? Hover over the the intensities to see their
+                    definition
                   </Text>
                 </FlexColumn>
                 <PainLevelsSwitch>
@@ -316,13 +320,15 @@ const JustificationModal = ({
                       justify="flex-start"
                       gap={1}
                     >
-                      <Text
-                        variant="h3"
-                        customColor={theme.pain_level_colors[painLevel.value]}
-                        minWidth="110px"
-                      >
-                        {painLevel.label}
-                      </Text>
+                      <TooltipContent tooltip={PAIN_DEFITIONS[painLevel.value]}>
+                        <Text
+                          variant="h3"
+                          customColor={theme.pain_level_colors[painLevel.value]}
+                          minWidth="110px"
+                        >
+                          {painLevel.label}
+                        </Text>
+                      </TooltipContent>
                       <TextField
                         inputSize="small"
                         noPadding

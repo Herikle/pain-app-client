@@ -5,6 +5,15 @@ import update from "immutability-helper";
 import { GetTracksListResponse } from "@queries/track/useGetTrack";
 
 type UpdateTrackOnCache = {
+  id: string;
+  track: Partial<ITrack>;
+};
+
+type AddTrack = {
+  track: ITrack;
+};
+
+type RemoveTrack = {
   track: ITrack;
 };
 
@@ -18,7 +27,9 @@ export const useUpdateTrackOnCache = () => {
 
     queryClient.setQueriesData(
       [QueryKeys.Track.List, { episode_id }],
-      (old: GetTracksListResponse) => {
+      (old: GetTracksListResponse | undefined) => {
+        if (!old) return old;
+
         const track_id = track._id;
 
         const trackIndex = old.results.findIndex(
@@ -41,7 +52,7 @@ export const useUpdateTrackOnCache = () => {
     );
   };
 
-  const addTrackOnCache = async (values: UpdateTrackOnCache) => {
+  const addTrackOnCache = async (values: AddTrack) => {
     const { track } = values;
 
     const episode_id = track.episode_id;
@@ -60,7 +71,7 @@ export const useUpdateTrackOnCache = () => {
     );
   };
 
-  const remoteTrackOnCache = async (values: UpdateTrackOnCache) => {
+  const remoteTrackOnCache = async (values: RemoveTrack) => {
     const { track } = values;
 
     const episode_id = track.episode_id;

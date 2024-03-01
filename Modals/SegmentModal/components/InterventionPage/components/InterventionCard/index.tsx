@@ -1,4 +1,5 @@
 import { Text } from "@components/Text";
+import { TooltipContent } from "@components/TooltipContent";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { CheckCircle, Pencil, Trash, XCircle } from "@phosphor-icons/react";
 import { media } from "@styles/media-query";
@@ -17,6 +18,9 @@ type InterventionCard = {
 };
 
 const ICON_SIZE = 20;
+
+const EFFECTIVE_TEXT = "Effective intervention";
+const INEFFECTIVE_TEXT = "Ineffective intervention";
 
 export const InterventionCard = ({
   intervention,
@@ -58,19 +62,23 @@ export const InterventionCard = ({
           >
             {name}
           </Text>
-          {effective ? (
-            <CheckCircle
-              size={16}
-              color={theme.colors.green_success}
-              weight="fill"
-            />
-          ) : (
-            <XCircle
-              size={16}
-              color={theme.colors.dark_red_danger}
-              weight="fill"
-            />
-          )}
+          <TooltipContent
+            tooltip={effective ? EFFECTIVE_TEXT : INEFFECTIVE_TEXT}
+          >
+            {effective ? (
+              <CheckCircle
+                size={16}
+                color={theme.colors.green_success}
+                weight="fill"
+              />
+            ) : (
+              <XCircle
+                size={16}
+                color={theme.colors.dark_red_danger}
+                weight="fill"
+              />
+            )}
+          </TooltipContent>
         </NameContainer>
         <Text color={textColor()} transition="color 0.2s ease-in-out">
           {dateAndTimeFormat(datetime)}
