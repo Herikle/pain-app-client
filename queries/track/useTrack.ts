@@ -66,9 +66,10 @@ const updateTrack = async ({ params, body }: UpdateTrackPayload) => {
 export const useUpdateTrack = () => {
   const { updateTrackOnCache } = useUpdateTrackOnCache();
   return useMutation(updateTrack, {
-    onSuccess: (data) => {
+    onMutate: async (variables) => {
       updateTrackOnCache({
-        track: data,
+        id: variables.params.track_id,
+        track: variables.body,
       });
     },
     onError: (error: AxiosError) => {

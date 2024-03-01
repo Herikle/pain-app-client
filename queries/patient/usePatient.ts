@@ -71,7 +71,6 @@ export const useUpdatePatient = () => {
 
   return useMutation(updatePatient, {
     onSuccess: () => {
-      queryClient.invalidateQueries(QueryKeys.Patients.ByID);
       queryClient.invalidateQueries(QueryKeys.Patients.List);
     },
     onError: (error: AxiosError) => {

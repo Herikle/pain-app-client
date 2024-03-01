@@ -60,9 +60,6 @@ export const useUpdateEpisode = () => {
   const queryClient = useQueryClient();
 
   return useMutation(updateEpisode, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Episode.ByID]);
-    },
     onError: (error: AxiosError) => {
       ToastError(error);
     },
