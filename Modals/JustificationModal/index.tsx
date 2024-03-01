@@ -73,7 +73,7 @@ const painLevels = [
 
 const levelsResult = {
   0: "(Ψ) Reject",
-  1: "(-) Contradict",
+  1: "(-) Inconsistent",
   2: "(Ο) Neutral",
   3: "(+) Support",
   4: "(Ω) Confirm",
