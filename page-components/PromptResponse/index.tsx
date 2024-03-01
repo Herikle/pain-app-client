@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Inconsolata } from "next/font/google";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
@@ -9,8 +8,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
-
-const inconsolata = Inconsolata({ subsets: ["latin"] });
 
 export type TokensUsageType = {
   prompt_tokens: number;
@@ -50,7 +47,7 @@ export const PromptResponse = ({
                 width="22"
                 height="22"
               />
-              <Text fontFamily={inconsolata}>
+              <Text>
                 Tokens used in this answer: {tokensUsage.response_tokens}
               </Text>
             </FlexRow>
@@ -61,9 +58,7 @@ export const PromptResponse = ({
                 width="22"
                 height="22"
               />
-              <Text fontFamily={inconsolata}>
-                Total (input + answer): {tokensUsage.total}
-              </Text>
+              <Text>Total (input + answer): {tokensUsage.total}</Text>
             </FlexRow>
           </TokensInfo>
         ) : (

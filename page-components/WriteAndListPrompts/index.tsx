@@ -3,8 +3,7 @@ import { CustomLoadingButton } from "@components/CustomLoadingButton";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { FloppyDisk, Star } from "@phosphor-icons/react";
-import { Inconsolata } from "next/font/google";
+import { FloppyDisk } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import {
   getAllAttributesFromPrompt,
@@ -25,12 +24,8 @@ import { RoutesPath } from "@utils/routes";
 import { TokensUsageType } from "@page-components/PromptResponse";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
-import { useSetSetMainPrompt } from "Modals/SetMainPromptModal/hook";
 import { CleanUpUndefined } from "@utils/helpers/object";
 import { Portal } from "@components/Portal";
-import { useDebounce } from "@utils/hooks/useDebounce";
-
-const inconsolata = Inconsolata({ subsets: ["latin"] });
 
 type WriteAndListPromptsProps = {
   prompt: string;
@@ -206,7 +201,7 @@ export const WriteAndListPrompts = ({
                   width="22"
                   height="22"
                 />
-                <Text fontFamily={inconsolata}>
+                <Text>
                   Tokens used on this input: {tokensUsage.prompt_tokens}
                 </Text>
               </FlexRow>

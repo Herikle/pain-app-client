@@ -1,15 +1,12 @@
 import { theme } from "@styles/theme";
 import styled from "styled-components";
-import { Inter } from "next/font/google";
 import { Text } from "@components/Text";
 import Link from "next/link";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const Footer = () => {
   return (
-    <Container className={inter.className}>
+    <Container>
       <Text variant="h2" fontWeight="400" color="pure_white">
         Pain<strong>Track</strong>
       </Text>
