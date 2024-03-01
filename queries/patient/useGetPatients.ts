@@ -48,7 +48,7 @@ type GetPatientByIdPayload = {
   };
 };
 
-type GetPatientByIdResponse = IPatient;
+export type GetPatientByIdResponse = IPatient;
 
 const getPatientById = async ({ params }: GetPatientByIdPayload) => {
   const { data } = await request({

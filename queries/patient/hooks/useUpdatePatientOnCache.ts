@@ -2,7 +2,7 @@ import { QueryKeys } from "@queries/keys";
 import { useQueryClient } from "react-query";
 import { IEpisode, IPatient } from "types";
 import update from "immutability-helper";
-import { GetPatientsResponse } from "../useGetPatients";
+import { GetPatientByIdResponse, GetPatientsResponse } from "../useGetPatients";
 
 type DeletePatientOnCache = {
   id: string;

@@ -6,6 +6,8 @@ import { capitalize } from "utils/helpers/string";
 import { RoutesPath } from "@utils/routes";
 import { MenuTypeProps } from "..";
 import { media } from "@styles/media-query";
+import { usePatientStateValue } from "state/usePatientState";
+import { useEpisodeStateValue } from "state/useEpisodeState";
 
 export const MobileMenu = ({
   isLogged,
@@ -20,6 +22,10 @@ export const MobileMenu = ({
   focusedPrompt,
   promptHref,
 }: MenuTypeProps) => {
+  const patientState = usePatientStateValue(selectedPatient?._id ?? "");
+
+  const episodeState = useEpisodeStateValue(selectedEpisode?._id ?? "");
+
   return (
     <Container>
       {isLogged ? (
@@ -34,7 +40,7 @@ export const MobileMenu = ({
           />
           <MenuLink
             label="Subject"
-            description={selectedPatient?.name}
+            description={patientState?.name ?? selectedPatient?.name}
             href={patientLinkHref()}
             iconPath={IconsPath.Patient}
             disabled={!pathname.includes(RoutesPath.new_patient)}
@@ -52,7 +58,7 @@ export const MobileMenu = ({
       )}
       <MenuLink
         label="Pain Episode"
-        description={selectedEpisode?.name}
+        description={episodeState?.name ?? selectedEpisode?.name}
         href={episodeLinkHref()}
         iconPath={IconsPath.Episode}
         disabled={!pathname.includes(RoutesPath.episode)}

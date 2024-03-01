@@ -8,6 +8,8 @@ import { SignOut } from "@phosphor-icons/react";
 import { capitalize } from "utils/helpers/string";
 import { RoutesPath } from "@utils/routes";
 import { MenuTypeProps } from "..";
+import { usePatientStateValue } from "state/usePatientState";
+import { useEpisodeStateValue } from "state/useEpisodeState";
 
 export const DesktopMenu = ({
   isLogged,
@@ -23,6 +25,9 @@ export const DesktopMenu = ({
   promptHref,
   logOut,
 }: MenuTypeProps) => {
+  const patientState = usePatientStateValue(selectedPatient?._id ?? "");
+
+  const episodeState = useEpisodeStateValue(selectedEpisode?._id ?? "");
   return (
     <Container>
       <TopItens>
@@ -46,7 +51,7 @@ export const DesktopMenu = ({
             />
             <MenuLink
               label="Subject"
-              description={selectedPatient?.name}
+              description={patientState?.name ?? selectedPatient?.name}
               href={patientLinkHref()}
               iconPath={IconsPath.Patient}
               disabled={!pathname.includes(RoutesPath.new_patient)}
@@ -64,7 +69,7 @@ export const DesktopMenu = ({
         )}
         <MenuLink
           label="Pain Episode"
-          description={selectedEpisode?.name}
+          description={episodeState?.name ?? selectedEpisode?.name}
           href={episodeLinkHref()}
           iconPath={IconsPath.Episode}
           disabled={!pathname.includes(RoutesPath.episode)}

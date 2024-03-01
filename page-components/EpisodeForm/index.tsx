@@ -11,6 +11,7 @@ import { useUpdateEpisode } from "@queries/episode/useEpisode";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
+import { useSetEpisodeState } from "state/useEpisodeState";
 
 const episodeSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,6 +35,8 @@ export const EpisodeForm = ({
   const [formData, setFormData] = useState<Partial<EpisodeSchema> | null>(null);
 
   const debouncedFormValue = useDebounce(formData, 500);
+
+  const setEpisodeState = useSetEpisodeState(episode._id);
 
   const {
     register,
@@ -85,13 +88,19 @@ export const EpisodeForm = ({
   };
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch((value, { name }) => {
       setFormData(value);
+      if (name === "name") {
+        setEpisodeState((prev) => ({
+          ...(prev ?? {}),
+          name: value.name,
+        }));
+      }
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [watch]);
+  }, [watch, setEpisodeState]);
 
   useEffect(() => {
     if (debouncedFormValue) {

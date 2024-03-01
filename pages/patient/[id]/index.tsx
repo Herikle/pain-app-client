@@ -25,6 +25,7 @@ import { TooltipContent } from "@components/TooltipContent";
 import { useSetCreateEpisodeModal } from "Modals/CreateEpisodeModal/hook";
 import { useAuth } from "@utils/hooks/useAuth";
 import { Error404 } from "@page-components/errors/404";
+import { usePatientStateValue } from "state/usePatientState";
 
 export default function Patient() {
   const router = useRouter();
@@ -34,6 +35,8 @@ export default function Patient() {
   const { isLogged } = useAuth();
 
   const [isSyncing, setIsSyncing] = useState(false);
+
+  const patientState = usePatientStateValue(id);
 
   const setSelectedPatient = useSetSelectedPatient();
 
@@ -93,6 +96,9 @@ export default function Patient() {
     }
   };
 
+  const patientType = patientState?.type ?? patient?.type;
+  const patientName = patientState?.name ?? patient?.name;
+
   return (
     <LoggedLayout>
       {getPatientById.isError ? (
@@ -102,14 +108,12 @@ export default function Patient() {
           <BackButton href={RoutesPath.profile} text="Return to your profile" />
           <UserBadgeContainer justify="space-between">
             <Badge
-              label={patient?.name}
-              description={patient?.type}
+              label={patientName}
+              description={patientType}
               descriptionVariant="h2"
               descriptionWeight="400"
               iconPath={
-                patient?.type === "animal"
-                  ? IconsPath.Animal
-                  : IconsPath.Patient
+                patientType === "animal" ? IconsPath.Animal : IconsPath.Patient
               }
             />
             <FlexColumn gap={1.5}>

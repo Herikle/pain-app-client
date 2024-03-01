@@ -4,7 +4,7 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
-import { IPatient, IPrompt } from "types";
+import { IPrompt } from "types";
 
 const recoilSelectedPrompt = atom<IPrompt | null>({
   key: "recoilSelectedPrompt",

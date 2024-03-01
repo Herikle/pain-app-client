@@ -15,6 +15,7 @@ import { Radio } from "@components/Radio";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { useGetScientificNameBySpecie } from "@queries/sugestion/useGetSugestion";
+import { useSetPatientState } from "state/usePatientState";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -70,6 +71,8 @@ export const UpdatePatientForm = ({
 
   const updatePatient = useUpdatePatient();
 
+  const setPatientState = useSetPatientState(patient._id);
+
   const { errors, isDirty } = formState;
 
   const onSubmit = async (data: Partial<PatientSchema>) => {
@@ -109,11 +112,25 @@ export const UpdatePatientForm = ({
       } else {
         setFormData(value);
       }
+
+      if (name === "name") {
+        setPatientState((state) => ({
+          ...(state ?? {}),
+          name: value.name,
+        }));
+      }
+
+      if (name === "type") {
+        setPatientState((state) => ({
+          ...(state ?? {}),
+          type: value.type,
+        }));
+      }
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [watch]);
+  }, [watch, setPatientState]);
 
   useEffect(() => {
     if (debouncedFormValue) {
