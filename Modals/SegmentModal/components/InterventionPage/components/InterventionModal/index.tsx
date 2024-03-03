@@ -13,12 +13,14 @@ import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 import { ALL_DOSES, Doses } from "../../const";
+import { TextArea } from "@components/TextArea";
 
 const InterventionSchema = zod.object({
   name: zod.string().min(1, "Intervention name is required"),
   datetime: zod.date().optional().nullable(),
   dose: zod.custom<Doses>().optional().nullable(),
   effective: zod.boolean(),
+  observation: zod.string().optional().nullable(),
 });
 
 export type CreateIntervention = zod.infer<typeof InterventionSchema>;
@@ -51,6 +53,7 @@ export const InterventionModal = ({
       dose: defaultValues?.dose,
       datetime: defaultValues?.datetime,
       effective: defaultValues?.effective,
+      observation: defaultValues?.observation,
     },
   });
 
@@ -90,7 +93,7 @@ export const InterventionModal = ({
                 )}
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid xs={12}>
               <Select
                 options={ALL_DOSES}
                 getLabel={(option) => option.label}
@@ -100,9 +103,16 @@ export const InterventionModal = ({
                 error={errors.dose?.message}
               />
             </Grid>
-            <Grid xs={6}>
-              <FlexRow justify="space-between" height="100%">
-                <Text>Effective?</Text>
+            <Grid xs={12}>
+              <TextArea
+                placeholder="Intervention description"
+                minRows={3}
+                {...register("observation")}
+              />
+            </Grid>
+            <Grid xs={12}>
+              <FlexRow justify="center" height="100%">
+                <Text variant="body1">This intervention was effective?</Text>
                 <Switch
                   defaultChecked={watch("effective")}
                   register={register("effective")}
@@ -122,6 +132,6 @@ export const InterventionModal = ({
 };
 
 const Container = styled.div`
-  width: 300px;
+  width: 500px;
   height: fit-content;
 `;

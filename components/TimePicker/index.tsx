@@ -7,11 +7,12 @@ import styled from "styled-components";
 
 interface TimePickerProps extends React.ComponentProps<typeof MuiTimePicker> {
   error?: string;
+  onClear?: () => void;
 }
 
 export const TimePicker = React.forwardRef(
   (
-    { label, error, ...rest }: TimePickerProps,
+    { label, error, onClear, ...rest }: TimePickerProps,
     ref: React.Ref<HTMLDivElement>
   ) => {
     return (
@@ -23,6 +24,7 @@ export const TimePicker = React.forwardRef(
         )}
         <MuiTimePicker
           {...rest}
+          defaultValue={null}
           ref={ref}
           sx={{
             "& .MuiInputBase-root": {
@@ -38,6 +40,14 @@ export const TimePicker = React.forwardRef(
             },
             "& .MuiInputBase-input": {
               fontSize: "14px",
+            },
+          }}
+          slotProps={{
+            field: {
+              clearable: !!onClear,
+              onClear: () => {
+                onClear?.();
+              },
             },
           }}
         />

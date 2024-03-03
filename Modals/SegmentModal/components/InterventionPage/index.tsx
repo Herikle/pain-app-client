@@ -18,6 +18,8 @@ import { CommonSegmentModalProps } from "../..";
 import update from "immutability-helper";
 import { media } from "@styles/media-query";
 import { LightScrollBar } from "@styles/theme";
+import { ALL_DOSES, Doses } from "./const";
+import { Select } from "@components/Select";
 
 const fakeDate = new Date().toISOString();
 
@@ -37,9 +39,12 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
 
   const [observation, setObservation] = useState<string>("");
 
+  const [dose, setDose] = useState<Doses | undefined>(undefined);
+
   const changeSelected = (intervention: IIntervetion) => {
     setSelected(intervention);
     setObservation(intervention.observation ?? "");
+    setDose(intervention?.dose ?? undefined);
   };
 
   const openAddModal = () => {
@@ -54,6 +59,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
     const newIntervention: IIntervetion = {
       ...intervention,
       datetime: intervention.datetime?.toISOString(),
+      observation: intervention.observation ?? "",
       _id: uuidv4(),
       createdAt: fakeDate,
       updatedAt: fakeDate,
@@ -85,6 +91,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
           $merge: {
             ...intervention,
             datetime: intervention.datetime?.toISOString(),
+            observation: intervention.observation ?? "",
           },
         },
       });
@@ -101,6 +108,24 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
         [index]: {
           $merge: {
             observation,
+          },
+        },
+      });
+
+      onChange(updatedInterventions);
+    }
+  };
+
+  const onChangeDose = (dose: Doses) => {
+    if (selected) {
+      setDose(dose);
+
+      const index = interventions.findIndex((i) => i._id === selected._id);
+
+      const updatedInterventions = update(interventions, {
+        [index]: {
+          $merge: {
+            dose,
           },
         },
       });
@@ -140,14 +165,24 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
         </ListIntervention>
         <Observation>
           {!!selected && (
-            <TextArea
-              label={`Observation about '${selected.name}'`}
-              minRows={15}
-              maxRows={15}
-              onChange={(e) => setObservation(e.target.value)}
-              value={observation}
-              onBlur={onBlurObservation}
-            />
+            <>
+              <Select
+                label={`Observation about '${selected.name}'`}
+                options={ALL_DOSES}
+                getLabel={(option) => option.label}
+                getValue={(option) => option.value}
+                id="select-dose"
+                value={dose}
+                onChange={(e) => onChangeDose(e.target.value as Doses)}
+              />
+              <TextArea
+                minRows={15}
+                maxRows={15}
+                onChange={(e) => setObservation(e.target.value)}
+                value={observation}
+                onBlur={onBlurObservation}
+              />
+            </>
           )}
         </Observation>
         <InterventionModal

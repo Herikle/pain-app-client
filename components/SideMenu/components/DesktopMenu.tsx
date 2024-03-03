@@ -28,6 +28,7 @@ export const DesktopMenu = ({
   const patientState = usePatientStateValue(selectedPatient?._id ?? "");
 
   const episodeState = useEpisodeStateValue(selectedEpisode?._id ?? "");
+
   return (
     <Container>
       <TopItens>

@@ -83,10 +83,11 @@ const Container = styled.label<Props>`
     $isNotSelected &&
     css`
       opacity: 0.5;
-
-      &:hover {
-        background-color: ${theme.colors.hover_state};
-        opacity: 1;
-      }
     `}
+
+
+    &:hover {
+    background-color: ${theme.colors.hover_state};
+    opacity: 1;
+  }
 `;

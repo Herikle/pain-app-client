@@ -46,6 +46,7 @@ export const DateAndTimePicker = ({
     newDate: Date,
     context: PickerChangeHandlerContext<DateValidationError>
   ) => {
+    if (!newDate) return;
     if (!!context.validationError) {
       onChange("");
       return;
@@ -63,6 +64,7 @@ export const DateAndTimePicker = ({
     newDate: Date,
     context: PickerChangeHandlerContext<TimeValidationError>
   ) => {
+    if (!newDate) return;
     if (!!context.validationError) {
       onChange("");
       return;
@@ -83,16 +85,14 @@ export const DateAndTimePicker = ({
         error={error}
         onChange={onChangeDate}
         value={value}
+        onClear={onClear}
       />
-      <TimePicker label={timeLabel} onChange={onChangeTime} value={value} />
-      {!!onClear && (
-        <>
-          <Clear id="clear-episode-data" onClick={onClear}>
-            <Eraser size={16} color={theme.colors.pure_black} />
-          </Clear>
-          <Tooltip anchorSelect="#clear-episode-data">Clear date</Tooltip>
-        </>
-      )}
+      <TimePicker
+        label={timeLabel}
+        onChange={onChangeTime}
+        value={value}
+        onClear={onClear}
+      />
     </Container>
   );
 };

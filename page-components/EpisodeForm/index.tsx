@@ -34,7 +34,7 @@ export const EpisodeForm = ({
 }: EpisodeFormProps) => {
   const [formData, setFormData] = useState<Partial<EpisodeSchema> | null>(null);
 
-  const debouncedFormValue = useDebounce(formData, 500);
+  const debouncedFormValue = useDebounce(formData, 600);
 
   const setEpisodeState = useSetEpisodeState(episode._id);
 
@@ -53,9 +53,7 @@ export const EpisodeForm = ({
       name: episode.name,
       location: episode.location,
       diagnosis: episode.diagnosis,
-      start_date: !!episode?.start_date
-        ? new Date(episode?.start_date)
-        : undefined,
+      start_date: !!episode?.start_date ? new Date(episode?.start_date) : null,
       comment: episode.comment,
     },
   });
@@ -124,7 +122,7 @@ export const EpisodeForm = ({
     <form>
       <Container>
         <Grid container spacing={4}>
-          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Episode name"
               placeholder="Examples: Headache, Depression crisis, Tooth ache, Sunburn"
@@ -132,14 +130,14 @@ export const EpisodeForm = ({
               error={errors.name?.message}
             />
           </Grid>
-          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Geographic location"
               {...register("location")}
               error={errors.location?.message}
             />
           </Grid>
-          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Diagnosis"
               {...register("diagnosis")}
@@ -147,7 +145,7 @@ export const EpisodeForm = ({
               placeholder="Examples: Gastritis, Clinical depression, Influenza, Hip fracture"
             />
           </Grid>
-          <Grid xl={5} lg={5} md={5} sm={12} xs={12}>
+          <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
             <Controller
               control={control}
               name="start_date"
@@ -162,7 +160,7 @@ export const EpisodeForm = ({
               )}
             />
           </Grid>
-          <Grid xl={10} lg={10} md={10} sm={12} xs={12}>
+          <Grid xl={12} lg={12} md={12} sm={12} xs={12}>
             <TextArea
               label="Comments"
               minRows={7}
