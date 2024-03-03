@@ -7,11 +7,12 @@ import styled from "styled-components";
 
 interface DatePickerProps extends React.ComponentProps<typeof MuiDatePicker> {
   error?: string;
+  onClear?: () => void;
 }
 
 export const DatePicker = React.forwardRef(
   (
-    { label, error, ...rest }: DatePickerProps,
+    { label, error, onClear, ...rest }: DatePickerProps,
     ref: React.Ref<HTMLDivElement>
   ) => {
     return (
@@ -23,6 +24,7 @@ export const DatePicker = React.forwardRef(
         )}
         <MuiDatePicker
           {...rest}
+          defaultValue={null}
           ref={ref}
           sx={{
             "& .MuiInputBase-root": {
@@ -38,6 +40,14 @@ export const DatePicker = React.forwardRef(
             },
             "& .MuiInputBase-input": {
               fontSize: "14px",
+            },
+          }}
+          slotProps={{
+            field: {
+              clearable: !!onClear,
+              onClear: () => {
+                onClear?.();
+              },
             },
           }}
         />

@@ -53,9 +53,7 @@ export const EpisodeForm = ({
       name: episode.name,
       location: episode.location,
       diagnosis: episode.diagnosis,
-      start_date: !!episode?.start_date
-        ? new Date(episode?.start_date)
-        : undefined,
+      start_date: !!episode?.start_date ? new Date(episode?.start_date) : null,
       comment: episode.comment,
     },
   });
