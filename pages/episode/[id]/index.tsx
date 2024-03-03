@@ -325,4 +325,9 @@ const TrackContainer = styled.div``;
 const Container = styled(FlexColumn)`
   align-items: flex-start;
   gap: 2rem;
+  width: 1180px;
+
+  ${media.up.laptopL`
+    width:100%;
+  `}
 `;
