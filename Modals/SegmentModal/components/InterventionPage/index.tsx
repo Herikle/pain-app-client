@@ -167,6 +167,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
           {!!selected && (
             <>
               <Select
+                label={`Observation about '${selected.name}'`}
                 options={ALL_DOSES}
                 getLabel={(option) => option.label}
                 getValue={(option) => option.value}
@@ -175,7 +176,6 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
                 onChange={(e) => onChangeDose(e.target.value as Doses)}
               />
               <TextArea
-                label={`Observation about '${selected.name}'`}
                 minRows={15}
                 maxRows={15}
                 onChange={(e) => setObservation(e.target.value)}
