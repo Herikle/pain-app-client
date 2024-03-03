@@ -54,6 +54,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
     const newIntervention: IIntervetion = {
       ...intervention,
       datetime: intervention.datetime?.toISOString(),
+      observation: intervention.observation ?? "",
       _id: uuidv4(),
       createdAt: fakeDate,
       updatedAt: fakeDate,
@@ -85,6 +86,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
           $merge: {
             ...intervention,
             datetime: intervention.datetime?.toISOString(),
+            observation: intervention.observation ?? "",
           },
         },
       });
