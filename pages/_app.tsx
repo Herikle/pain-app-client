@@ -60,7 +60,12 @@ const Application = ({ children }: ApplicationProps) => {
             content="A scientific tool for the description and analysis of the pain experience"
           />
         </Head>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider
+          dateAdapter={AdapterDateFns}
+          dateFormats={{
+            fullDate: "MM/dd/yyyy",
+          }}
+        >
           {children}
           <Modals />
         </LocalizationProvider>

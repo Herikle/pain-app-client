@@ -30,12 +30,22 @@ export const getDotDateFormat = (date: string | undefined) => {
   return format(new Date(date), "dd.MM.yy");
 };
 
+export const getDateFormatedByLocale = (date: string | undefined) => {
+  //only english for now
+
+  if (!date) {
+    return "";
+  }
+
+  return format(new Date(date), "MM/dd/yyyy");
+};
+
 export const dateAndTimeFormat = (date: string | undefined) => {
   if (!date) {
     return "";
   }
 
-  return format(new Date(date), "dd/MM/yy 'at' HH:mm");
+  return format(new Date(date), "MM/dd/yy 'at' HH:mm");
 };
 
 export const getDateFromString = (date: string | Date | undefined) => {

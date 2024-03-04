@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
 import { ALL_DOSES, Doses } from "../../const";
 import { TextArea } from "@components/TextArea";
+import { media } from "@styles/media-query";
 
 const InterventionSchema = zod.object({
   name: zod.string().min(1, "Intervention name is required"),
@@ -134,4 +135,8 @@ export const InterventionModal = ({
 const Container = styled.div`
   width: 500px;
   height: fit-content;
+
+  ${media.up.tablet`
+    width: 60vw;
+  `}
 `;

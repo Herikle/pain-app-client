@@ -224,14 +224,14 @@ const AddTitle = styled(FlexRow)`
 
 const Observation = styled(FlexColumn)`
   width: 50%;
-  ${media.down.tablet`
+  ${media.up.tablet`
     width: 100%;
   `}
 `;
 
 const ListIntervention = styled(FlexColumn)`
   width: 50%;
-  ${media.down.tablet`
+  ${media.up.tablet`
     width: 100%;
     max-height: 40vh;
     overflow: auto;

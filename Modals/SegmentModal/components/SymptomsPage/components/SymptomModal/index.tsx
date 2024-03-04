@@ -18,6 +18,7 @@ import {
 import { theme } from "@styles/theme";
 import { DateTimePicker } from "@components/DateTimePicker";
 import { DateAndTimePicker } from "@components/DateAndTimePicker";
+import { media } from "@styles/media-query";
 
 const SymptomSchema = zod.object({
   name: zod.string().min(1),
@@ -101,6 +102,10 @@ export const SymptomModal = ({
 };
 
 const Container = styled.div`
-  width: 300px;
+  width: 500px;
   height: fit-content;
+
+  ${media.up.tablet`
+    width: 60vw;
+  `}
 `;

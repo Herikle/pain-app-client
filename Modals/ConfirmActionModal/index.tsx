@@ -5,6 +5,7 @@ import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import React, { useState } from "react";
 import { TextField } from "@components/TextField";
+import { media } from "@styles/media-query";
 
 type ConfirmActionModalProps = {
   onConfirm: (confirmationText?: string) => void;
@@ -86,4 +87,9 @@ export const ConfirmActionModal = ({
 const Container = styled(FlexColumn)`
   align-items: center;
   max-width: 500px;
+
+  ${media.up.tablet`
+    max-width: unset;
+    width: 70vw;
+  `}
 `;

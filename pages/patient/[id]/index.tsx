@@ -15,7 +15,7 @@ import { CallToAction } from "@components/CallToAction";
 import { useCreateEpisode } from "@queries/episode/useEpisode";
 import { useGetEpisodesList } from "@queries/episode/useGetEpisode";
 import { IEpisode } from "types";
-import { getDotDateFormat } from "@utils/helpers/date";
+import { getDateFormatedByLocale } from "@utils/helpers/date";
 import { useSetDeletePatientModal } from "Modals/DeletePatientModal/hook";
 import { Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
@@ -152,7 +152,7 @@ export default function Patient() {
                 {
                   accessor: "createdAt",
                   label: "Date",
-                  render: getDotDateFormat,
+                  render: getDateFormatedByLocale,
                 },
                 {
                   accessor: "tracks_count",
