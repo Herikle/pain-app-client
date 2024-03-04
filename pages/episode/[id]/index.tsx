@@ -310,16 +310,6 @@ const EpisodeBadgeContainer = styled(FlexRow)`
   `}
 `;
 
-const SaveButtonContainer = styled.div`
-  position: fixed;
-  right: 2rem;
-  bottom: 2rem;
-  ${media.up.tablet`
-    bottom: calc(${MOBILE_MENU_HEIGHT}px + 1rem);
-    right: 1rem;
-  `}
-`;
-
 const TrackContainer = styled.div``;
 
 const Container = styled(FlexColumn)`

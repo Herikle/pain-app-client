@@ -139,7 +139,7 @@ export const Track = ({ track }: TrackProps) => {
   return (
     <Element name={`track_${track._id}`}>
       <Wrapper gap={2}>
-        <FlexRow justify="space-between">
+        <NameAndActions>
           <Text variant="h3">
             {cumulativePainMode && "Cumulative pain for "}
             {track.name}
@@ -176,7 +176,7 @@ export const Track = ({ track }: TrackProps) => {
               </TooltipContent>
             )}
           </FlexRow>
-        </FlexRow>
+        </NameAndActions>
         <Container>
           <SegmentsTitleComponent
             cumulativePainMode={{
@@ -205,6 +205,17 @@ export const Track = ({ track }: TrackProps) => {
     </Element>
   );
 };
+
+const NameAndActions = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+
+  ${media.up.tablet`
+    flex-direction: column;
+    align-items: flex-start;
+  `}
+`;
 
 const IconCommonStyle = css`
   color: ${theme.colors.text_switched};

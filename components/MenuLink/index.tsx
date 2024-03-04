@@ -92,7 +92,11 @@ export const MenuLink = ({
             )}
           </>
         )}
-        <Text variant="body2Bold" color="pure_white">
+        <Text
+          variant="body2Bold"
+          color="pure_white"
+          align={isTabletUp ? "center" : undefined}
+        >
           {label}
         </Text>
       </DescriptionContainer>
