@@ -77,13 +77,12 @@ export const UpdatePatientForm = ({
 
   const onSubmit = async (data: Partial<PatientSchema>) => {
     if (!isDirty) return;
-    await updatePatient.mutateAsync({
+    updatePatient.mutateAsync({
       params: {
         patient_id: patient._id,
       },
       body: data,
     });
-    reset(data);
   };
   const useGetScientificName = useGetScientificNameBySpecie();
 
