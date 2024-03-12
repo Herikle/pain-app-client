@@ -11,6 +11,11 @@ export const Footer = () => {
         Pain<strong>Track</strong>
       </Text>
       <FooterLinks>
+        <Link href="contact">
+          <Text color="pure_white" opacity={0.4}>
+            Contact
+          </Text>
+        </Link>
         <Link href="about">
           <Text color="pure_white" opacity={0.4}>
             About PainTrack.org

@@ -66,6 +66,7 @@ interface TextProps extends React.ComponentPropsWithoutRef<"span"> {
   minWidth?: string;
   fontFamily?: NextFont;
   transition?: CSSProperties["transition"];
+  fontStyle?: CSSProperties["fontStyle"];
 }
 
 export const Text = ({
@@ -86,6 +87,7 @@ export const Text = ({
   minWidth,
   fontFamily,
   transition,
+  fontStyle,
   ...rest
 }: TextProps) => {
   return (
@@ -107,6 +109,7 @@ export const Text = ({
       $maxWidth={maxWidth}
       $minWidth={minWidth}
       $transition={transition}
+      $fontStyle={fontStyle}
       title={textElipsis ? (children as string) : undefined}
       {...rest}
     >
@@ -128,6 +131,7 @@ type TextStyledProps = {
   $textElipsis?: boolean;
   $minWidth?: string;
   $transition?: CSSProperties["transition"];
+  $fontStyle?: CSSProperties["fontStyle"];
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -197,5 +201,11 @@ const TextStyled = styled.span<TextStyledProps>`
     $transition &&
     css`
       transition: ${$transition};
+    `}
+
+    ${({ $fontStyle }) =>
+    $fontStyle &&
+    css`
+      font-style: ${$fontStyle};
     `}
 `;

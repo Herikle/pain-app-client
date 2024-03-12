@@ -1,5 +1,4 @@
 import { Text } from "@components/Text";
-import CaretSelectIcon from "public/icons/select-caret.svg";
 import { FlexColumn } from "@design-components/Flex";
 import { Question } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
@@ -109,7 +108,7 @@ const SelectStyled = styled.select<SelectStyledProps>`
   background-color: ${theme.colors.pure_white};
   outline: none;
   appearance: none;
-  background-image: url(${CaretSelectIcon.src});
+  background-image: url("/icons/select-caret.svg");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1em;
