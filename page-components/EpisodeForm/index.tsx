@@ -64,20 +64,18 @@ export const EpisodeForm = ({
 
   const onSubmit = async (data: EpisodeSchema) => {
     if (!isDirty) return;
-    await updateEpisode.mutateAsync({
+    updateEpisode.mutateAsync({
       params: {
         episode_id: episode._id,
       },
       body: data,
     });
-
-    reset(data);
   };
 
   const clearDate = async () => {
     setValue("start_date", null);
     const values = getValues();
-    await updateEpisode.mutateAsync({
+    updateEpisode.mutateAsync({
       params: {
         episode_id: episode._id,
       },

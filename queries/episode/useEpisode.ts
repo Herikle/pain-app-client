@@ -57,8 +57,6 @@ const updateEpisode = async ({ params, body }: UpdateEpisodePayload) => {
 };
 
 export const useUpdateEpisode = () => {
-  const queryClient = useQueryClient();
-
   return useMutation(updateEpisode, {
     onError: (error: AxiosError) => {
       ToastError(error);
