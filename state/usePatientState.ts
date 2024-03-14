@@ -10,6 +10,7 @@ import { IPatient } from "types";
 type PatientState = {
   name?: string;
   type?: IPatient["type"];
+  commonName?: string;
 };
 
 const recoilPatientState = memoize((patient_id: string) =>

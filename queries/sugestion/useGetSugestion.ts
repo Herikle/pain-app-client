@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { request } from "@queries/request";
 import { IMe, IPrompt } from "types";
 import { QueryKeys } from "@queries/keys";
@@ -17,10 +17,24 @@ const getScientificNameBySpecie = async (specie: string) => {
   };
 };
 
-export const useGetScientificNameBySpecie = () => {
-  return useMutation(getScientificNameBySpecie, {
-    onError: (error: AxiosError) => {
-      ToastError(error);
+type GetScientificNameBySpeciePayload = {
+  specie: string | undefined;
+};
+
+export const useGetScientificNameBySpecie = ({
+  specie,
+}: GetScientificNameBySpeciePayload) => {
+  return useQuery(
+    [QueryKeys.Patients.GetScientificName, specie],
+    () => {
+      if (!specie) return Promise.resolve({ scientific_name: "" });
+
+      return getScientificNameBySpecie(specie);
     },
-  });
+    {
+      onError: (error: AxiosError) => {
+        ToastError(error);
+      },
+    }
+  );
 };

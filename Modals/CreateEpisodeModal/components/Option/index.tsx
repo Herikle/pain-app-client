@@ -24,8 +24,12 @@ export const Option = ({
 }: OptionProps) => {
   return (
     <OptionContainer onClick={onClick} $hasClick={!!onClick}>
-      {srcImage && <Image src={srcImage} width={40} height={40} alt={alt} />}
-      {icon && icon}
+      {srcImage && (
+        <IconDiv>
+          <Image src={srcImage} width={40} height={40} alt={alt} />
+        </IconDiv>
+      )}
+      {icon && <IconDiv>{icon}</IconDiv>}
       <OptionDescription>
         <Text variant="h1">{title}</Text>
         {description && (
@@ -38,8 +42,14 @@ export const Option = ({
   );
 };
 
+const IconDiv = styled.div`
+  flex-shrink: 0;
+  display: flex;
+`;
+
 const OptionDescription = styled(FlexColumn)`
   gap: 1rem;
+  max-width: 100%;
 `;
 
 type ContainerProps = {
