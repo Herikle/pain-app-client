@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { useGetScientificNameBySpecie } from "@queries/sugestion/useGetSugestion";
 import { useSetPatientState } from "state/usePatientState";
+import { LoadingWrapper } from "@components/LoadingWrapper";
 
 const newPatientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -84,32 +85,27 @@ export const UpdatePatientForm = ({
       body: data,
     });
   };
-  const useGetScientificName = useGetScientificNameBySpecie();
 
-  const [commonNameHelper, setCommonNameHelper] = useState<string | null>(null);
-  const commmon_name_debounce = useDebounce(commonNameHelper, 1000);
+  const commmon_name_debounce = useDebounce(watch("common_name"), 1000);
+
+  const getScientificName = useGetScientificNameBySpecie({
+    specie: commmon_name_debounce,
+  });
 
   useEffect(() => {
-    const fetch = async () => {
-      if (!commmon_name_debounce) return;
-
-      const specieName = await useGetScientificName.mutateAsync(
-        commmon_name_debounce
-      );
-      setValue("scientific_name", specieName.scientific_name);
-      const values = getValues();
-      setFormData(values);
-    };
-    fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commmon_name_debounce]);
+    if (!getScientificName.data) return;
+    setValue("scientific_name", getScientificName.data?.scientific_name);
+  }, [getScientificName.data, setValue]);
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "common_name" && value.common_name) {
-        setCommonNameHelper(value.common_name);
-      } else {
-        setFormData(value);
+      setFormData(value);
+
+      if (name === "common_name") {
+        setPatientState((state) => ({
+          ...(state ?? {}),
+          commonName: value.common_name,
+        }));
       }
 
       if (name === "name") {
@@ -194,13 +190,28 @@ export const UpdatePatientForm = ({
                 />
               </Grid>
               <Grid xl={6} lg={6} md={6} sm={12} xs={12}>
-                <TextField
-                  label="Scientifc Name"
-                  placeholder="Name of the species"
-                  disabled
-                  noBorder={true}
-                  {...register("scientific_name")}
-                />
+                <FlexRow
+                  justify="flex-start"
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  <LoadingWrapper
+                    loading={getScientificName.isLoading}
+                    overContainer
+                    size={12}
+                    style={{
+                      left: 8,
+                    }}
+                  />
+                  <TextField
+                    label="Scientifc Name"
+                    placeholder="Name of the species"
+                    disabled
+                    noBorder={true}
+                    {...register("scientific_name")}
+                  />
+                </FlexRow>
               </Grid>
               <Grid xs={12}>
                 <TextField

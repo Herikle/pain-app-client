@@ -98,6 +98,15 @@ export default function Patient() {
 
   const patientType = patientState?.type ?? patient?.type;
   const patientName = patientState?.name ?? patient?.name;
+  const patientCommonName = patientState?.commonName ?? patient?.common_name;
+
+  const getPatientSpecie = () => {
+    if (patientType === "animal") {
+      return patientCommonName || patientType;
+    }
+
+    return patientType;
+  };
 
   return (
     <LoggedLayout>
@@ -109,7 +118,7 @@ export default function Patient() {
           <UserBadgeContainer justify="space-between">
             <Badge
               label={patientName}
-              description={patientType}
+              description={getPatientSpecie()}
               descriptionVariant="h2"
               descriptionWeight="400"
               iconPath={

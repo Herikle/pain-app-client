@@ -1,6 +1,6 @@
 import { theme } from "@styles/theme";
 import { Oval } from "react-loader-spinner";
-import styled, { css } from "styled-components";
+import styled, { CSSProperties, css } from "styled-components";
 
 type LoadingWrapperProps = {
   loading: boolean;
@@ -8,6 +8,7 @@ type LoadingWrapperProps = {
   fullScreen?: boolean;
   overContainer?: boolean;
   size?: number;
+  style?: CSSProperties;
 };
 
 export const LoadingWrapper = ({
@@ -16,12 +17,13 @@ export const LoadingWrapper = ({
   fullScreen,
   overContainer,
   size = 32,
+  style,
 }: LoadingWrapperProps) => {
   return loading ? (
     <>
       {overContainer && <Overlay data-testid="loading-wrapper-overlay" />}
-
       <Container
+        style={style}
         $fullScreen={fullScreen}
         $overContainer={overContainer}
         data-testid="loading-wrapper"

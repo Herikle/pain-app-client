@@ -11,6 +11,7 @@ export const QueryKeys = {
   Patients: {
     List: "patients/list",
     ByID: "patients/byId",
+    GetScientificName: "patients/getScientificName",
   },
   Episode: {
     List: "episode/list",
