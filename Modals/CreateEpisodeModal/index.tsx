@@ -20,6 +20,7 @@ import { ImportEpisodeStructure } from "types";
 import { checkValidity } from "./helpers/checkEpisodeValidity";
 import { ZodIssue } from "zod";
 import { transparentize } from "polished";
+import { media } from "@styles/media-query";
 
 type ImportFromArchiveProps = {
   patient_id: string;
@@ -258,6 +259,11 @@ const ReturnContainer = styled(FlexRow)`
 const Container = styled(FlexColumn)`
   padding: 1rem;
   min-width: 540px;
+
+  ${media.up.tablet`
+    min-width: unset;
+    width: 95vw;
+  `}
 `;
 
 export const CreateEpisodeModal = () => {
