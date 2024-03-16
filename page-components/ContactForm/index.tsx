@@ -1,3 +1,6 @@
+import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import styled from "styled-components";
 import { Button } from "@components/Button";
 import { Select } from "@components/Select";
 import { Text } from "@components/Text";
@@ -6,7 +9,8 @@ import { TextField } from "@components/TextField";
 import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
 import { useForm, z, zodResolver } from "utils/helpers/form-validation";
-import styled from "styled-components";
+import { media } from "@styles/media-query";
+import { useSendContactForm } from "@queries/public/usePublic";
 
 type SubjectOptions = {
   label: string;
@@ -36,8 +40,15 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-export const ContactForm = () => {
+type ContactFormProps = {
+  onSuccess?: () => void;
+  onError?: () => void;
+};
+
+export const ContactForm = ({ onError, onSuccess }: ContactFormProps) => {
   const { isLogged, user } = useAuth();
+
+  const recaptchaRef = React.createRef<ReCAPTCHA>();
 
   const { register, handleSubmit, formState } = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -48,9 +59,27 @@ export const ContactForm = () => {
     },
   });
 
+  const sendContactForm = useSendContactForm();
+
   const { errors } = formState;
 
-  const onSubmit = (data: ContactFormValues) => {};
+  const onSubmit = async (data: ContactFormValues) => {
+    try {
+      const recaptchaValue = await recaptchaRef.current?.executeAsync();
+
+      await sendContactForm.mutateAsync({
+        body: {
+          email: data.email,
+          message: data.message,
+          subject: data.subject,
+          recaptchaToken: recaptchaValue,
+        },
+      });
+      onSuccess?.();
+    } catch (error) {
+      onError?.();
+    }
+  };
 
   return (
     <Container>
@@ -90,7 +119,12 @@ export const ContactForm = () => {
           {...register("message")}
           error={errors.message?.message}
         />
-        <Button>Send</Button>
+        <Button loading={sendContactForm.isLoading}>Send</Button>
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          size="invisible"
+          sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
+        />
       </Form>
     </Container>
   );
@@ -106,5 +140,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  width: 500px;
+  width: 600px;
+
+  ${media.up.tablet`
+    width: 100%;
+    padding-inline: 1rem;
+  `}
 `;

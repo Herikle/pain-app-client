@@ -29,3 +29,29 @@ export const useGenerateResponse = () => {
     },
   });
 };
+
+type ContactForm = {
+  body: {
+    email: string;
+    message: string;
+    subject: string;
+    recaptchaToken: string;
+  };
+};
+
+const sendContactForm = async ({ body }: ContactForm) => {
+  await request({
+    method: "POST",
+    service: "public",
+    url: "/contact-form",
+    data: body,
+  });
+};
+
+export const useSendContactForm = () => {
+  return useMutation(sendContactForm, {
+    onError: (err: AxiosError) => {
+      ToastError(err);
+    },
+  });
+};
