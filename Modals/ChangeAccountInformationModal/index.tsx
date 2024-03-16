@@ -1,33 +1,29 @@
-import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Modal } from "../Modal";
 import { useChangeAccountInformationModalState } from "./hook";
-import styled from "styled-components";
-import { AccountForm } from "@page-components/AccountForm";
-import { media } from "@styles/media-query";
+import { useState } from "react";
+import { MainPage } from "./components/Main";
+
+export type AccountInformationsPages = "main" | "email" | "password";
 
 export type ChildPropsChangeAccountInformationModal = {
   onClose: () => void;
 };
 
 const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
+  const [page, setPage] = useState<AccountInformationsPages>("main");
+
+  const pages: Record<AccountInformationsPages, JSX.Element> = {
+    main: <MainPage onChangePage={setPage} />,
+    email: <div />,
+    password: <div />,
+  };
+
   return (
     <Modal onClose={onClose} hasCloseButton>
-      <Container>
-        <AccountForm />
-      </Container>
+      {pages[page]}
     </Modal>
   );
 };
-
-const Container = styled(FlexColumn)`
-  align-items: flex-start;
-  width: 700px;
-
-  ${media.up.tablet`
-    width: 100%; 
-    min-width: 70vw;
-  `}
-`;
 
 export const ChangeAccountInformationModal = () => {
   const [isOpen, setIsOpen] = useChangeAccountInformationModalState();
