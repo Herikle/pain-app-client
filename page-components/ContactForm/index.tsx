@@ -7,6 +7,7 @@ import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
 import { useForm, z, zodResolver } from "utils/helpers/form-validation";
 import styled from "styled-components";
+import { media } from "@styles/media-query";
 
 type SubjectOptions = {
   label: string;
@@ -36,7 +37,12 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-export const ContactForm = () => {
+type ContactFormProps = {
+  onSuccess?: () => void;
+  onError?: () => void;
+};
+
+export const ContactForm = ({ onError, onSuccess }: ContactFormProps) => {
   const { isLogged, user } = useAuth();
 
   const { register, handleSubmit, formState } = useForm<ContactFormValues>({
@@ -50,7 +56,9 @@ export const ContactForm = () => {
 
   const { errors } = formState;
 
-  const onSubmit = (data: ContactFormValues) => {};
+  const onSubmit = (data: ContactFormValues) => {
+    onSuccess?.();
+  };
 
   return (
     <Container>
@@ -106,5 +114,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  width: 500px;
+  width: 600px;
+
+  ${media.up.tablet`
+    width: 100%;
+    padding-inline: 1rem;
+  `}
 `;

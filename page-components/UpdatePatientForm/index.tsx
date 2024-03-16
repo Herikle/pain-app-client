@@ -45,30 +45,22 @@ export const UpdatePatientForm = ({
 
   const debouncedFormValue = useDebounce(formData, 500);
 
-  const {
-    register,
-    formState,
-    handleSubmit,
-    reset,
-    control,
-    watch,
-    setValue,
-    getValues,
-  } = useForm<PatientSchema>({
-    resolver: zodResolver(newPatientSchema),
-    defaultValues: {
-      name: patient.name,
-      birth_date: getDateFromString(patient.birth_date),
-      type: patient.type,
-      about: patient.about ?? "",
-      production_system: patient.production_system ?? "",
-      life_fate: patient.life_fate ?? "",
-      location: patient.location ?? "",
-      common_name: patient.common_name ?? "",
-      scientific_name: patient.scientific_name ?? "",
-    },
-    mode: "onChange",
-  });
+  const { register, formState, handleSubmit, control, watch, setValue } =
+    useForm<PatientSchema>({
+      resolver: zodResolver(newPatientSchema),
+      defaultValues: {
+        name: patient.name,
+        birth_date: getDateFromString(patient.birth_date),
+        type: patient.type,
+        about: patient.about ?? "",
+        production_system: patient.production_system ?? "",
+        life_fate: patient.life_fate ?? "",
+        location: patient.location ?? "",
+        common_name: patient.common_name ?? "",
+        scientific_name: patient.scientific_name ?? "",
+      },
+      mode: "onChange",
+    });
 
   const updatePatient = useUpdatePatient();
 

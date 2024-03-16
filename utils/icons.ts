@@ -42,4 +42,6 @@ export const ImagesPath = {
   MailSentBro: "/assets/mail-sent-bro.png",
   PieceOfMindoBro: "/assets/piece-of-mind-bro.png",
   Error404: "/assets/404-new.svg",
+  MessageSent: "/assets/message-sent.svg",
+  MessageError: "/assets/message-error.svg",
 };
