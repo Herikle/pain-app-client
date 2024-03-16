@@ -30,7 +30,11 @@ export const MessageSentSuccess = () => {
   );
 };
 
-export const MessageSentError = () => {
+type MessageSentErrorProps = {
+  onRetry?: () => void;
+};
+
+export const MessageSentError = ({ onRetry }: MessageSentErrorProps) => {
   return (
     <Container gap={3} align="center">
       <Image
@@ -45,7 +49,9 @@ export const MessageSentError = () => {
       <Text variant="h3" align="center" fontWeight="400">
         {"Don't worry, It's our fault. Please try again later."}
       </Text>
-      <Button fullWidth>Retry</Button>
+      <Button fullWidth onClick={onRetry}>
+        Retry
+      </Button>
       <Link href={RoutesPath.home} style={{ width: "100%" }}>
         <Button
           fullWidth

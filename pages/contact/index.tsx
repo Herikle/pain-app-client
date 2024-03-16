@@ -20,12 +20,16 @@ export default function ContactPage() {
     setIsError(true);
   };
 
+  const onRetry = () => {
+    setIsError(false);
+  };
+
   const getPageComponent = () => {
     if (isSuccess) {
       return <MessageSentSuccess />;
     }
     if (isError) {
-      return <MessageSentError />;
+      return <MessageSentError onRetry={onRetry} />;
     }
 
     return <ContactForm onSuccess={handleSuccess} onError={handleError} />;

@@ -52,6 +52,8 @@ export default function GeneratePage({
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  const recaptchaRef = React.createRef<ReCAPTCHA>();
+
   if (!attributes?.attributes) return <></>;
 
   const attributesList = Object.keys(attributes.attributes);
@@ -97,8 +99,6 @@ export default function GeneratePage({
       setGptResponse((prev) => prev + pieceOfText);
     }
   };
-
-  const recaptchaRef = React.createRef<ReCAPTCHA>();
 
   const rerun = () => {
     if (isRunning) {
