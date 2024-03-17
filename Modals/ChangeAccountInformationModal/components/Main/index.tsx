@@ -16,7 +16,7 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
 
   return (
     <Container>
-      <Text variant="h1">Change name</Text>
+      <Text variant="h1">Account settings</Text>
       <FlexColumn mt={2} gap={3}>
         <AccountForm />
         <FlexColumn gap={1.5}>
@@ -44,10 +44,5 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
-  width: 700px;
-
-  ${media.up.tablet`
-    width: 100%; 
-    min-width: 70vw;
-  `}
+  width: 100%;
 `;

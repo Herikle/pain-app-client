@@ -6,6 +6,7 @@ import {
   FlattenInterpolation,
   Interpolation,
   InterpolationFunction,
+  SimpleInterpolation,
   ThemedStyledProps,
   css,
 } from "styled-components";
@@ -48,7 +49,10 @@ type MediaType = {
 export const media: MediaType = {
   down: (Object.keys(breakpoints) as Array<keyof typeof breakpoints>).reduce(
     (acc, label) => {
-      acc[label] = (first: any, ...interpolations: any[]) => css`
+      acc[label] = (
+        first: TemplateStringsArray | CSSObject,
+        ...interpolations: SimpleInterpolation[]
+      ) => css`
         @media (min-width: ${breakpoints[label]}px) {
           ${css(first, ...interpolations)}
         }
@@ -61,7 +65,10 @@ export const media: MediaType = {
   ),
   up: (Object.keys(breakpoints) as Array<keyof typeof breakpoints>).reduce(
     (acc, label) => {
-      acc[label] = (first: any, ...interpolations: any[]) => css`
+      acc[label] = (
+        first: TemplateStringsArray | CSSObject,
+        ...interpolations: SimpleInterpolation[]
+      ) => css`
         @media (max-width: ${breakpoints[label]}px) {
           ${css(first, ...interpolations)}
         }
