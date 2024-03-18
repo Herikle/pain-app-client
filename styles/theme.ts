@@ -18,6 +18,7 @@ const LightThemeColors = {
   red_danger: "#FF0000",
   dark_red_danger: "#B80000",
   pastel: "#F5F5F5",
+  dark_pastel: "#252525",
   green_success: "#58C162",
 };
 
