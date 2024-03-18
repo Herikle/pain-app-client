@@ -91,6 +91,7 @@ export const TextField = React.forwardRef(
             />
             <EyeContainer
               type="button"
+              tabIndex={-1}
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (

@@ -17,6 +17,7 @@ import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
 import { useCreatePatient } from "@queries/patient/usePatient";
+import { Gear } from "@phosphor-icons/react";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -73,6 +74,8 @@ export default function ProfilePage() {
           description={user?.email}
           iconPath={IconsPath.Doctor}
           onClickEdit={openAccountInfoModal}
+          EditPhorphorIcon={Gear}
+          editIconAlwaysVisible
         />
 
         <Table
@@ -122,11 +125,6 @@ export default function ProfilePage() {
     </LoggedLayout>
   );
 }
-
-const FormContainer = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

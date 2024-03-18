@@ -5,13 +5,18 @@ import { PasswordSuccessfullyUpdated } from "./components/Success";
 
 export type PasswordProps = {
   onBack: () => void;
+  onSuccess: () => void;
 };
 
-export const Password = ({ onBack }: PasswordProps) => {
+export const Password = ({
+  onBack,
+  onSuccess: onSuccessProps,
+}: PasswordProps) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const onSuccess = () => {
     setIsSuccess(true);
+    onSuccessProps();
   };
 
   return (
