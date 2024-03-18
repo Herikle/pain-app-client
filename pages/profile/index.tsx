@@ -5,7 +5,6 @@ import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import Router from "next/router";
-import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
 import { useGetPatients } from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
@@ -119,11 +118,6 @@ export default function ProfilePage() {
             },
           }}
         />
-        {!user?.noPassword && (
-          <FormContainer>
-            <PasswordSettingsForm />
-          </FormContainer>
-        )}
       </Container>
     </LoggedLayout>
   );

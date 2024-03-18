@@ -54,7 +54,7 @@ interface TextProps extends React.ComponentPropsWithoutRef<"span"> {
   variant?: TextVariant;
   color?: ThemeColors;
   fontSize?: string;
-  fontWeight?: string;
+  fontWeight?: CSSProperties["fontWeight"];
   align?: TextAlign;
   opacity?: number;
   mt?: number;
@@ -125,7 +125,7 @@ type TextStyledProps = {
   $variant: TextVariant;
   $color: string;
   $fontSize?: string;
-  $fontWeight?: string;
+  $fontWeight?: CSSProperties["fontWeight"];
   $align?: TextAlign;
   $opacity?: number;
   $whiteSpace?: string;

@@ -65,9 +65,5 @@ export const AccountForm = () => {
 const Container = styled(FlexColumn)`
   gap: 2rem;
   justify-content: flex-start;
-  width: 300px;
-
-  ${media.up.tablet`
-    width: 100%;     
-  `}
+  width: 100%;
 `;
