@@ -7,11 +7,18 @@ import { useAuth } from "@utils/hooks/useAuth";
 import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
 
-export const ConfirmCodeEmailChange = () => {
+type ConfirmCodeEmailChangeProps = {
+  onSuccess: () => void;
+};
+
+export const ConfirmCodeEmailChange = ({
+  onSuccess,
+}: ConfirmCodeEmailChangeProps) => {
   const { user } = useAuth();
 
   const handleCompletePin = (value: string) => {
     console.log(value);
+    onSuccess();
   };
 
   return (

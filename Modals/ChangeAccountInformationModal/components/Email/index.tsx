@@ -21,7 +21,11 @@ export const Email = ({ onBack }: EmailProps) => {
       {isAllSuccess ? (
         <EmailSuccessfullyUpdated email={newEmail} />
       ) : userHasChoosenNewEmail ? (
-        <ConfirmCodeEmailChange />
+        <ConfirmCodeEmailChange
+          onSuccess={() => {
+            setIsSuccess(true);
+          }}
+        />
       ) : (
         <UpdateEmailForm
           onBack={onBack}
