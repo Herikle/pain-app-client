@@ -25,6 +25,7 @@ export const Email = ({ onBack }: EmailProps) => {
           onSuccess={() => {
             setIsSuccess(true);
           }}
+          onRetrySendCode={() => {}}
         />
       ) : (
         <UpdateEmailForm

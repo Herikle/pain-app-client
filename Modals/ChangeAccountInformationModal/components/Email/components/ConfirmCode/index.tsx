@@ -6,19 +6,40 @@ import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
 import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
+import { useEffect, useState } from "react";
+import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
 
 type ConfirmCodeEmailChangeProps = {
   onSuccess: () => void;
+  onRetrySendCode: () => void;
 };
 
 export const ConfirmCodeEmailChange = ({
   onSuccess,
+  onRetrySendCode,
 }: ConfirmCodeEmailChangeProps) => {
   const { user } = useAuth();
+
+  const [counter, setCounter] = useState(90);
 
   const handleCompletePin = (value: string) => {
     console.log(value);
     onSuccess();
+  };
+
+  useEffect(() => {
+    if (counter > 0) {
+      setTimeout(() => setCounter(counter - 1), 1000);
+    }
+  }, [counter]);
+
+  const counterIsZero = counter === 0;
+
+  const retrySendCode = () => {
+    if (!counterIsZero) return;
+
+    onRetrySendCode();
+    setCounter(90);
   };
 
   return (
@@ -56,8 +77,15 @@ export const ConfirmCodeEmailChange = ({
           />
           <Text variant="body1">
             {"Didn't receive a link?"}{" "}
-            <Text variant="body1" decoration="underline" color="primary">
-              Send again
+            <Text
+              variant="body1"
+              decoration="underline"
+              onClick={retrySendCode}
+              color={counterIsZero ? "primary" : "font_color"}
+              cursor={counterIsZero ? "pointer" : "default"}
+            >
+              Send again{" "}
+              {!counterIsZero && <>({secondsToMinutesAndSeconds(counter)})</>}
             </Text>
           </Text>
         </FlexColumn>

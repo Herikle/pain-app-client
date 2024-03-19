@@ -68,6 +68,7 @@ interface TextProps extends React.ComponentPropsWithoutRef<"span"> {
   transition?: CSSProperties["transition"];
   fontStyle?: CSSProperties["fontStyle"];
   letterSpacing?: CSSProperties["letterSpacing"];
+  cursor?: CSSProperties["cursor"];
 }
 
 export const Text = ({
@@ -90,6 +91,7 @@ export const Text = ({
   transition,
   fontStyle,
   letterSpacing,
+  cursor,
   ...rest
 }: TextProps) => {
   return (
@@ -114,6 +116,7 @@ export const Text = ({
       $fontStyle={fontStyle}
       $letterSpacing={letterSpacing}
       title={textElipsis ? (children as string) : undefined}
+      $cursor={cursor}
       {...rest}
     >
       {children}
@@ -136,6 +139,7 @@ type TextStyledProps = {
   $transition?: CSSProperties["transition"];
   $fontStyle?: CSSProperties["fontStyle"];
   $letterSpacing?: CSSProperties["letterSpacing"];
+  $cursor?: CSSProperties["cursor"];
 };
 
 const TextStyled = styled.span<TextStyledProps>`
@@ -219,5 +223,11 @@ const TextStyled = styled.span<TextStyledProps>`
       letter-spacing: ${typeof $letterSpacing === "string"
         ? $letterSpacing
         : `${$letterSpacing}px`};
+    `}
+
+    ${({ $cursor }) =>
+    $cursor &&
+    css`
+      cursor: ${$cursor};
     `}
 `;
