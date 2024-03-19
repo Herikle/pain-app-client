@@ -40,7 +40,7 @@ export const ImagesPath = {
   OkBro: "/assets/ok-bro.svg",
   VetIllustration: "/assets/vet.svg",
   MailSentBro: "/assets/mail-sent-bro.png",
-  PieceOfMindoBro: "/assets/piece-of-mind-bro.png",
+  PeaceOfMindoBro: "/assets/peace-of-mind-bro.png",
   Error404: "/assets/404-new.svg",
   MessageSent: "/assets/message-sent.svg",
   MessageError: "/assets/message-error.svg",

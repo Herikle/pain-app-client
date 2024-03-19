@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Eye, EyeClosed, Question } from "@phosphor-icons/react";
 import { Tooltip } from "react-tooltip";
-import styled, { css } from "styled-components";
-import { Text } from "@components/Text";
+import styled, { CSSProperties, css } from "styled-components";
+import { Text, TextVariant } from "@components/Text";
 import { theme } from "@styles/theme";
 
+type LabelOptions = {
+  textVariant?: TextVariant;
+  fontWeight?: CSSProperties["fontWeight"];
+};
+
 interface Props extends React.ComponentPropsWithoutRef<"input"> {
-  label?: string;
+  label?: React.ReactNode;
   fullWidth?: boolean;
   width?: string;
   error?: string;
@@ -14,6 +19,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   noPadding?: boolean;
   inputSize?: "small" | "medium" | "large";
   noBorder?: boolean;
+  labelOptions?: LabelOptions;
 }
 
 export const TextField = React.forwardRef(
@@ -27,19 +33,36 @@ export const TextField = React.forwardRef(
       noPadding,
       inputSize,
       noBorder,
+      labelOptions,
       ...rest
     }: Props,
     ref: any
   ) => {
     const [showPassword, setShowPassword] = useState(false);
 
+    const labelIsParsableString = useMemo(() => {
+      if (!label) return false;
+
+      const parsableStringValues = ["string", "number", "boolean"];
+
+      return parsableStringValues.includes(typeof label);
+    }, [label]);
+
     return (
       <Container $fullWidth={fullWidth} $width={width}>
         {label && (
           <Label htmlFor={rest?.id}>
-            <Text variant="body2Bold" whiteSpace="nowrap">
-              {label}
-            </Text>
+            {labelIsParsableString ? (
+              <Text
+                variant={labelOptions?.textVariant ?? "body2Bold"}
+                whiteSpace="nowrap"
+                fontWeight={labelOptions?.fontWeight}
+              >
+                {label}
+              </Text>
+            ) : (
+              label
+            )}
             {helperText && rest?.id && (
               <>
                 <Question size={16} weight="fill" id={`${rest?.id}-helper`} />
@@ -68,12 +91,21 @@ export const TextField = React.forwardRef(
             />
             <EyeContainer
               type="button"
+              tabIndex={-1}
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
-                <EyeClosed size={22} weight="bold" />
+                <EyeClosed
+                  size={22}
+                  weight="bold"
+                  color={theme.colors.secondary_font}
+                />
               ) : (
-                <Eye size={22} weight="bold" />
+                <Eye
+                  size={22}
+                  weight="bold"
+                  color={theme.colors.secondary_font}
+                />
               )}
             </EyeContainer>
           </InputContainer>

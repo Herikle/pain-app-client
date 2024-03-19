@@ -48,22 +48,14 @@ export const AccountForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <UnsavedChangesDialog shouldConfirmLeave={isDirty} />
       <Container>
-        <Text variant="h1">Change name</Text>
-        <Grid container spacing={4} width="100%">
-          <Grid xs={6}>
-            <TextField
-              label="Which name should be displayed?"
-              error={errors.name?.message}
-              {...register("name")}
-            />
-          </Grid>
-        </Grid>
-        <Button
-          width="140px"
-          loading={updateAccount.isLoading}
-          disabled={!isDirty}
-        >
-          Save changes
+        <TextField
+          fullWidth
+          label="Display name"
+          error={errors.name?.message}
+          {...register("name")}
+        />
+        <Button fullWidth loading={updateAccount.isLoading} disabled={!isDirty}>
+          Save display name
         </Button>
       </Container>
     </form>
@@ -73,9 +65,5 @@ export const AccountForm = () => {
 const Container = styled(FlexColumn)`
   gap: 2rem;
   justify-content: flex-start;
-  width: 500px;
-
-  ${media.up.tablet`
-    width: 100%;     
-  `}
+  width: 100%;
 `;

@@ -1,6 +1,6 @@
 import { Text, TextVariant } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { PencilSimpleLine } from "@phosphor-icons/react";
+import { Icon, PencilSimpleLine } from "@phosphor-icons/react";
 import { media } from "@styles/media-query";
 import { theme } from "@styles/theme";
 import Image from "next/image";
@@ -12,7 +12,9 @@ type Props = {
   description?: string;
   descriptionVariant?: TextVariant;
   descriptionWeight?: string;
+  EditPhorphorIcon?: Icon;
   onClickEdit?: () => void;
+  editIconAlwaysVisible?: boolean;
 };
 
 export const Badge = ({
@@ -22,6 +24,8 @@ export const Badge = ({
   descriptionVariant = "body2",
   descriptionWeight,
   onClickEdit,
+  editIconAlwaysVisible,
+  EditPhorphorIcon,
 }: Props) => {
   return (
     <Container data-testid="badge-container">
@@ -40,8 +44,16 @@ export const Badge = ({
             {label}
           </Text>
           {!!onClickEdit && (
-            <EditCircleIcon onClick={onClickEdit} data-testid="badge-edit-icon">
-              <PencilSimpleLine size={16} color={theme.colors.font_color} />
+            <EditCircleIcon
+              onClick={onClickEdit}
+              data-testid="badge-edit-icon"
+              $alwaysVisible={!!editIconAlwaysVisible}
+            >
+              {EditPhorphorIcon ? (
+                <EditPhorphorIcon size={16} color={theme.colors.font_color} />
+              ) : (
+                <PencilSimpleLine size={16} color={theme.colors.font_color} />
+              )}
             </EditCircleIcon>
           )}
         </FlexRow>
@@ -59,7 +71,11 @@ export const Badge = ({
   );
 };
 
-const EditCircleIcon = styled.div`
+type EditCircleProps = {
+  $alwaysVisible: boolean;
+};
+
+const EditCircleIcon = styled.div<EditCircleProps>`
   border-radius: 50%;
   cursor: pointer;
   width: 22px;
@@ -71,7 +87,7 @@ const EditCircleIcon = styled.div`
   &:hover {
     background-color: ${theme.colors.text_switched};
   }
-  opacity: 0;
+  opacity: ${({ $alwaysVisible }) => ($alwaysVisible ? 1 : 0)};
 
   ${media.up.tablet`
     opacity: 1;

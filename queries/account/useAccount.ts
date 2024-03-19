@@ -1,7 +1,7 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { IMe, IRole } from "types";
 import { ToastError, ToastSuccess } from "@utils/toasts";
 
@@ -145,6 +145,69 @@ export const useResetPassword = () => {
   return useMutation(resetPassword, {
     onSuccess: () => {
       ToastSuccess("Password reseted!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type RequestEmailChangePayload = {
+  body: {
+    newEmail: string;
+  };
+};
+
+const requestEmailChange = async ({
+  body: { newEmail },
+}: RequestEmailChangePayload) => {
+  await request({
+    service: "account",
+    url: "/request-email-change",
+    method: "POST",
+    data: { newEmail },
+  });
+
+  return true;
+};
+
+export const useRequestEmailChange = () => {
+  return useMutation(requestEmailChange, {
+    onSuccess: () => {
+      ToastSuccess("Email change requested!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type ConfirmEmailChangePayload = {
+  body: {
+    code: string;
+  };
+};
+
+const confirmEmailChange = async ({
+  body: { code },
+}: ConfirmEmailChangePayload) => {
+  await request({
+    service: "account",
+    url: "/confirm-email-change",
+    method: "PATCH",
+    data: { code },
+  });
+
+  return true;
+};
+
+export const useConfirmEmailChange = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(confirmEmailChange, {
+    onSuccess: () => {
+      ToastSuccess("Email change confirmed!");
+      queryClient.invalidateQueries([QueryKeys.Auth.Me]);
     },
     onError: (error: AxiosError) => {
       ToastError(error);

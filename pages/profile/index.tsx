@@ -5,7 +5,6 @@ import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import Router from "next/router";
-import { PasswordSettingsForm } from "@page-components/PasswordSettingsForm";
 import { useGetPatients } from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
@@ -18,6 +17,7 @@ import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
 import { useCreatePatient } from "@queries/patient/usePatient";
+import { Gear } from "@phosphor-icons/react";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -74,6 +74,8 @@ export default function ProfilePage() {
           description={user?.email}
           iconPath={IconsPath.Doctor}
           onClickEdit={openAccountInfoModal}
+          EditPhorphorIcon={Gear}
+          editIconAlwaysVisible
         />
 
         <Table
@@ -119,20 +121,10 @@ export default function ProfilePage() {
             },
           }}
         />
-        {!user?.noPassword && (
-          <FormContainer>
-            <PasswordSettingsForm />
-          </FormContainer>
-        )}
       </Container>
     </LoggedLayout>
   );
 }
-
-const FormContainer = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

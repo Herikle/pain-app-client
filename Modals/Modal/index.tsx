@@ -31,7 +31,6 @@ export const Modal = ({
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        console.log("escape");
         onClose && onClose();
       }
     };

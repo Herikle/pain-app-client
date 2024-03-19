@@ -31,22 +31,20 @@ export const StyledToastError = (message: string) => {
 
 export const ToastError = (error: AxiosError<any>) => {
   const status = error.response?.status;
+  const errorData = error.response?.data as ValidationError;
 
   if (status === 422) {
-    const errorData = error.response?.data as ValidationError;
     const errors = errorData.errors;
     if (!!errors) {
       Object.keys(errors).forEach((key) => {
         StyledToastError(errors[key]);
       });
-    } else {
-      if (!!errorData.message) {
-        StyledToastError(errorData.message);
-      } else {
-        StyledToastError("Something went wrong!");
-      }
+      return;
     }
-  }else {
+  }
+  if (!!errorData?.message) {
+    StyledToastError(errorData.message);
+  } else {
     StyledToastError("Something went wrong!");
   }
 };

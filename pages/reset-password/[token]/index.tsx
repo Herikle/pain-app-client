@@ -68,7 +68,7 @@ export default function ResetPassword() {
                 width={250}
                 height={250}
                 alt="All set"
-                src={ImagesPath.PieceOfMindoBro}
+                src={ImagesPath.PeaceOfMindoBro}
               />
               <Link href={RoutesPath.login} style={{ width: "100%" }}>
                 <Button variant="contained" color="primary" fullWidth>
