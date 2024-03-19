@@ -9,6 +9,7 @@ import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
 import { useConfirmEmailChange } from "@queries/account/useAccount";
+import { LoadingWrapper } from "@components/LoadingWrapper";
 
 type ConfirmCodeEmailChangeProps = {
   onSuccess: () => void;
@@ -51,6 +52,7 @@ export const ConfirmCodeEmailChange = ({
 
   return (
     <Container>
+      <LoadingWrapper overContainer loading={confirmEmailChange.isLoading} />
       <FlexColumn justify="center" align="center" gap={2} height="100%">
         <Image
           src={ImagesPath.MailSentBro}
