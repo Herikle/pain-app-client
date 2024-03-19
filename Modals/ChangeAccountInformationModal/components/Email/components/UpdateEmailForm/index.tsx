@@ -8,6 +8,7 @@ import { TextField } from "@components/TextField";
 import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
 import { MainFormContainer } from "Modals/ChangeAccountInformationModal/components/shared-styles";
+import { useRequestEmailChange } from "@queries/account/useAccount";
 
 const changeEmailSchema = z
   .object({
@@ -33,9 +34,16 @@ export const UpdateEmailForm = ({ onBack, onSuccess }: EmailProps) => {
     resolver: zodResolver(changeEmailSchema),
   });
 
+  const requestEmailChange = useRequestEmailChange();
+
   const { errors } = formState;
 
-  const onSubmit = (data: z.infer<typeof changeEmailSchema>) => {
+  const onSubmit = async (data: z.infer<typeof changeEmailSchema>) => {
+    await requestEmailChange.mutateAsync({
+      body: {
+        newEmail: data.email,
+      },
+    });
     onSuccess(data.email);
   };
 
@@ -62,7 +70,7 @@ export const UpdateEmailForm = ({ onBack, onSuccess }: EmailProps) => {
               {...register("confirmEmail")}
               error={errors.confirmEmail?.message}
             />
-            <Button>Proceed</Button>
+            <Button loading={requestEmailChange.isLoading}>Proceed</Button>
           </FlexColumn>
         </form>
       </FlexColumn>

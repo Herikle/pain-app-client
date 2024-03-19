@@ -42,7 +42,7 @@ export const ToastError = (error: AxiosError<any>) => {
       return;
     }
   }
-  if (!!errorData.message) {
+  if (!!errorData?.message) {
     StyledToastError(errorData.message);
   } else {
     StyledToastError("Something went wrong!");

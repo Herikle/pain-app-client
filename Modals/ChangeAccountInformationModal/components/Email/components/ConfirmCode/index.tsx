@@ -8,6 +8,7 @@ import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
+import { useConfirmEmailChange } from "@queries/account/useAccount";
 
 type ConfirmCodeEmailChangeProps = {
   onSuccess: () => void;
@@ -22,8 +23,14 @@ export const ConfirmCodeEmailChange = ({
 
   const [counter, setCounter] = useState(90);
 
-  const handleCompletePin = (value: string) => {
-    console.log(value);
+  const confirmEmailChange = useConfirmEmailChange();
+
+  const handleCompletePin = async (value: string) => {
+    await confirmEmailChange.mutateAsync({
+      body: {
+        code: value,
+      },
+    });
     onSuccess();
   };
 
@@ -84,7 +91,7 @@ export const ConfirmCodeEmailChange = ({
               color={counterIsZero ? "primary" : "font_color"}
               cursor={counterIsZero ? "pointer" : "default"}
             >
-              Send again{" "}
+              Retry{" "}
               {!counterIsZero && <>({secondsToMinutesAndSeconds(counter)})</>}
             </Text>
           </Text>
