@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
 import { useConfirmEmailChange } from "@queries/account/useAccount";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import { media } from "@styles/media-query";
 
 type ConfirmCodeEmailChangeProps = {
   onSuccess: () => void;
@@ -65,25 +66,14 @@ export const ConfirmCodeEmailChange = ({
           <strong>{user?.email}</strong>
         </Text>
         <Text variant="body1">Enter the six-digit code you received here:</Text>
-        <FlexColumn mt={1} justify="center" align="center" gap={3} width="100%">
-          <PinInput
-            length={6}
-            onComplete={handleCompletePin}
-            inputStyle={{
-              backgroundColor: theme.colors.pastel,
-              border: `1px solid ${theme.colors.dark_pastel}`,
-              borderRadius: "14px",
-              height: "88px",
-              width: "74px",
-              fontSize: "24px",
-              fontWeight: "normal",
-            }}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-            }}
-          />
+        <PinInputContainer
+          mt={1}
+          justify="center"
+          align="center"
+          gap={3}
+          width="100%"
+        >
+          <PinInput length={6} onComplete={handleCompletePin} />
           <Text variant="body1">
             {"Didn't receive a link?"}{" "}
             <Text
@@ -97,11 +87,36 @@ export const ConfirmCodeEmailChange = ({
               {!counterIsZero && <>({secondsToMinutesAndSeconds(counter)})</>}
             </Text>
           </Text>
-        </FlexColumn>
+        </PinInputContainer>
       </FlexColumn>
     </Container>
   );
 };
+
+const PinInputContainer = styled(FlexColumn)`
+  & .pincode-input-text {
+    width: 74px !important;
+    height: 88px !important;
+    background-color: ${theme.colors.pastel};
+    border: 1px solid ${theme.colors.dark_pastel};
+    border-radius: 14px;
+    font-size: 24px;
+    font-weight: normal;
+    ${media.up.tablet`
+      width: 100% !important;    
+      height: 60px !important;  
+    `};
+  }
+
+  & .pincode-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    ${media.up.tablet`
+      gap: 0.25rem;
+    `};
+  }
+`;
 
 const Container = styled.div`
   width: 100%;
