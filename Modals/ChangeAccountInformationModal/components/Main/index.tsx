@@ -29,7 +29,7 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
             Change your e-mail
           </Button>
         </FlexColumn>
-        {!user?.noPassword && (
+        {!user?.noPassword ? (
           <FlexColumn gap={1.5}>
             <Text variant="body1Bold">Password</Text>
             <Text variant="body1" color="text_switched">
@@ -37,6 +37,16 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
             </Text>
             <Button fullWidth onClick={() => onChangePage?.("password")}>
               Change your password
+            </Button>
+          </FlexColumn>
+        ) : (
+          <FlexColumn gap={1.5}>
+            <Text variant="body1Bold">Password</Text>
+            <Text variant="body1" color="text_switched">
+              {"You don't have a password set yet."}
+            </Text>
+            <Button fullWidth onClick={() => onChangePage?.("setPassword")}>
+              Set your password
             </Button>
           </FlexColumn>
         )}

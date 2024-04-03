@@ -7,8 +7,13 @@ import styled, { css } from "styled-components";
 import { media } from "@styles/media-query";
 import { Password } from "./components/Password";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { SetPassword } from "./components/SetPassword";
 
-export type AccountInformationsPages = "main" | "email" | "password";
+export type AccountInformationsPages =
+  | "main"
+  | "email"
+  | "password"
+  | "setPassword";
 
 export type ChildPropsChangeAccountInformationModal = {
   onClose: () => void;
@@ -30,6 +35,7 @@ const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
         onSuccess={() => setChangePasswordSuccess(true)}
       />
     ),
+    setPassword: <SetPassword onBack={() => setPage("main")} />,
   };
 
   const close = () => {
