@@ -8,32 +8,32 @@ import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
-import { useConfirmEmailChange } from "@queries/account/useAccount";
+import { useConfirmSetPasswordCode } from "@queries/account/useAccount";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { media } from "@styles/media-query";
 
-type ConfirmCodeEmailChangeProps = {
-  onSuccess: () => void;
+type ConfirmCodeSetPasswordProps = {
+  onSuccess: (secret_token: string) => void;
   onRetrySendCode: () => void;
 };
 
 export const ConfirmCodeSetPassword = ({
   onSuccess,
   onRetrySendCode,
-}: ConfirmCodeEmailChangeProps) => {
+}: ConfirmCodeSetPasswordProps) => {
   const { user } = useAuth();
 
   const [counter, setCounter] = useState(90);
 
-  const confirmEmailChange = useConfirmEmailChange();
+  const confirmSetPasswordCode = useConfirmSetPasswordCode();
 
   const handleCompletePin = async (value: string) => {
-    await confirmEmailChange.mutateAsync({
+    const secret_token = await confirmSetPasswordCode.mutateAsync({
       body: {
         code: value,
       },
     });
-    onSuccess();
+    onSuccess(secret_token);
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const ConfirmCodeSetPassword = ({
 
   return (
     <Container>
-      <LoadingWrapper overContainer loading={confirmEmailChange.isLoading} />
+      <LoadingWrapper overContainer loading={false} />
       <FlexColumn justify="center" align="center" gap={2} height="100%">
         <Image
           src={ImagesPath.MailSentBro}
@@ -73,7 +73,7 @@ export const ConfirmCodeSetPassword = ({
           gap={3}
           width="100%"
         >
-          <PinInput length={6} onComplete={handleCompletePin} />
+          <PinInput length={6} onComplete={handleCompletePin} type="custom" />
           <Text variant="body1">
             {"Didn't receive a link?"}{" "}
             <Text

@@ -235,3 +235,30 @@ export const useRequestSetAccountPassword = () => {
     },
   });
 };
+
+type ConfirmSetPasswordCode = {
+  body: {
+    code: string;
+  };
+};
+
+const confirmSetPasswordCode = async ({
+  body: { code },
+}: ConfirmSetPasswordCode) => {
+  const { data } = await request({
+    service: "account",
+    url: "/confirm-set-password-code",
+    method: "PATCH",
+    data: { code },
+  });
+
+  return data as string;
+};
+
+export const useConfirmSetPasswordCode = () => {
+  return useMutation(confirmSetPasswordCode, {
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};

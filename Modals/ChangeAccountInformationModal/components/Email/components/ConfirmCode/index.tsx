@@ -73,7 +73,7 @@ export const ConfirmCodeEmailChange = ({
           gap={3}
           width="100%"
         >
-          <PinInput length={6} onComplete={handleCompletePin} />
+          <PinInput length={6} onComplete={handleCompletePin} type="custom" />
           <Text variant="body1">
             {"Didn't receive a link?"}{" "}
             <Text

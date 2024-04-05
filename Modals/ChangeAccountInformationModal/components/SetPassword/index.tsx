@@ -7,12 +7,13 @@ type EmailProps = {
 };
 
 export const SetPassword = ({ onBack, onSuccess }: EmailProps) => {
-  const [isCodeSuccess, setIsCodeSuccess] = useState(false);
+  const [secretToken, setSecretToken] = useState<string | null>(null);
 
   return (
     <ConfirmCodeSetPassword
-      onSuccess={() => {
-        setIsCodeSuccess(true);
+      onSuccess={(secret_token) => {
+        console.log(secret_token);
+        setSecretToken(secret_token);
       }}
       onRetrySendCode={() => {}}
     />
