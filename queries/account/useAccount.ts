@@ -214,3 +214,24 @@ export const useConfirmEmailChange = () => {
     },
   });
 };
+
+const requestSetAccountPassword = async () => {
+  await request({
+    service: "account",
+    url: "/request-set-account-password",
+    method: "POST",
+  });
+
+  return true;
+};
+
+export const useRequestSetAccountPassword = () => {
+  return useMutation(requestSetAccountPassword, {
+    onSuccess: () => {
+      ToastSuccess("Password set requested!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
