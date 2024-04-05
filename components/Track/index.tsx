@@ -66,6 +66,7 @@ export const SegmentsTitleComponent = ({
         <TooltipContent
           key={pain}
           tooltip={PAIN_DEFITIONS[pain]}
+          bgColor={theme.pain_level_colors[pain]}
           place="top-start"
           minWidth={"500px"}
         >

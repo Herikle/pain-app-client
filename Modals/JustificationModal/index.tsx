@@ -320,7 +320,10 @@ const JustificationModal = ({
                       justify="flex-start"
                       gap={1}
                     >
-                      <TooltipContent tooltip={PAIN_DEFITIONS[painLevel.value]}>
+                      <TooltipContent
+                        tooltip={PAIN_DEFITIONS[painLevel.value]}
+                        bgColor={theme.pain_level_colors[painLevel.value]}
+                      >
                         <Text
                           variant="h3"
                           customColor={theme.pain_level_colors[painLevel.value]}
