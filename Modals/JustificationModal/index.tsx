@@ -71,9 +71,17 @@ const painLevels = [
   },
 ];
 
+const levelsResultExplanation = {
+  0: "strong and definitive evidence against the hypothesis, enough to reject it by itself.",
+  1: "evidence that is inconsistent with the this hypothesis, but not strong enough to completely reject it.",
+  2: "indicates a lack of evidence to support or refute the hypothesis, or that the information is irrelevant to the hypothesis matter",
+  3: "evidence that is consistent with this hypothesis, but not strong enough to confirm it by itself.",
+  4: "strong evidence to support the hypothesis, enough to confirm it by itself.",
+};
+
 const levelsResult = {
   0: "(Ψ) Reject",
-  1: "(-) Inconsistent",
+  1: "(-) Contradict",
   2: "(Ο) Neutral",
   3: "(+) Support",
   4: "(Ω) Confirm",
@@ -348,13 +356,22 @@ const JustificationModal = ({
                           marginTop: "5px",
                         }}
                       />
-                      <Text variant="h3" whiteSpace="nowrap" minWidth="120px">
-                        {
-                          levelsResult[
+                      <TooltipContent
+                        tooltip={
+                          levelsResultExplanation[
                             watch(`ranking.${painLevel.value}` as any)
                           ]
                         }
-                      </Text>
+                        place="top-start"
+                      >
+                        <Text variant="h3" whiteSpace="nowrap" minWidth="120px">
+                          {
+                            levelsResult[
+                              watch(`ranking.${painLevel.value}` as any)
+                            ]
+                          }
+                        </Text>
+                      </TooltipContent>
                     </PainLevelRow>
                   ))}
                 </PainLevelsSwitch>
