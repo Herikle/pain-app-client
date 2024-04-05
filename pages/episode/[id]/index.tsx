@@ -205,12 +205,12 @@ export default function EpisodePage() {
                   onClick={openSaveModal}
                 />
                 <Text variant="body1">
-                  To save any information, you need to{" "}
+                  To effectively track your data, please{" "}
                   <Link
                     href={RoutesPath.register}
                     style={{ textDecoration: "underline" }}
                   >
-                    Create an account
+                    create an account
                   </Link>{" "}
                   or{" "}
                   <Link
@@ -269,7 +269,17 @@ export default function EpisodePage() {
           </Container>
           {saveModal && (
             <ConfirmActionModal
-              description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
+              description={
+                <FlexColumn>
+                  <Text variant="body2">
+                    To effectively track and manage your pain episodes, creating
+                    an account is required. Simply sign in, and {`you'll`} have
+                    the ability to document as many episodes as you need, (and
+                    across various subjects—particularly beneficial if{" "}
+                    {`you're`} a doctor, veterinarian, or animal scientist).
+                  </Text>
+                </FlexColumn>
+              }
               confirmText="Create an account now"
               cancelText={
                 <Text variant="body2">
