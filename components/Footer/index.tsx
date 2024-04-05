@@ -4,6 +4,7 @@ import { Text } from "@components/Text";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";
+import { media } from "@styles/media-query";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -40,6 +41,11 @@ const FooterLinks = styled.div`
   display: flex;
   align-items: center;
   gap: 80px;
+
+  ${media.up.mobileL`
+    gap: 0.5rem;
+    flex-direction: column;
+  `}
 `;
 
 const Container = styled.div`
@@ -50,4 +56,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${media.up.mobileM`
+    overflow:hidden;
+  `}
 `;

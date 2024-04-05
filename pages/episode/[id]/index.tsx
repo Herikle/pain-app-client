@@ -34,6 +34,7 @@ import { UnsavedChangesDialog } from "@components/UnsavedChangesDialog";
 import { TooltipContent } from "@components/TooltipContent";
 import { Error404 } from "@page-components/errors/404";
 import { useEpisodeStateValue } from "state/useEpisodeState";
+import { TextField } from "@components/TextField";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -59,6 +60,8 @@ export default function EpisodePage() {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const [confirmExportEpisode, setConfirmExportEpisode] = useState(false);
+
+  const [fileNameExported, setFileNameExported] = useState("");
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -120,6 +123,17 @@ export default function EpisodePage() {
       },
     });
 
+    const json = JSON.stringify(episodeExported, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+
+    const fileName = fileNameExported || getDefaultFileName();
+
+    fileDownload(blob, `${fileName}.json`);
+
+    setConfirmExportEpisode(false);
+  };
+
+  const getDefaultFileName = () => {
     const first05PatientName = episode?.patient?.name.slice(0, 5);
 
     const first10EpisodeName = episode?.name.slice(0, 10);
@@ -127,12 +141,15 @@ export default function EpisodePage() {
     const currentDate = new Date().toISOString().split("T")[0];
 
     const fileName = `Episode_${first05PatientName}_${first10EpisodeName}_${currentDate}`;
-    const json = JSON.stringify(episodeExported, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
 
-    fileDownload(blob, `${fileName}.json`);
+    return fileName;
+  };
 
-    setConfirmExportEpisode(false);
+  const openConfirmExportation = () => {
+    const fileName = getDefaultFileName();
+
+    setFileNameExported(fileName);
+    setConfirmExportEpisode(true);
   };
 
   const ignorePaths = useMemo(() => {
@@ -188,12 +205,12 @@ export default function EpisodePage() {
                   onClick={openSaveModal}
                 />
                 <Text variant="body1">
-                  To save any information, you need to{" "}
+                  To effectively track your data, please{" "}
                   <Link
                     href={RoutesPath.register}
                     style={{ textDecoration: "underline" }}
                   >
-                    Create an account
+                    create an account
                   </Link>{" "}
                   or{" "}
                   <Link
@@ -218,9 +235,7 @@ export default function EpisodePage() {
                       <Export
                         size={24}
                         color={theme.colors.text_switched}
-                        onClick={() => {
-                          setConfirmExportEpisode(true);
-                        }}
+                        onClick={openConfirmExportation}
                         cursor="pointer"
                       />
                     </TooltipContent>
@@ -254,7 +269,17 @@ export default function EpisodePage() {
           </Container>
           {saveModal && (
             <ConfirmActionModal
-              description="To record information about a pain episode, an account is required. Simply sign in, and you'll have the ability to document as many episodes as you need, (and across various subjects—particularly beneficial if you're a doctor, veterinarian, or animal scientist)"
+              description={
+                <FlexColumn>
+                  <Text variant="body2">
+                    To effectively track and manage your pain episodes, creating
+                    an account is required. Simply sign in, and {`you'll`} have
+                    the ability to document as many episodes as you need, (and
+                    across various subjects—particularly beneficial if{" "}
+                    {`you're`} a doctor, veterinarian, or animal scientist).
+                  </Text>
+                </FlexColumn>
+              }
               confirmText="Create an account now"
               cancelText={
                 <Text variant="body2">
@@ -291,7 +316,15 @@ export default function EpisodePage() {
               }}
               loading={exportEpisode.isLoading}
               title="Exporting"
-              description="Would you like to export this episode as a JSON file?"
+              description={
+                <FlexColumn>
+                  You can choose a name for the file that will be exported.
+                  <TextField
+                    value={fileNameExported}
+                    onChange={(e) => setFileNameExported(e.target.value)}
+                  />
+                </FlexColumn>
+              }
               confirmText="Export now"
               cancelText="Go back"
             />

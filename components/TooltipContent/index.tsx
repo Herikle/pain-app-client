@@ -1,3 +1,4 @@
+import { theme } from "@styles/theme";
 import { useMemo } from "react";
 import { PlacesType, Tooltip } from "react-tooltip";
 import styled from "styled-components";
@@ -8,6 +9,7 @@ type TooltipContentProps = {
   tooltip: string;
   place?: PlacesType;
   minWidth?: string;
+  bgColor?: string;
 };
 
 export const TooltipContent = ({
@@ -15,6 +17,7 @@ export const TooltipContent = ({
   tooltip,
   place,
   minWidth,
+  bgColor,
 }: TooltipContentProps) => {
   const id = useMemo(() => v4(), []);
 
@@ -22,13 +25,11 @@ export const TooltipContent = ({
     <Container data-tooltip-id={id}>
       {children}
       <Tooltip
-        style={
-          minWidth
-            ? {
-                minWidth,
-              }
-            : undefined
-        }
+        style={{
+          minWidth: minWidth ? minWidth : "auto",
+          backgroundColor: bgColor ? bgColor : "#222",
+          zIndex: 1,
+        }}
         anchorSelect={`[data-tooltip-id="${id}"]`}
         place={place}
       >
