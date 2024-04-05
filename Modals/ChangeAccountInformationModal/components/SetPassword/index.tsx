@@ -1,21 +1,36 @@
 import React, { useState } from "react";
 import { ConfirmCodeSetPassword } from "./components/ConfirmCode";
+import { SetPasswordFormForm } from "./components/SetPasswordForm";
+import { PasswordSuccessfullySetted } from "./components/Success";
 
 type EmailProps = {
-  onBack: () => void;
   onSuccess: () => void;
 };
 
-export const SetPassword = ({ onBack, onSuccess }: EmailProps) => {
+export const SetPassword = ({ onSuccess }: EmailProps) => {
   const [secretToken, setSecretToken] = useState<string | null>(null);
 
-  return (
+  const [success, setSuccess] = useState(false);
+
+  const onSuccessSetPassword = () => {
+    setSuccess(true);
+    onSuccess();
+  };
+
+  return !!secretToken ? (
+    success ? (
+      <PasswordSuccessfullySetted />
+    ) : (
+      <SetPasswordFormForm
+        secret_token={secretToken}
+        onSuccess={onSuccessSetPassword}
+      />
+    )
+  ) : (
     <ConfirmCodeSetPassword
       onSuccess={(secret_token) => {
-        console.log(secret_token);
         setSecretToken(secret_token);
       }}
-      onRetrySendCode={() => {}}
     />
   );
 };

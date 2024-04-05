@@ -8,24 +8,27 @@ import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
-import { useConfirmSetPasswordCode } from "@queries/account/useAccount";
+import {
+  useConfirmSetPasswordCode,
+  useRequestSetAccountPassword,
+} from "@queries/account/useAccount";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { media } from "@styles/media-query";
 
 type ConfirmCodeSetPasswordProps = {
   onSuccess: (secret_token: string) => void;
-  onRetrySendCode: () => void;
 };
 
 export const ConfirmCodeSetPassword = ({
   onSuccess,
-  onRetrySendCode,
 }: ConfirmCodeSetPasswordProps) => {
   const { user } = useAuth();
 
   const [counter, setCounter] = useState(90);
 
   const confirmSetPasswordCode = useConfirmSetPasswordCode();
+
+  const requestSetPasswordMutation = useRequestSetAccountPassword();
 
   const handleCompletePin = async (value: string) => {
     const secret_token = await confirmSetPasswordCode.mutateAsync({
@@ -44,16 +47,23 @@ export const ConfirmCodeSetPassword = ({
 
   const counterIsZero = counter === 0;
 
-  const retrySendCode = () => {
+  const retrySendCode = async () => {
     if (!counterIsZero) return;
 
-    onRetrySendCode();
+    await requestSetPasswordMutation.mutateAsync();
+
     setCounter(90);
   };
 
   return (
     <Container>
-      <LoadingWrapper overContainer loading={false} />
+      <LoadingWrapper
+        overContainer
+        loading={
+          confirmSetPasswordCode.isLoading ||
+          requestSetPasswordMutation.isLoading
+        }
+      />
       <FlexColumn justify="center" align="center" gap={2} height="100%">
         <Image
           src={ImagesPath.MailSentBro}

@@ -39,12 +39,7 @@ const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
         onSuccess={() => setChangePasswordSuccess(true)}
       />
     ),
-    setPassword: (
-      <SetPassword
-        onBack={() => setPage("main")}
-        onSuccess={() => setSetPasswordSuccess(true)}
-      />
-    ),
+    setPassword: <SetPassword onSuccess={() => setSetPasswordSuccess(true)} />,
   };
 
   const close = () => {
