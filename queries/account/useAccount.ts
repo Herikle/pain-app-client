@@ -214,3 +214,84 @@ export const useConfirmEmailChange = () => {
     },
   });
 };
+
+const requestSetAccountPassword = async () => {
+  await request({
+    service: "account",
+    url: "/request-set-account-password",
+    method: "POST",
+  });
+
+  return true;
+};
+
+export const useRequestSetAccountPassword = () => {
+  return useMutation(requestSetAccountPassword, {
+    onSuccess: () => {
+      ToastSuccess("Password set requested!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type ConfirmSetPasswordCode = {
+  body: {
+    code: string;
+  };
+};
+
+const confirmSetPasswordCode = async ({
+  body: { code },
+}: ConfirmSetPasswordCode) => {
+  const { data } = await request({
+    service: "account",
+    url: "/confirm-set-password-code",
+    method: "PATCH",
+    data: { code },
+  });
+
+  return data as string;
+};
+
+export const useConfirmSetPasswordCode = () => {
+  return useMutation(confirmSetPasswordCode, {
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};
+
+type SetPasswordAccount = {
+  body: {
+    password: string;
+    password_confirm: string;
+    secret_token: string;
+  };
+};
+
+const setPasswordAccount = async ({ body }: SetPasswordAccount) => {
+  await request({
+    service: "account",
+    url: "/set-password-account",
+    method: "PATCH",
+    data: body,
+  });
+
+  return true;
+};
+
+export const useSetPasswordAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(setPasswordAccount, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Auth.Me]);
+      ToastSuccess("Password set!");
+    },
+    onError: (error: AxiosError) => {
+      ToastError(error);
+    },
+  });
+};

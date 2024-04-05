@@ -7,8 +7,13 @@ import styled, { css } from "styled-components";
 import { media } from "@styles/media-query";
 import { Password } from "./components/Password";
 import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { SetPassword } from "./components/SetPassword";
 
-export type AccountInformationsPages = "main" | "email" | "password";
+export type AccountInformationsPages =
+  | "main"
+  | "email"
+  | "password"
+  | "setPassword";
 
 export type ChildPropsChangeAccountInformationModal = {
   onClose: () => void;
@@ -19,7 +24,11 @@ const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
 
   const [changePasswordSuccess, setChangePasswordSuccess] = useState(false);
 
+  const [setPasswordSuccess, setSetPasswordSuccess] = useState(false);
+
   const [closeConfirmation, setCloseConfirmation] = useState(false);
+
+  const [modalText, setModalText] = useState({ title: "", description: "" });
 
   const pages: Record<AccountInformationsPages, JSX.Element> = {
     main: <MainPage onChangePage={setPage} />,
@@ -30,12 +39,31 @@ const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
         onSuccess={() => setChangePasswordSuccess(true)}
       />
     ),
+    setPassword: <SetPassword onSuccess={() => setSetPasswordSuccess(true)} />,
   };
 
   const close = () => {
-    if (page === "password" && !changePasswordSuccess) {
-      setCloseConfirmation(true);
-      return;
+    if (page === "password") {
+      if (!changePasswordSuccess) {
+        setModalText({
+          title: "Password change in progress",
+          description:
+            "Are you sure you want to leave? All changes will be lost.",
+        });
+        setCloseConfirmation(true);
+        return;
+      }
+    }
+    if (page === "setPassword") {
+      if (!setPasswordSuccess) {
+        setCloseConfirmation(true);
+        setModalText({
+          title: "Password set in progress",
+          description:
+            "Are you sure you want to leave? All changes will be lost.",
+        });
+        return;
+      }
     }
     onClose();
   };
@@ -47,8 +75,8 @@ const Child = ({ onClose }: ChildPropsChangeAccountInformationModal) => {
       </Modal>
       {closeConfirmation && (
         <ConfirmActionModal
-          title="Password chage in progress"
-          description="Are you sure you want to leave? All changes will be lost."
+          title={modalText.title}
+          description={modalText.description}
           onClose={() => setCloseConfirmation(false)}
           onConfirm={onClose}
           confirmText="Leave"

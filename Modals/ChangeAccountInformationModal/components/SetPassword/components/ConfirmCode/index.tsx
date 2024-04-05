@@ -8,32 +8,35 @@ import { ImagesPath } from "@utils/icons";
 import { theme } from "@styles/theme";
 import { useEffect, useState } from "react";
 import { secondsToMinutesAndSeconds } from "@utils/helpers/time";
-import { useConfirmEmailChange } from "@queries/account/useAccount";
+import {
+  useConfirmSetPasswordCode,
+  useRequestSetAccountPassword,
+} from "@queries/account/useAccount";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { media } from "@styles/media-query";
 
-type ConfirmCodeEmailChangeProps = {
-  onSuccess: () => void;
-  onRetrySendCode: () => void;
+type ConfirmCodeSetPasswordProps = {
+  onSuccess: (secret_token: string) => void;
 };
 
-export const ConfirmCodeEmailChange = ({
+export const ConfirmCodeSetPassword = ({
   onSuccess,
-  onRetrySendCode,
-}: ConfirmCodeEmailChangeProps) => {
+}: ConfirmCodeSetPasswordProps) => {
   const { user } = useAuth();
 
   const [counter, setCounter] = useState(90);
 
-  const confirmEmailChange = useConfirmEmailChange();
+  const confirmSetPasswordCode = useConfirmSetPasswordCode();
+
+  const requestSetPasswordMutation = useRequestSetAccountPassword();
 
   const handleCompletePin = async (value: string) => {
-    await confirmEmailChange.mutateAsync({
+    const secret_token = await confirmSetPasswordCode.mutateAsync({
       body: {
         code: value,
       },
     });
-    onSuccess();
+    onSuccess(secret_token);
   };
 
   useEffect(() => {
@@ -44,16 +47,23 @@ export const ConfirmCodeEmailChange = ({
 
   const counterIsZero = counter === 0;
 
-  const retrySendCode = () => {
+  const retrySendCode = async () => {
     if (!counterIsZero) return;
 
-    onRetrySendCode();
+    await requestSetPasswordMutation.mutateAsync();
+
     setCounter(90);
   };
 
   return (
     <Container>
-      <LoadingWrapper overContainer loading={confirmEmailChange.isLoading} />
+      <LoadingWrapper
+        overContainer
+        loading={
+          confirmSetPasswordCode.isLoading ||
+          requestSetPasswordMutation.isLoading
+        }
+      />
       <FlexColumn justify="center" align="center" gap={2} height="100%">
         <Image
           src={ImagesPath.MailSentBro}
@@ -62,7 +72,7 @@ export const ConfirmCodeEmailChange = ({
           alt="Mail sent"
         />
         <Text variant="body1" align="center">
-          In order to proceed, we sent a code to your previous e-mail,{" "}
+          In order to proceed, we sent a code to your e-mail,{" "}
           <strong>{user?.email}</strong>
         </Text>
         <Text variant="body1">Enter the six-digit code you received here:</Text>
