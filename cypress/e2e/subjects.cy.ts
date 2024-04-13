@@ -1,5 +1,4 @@
 import user from "../fixtures/users/test-user.json";
-import "cypress-real-events";
 
 describe("test subjects actions", () => {
   beforeEach(() => {

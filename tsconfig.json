@@ -30,8 +30,7 @@
       "@layouts/*": ["layouts/*"],
       "@logic-components/*": ["logic-components/*"],
       "@design-components/*": ["design-components/*"]
-    },
-    "types": ["cypress", "node", "cypress-real-events"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules", "./cypress.config.ts", "cypress"]
