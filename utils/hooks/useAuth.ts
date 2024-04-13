@@ -50,6 +50,7 @@ export const useAuth = (options?: UseAuthOptions) => {
     isLogged: !!user,
     isLoading: loggedUser.isLoading,
     logOut,
+    isSuper: user?.super,
   };
 };
 

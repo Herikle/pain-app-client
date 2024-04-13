@@ -62,11 +62,13 @@ export const Login = ({ onSubmit, loading }: Props) => {
           </Link>
         </Text>
         <TextField
+          data-cy="email-input"
           label="Your e-mail"
           {...register("email")}
           error={errors.email?.message}
         />
         <TextField
+          data-cy="password-input"
           label="Your password"
           type="password"
           {...register("password")}
@@ -84,7 +86,12 @@ export const Login = ({ onSubmit, loading }: Props) => {
           </Text>
         </Link>
         <Buttons>
-          <Button fullWidth type="submit" loading={loading}>
+          <Button
+            fullWidth
+            type="submit"
+            loading={loading}
+            data-cy="login-button"
+          >
             Log in
           </Button>
           <Text variant="body2" color="font_color">

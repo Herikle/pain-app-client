@@ -66,9 +66,8 @@ export default function ProfilePage() {
 
   return (
     <LoggedLayout>
-      <Container>
+      <Container data-cy="profile-page">
         <Text variant="h1">Your profile</Text>
-
         <Badge
           label={user?.name}
           description={user?.email}
@@ -76,6 +75,9 @@ export default function ProfilePage() {
           onClickEdit={openAccountInfoModal}
           EditPhorphorIcon={Gear}
           editIconAlwaysVisible
+          iconProps={{
+            "data-cy": "edit-account-info",
+          }}
         />
 
         <Table
@@ -119,6 +121,9 @@ export default function ProfilePage() {
             onChangePage: (page) => {
               setCurrentPage(page - 1);
             },
+          }}
+          addButtonProps={{
+            "data-cy": "add-patient-button",
           }}
         />
       </Container>

@@ -10,6 +10,7 @@ type AddButtonProps = {
   loading?: boolean;
   id?: string;
   color?: ThemeColors;
+  "data-cy"?: string;
 };
 
 export const AddButton = ({
@@ -18,6 +19,7 @@ export const AddButton = ({
   loading,
   id,
   color,
+  "data-cy": dataCy,
 }: AddButtonProps) => {
   const render = (children) => {
     if (href) {
@@ -43,6 +45,7 @@ export const AddButton = ({
     <Container id={id} data-testid="add-button">
       <LoadingWrapper loading={!!loading} overContainer size={16} />
       <PlusCircle
+        data-cy={dataCy}
         onClick={onClick}
         cursor="pointer"
         size={32}

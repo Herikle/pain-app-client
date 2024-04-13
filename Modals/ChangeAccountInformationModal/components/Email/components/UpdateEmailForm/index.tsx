@@ -56,7 +56,7 @@ export const UpdateEmailForm = ({ onBack, onSuccess }: EmailProps) => {
         <Text variant="body1" color="text_switched">
           {user?.email}
         </Text>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} data-cy="update-email-form">
           <FlexColumn gap={1.5}>
             <TextField
               label="Enter the e-mail you want to use:"

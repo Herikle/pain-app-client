@@ -12,12 +12,12 @@ import { IEpisode, IMe, IPatient, IPrompt } from "types";
 import { MobileMenu } from "./components/MobileMenu";
 
 export const SideMenu = () => {
-  const { user, logOut, isLogged } = useAuth();
+  const { user, logOut, isLogged, isSuper } = useAuth();
 
   const { pathname } = useRouter();
 
   const getLastPrompt = useGetLastPrompt({
-    enabled: isLogged,
+    enabled: isLogged && isSuper,
   });
 
   const lastPrompt = useMemo(() => getLastPrompt.data, [getLastPrompt.data]);
