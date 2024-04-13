@@ -52,6 +52,9 @@ type Props = {
     pages: number;
     onChangePage: (page: number) => void;
   };
+  addButtonProps?: {
+    "data-cy"?: string;
+  };
 };
 
 export const Table = ({
@@ -62,6 +65,7 @@ export const Table = ({
   header,
   isLoading,
   pagination,
+  addButtonProps,
 }: Props) => {
   const thereIsNoData = !(data?.length > 0);
 
@@ -117,6 +121,7 @@ export const Table = ({
               onClick={header.onPlusClick}
               href={header.plusHref}
               loading={header.loading}
+              data-cy={addButtonProps?.["data-cy"]}
             />
           )}
         </Header>

@@ -20,7 +20,7 @@ export type SignUpPayload = {
   };
 };
 
-const signUp = async ({ body }: SignUpPayload) => {
+export const signUp = async ({ body }: SignUpPayload) => {
   const { data } = await request({
     method: "POST",
     service: "auth",

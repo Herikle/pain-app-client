@@ -22,6 +22,7 @@ type ButtonProps = {
   textColor?: ThemeColors;
   borderColor?: ThemeColors;
   noPadding?: boolean;
+  "data-cy"?: string;
 };
 
 const variants: Record<ButtonVariants, any> = {
@@ -52,6 +53,7 @@ export const Button = ({
   textColor,
   noPadding,
   borderColor,
+  "data-cy": dataCy,
 }: ButtonProps) => {
   const getTextColors = () => {
     if (textColor) {
@@ -80,6 +82,7 @@ export const Button = ({
       $noPadding={noPadding}
       $borderColor={borderColor ? theme.colors[borderColor] : undefined}
       disabled={disabled || loading}
+      data-cy={dataCy}
     >
       {loading ? (
         <LoadingWrapper data-testid="button-container-loading">

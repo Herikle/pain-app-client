@@ -113,7 +113,7 @@ export default function Patient() {
       {getPatientById.isError ? (
         <Error404 />
       ) : (
-        <Container>
+        <Container data-cy="patient-page">
           <BackButton href={RoutesPath.profile} text="Return to your profile" />
           <UserBadgeContainer justify="space-between">
             <Badge

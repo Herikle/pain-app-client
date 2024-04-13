@@ -15,6 +15,10 @@ type Props = {
   EditPhorphorIcon?: Icon;
   onClickEdit?: () => void;
   editIconAlwaysVisible?: boolean;
+  "data-cy"?: string;
+  iconProps?: {
+    "data-cy": string;
+  };
 };
 
 export const Badge = ({
@@ -26,9 +30,11 @@ export const Badge = ({
   onClickEdit,
   editIconAlwaysVisible,
   EditPhorphorIcon,
+  "data-cy": dataCy,
+  iconProps,
 }: Props) => {
   return (
-    <Container data-testid="badge-container">
+    <Container data-testid="badge-container" data-cy={dataCy}>
       <ImageBox>
         <Image
           src={iconPath}
@@ -39,7 +45,7 @@ export const Badge = ({
         />
       </ImageBox>
       <DescriptionContainer gap={1}>
-        <FlexRow gap={1}>
+        <FlexRow gap={1} justify="flex-start">
           <Text variant="h1" color="font_color">
             {label}
           </Text>
@@ -50,9 +56,17 @@ export const Badge = ({
               $alwaysVisible={!!editIconAlwaysVisible}
             >
               {EditPhorphorIcon ? (
-                <EditPhorphorIcon size={16} color={theme.colors.font_color} />
+                <EditPhorphorIcon
+                  size={16}
+                  color={theme.colors.font_color}
+                  data-cy={iconProps?.["data-cy"]}
+                />
               ) : (
-                <PencilSimpleLine size={16} color={theme.colors.font_color} />
+                <PencilSimpleLine
+                  size={16}
+                  color={theme.colors.font_color}
+                  data-cy={iconProps?.["data-cy"]}
+                />
               )}
             </EditCircleIcon>
           )}

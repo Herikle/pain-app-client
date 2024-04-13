@@ -26,7 +26,9 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
 
   return (
     <MainFormContainer>
-      <Text variant="h1">Account settings</Text>
+      <Text variant="h1" data-cy="account-settings-title">
+        Account settings
+      </Text>
       <FlexColumn mt={2} gap={3} width="100%">
         <AccountForm />
         <FlexColumn gap={1.5}>
@@ -34,7 +36,11 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
           <Text variant="body1" color="text_switched">
             {user?.email}
           </Text>
-          <Button fullWidth onClick={() => onChangePage?.("email")}>
+          <Button
+            fullWidth
+            onClick={() => onChangePage?.("email")}
+            data-cy="change-email-button"
+          >
             Change your e-mail
           </Button>
         </FlexColumn>
@@ -44,7 +50,11 @@ export const MainPage = ({ onChangePage }: MainPageProps) => {
             <Text variant="body1" color="text_switched">
               *********
             </Text>
-            <Button fullWidth onClick={() => onChangePage?.("password")}>
+            <Button
+              fullWidth
+              onClick={() => onChangePage?.("password")}
+              data-cy="change-password-button"
+            >
               Change your password
             </Button>
           </FlexColumn>

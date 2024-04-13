@@ -53,8 +53,14 @@ export const AccountForm = () => {
           label="Display name"
           error={errors.name?.message}
           {...register("name")}
+          data-cy="display-name-input"
         />
-        <Button fullWidth loading={updateAccount.isLoading} disabled={!isDirty}>
+        <Button
+          fullWidth
+          loading={updateAccount.isLoading}
+          disabled={!isDirty}
+          data-cy="save-display-name"
+        >
           Save display name
         </Button>
       </Container>
