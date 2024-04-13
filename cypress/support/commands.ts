@@ -63,13 +63,33 @@ Cypress.Commands.add("clearUserData", (email: string, password: string) => {
     });
 });
 
+Cypress.Commands.add("addSubjectTo", (email: string, password: string) => {
+  cy.request({
+    url: `${Cypress.env("API_URL")}/auth/login`,
+    method: "POST",
+    body: { email, password },
+  })
+    .its("body")
+    .then((body) => {
+      cy.request({
+        url: `${Cypress.env("API_URL")}/patient`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${body.token}`,
+        },
+      })
+        .its("body")
+        .then((body) => {
+          cy.wrap(body);
+        });
+    });
+});
+
 declare namespace Cypress {
   interface Chainable {
     login(email: string, password: string): Chainable<void>;
     clearUserData(email: string, password: string): Chainable<void>;
-    // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-    // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-    // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+    addSubjectTo(email: string, password: string): Chainable<any>;
     getByCy(selector: string, ...args: any): Chainable<JQuery<HTMLElement>>;
   }
 }

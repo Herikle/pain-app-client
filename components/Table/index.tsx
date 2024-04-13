@@ -142,7 +142,7 @@ export const Table = ({
           </Thead>
           <tbody>
             {data?.map((item, index) => (
-              <Tr key={index} $hasLink={!!mountHref}>
+              <Tr key={index} $hasLink={!!mountHref} data-cy="table-row">
                 {columns.map((column) => (
                   <Td key={column.accessor}>
                     {renderRowItem(

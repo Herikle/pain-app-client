@@ -21,6 +21,7 @@ type ConfirmActionModalProps = {
   cancelText?: React.ReactNode;
   hasCloseButton?: boolean;
   onCancel?: () => void;
+  "data-cy"?: string;
 };
 
 export const ConfirmActionModal = ({
@@ -34,6 +35,7 @@ export const ConfirmActionModal = ({
   cancelText = "No, I want to go back",
   hasCloseButton = false,
   onCancel,
+  "data-cy": dataCy,
 }: ConfirmActionModalProps) => {
   const [confirmationText, setConfirmationText] = useState("");
 
@@ -45,7 +47,7 @@ export const ConfirmActionModal = ({
 
   return (
     <Modal onClose={onClose} hasCloseButton={hasCloseButton}>
-      <Container gap={2}>
+      <Container gap={2} data-cy={dataCy}>
         {title && <Text variant="body2Bold">{title}</Text>}
         {description && <Text variant="body2">{description}</Text>}
         {writeConfirmation && (
@@ -58,6 +60,7 @@ export const ConfirmActionModal = ({
               onChange={(e) => setConfirmationText(e.target.value)}
               helperText="Respect case sensitive: 'A' is different from 'a'"
               id="confirmation-text"
+              data-cy="confirm-action-input"
             />
           </>
         )}
@@ -67,6 +70,7 @@ export const ConfirmActionModal = ({
             onClick={confirm}
             loading={loading}
             disabled={writeConfirmation && !isValid}
+            data-cy="confirm-action-button"
           >
             {confirmText}
           </Button>

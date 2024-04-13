@@ -30,6 +30,7 @@ const Child = ({ onClose, patient_id, patient }: DeletePatientModalProps) => {
 
   return (
     <ConfirmActionModal
+      data-cy="delete-patient-modal"
       onClose={onClose}
       onConfirm={onConfirm}
       title={
