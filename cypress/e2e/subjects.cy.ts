@@ -21,7 +21,7 @@ describe("test subjects actions", () => {
     });
   });
 
-  it("delete button is disable when first name is not typed", () => {
+  it("delete button is disabled when first name is not typed", () => {
     cy.addSubjectTo(user.email, user.password).then((subject) => {
       cy.visit(`patient/${subject._id}`);
       cy.getByCy("delete-patient-button").wait(1000).click();
@@ -31,7 +31,7 @@ describe("test subjects actions", () => {
     });
   });
 
-  it("delete button is enable when first name is typed", () => {
+  it("delete button is enabled when first name is typed", () => {
     cy.addSubjectTo(user.email, user.password).then((subject) => {
       cy.visit(`patient/${subject._id}`);
       cy.getByCy("delete-patient-button").wait(1000).click();
