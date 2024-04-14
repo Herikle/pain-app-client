@@ -17,7 +17,7 @@ describe("test episode actions", () => {
     });
   });
 
-  it.only("create a new episode importing from archive", () => {
+  it("create a new episode importing from archive", () => {
     cy.addSubjectTo(user.email, user.password).then((subject) => {
       cy.visit(`patient/${subject._id}`);
       cy.getByCy("add-episode-button").wait(1000).click();

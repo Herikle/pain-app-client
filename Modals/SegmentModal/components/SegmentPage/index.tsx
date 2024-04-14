@@ -93,7 +93,7 @@ export const SegmentPage = ({
 
   return (
     <form>
-      <Container>
+      <Container data-cy="segment-page">
         <Grid container spacing={4} width={isTablet ? "100%" : "50%"}>
           <Grid xs={12}>
             <TextField

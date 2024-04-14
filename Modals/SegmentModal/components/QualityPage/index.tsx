@@ -98,7 +98,7 @@ export const QualityPage = ({
 
   return (
     <form onChange={onUpdate}>
-      <Container>
+      <Container data-cy="quality-page">
         <SelectionSession gap={2}>
           <Section gap={1}>
             <Text variant="body1Bold">Pain Texture</Text>

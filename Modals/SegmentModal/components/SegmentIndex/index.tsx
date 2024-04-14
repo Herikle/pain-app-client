@@ -169,7 +169,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
 
   return (
     <>
-      <Container>
+      <Container data-cy="edit-segment-modal">
         <Content>
           <TabsContainer>
             <Tabs
@@ -186,6 +186,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
               allowScrollButtonsMobile
             >
               <Tab
+                data-cy="segment-tab"
                 label={
                   <Text variant="body1Bold" color={getColor(0)}>
                     Segment
@@ -194,6 +195,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
                 sx={TabSx}
               />
               <Tab
+                data-cy="intensities-tab"
                 label={
                   <Text variant="body1Bold" color={getColor(1)}>
                     Intensities
@@ -202,6 +204,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
                 sx={TabSx}
               />
               <Tab
+                data-cy="quality-tab"
                 label={
                   <Text variant="body1Bold" color={getColor(2)}>
                     Quality
@@ -210,6 +213,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
                 sx={TabSx}
               />
               <Tab
+                data-cy="intervention-tab"
                 label={
                   <Text variant="body1Bold" color={getColor(3)}>
                     Intervention
@@ -218,6 +222,7 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
                 sx={TabSx}
               />
               <Tab
+                data-cy="symptoms-tab"
                 label={
                   <Text variant="body1Bold" color={getColor(4)}>
                     Symptoms

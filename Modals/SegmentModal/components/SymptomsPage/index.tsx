@@ -106,7 +106,7 @@ export const SymptomsPage = ({ symptoms, onChange }: Props) => {
 
   return (
     <>
-      <Container>
+      <Container data-cy="symptoms-page">
         <ListSymptom>
           <AddTitle justify="space-between">
             <FlexRow>

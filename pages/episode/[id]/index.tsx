@@ -263,6 +263,7 @@ export default function EpisodePage() {
                   <AddButton
                     onClick={onCreateTrack}
                     loading={createTrack.isLoading}
+                    data-cy="add-track-button"
                   />
                 </FlexRow>
                 <ListTrack episode_id={id} />
