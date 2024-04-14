@@ -1,0 +1,82 @@
+{
+  "_id": "661b652c0d8f996b7ce6590d",
+  "name": "Sample Episode",
+  "patient_id": "661b652c0d8f996b7ce65908",
+  "creator_id": "65b9d59967b985f5994097a2",
+  "createdAt": "2024-04-14T05:10:04.954Z",
+  "updatedAt": "2024-04-14T05:10:04.954Z",
+  "__v": 0,
+  "patient": {
+    "_id": "661b652c0d8f996b7ce65908",
+    "name": "Subject 1",
+    "creator_id": "65b9d59967b985f5994097a2",
+    "type": "human",
+    "createdAt": "2024-04-14T05:10:04.827Z",
+    "updatedAt": "2024-04-14T05:10:04.827Z",
+    "__v": 0,
+    "id": "661b652c0d8f996b7ce65908"
+  },
+  "tracks": [
+    {
+      "_id": "661b652c0d8f996b7ce65910",
+      "name": "New Track 1",
+      "pain_type": "physical",
+      "episode_id": "661b652c0d8f996b7ce6590d",
+      "createdAt": "2024-04-14T05:10:04.957Z",
+      "updatedAt": "2024-04-14T05:10:04.957Z",
+      "__v": 0,
+      "segments": [
+        {
+          "intensities": {
+            "type": "values"
+          },
+          "_id": "661b652c0d8f996b7ce65912",
+          "time_unit": "minutes",
+          "pain_type": "acute",
+          "track_id": "661b652c0d8f996b7ce65910",
+          "interventions": [],
+          "symptoms": [],
+          "createdAt": "2024-04-14T05:10:04.960Z",
+          "updatedAt": "2024-04-14T05:10:04.960Z",
+          "__v": 0,
+          "justifications": [],
+          "id": "661b652c0d8f996b7ce65912"
+        },
+        {
+          "intensities": {
+            "type": "values"
+          },
+          "_id": "661b652c0d8f996b7ce65913",
+          "time_unit": "minutes",
+          "pain_type": "acute",
+          "track_id": "661b652c0d8f996b7ce65910",
+          "interventions": [],
+          "symptoms": [],
+          "createdAt": "2024-04-14T05:10:04.960Z",
+          "updatedAt": "2024-04-14T05:10:04.960Z",
+          "__v": 0,
+          "justifications": [],
+          "id": "661b652c0d8f996b7ce65913"
+        },
+        {
+          "intensities": {
+            "type": "values"
+          },
+          "_id": "661b652c0d8f996b7ce65914",
+          "time_unit": "minutes",
+          "pain_type": "acute",
+          "track_id": "661b652c0d8f996b7ce65910",
+          "interventions": [],
+          "symptoms": [],
+          "createdAt": "2024-04-14T05:10:04.960Z",
+          "updatedAt": "2024-04-14T05:10:04.960Z",
+          "__v": 0,
+          "justifications": [],
+          "id": "661b652c0d8f996b7ce65914"
+        }
+      ],
+      "id": "661b652c0d8f996b7ce65910"
+    }
+  ],
+  "id": "661b652c0d8f996b7ce6590d"
+}

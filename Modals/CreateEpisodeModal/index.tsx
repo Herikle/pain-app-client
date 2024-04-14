@@ -140,19 +140,31 @@ const ImportFromArchive = ({ patient_id, onClose }: ImportFromArchiveProps) => {
         )}
         {!archive ? (
           <label ref={labelRef}>
-            <input type="file" accept=".json" onChange={onChangeInput} hidden />
+            <input
+              data-cy="import-episode-input"
+              type="file"
+              accept=".json"
+              onChange={onChangeInput}
+              hidden
+            />
             <Button
               fullWidth
               type="button"
               onClick={() => {
                 labelRef.current?.click();
               }}
+              data-cy="browse-files-button"
             >
               Browse files...
             </Button>
           </label>
         ) : (
-          <Button fullWidth type="button" onClick={runImport}>
+          <Button
+            fullWidth
+            type="button"
+            onClick={runImport}
+            data-cy="import-episode-button"
+          >
             Import
           </Button>
         )}
@@ -218,6 +230,7 @@ const Child = ({ onClose, patient_id }: ChildPropsCreateEpisodeModal) => {
               title="Create a new episode"
               description="Start from zero and create a default episode"
               onClick={createEpisodeHandler}
+              data-cy="create-episode-option"
             />
             <Option
               icon={
@@ -229,6 +242,7 @@ const Child = ({ onClose, patient_id }: ChildPropsCreateEpisodeModal) => {
               onClick={() => {
                 setPage("import");
               }}
+              data-cy="import-episode-option"
             />
           </>
         )}
