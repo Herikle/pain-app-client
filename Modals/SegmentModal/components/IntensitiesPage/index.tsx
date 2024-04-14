@@ -90,7 +90,7 @@ export const IntensitiesPage = ({
 
   return (
     <form>
-      <Container>
+      <Container data-cy="intensities-page">
         <FlexColumn>
           <FlexRow gap={6} pl={3}>
             <Radio label="Draw" value="draw" {...register("type")} />

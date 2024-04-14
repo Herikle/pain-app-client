@@ -138,7 +138,7 @@ export const Track = ({ track }: TrackProps) => {
   const hasSegments = !!segments;
 
   return (
-    <Element name={`track_${track._id}`}>
+    <Element name={`track_${track._id}`} data-cy="track-component">
       <Wrapper gap={2}>
         <NameAndActions>
           <Text variant="h3">
@@ -149,10 +149,18 @@ export const Track = ({ track }: TrackProps) => {
             {!cumulativePainMode && (
               <>
                 <TooltipContent tooltip="Edit track">
-                  <PencilIcon size={16} onClick={onClickTrackEdit} />
+                  <PencilIcon
+                    size={16}
+                    onClick={onClickTrackEdit}
+                    data-cy="edit-track-button"
+                  />
                 </TooltipContent>
                 <TooltipContent tooltip="Delete track">
-                  <TrashIcon size={16} onClick={openConfirmDelete} />
+                  <TrashIcon
+                    size={16}
+                    onClick={openConfirmDelete}
+                    data-cy="delete-track-button"
+                  />
                 </TooltipContent>
               </>
             )}

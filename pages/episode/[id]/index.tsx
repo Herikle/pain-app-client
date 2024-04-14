@@ -185,7 +185,7 @@ export default function EpisodePage() {
             shouldConfirmLeave={!isLogged}
             pathnamesToIgnore={ignorePaths}
           />
-          <Container>
+          <Container data-cy="episode-page">
             {!!episode?.patient_id && (
               <BackButton
                 href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
@@ -237,6 +237,7 @@ export default function EpisodePage() {
                         color={theme.colors.text_switched}
                         onClick={openConfirmExportation}
                         cursor="pointer"
+                        data-cy="export-episode-button"
                       />
                     </TooltipContent>
                     <TooltipContent tooltip="Delete episode">
@@ -244,6 +245,7 @@ export default function EpisodePage() {
                         size={24}
                         color={theme.colors.text_switched}
                         cursor="pointer"
+                        data-cy="delete-episode-button"
                         onClick={() => setConfirmDelete(true)}
                       />
                     </TooltipContent>
@@ -261,6 +263,7 @@ export default function EpisodePage() {
                   <AddButton
                     onClick={onCreateTrack}
                     loading={createTrack.isLoading}
+                    data-cy="add-track-button"
                   />
                 </FlexRow>
                 <ListTrack episode_id={id} />
@@ -300,6 +303,7 @@ export default function EpisodePage() {
           )}
           {confirmDelete && (
             <ConfirmActionModal
+              data-cy="delete-episode-modal"
               onConfirm={onDeleteEpisode}
               onClose={() => {
                 setConfirmDelete(false);
@@ -310,6 +314,7 @@ export default function EpisodePage() {
           )}
           {confirmExportEpisode && (
             <ConfirmActionModal
+              data-cy="export-episode-modal"
               onConfirm={onClickExport}
               onClose={() => {
                 setConfirmExportEpisode(false);
@@ -320,6 +325,7 @@ export default function EpisodePage() {
                 <FlexColumn>
                   You can choose a name for the file that will be exported.
                   <TextField
+                    data-cy="export-episode-file-name-input"
                     value={fileNameExported}
                     onChange={(e) => setFileNameExported(e.target.value)}
                   />

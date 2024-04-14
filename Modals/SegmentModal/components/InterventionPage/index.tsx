@@ -136,7 +136,7 @@ export const InterventionPage = ({ interventions, onChange }: Props) => {
 
   return (
     <>
-      <Container>
+      <Container data-cy="intervention-page">
         <ListIntervention>
           <AddTitle justify="space-between">
             <FlexRow>

@@ -172,6 +172,9 @@ export default function Patient() {
               }
               isLoading={getPatientEpisodes.isLoading}
               data={episodes}
+              addButtonProps={{
+                "data-cy": "add-episode-button",
+              }}
               CallToAction={
                 <CallToAction
                   text1="There are no episodes registered yet."

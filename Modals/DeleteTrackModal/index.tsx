@@ -26,6 +26,7 @@ export const DeleteTracKModal = ({ track, onClose }: DeleteTrackModalProps) => {
 
   return (
     <ConfirmActionModal
+      data-cy="delete-track-modal"
       onClose={closeConfirmDelete}
       title="Are you sure you want to delete this track?"
       description="All segments will be lost. This action cannot be undone."
@@ -34,7 +35,7 @@ export const DeleteTracKModal = ({ track, onClose }: DeleteTrackModalProps) => {
         label: (
           <>
             To delete this track, type the track name{" "}
-            <strong>{track.name}</strong>
+            <strong data-cy="delete-track-modal-name">{track.name}</strong>
           </>
         ),
         testText: track.name,

@@ -113,7 +113,7 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
 
   return (
     <>
-      <Container>
+      <Container data-cy="edit-track-modal">
         <Content>
           <TabsContainer>
             <Tabs

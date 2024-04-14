@@ -85,11 +85,44 @@ Cypress.Commands.add("addSubjectTo", (email: string, password: string) => {
     });
 });
 
+Cypress.Commands.add(
+  "addEpisodeTo",
+  (email: string, password: string, subject_id: string) => {
+    cy.request({
+      url: `${Cypress.env("API_URL")}/auth/login`,
+      method: "POST",
+      body: { email, password },
+    })
+      .its("body")
+      .then((body) => {
+        cy.request({
+          url: `${Cypress.env("API_URL")}/episode`,
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${body.token}`,
+          },
+          body: {
+            patient_id: subject_id,
+          },
+        })
+          .its("body")
+          .then((body) => {
+            cy.wrap(body);
+          });
+      });
+  }
+);
+
 declare namespace Cypress {
   interface Chainable {
+    getByCy(selector: string, ...args: any): Chainable<JQuery<HTMLElement>>;
     login(email: string, password: string): Chainable<void>;
     clearUserData(email: string, password: string): Chainable<void>;
     addSubjectTo(email: string, password: string): Chainable<any>;
-    getByCy(selector: string, ...args: any): Chainable<JQuery<HTMLElement>>;
+    addEpisodeTo(
+      email: string,
+      password: string,
+      subject_id: string
+    ): Chainable<any>;
   }
 }

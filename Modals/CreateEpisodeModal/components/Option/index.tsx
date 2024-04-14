@@ -12,6 +12,7 @@ type OptionProps = {
   title: string;
   description?: string;
   onClick?: () => void;
+  "data-cy"?: string;
 };
 
 export const Option = ({
@@ -21,9 +22,10 @@ export const Option = ({
   title,
   description,
   onClick,
+  "data-cy": dataCy,
 }: OptionProps) => {
   return (
-    <OptionContainer onClick={onClick} $hasClick={!!onClick}>
+    <OptionContainer onClick={onClick} $hasClick={!!onClick} data-cy={dataCy}>
       {srcImage && (
         <IconDiv>
           <Image src={srcImage} width={40} height={40} alt={alt} />

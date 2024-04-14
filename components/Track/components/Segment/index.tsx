@@ -59,6 +59,7 @@ export const Segment = ({
         )}
       </SegmentName>
       <Container
+        data-cy="segment-component"
         $hasClick={!!onClick}
         onClick={() => onClick?.()}
         $bgColor={backgroundColor}
