@@ -225,7 +225,7 @@ const config: Config = {
     "^@layouts/(.*)$": "<rootDir>/layouts/$1",
     "^@logic-components/(.*)$": "<rootDir>/logic-components/$1",
     "^@design-components/(.*)$": "<rootDir>/design-components/$1",
-
+    "^@state/(.*)$": "<rootDir>/state/$1",
     // Handle @next/font
     "@next/font/(.*)": `<rootDir>/__mocks__/nextFontMock.js`,
     // Handle next/font

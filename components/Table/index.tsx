@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Text } from "@components/Text";
 import { SortCaret } from "./components/SortCaret";
-import { FlexRow } from "@design-components/Flex";
 import { AddButton } from "@components/AddButton";
-import { useFilters } from "state/useFilters";
+import { useFilters } from "@state/useFilters";
 import {
   SORT_BY_KEY,
   getPureSortValue,
@@ -142,7 +141,12 @@ export const Table = ({
           </Thead>
           <tbody>
             {data?.map((item, index) => (
-              <Tr key={index} $hasLink={!!mountHref} data-cy="table-row">
+              <Tr
+                key={index}
+                $hasLink={!!mountHref}
+                data-cy="table-row"
+                data-testid="table-row"
+              >
                 {columns.map((column) => (
                   <Td key={column.accessor}>
                     {renderRowItem(
