@@ -1,7 +1,6 @@
 import { Radio } from "@components/Radio";
 import { Text } from "@components/Text";
 import { TextArea } from "@components/TextArea";
-import { SegmentsTitleComponent } from "@components/Track";
 import { Segment } from "@components/Track/components/Segment";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { theme } from "@styles/theme";
@@ -17,6 +16,7 @@ import {
 import { DrawObject } from "@components/Paint";
 import { media } from "@styles/media-query";
 import { JustificationList } from "./components/JustificationList";
+import { SegmentsTitleComponent } from "@components/Track/components/SegmentsTitleComponent";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),

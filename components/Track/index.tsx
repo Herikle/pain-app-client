@@ -1,99 +1,28 @@
-import styled, { css } from "styled-components";
-import { SEGMENT_SECTION_HEIGHT } from "./components/Segment/const";
-import { FlexColumn, FlexRow } from "@design-components/Flex";
+import { FlexRow } from "@design-components/Flex";
+import {
+  ChartBarIcon,
+  CommentContainer,
+  Container,
+  NameAndActions,
+  PencilIcon,
+  TrashIcon,
+  Wrapper,
+} from "./styles";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
-import { ChartBar, Pencil, Trash } from "@phosphor-icons/react";
 import { useSetSegmentModal } from "Modals/SegmentModal/hook";
 import { useSetTrackModal } from "Modals/TrackModal/hook";
-import { ISegment, ITrack } from "types";
+import { ISegment } from "types";
 import { Element } from "react-scroll";
 import { SegmentModalTabs } from "Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
-import { media } from "@styles/media-query";
 import { useState } from "react";
 import { DeleteTracKModal } from "Modals/DeleteTrackModal";
-import {
-  PainType,
-  calculateCumulativeTime,
-} from "@utils/helpers/segmentHelpers";
-import v from "voca";
+import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
+
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
 import { TooltipContent } from "@components/TooltipContent";
-import { PAIN_DEFITIONS } from "./const";
-
-type Props = {
-  cumulativePainMode?: {
-    active: boolean;
-    hours: {
-      e: string;
-      d: string;
-      h: string;
-      a: string;
-      n: string;
-    };
-  };
-  removeExtraSpace?: boolean;
-};
-
-const pains: PainType[] = [
-  "excruciating",
-  "disabling",
-  "hurful",
-  "annoying",
-  "no_pain",
-];
-
-const painsAbbreviation: { [key in PainType]: string } = {
-  excruciating: "e",
-  disabling: "d",
-  hurful: "h",
-  annoying: "a",
-  no_pain: "n",
-};
-
-export const SegmentsTitleComponent = ({
-  cumulativePainMode,
-  removeExtraSpace,
-}: Props) => {
-  const isCumulativePainMode = !!cumulativePainMode?.active;
-
-  const hours = cumulativePainMode?.hours;
-
-  return (
-    <SegmentsTitle>
-      {pains.map((pain) => (
-        <TooltipContent
-          key={pain}
-          tooltip={PAIN_DEFITIONS[pain]}
-          bgColor={theme.pain_level_colors[pain]}
-          place="top-start"
-          minWidth={"500px"}
-        >
-          <SegmentName key={pain} $removeExtraSpace={removeExtraSpace}>
-            {isCumulativePainMode ? (
-              <FlexRow justify="start" align="center" gap={1} height="100%">
-                <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
-                  {v.upperCase(painsAbbreviation[pain])}
-                </Text>{" "}
-                <Text
-                  variant="body1Bold"
-                  customColor={theme.pain_level_colors[pain]}
-                >
-                  {hours?.[painsAbbreviation[pain]]}
-                </Text>
-              </FlexRow>
-            ) : (
-              <Text variant="h3" customColor={theme.pain_level_colors[pain]}>
-                {v.capitalize(pain.replace("_", " "))}
-              </Text>
-            )}
-          </SegmentName>
-        </TooltipContent>
-      ))}
-    </SegmentsTitle>
-  );
-};
+import { SegmentsTitleComponent } from "./components/SegmentsTitleComponent";
 
 type TrackItem = {
   _id: string;
@@ -223,100 +152,3 @@ export const Track = ({ track }: TrackProps) => {
     </Element>
   );
 };
-
-const NameAndActions = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-
-  ${media.up.tablet`
-    flex-direction: column;
-    align-items: flex-start;
-  `}
-`;
-
-const IconCommonStyle = css`
-  color: ${theme.colors.text_switched};
-  cursor: pointer;
-  border-radius: 50%;
-  padding: 0.25rem;
-
-  box-sizing: content-box;
-
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-
-  &:hover {
-    color: ${theme.colors.font_color};
-    background-color: ${theme.colors.light_grey};
-  }
-`;
-
-const PencilIcon = styled(Pencil)`
-  ${IconCommonStyle}
-`;
-
-const TrashIcon = styled(Trash)`
-  ${IconCommonStyle}
-`;
-
-type ChartBarProps = {
-  cursor?: string;
-};
-
-const ChartBarIcon = styled(ChartBar)<ChartBarProps>`
-  ${IconCommonStyle}
-
-  ${({ cursor }) =>
-    cursor &&
-    css`
-      cursor: ${cursor};
-    `}
-`;
-
-type CommentContainerProps = {
-  $cumulativePainMode: boolean;
-};
-
-const CommentContainer = styled.div<CommentContainerProps>`
-  max-width: 900px;
-  margin-bottom: 2rem;
-  opacity: ${({ $cumulativePainMode }) => ($cumulativePainMode ? 0 : 1)};
-`;
-
-type SegmentProps = {
-  $removeExtraSpace?: boolean;
-};
-
-const SegmentName = styled.div<SegmentProps>`
-  height: ${SEGMENT_SECTION_HEIGHT}px;
-  > span {
-    margin-block: auto;
-  }
-  display: flex;
-  flex-direction: column;
-  ${({ $removeExtraSpace }) =>
-    $removeExtraSpace
-      ? css`
-          width: fit-content;
-        `
-      : css`
-          min-width: 180px;
-        `}
-`;
-
-const SegmentsTitle = styled(FlexColumn)`
-  gap: 0;
-  margin-top: 2rem;
-  padding-right: 1.5rem;
-`;
-
-const Container = styled.div`
-  display: flex;
-`;
-
-const Wrapper = styled(FlexColumn)`
-  padding-left: 2rem;
-  ${media.up.mobileL`
-    padding-left: 0;
-  `}
-`;
