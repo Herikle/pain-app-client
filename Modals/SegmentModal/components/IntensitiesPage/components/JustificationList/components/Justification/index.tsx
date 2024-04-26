@@ -2,8 +2,8 @@ import { Text } from "@components/Text";
 import { FlexRow } from "@design-components/Flex";
 import { CaretRight } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
-import { Evidences } from "Modals/JustificationModal";
-import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
+import { Evidences } from "@Modals/JustificationModal";
+import { useSetJustificationModal } from "@Modals/JustificationModal/hooks";
 import styled from "styled-components";
 import { ISegmentJustification } from "types";
 

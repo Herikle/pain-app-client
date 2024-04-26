@@ -4,6 +4,7 @@ import { Tooltip } from "react-tooltip";
 import styled, { CSSProperties, css } from "styled-components";
 import { Text, TextVariant } from "@components/Text";
 import { theme } from "@styles/theme";
+import { TooltipContent } from "@components/TooltipContent";
 
 type LabelOptions = {
   textVariant?: TextVariant;
@@ -63,19 +64,10 @@ export const TextField = React.forwardRef(
             ) : (
               label
             )}
-            {helperText && rest?.id && (
-              <>
-                <Question size={16} weight="fill" id={`${rest?.id}-helper`} />
-                <TooltipWrapper>
-                  <Tooltip anchorSelect={`#${rest?.id}-helper`} noArrow>
-                    <TooltipContainer>
-                      <Text variant="body2" color="font_color">
-                        {helperText}
-                      </Text>
-                    </TooltipContainer>
-                  </Tooltip>
-                </TooltipWrapper>
-              </>
+            {helperText && (
+              <TooltipContent tooltip={helperText} noArrow theme="light">
+                <Question size={16} weight="fill" />
+              </TooltipContent>
             )}
           </Label>
         )}

@@ -8,7 +8,7 @@ import styled, { css } from "styled-components";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import Image from "next/image";
 import { IconsPath } from "@utils/icons";
-import { SegmentModalTabs } from "Modals/SegmentModal";
+import { SegmentModalTabs } from "@Modals/SegmentModal";
 import { Tooltip } from "react-tooltip";
 import v from "voca";
 import { getTimeUnitAbbreviation } from "@utils/helpers/segmentHelpers";

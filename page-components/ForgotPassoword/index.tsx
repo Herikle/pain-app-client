@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/Button";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
-import { RoutesPath } from "utils/routes";
+import { RoutesPath } from "@utils/routes";
 import Link from "next/link";
 import { media } from "@styles/media-query";
 

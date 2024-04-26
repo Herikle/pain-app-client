@@ -6,7 +6,7 @@ import { Button } from "@components/Button";
 import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
-import { RoutesPath } from "utils/routes";
+import { RoutesPath } from "@utils/routes";
 import Link from "next/link";
 import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";

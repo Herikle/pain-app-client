@@ -1,5 +1,5 @@
-import { RoutesPath } from "utils/routes";
-import { useAuth } from "utils/hooks/useAuth";
+import { RoutesPath } from "@utils/routes";
+import { useAuth } from "@utils/hooks/useAuth";
 import { useRouter } from "next/router";
 import { useSelectedPatientValue } from "state/useSelectedPatient";
 import { useSelectedEpisodeValue } from "state/useSelectedEpisode";

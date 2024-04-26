@@ -14,7 +14,7 @@ import { useSetSelectedEpisode } from "state/useSelectedEpisode";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useAuth } from "@utils/hooks/useAuth";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";

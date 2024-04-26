@@ -2,7 +2,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { useCreateEpisodeModalState } from "./hook";
 import styled from "styled-components";
 import Router from "next/router";
-import { Modal } from "Modals/Modal";
+import { Modal } from "@Modals/Modal";
 import {
   useCreateEpisode,
   useImportEpisode,

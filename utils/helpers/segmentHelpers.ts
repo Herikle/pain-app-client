@@ -72,7 +72,18 @@ export const convertNumberToFixed = (value: number) => {
   return number;
 };
 
-export const calculateCumulativeTime = (segments: ISegment[] | undefined) => {
+type SegmentsCumulativeTime = {
+  start?: number;
+  end?: number;
+  time_unit: ISegmentTimeUnit;
+  intensities: {
+    values?: ISegmentValues;
+  };
+};
+
+export const calculateCumulativeTime = (
+  segments: SegmentsCumulativeTime[] | undefined
+) => {
   if (!segments)
     return {
       e: "",

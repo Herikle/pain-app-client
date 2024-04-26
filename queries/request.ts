@@ -1,5 +1,5 @@
 import axios, { Method, ResponseType } from "axios";
-import { getToken } from "utils/localStorage/token";
+import { getToken } from "@utils/localStorage/token";
 
 export type RequestService =
   | "auth"

@@ -5,6 +5,7 @@ import { theme } from "@styles/theme";
 import { Tooltip } from "react-tooltip";
 import styled, { css } from "styled-components";
 import React from "react";
+import { TooltipContent } from "@components/TooltipContent";
 
 interface SelectProps extends React.ComponentPropsWithoutRef<"select"> {
   options: any[];
@@ -37,19 +38,10 @@ export const Select = React.forwardRef(
         {label && (
           <Label htmlFor={id}>
             <Text variant="body2Bold">{label}</Text>
-            {helperText && id && (
-              <>
-                <Question size={16} weight="fill" id={`${id}-helper`} />
-                <TooltipWrapper>
-                  <Tooltip anchorSelect={`#${id}-helper`} noArrow>
-                    <TooltipContainer>
-                      <Text variant="body2" color="font_color">
-                        {helperText}
-                      </Text>
-                    </TooltipContainer>
-                  </Tooltip>
-                </TooltipWrapper>
-              </>
+            {helperText && (
+              <TooltipContent tooltip={helperText} noArrow theme="light">
+                <Question size={16} weight="fill" />
+              </TooltipContent>
             )}
           </Label>
         )}

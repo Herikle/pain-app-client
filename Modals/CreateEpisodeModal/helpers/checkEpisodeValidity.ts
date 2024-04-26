@@ -1,4 +1,4 @@
-import { Doses } from "Modals/SegmentModal/components/InterventionPage/const";
+import { Doses } from "@Modals/SegmentModal/components/InterventionPage/const";
 import {
   IEpisode,
   IIntervetion,
@@ -16,7 +16,7 @@ import {
   ImportEpisodeStructure,
 } from "types";
 
-import { z } from "utils/helpers/form-validation";
+import { z } from "@utils/helpers/form-validation";
 
 const checkIfDateIsValid = (date: string | undefined | null) => {
   if (!date) {

@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { request } from "@queries/request";
 import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
-import { minutes } from "utils/helpers/time";
+import { minutes } from "@utils/helpers/time";
 
 const getAuthenticatedUser = async () => {
   const { data } = await request({

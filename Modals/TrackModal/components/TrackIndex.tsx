@@ -11,7 +11,7 @@ import { Trash, X } from "@phosphor-icons/react";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
 import { media } from "@styles/media-query";
-import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import { DeleteTracKModal } from "@Modals/DeleteTrackModal";
 import { useUpdateTrack } from "@queries/track/useTrack";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { SyncingIndicator } from "@components/SyncingIndicator";
@@ -50,8 +50,15 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
+type TrackItemModal = {
+  name: string;
+  pain_type: "psychological" | "physical";
+  comment?: string | undefined;
+  _id: string;
+};
+
 type TrackIndexProps = {
-  track: ITrack;
+  track: TrackItemModal;
   onClose: () => void;
 };
 

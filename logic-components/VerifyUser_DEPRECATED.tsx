@@ -1,8 +1,8 @@
-import { useSetWelcomeUserTypeSelectorModal } from "Modals/WelcomeUserTypeSelectorModal/hook";
+import { useSetWelcomeUserTypeSelectorModal } from "@Modals/WelcomeUserTypeSelectorModal/hook";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useAuth } from "utils/hooks/useAuth";
-import { ProtectedRoutesPath } from "utils/routes";
+import { useAuth } from "@utils/hooks/useAuth";
+import { ProtectedRoutesPath } from "@utils/routes";
 
 export const VerifyUser = () => {
   const { user } = useAuth();

@@ -20,8 +20,14 @@ const schema = z.object({
 
 export type TrackEditType = z.infer<typeof schema>;
 
+type TrackItemDetailsPage = {
+  name: string;
+  pain_type: "psychological" | "physical";
+  comment?: string;
+};
+
 type TrackDetailsPageProps = {
-  track: ITrack;
+  track: TrackItemDetailsPage;
   onChange: (data: Partial<TrackEditType>) => void;
 };
 

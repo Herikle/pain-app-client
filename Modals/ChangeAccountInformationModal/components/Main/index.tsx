@@ -4,7 +4,7 @@ import { FlexColumn } from "@design-components/Flex";
 import { AccountForm } from "@page-components/AccountForm";
 import { media } from "@styles/media-query";
 import { useAuth } from "@utils/hooks/useAuth";
-import { AccountInformationsPages } from "Modals/ChangeAccountInformationModal";
+import { AccountInformationsPages } from "@Modals/ChangeAccountInformationModal";
 import styled from "styled-components";
 import { MainFormContainer } from "../shared-styles";
 import { useRequestSetAccountPassword } from "@queries/account/useAccount";

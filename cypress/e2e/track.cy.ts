@@ -1,6 +1,6 @@
 import user from "../fixtures/users/test-user.json";
 
-describe("test episode actions", () => {
+describe("test track actions", () => {
   beforeEach(() => {
     cy.clearUserData(user.email, user.password);
     cy.login(user.email, user.password);

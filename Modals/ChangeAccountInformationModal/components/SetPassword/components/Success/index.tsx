@@ -3,7 +3,7 @@ import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { media } from "@styles/media-query";
 import { ImagesPath } from "@utils/icons";
-import { useSetChangeAccountInformationModal } from "Modals/ChangeAccountInformationModal/hook";
+import { useSetChangeAccountInformationModal } from "@Modals/ChangeAccountInformationModal/hook";
 import Image from "next/image";
 import styled from "styled-components";
 

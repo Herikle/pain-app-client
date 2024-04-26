@@ -1,10 +1,10 @@
 import { SideMenu } from "@components/SideMenu";
 import styled from "styled-components";
-import { useAuth } from "utils/hooks/useAuth";
+import { useAuth } from "@utils/hooks/useAuth";
 import { LoadingPage } from "./Loading";
 import { useEffect } from "react";
 import Router from "next/router";
-import { RoutesPath } from "utils/routes";
+import { RoutesPath } from "@utils/routes";
 import { media, useMatchMediaUp } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { TOP_BAR_HEIGHT_PIXELS } from "@components/TopBar/consts";

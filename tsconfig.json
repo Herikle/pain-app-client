@@ -29,7 +29,9 @@
       "@utils/*": ["utils/*"],
       "@layouts/*": ["layouts/*"],
       "@logic-components/*": ["logic-components/*"],
-      "@design-components/*": ["design-components/*"]
+      "@design-components/*": ["design-components/*"],
+      "@state/*": ["state/*"],
+      "@Modals/*": ["Modals/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

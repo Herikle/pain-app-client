@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { request } from "@queries/request";
 import { IMe } from "types";
 import { QueryKeys } from "@queries/keys";
-import { storeToken } from "utils/localStorage/token";
+import { storeToken } from "@utils/localStorage/token";
 import { AxiosError } from "axios";
 import { StyledToastError, ToastError } from "@utils/toasts";
 

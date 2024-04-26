@@ -13,7 +13,7 @@ import {
 import Router, { useRouter } from "next/router";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { useSetSelectedPrompt } from "state/useSelectedPrompt";
-import { useSetChangedPromptWarningModal } from "Modals/ChangedPromptWarningModal/hook";
+import { useSetChangedPromptWarningModal } from "@Modals/ChangedPromptWarningModal/hook";
 import { RoutesPath } from "@utils/routes";
 import {
   CommonKeyStringPair,

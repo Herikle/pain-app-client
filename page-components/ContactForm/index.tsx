@@ -8,7 +8,7 @@ import { TextArea } from "@components/TextArea";
 import { TextField } from "@components/TextField";
 import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
-import { useForm, z, zodResolver } from "utils/helpers/form-validation";
+import { useForm, z, zodResolver } from "@utils/helpers/form-validation";
 import { media } from "@styles/media-query";
 import { useSendContactForm } from "@queries/public/usePublic";
 

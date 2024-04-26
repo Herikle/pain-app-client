@@ -11,7 +11,7 @@ import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
 import { IconsPath } from "@utils/icons";
 import { RoutesPath } from "@utils/routes";
-import { useSetChangeAccountInformationModal } from "Modals/ChangeAccountInformationModal/hook";
+import { useSetChangeAccountInformationModal } from "@Modals/ChangeAccountInformationModal/hook";
 import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
