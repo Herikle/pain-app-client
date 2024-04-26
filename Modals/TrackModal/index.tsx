@@ -3,9 +3,16 @@ import { Modal } from "../Modal";
 import { TrackIndex } from "./components/TrackIndex";
 import { useTrackModalState } from "./hook";
 
+type TrackItemModal = {
+  name: string;
+  _id: string;
+  pain_type: "psychological" | "physical";
+  comment?: string;
+};
+
 export type TrackModalChildProps = {
   onClose: () => void;
-  track: ITrack;
+  track: TrackItemModal;
 };
 
 const Child = ({ onClose, track }: TrackModalChildProps) => {

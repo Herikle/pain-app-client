@@ -3,8 +3,13 @@ import { ConfirmActionModal } from "Modals/ConfirmActionModal";
 import { useState } from "react";
 import { ITrack } from "types";
 
+type TrackItemDeleteModal = {
+  _id: string;
+  name: string;
+};
+
 type DeleteTrackModalProps = {
-  track: ITrack;
+  track: TrackItemDeleteModal;
   onClose: () => void;
 };
 

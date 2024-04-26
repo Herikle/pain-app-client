@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Segment } from "../Segment";
-import { ISegment, ITrack } from "types";
+import { ISegment } from "types";
 import { SegmentModalTabs } from "Modals/SegmentModal";
 import { AddButton } from "@components/AddButton";
 import { FlexRow } from "@design-components/Flex";
@@ -9,9 +9,15 @@ import { useCreateSegment } from "@queries/segment/useSegment";
 import { LightScrollBar } from "@styles/theme";
 import { useRef } from "react";
 
+type TrackItemListSegments = {
+  segments?: ISegment[];
+  _id: string;
+  episode_id: string;
+};
+
 type ListSegmentsProps = {
   onClickSegment: (segment: ISegment, tab?: SegmentModalTabs) => void;
-  track: ITrack;
+  track: TrackItemListSegments;
   cumulativePainMode?: boolean;
   enableAddNewSegment?: boolean;
 };

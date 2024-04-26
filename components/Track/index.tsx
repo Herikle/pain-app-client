@@ -95,8 +95,17 @@ export const SegmentsTitleComponent = ({
   );
 };
 
+type TrackItem = {
+  _id: string;
+  name: string;
+  pain_type: "psychological" | "physical";
+  segments?: ISegment[];
+  episode_id: string;
+  comment?: string;
+};
+
 type TrackProps = {
-  track: ITrack;
+  track: TrackItem;
 };
 
 export const Track = ({ track }: TrackProps) => {

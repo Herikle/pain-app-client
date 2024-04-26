@@ -50,8 +50,15 @@ const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
 
 const TabPanelContainer = styled.div``;
 
+type TrackItemModal = {
+  name: string;
+  pain_type: "psychological" | "physical";
+  comment?: string | undefined;
+  _id: string;
+};
+
 type TrackIndexProps = {
-  track: ITrack;
+  track: TrackItemModal;
   onClose: () => void;
 };
 
