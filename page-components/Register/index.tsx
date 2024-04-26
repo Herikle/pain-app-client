@@ -7,7 +7,7 @@ import { Checkbox } from "@components/Checkbox";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import Link from "next/link";
-import { RoutesPath } from "utils/routes";
+import { RoutesPath } from "@utils/routes";
 import { media } from "@styles/media-query";
 import { FlexRow } from "@design-components/Flex";
 import { GoogleLogo } from "@phosphor-icons/react";

@@ -10,7 +10,7 @@ import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { IconsPath } from "@utils/icons";
 import { CreateSymptom, SymptomModal } from "./components/SymptomModal";
 import { SymptomCard } from "./components/SymptomCard";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { CommonSegmentModalProps } from "../..";
 import update from "immutability-helper";
 import { media } from "@styles/media-query";

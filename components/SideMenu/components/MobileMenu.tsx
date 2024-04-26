@@ -1,8 +1,8 @@
 import { theme } from "@styles/theme";
 import styled from "styled-components";
-import { IconsPath } from "utils/icons";
+import { IconsPath } from "@utils/icons";
 import { MenuLink } from "@components/MenuLink";
-import { capitalize } from "utils/helpers/string";
+import { capitalize } from "@utils/helpers/string";
 import { RoutesPath } from "@utils/routes";
 import { MenuTypeProps } from "..";
 import { media } from "@styles/media-query";

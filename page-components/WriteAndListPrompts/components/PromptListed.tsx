@@ -1,4 +1,4 @@
-import { useSetDeletePromptModal } from "Modals/DeletePromptModal/hook";
+import { useSetDeletePromptModal } from "@Modals/DeletePromptModal/hook";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { FlexRow } from "@design-components/Flex";

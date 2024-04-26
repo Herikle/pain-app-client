@@ -7,7 +7,7 @@ import { Text } from "@components/Text";
 import { Button } from "@components/Button";
 import { TextField } from "@components/TextField";
 import { BackButton } from "@components/BackButton";
-import { MainFormContainer } from "Modals/ChangeAccountInformationModal/components/shared-styles";
+import { MainFormContainer } from "@Modals/ChangeAccountInformationModal/components/shared-styles";
 
 const PasswordSettingsSchema = z
   .object({

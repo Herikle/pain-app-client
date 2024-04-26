@@ -6,7 +6,7 @@ import { Email } from "./components/Email";
 import styled, { css } from "styled-components";
 import { media } from "@styles/media-query";
 import { Password } from "./components/Password";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { SetPassword } from "./components/SetPassword";
 
 export type AccountInformationsPages =

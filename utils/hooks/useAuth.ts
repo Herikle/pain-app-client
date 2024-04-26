@@ -2,8 +2,8 @@ import { useGetLoggedUser } from "@queries/auth/useGetAuth";
 import Router from "next/router";
 import { useCallback, useEffect, useMemo } from "react";
 import { useQueryClient } from "react-query";
-import { clearToken, getToken } from "utils/localStorage/token";
-import { RoutesPath } from "utils/routes";
+import { clearToken, getToken } from "@utils/localStorage/token";
+import { RoutesPath } from "@utils/routes";
 
 type UseAuthOptions = {
   redirect?: boolean;

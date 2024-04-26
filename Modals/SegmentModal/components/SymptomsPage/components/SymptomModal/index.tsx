@@ -1,5 +1,5 @@
 import { Button } from "@components/Button";
-import { Modal } from "Modals/Modal";
+import { Modal } from "@Modals/Modal";
 import { Select } from "@components/Select";
 import { Switch } from "@components/Switch";
 import { Text } from "@components/Text";

@@ -1,4 +1,4 @@
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";

@@ -8,8 +8,8 @@ import {
 import { GuestLayout } from "layouts/GuestLayout";
 import Router from "next/router";
 import styled from "styled-components";
-import { useGuest } from "utils/hooks/useAuth";
-import { RoutesPath } from "utils/routes";
+import { useGuest } from "@utils/hooks/useAuth";
+import { RoutesPath } from "@utils/routes";
 
 export default function RegisterPage() {
   useGuest();

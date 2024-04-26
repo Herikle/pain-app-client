@@ -10,14 +10,14 @@ import {
 } from "./styles";
 import { Text } from "@components/Text";
 import { theme } from "@styles/theme";
-import { useSetSegmentModal } from "Modals/SegmentModal/hook";
-import { useSetTrackModal } from "Modals/TrackModal/hook";
+import { useSetSegmentModal } from "@Modals/SegmentModal/hook";
+import { useSetTrackModal } from "@Modals/TrackModal/hook";
 import { ISegment } from "types";
 import { Element } from "react-scroll";
-import { SegmentModalTabs } from "Modals/SegmentModal";
+import { SegmentModalTabs } from "@Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
 import { useState } from "react";
-import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import { DeleteTracKModal } from "@Modals/DeleteTrackModal";
 import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
 
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
@@ -91,6 +91,7 @@ export const Track = ({ track }: TrackProps) => {
                     size={16}
                     onClick={onClickTrackEdit}
                     data-cy="edit-track-button"
+                    data-testid="edit-track-button"
                   />
                 </TooltipContent>
                 <TooltipContent tooltip="Delete track">
@@ -98,6 +99,7 @@ export const Track = ({ track }: TrackProps) => {
                     size={16}
                     onClick={openConfirmDelete}
                     data-cy="delete-track-button"
+                    data-testid="delete-track-button"
                   />
                 </TooltipContent>
               </>

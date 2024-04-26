@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Segment } from "../Segment";
 import { ISegment } from "types";
-import { SegmentModalTabs } from "Modals/SegmentModal";
+import { SegmentModalTabs } from "@Modals/SegmentModal";
 import { AddButton } from "@components/AddButton";
 import { FlexRow } from "@design-components/Flex";
 import { Tooltip } from "react-tooltip";

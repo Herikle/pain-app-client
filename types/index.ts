@@ -1,5 +1,5 @@
 import { DrawObject } from "@components/Paint";
-import { Doses } from "Modals/SegmentModal/components/InterventionPage/const";
+import { Doses } from "@Modals/SegmentModal/components/InterventionPage/const";
 
 export type Meta = {
   current_count: number;

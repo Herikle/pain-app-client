@@ -1,5 +1,5 @@
 import React from "react";
-import { z, zodResolver, useForm } from "utils/helpers/form-validation";
+import { z, zodResolver, useForm } from "@utils/helpers/form-validation";
 
 import { BackButton } from "@components/BackButton";
 import { Button } from "@components/Button";
@@ -7,7 +7,7 @@ import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
 import { FlexColumn } from "@design-components/Flex";
 import { useAuth } from "@utils/hooks/useAuth";
-import { MainFormContainer } from "Modals/ChangeAccountInformationModal/components/shared-styles";
+import { MainFormContainer } from "@Modals/ChangeAccountInformationModal/components/shared-styles";
 import { useRequestEmailChange } from "@queries/account/useAccount";
 
 const changeEmailSchema = z

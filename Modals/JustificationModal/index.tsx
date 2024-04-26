@@ -1,7 +1,7 @@
 import { ISegmentJustification } from "types";
-import { useForm, z, zodResolver } from "utils/helpers/form-validation";
+import { useForm, z, zodResolver } from "@utils/helpers/form-validation";
 import { useJustificationModalState } from "./hooks";
-import { Modal } from "Modals/Modal";
+import { Modal } from "@Modals/Modal";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Text } from "@components/Text";
 import { TextField } from "@components/TextField";
@@ -18,7 +18,7 @@ import {
   useUpdateSegmentJustification,
 } from "@queries/segment-justification/useSegmentJustification";
 import { useEffect, useState } from "react";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 import _ from "lodash";

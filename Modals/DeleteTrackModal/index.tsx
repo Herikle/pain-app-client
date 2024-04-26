@@ -1,5 +1,5 @@
 import { useDeleteTrack } from "@queries/track/useTrack";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useState } from "react";
 import { ITrack } from "types";
 

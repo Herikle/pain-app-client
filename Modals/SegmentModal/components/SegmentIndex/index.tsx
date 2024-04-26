@@ -22,12 +22,12 @@ import { useSegmentPageForm } from "./pagesFormHooks/useSegmentPageForm";
 import { useIntensitiesPageForm } from "./pagesFormHooks/useIntensitiesPageForm";
 import { useQualityPageForm } from "./pagesFormHooks/useQualityPageForm";
 import { Portal } from "@components/Portal";
-import { ConfirmActionModal } from "Modals/ConfirmActionModal";
+import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useInterventionPageForm } from "./pagesFormHooks/useInterventionPageForm";
 import { useSymptomPageForm } from "./pagesFormHooks/useSymptomsPageForm";
 import { SegmentModalTabs } from "../..";
 import { media } from "@styles/media-query";
-import { useSetJustificationModal } from "Modals/JustificationModal/hooks";
+import { useSetJustificationModal } from "@Modals/JustificationModal/hooks";
 import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 

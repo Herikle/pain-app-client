@@ -1,4 +1,4 @@
-import { useAuth } from "utils/hooks/useAuth";
+import { useAuth } from "@utils/hooks/useAuth";
 import { useMatchMediaUp } from "@styles/media-query";
 import { DesktopTopBar } from "./components/DesktopTopBar";
 import { MobileTopBar } from "./components/MobileTopBar";

@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { AddButton } from "@components/AddButton";
 import { Box } from "@mui/material";
 import { RoutesPath } from "@utils/routes";
-import { useSetSetMainPrompt } from "Modals/SetMainPromptModal/hook";
+import { useSetSetMainPrompt } from "@Modals/SetMainPromptModal/hook";
 import Link from "next/link";
 
 type ListPromptsProps = {

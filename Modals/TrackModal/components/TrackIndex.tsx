@@ -11,7 +11,7 @@ import { Trash, X } from "@phosphor-icons/react";
 import { TrackDetailsPage, TrackEditType } from "./TrackDetailsPage";
 import { ITrack } from "types";
 import { media } from "@styles/media-query";
-import { DeleteTracKModal } from "Modals/DeleteTrackModal";
+import { DeleteTracKModal } from "@Modals/DeleteTrackModal";
 import { useUpdateTrack } from "@queries/track/useTrack";
 import { useDebounce } from "@utils/hooks/useDebounce";
 import { SyncingIndicator } from "@components/SyncingIndicator";
