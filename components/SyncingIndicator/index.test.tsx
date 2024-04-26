@@ -2,6 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SyncingIndicator } from ".";
+import { act } from "react-dom/test-utils";
 
 describe("SyncingIndicator component", () => {
   it("renders SyncingIndicator component with online state", () => {
@@ -12,7 +13,11 @@ describe("SyncingIndicator component", () => {
 
   it("renders SyncingIndicator component with offline state", async () => {
     render(<SyncingIndicator isSyncing={false} />);
-    window.dispatchEvent(new Event("offline"));
+
+    act(() => {
+      window.dispatchEvent(new Event("offline"));
+    });
+
     await waitFor(() => screen.getByAltText("unavailable"));
     const image = screen.getByAltText("unavailable");
     expect(image).toBeInTheDocument();

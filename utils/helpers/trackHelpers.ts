@@ -35,7 +35,11 @@ const segmentHaveIntensities = (segment: ISegment) => {
   return true;
 };
 
-export const checkIfTrackHasEnoughData = (track: ITrack) => {
+type TrackEnoughData = {
+  segments?: ISegment[];
+};
+
+export const checkIfTrackHasEnoughData = (track: TrackEnoughData) => {
   const segments = track.segments;
 
   if (!segments) return false;
