@@ -1,6 +1,9 @@
 import { QueryKeys } from "@queries/keys";
 import { useQueryClient } from "react-query";
-import { GetEpisodesListResponse } from "../useGetEpisode";
+import {
+  GetEpisodeByIdResponse,
+  GetEpisodesListResponse,
+} from "../useGetEpisode";
 import { IEpisode } from "types";
 import update from "immutability-helper";
 
@@ -37,5 +40,22 @@ export const useUpdateEpisodeOnCache = () => {
     );
   };
 
-  return { deleteEpisodeOnCache };
+  const updateEpisodeByIdOnCache = async (
+    id: string,
+    values: Partial<IEpisode>
+  ) => {
+    queryClient.setQueryData(
+      [QueryKeys.Episode.ByID, { episode_id: id }],
+      (old: GetEpisodeByIdResponse) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          ...values,
+        };
+      }
+    );
+  };
+
+  return { deleteEpisodeOnCache, updateEpisodeByIdOnCache };
 };

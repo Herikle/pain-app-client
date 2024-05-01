@@ -42,7 +42,7 @@ type UpdatePatientPayload = {
   };
   body: {
     name?: string;
-    birth_date?: Date | null;
+    birth_date?: string | null;
     type?: IPatient["type"];
     production_system?: string;
     life_fate?: string;
@@ -69,7 +69,15 @@ const updatePatient = async ({ params, body }: UpdatePatientPayload) => {
 export const useUpdatePatient = () => {
   const queryClient = useQueryClient();
 
+  const { updatePatientByIdOnCache } = useUpdatePatientOnCache();
+
   return useMutation(updatePatient, {
+    onMutate: async ({ params, body }) => {
+      updatePatientByIdOnCache(params.patient_id, {
+        ...body,
+        birth_date: body.birth_date ?? undefined,
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(QueryKeys.Patients.List);
     },

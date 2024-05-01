@@ -35,5 +35,20 @@ export const useUpdatePatientOnCache = () => {
     );
   };
 
-  return { deletePatientOnCache };
+  const updatePatientByIdOnCache = async (
+    id: string,
+    values: Partial<IPatient>
+  ) => {
+    queryClient.setQueryData(
+      [QueryKeys.Patients.ByID, { id }],
+      (old: GetPatientByIdResponse) => {
+        return {
+          ...old,
+          ...values,
+        };
+      }
+    );
+  };
+
+  return { deletePatientOnCache, updatePatientByIdOnCache };
 };

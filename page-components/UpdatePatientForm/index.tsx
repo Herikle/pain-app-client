@@ -74,7 +74,10 @@ export const UpdatePatientForm = ({
       params: {
         patient_id: patient._id,
       },
-      body: data,
+      body: {
+        ...data,
+        birth_date: data.birth_date?.toISOString() ?? null,
+      },
     });
   };
 
@@ -167,8 +170,8 @@ export const UpdatePatientForm = ({
             <FlexColumn height="100%" gap={1.5}>
               <Text variant="body2Bold">Subject Type</Text>
               <FlexRow gap={6}>
-                <Radio label="Human" value="human" {...register("type")} />
-                <Radio label="Animal" value="animal" {...register("type")} />
+                <Radio label="Human" {...register("type")} value="human" />
+                <Radio label="Animal" {...register("type")} value="animal" />
               </FlexRow>
             </FlexColumn>
           </Grid>
