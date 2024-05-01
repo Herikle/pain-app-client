@@ -48,6 +48,8 @@ type GetEpisodeByIdPayload = {
   };
 };
 
+export type GetEpisodeByIdResponse = IEpisode;
+
 const getEpisodeById = async ({ params }: GetEpisodeByIdPayload) => {
   const { data } = await request({
     method: "GET",
@@ -55,7 +57,7 @@ const getEpisodeById = async ({ params }: GetEpisodeByIdPayload) => {
     url: `/${params.episode_id}`,
   });
 
-  return data as IEpisode;
+  return data as GetEpisodeByIdResponse;
 };
 
 export const useGetEpisodeById = (

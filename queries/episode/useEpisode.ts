@@ -35,7 +35,7 @@ export const useCreateEpisode = () => {
 type UpdateEpisode = Partial<
   Omit<IEpisode, "_id" | "patient_id" | "creator_id" | "start_date">
 > & {
-  start_date?: Date | null;
+  start_date?: string | null;
 };
 
 type UpdateEpisodePayload = {
@@ -57,7 +57,15 @@ const updateEpisode = async ({ params, body }: UpdateEpisodePayload) => {
 };
 
 export const useUpdateEpisode = () => {
+  const { updateEpisodeByIdOnCache } = useUpdateEpisodeOnCache();
+
   return useMutation(updateEpisode, {
+    onMutate: async ({ params, body }) => {
+      updateEpisodeByIdOnCache(params.episode_id, {
+        ...body,
+        start_date: body.start_date ?? undefined,
+      });
+    },
     onError: (error: AxiosError) => {
       ToastError(error);
     },

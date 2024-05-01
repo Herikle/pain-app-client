@@ -68,7 +68,10 @@ export const EpisodeForm = ({
       params: {
         episode_id: episode._id,
       },
-      body: data,
+      body: {
+        ...data,
+        start_date: data.start_date?.toISOString() ?? null,
+      },
     });
   };
 
@@ -79,7 +82,7 @@ export const EpisodeForm = ({
       params: {
         episode_id: episode._id,
       },
-      body: values,
+      body: { start_date: null },
     });
   };
 
