@@ -29,6 +29,7 @@ export default function ProfilePage() {
   const getPatients = useGetPatients({
     page: currentPage,
     limit: 5,
+    sortBy: "-createdAt",
     ...filters,
   });
 
@@ -133,7 +134,7 @@ export default function ProfilePage() {
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
-  width: 800px;
+  width: 1200px;
   gap: 2rem;
 
   ${media.up.laptop`

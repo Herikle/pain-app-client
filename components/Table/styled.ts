@@ -23,8 +23,8 @@ export const ItemContainer = styled.div<ItemContainerProps>`
   ${({ $withOverflow }) =>
     $withOverflow &&
     css`
-      max-width: 200px;
-      min-width: 200px;
+      max-width: 300px;
+      min-width: 300px;
       overflow: hidden;
       text-overflow: ellipsis;
     `}
@@ -77,7 +77,7 @@ export const Container = styled.div`
   position: relative;
   min-height: 20rem;
   height: 20rem;
-  min-width: 500px;
+  min-width: 600px;
   display: flex;
   flex-direction: column;
   ${media.up.tablet`

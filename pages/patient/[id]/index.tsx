@@ -26,6 +26,7 @@ import { useSetCreateEpisodeModal } from "@Modals/CreateEpisodeModal/hook";
 import { useAuth } from "@utils/hooks/useAuth";
 import { Error404 } from "@page-components/errors/404";
 import { usePatientStateValue } from "state/usePatientState";
+import { useFiltersValue } from "@state/useFilters";
 
 export default function Patient() {
   const router = useRouter();
@@ -42,11 +43,15 @@ export default function Patient() {
 
   const getPatientById = useGetPatientById({ id }, !!id);
 
+  const filters = useFiltersValue();
+
   const getPatientEpisodes = useGetEpisodesList(
     {
       patient_id: id,
       page: 0,
       limit: 5,
+      sortBy: "-createdAt",
+      ...filters,
     },
     !!id
   );
