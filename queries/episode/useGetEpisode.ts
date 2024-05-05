@@ -10,6 +10,7 @@ type GetEpisodsListPayload = {
     patient_id: string;
     page: number;
     limit: number;
+    [key: string]: any;
   };
 };
 

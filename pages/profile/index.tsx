@@ -29,6 +29,7 @@ export default function ProfilePage() {
   const getPatients = useGetPatients({
     page: currentPage,
     limit: 5,
+    sortBy: "-createdAt",
     ...filters,
   });
 
