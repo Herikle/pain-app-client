@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 type CallToActionProps = {
   text1: string;
-  text2: string;
+  text2?: string;
   href?: string;
   onClick?: () => void;
   loading?: boolean;
@@ -35,18 +35,20 @@ export const CallToAction = ({
       <Row>
         <Text>{text1}</Text>
       </Row>
-      <Row>
-        <Text>Click</Text>{" "}
-        {renderActionButton(
-          <PlusContainer
-            onClick={onClick}
-            data-testid="call-to-action-plus-container"
-          >
-            <AddButton loading={loading} />
-          </PlusContainer>
-        )}
-        <Text>{text2}</Text>
-      </Row>
+      {!!text2 && (
+        <Row>
+          <Text>Click</Text>{" "}
+          {renderActionButton(
+            <PlusContainer
+              onClick={onClick}
+              data-testid="call-to-action-plus-container"
+            >
+              <AddButton loading={loading} />
+            </PlusContainer>
+          )}
+          <Text>{text2}</Text>
+        </Row>
+      )}
     </Container>
   );
 };

@@ -114,7 +114,7 @@ export const Table = ({
     <Wrapper>
       {header && (
         <Header>
-          <Text variant="h1">{header.title}</Text>
+          <Text variant="h2">{header.title}</Text>
           {showHeader && (
             <AddButton
               onClick={header.onPlusClick}

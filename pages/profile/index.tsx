@@ -5,7 +5,10 @@ import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import Router from "next/router";
-import { useGetPatients } from "@queries/patient/useGetPatients";
+import {
+  useGetPatients,
+  useGetPatientsSugestion,
+} from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
@@ -18,6 +21,7 @@ import styled from "styled-components";
 import { IPatient } from "types";
 import { useCreatePatient } from "@queries/patient/usePatient";
 import { Gear } from "@phosphor-icons/react";
+import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -33,9 +37,37 @@ export default function ProfilePage() {
     ...filters,
   });
 
+  const [bookmarkCurrentPage, setBookmarkCurrentPage] = useState(0);
+
+  const getBookmarkPatients = useGetBookmarkPatients({
+    page: bookmarkCurrentPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
+  const [suggestionsCurrentPage, setSuggestionsCurrentPage] = useState(0);
+
+  const getSuggestionPatients = useGetPatientsSugestion({
+    page: suggestionsCurrentPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
     [getPatients.data]
+  );
+
+  const bookmarkPatients = useMemo(
+    () => getBookmarkPatients.data?.results ?? [],
+    [getBookmarkPatients.data]
+  );
+
+  const suggestionPatients = useMemo(
+    () => getSuggestionPatients.data?.results ?? [],
+    [getSuggestionPatients.data]
   );
 
   const renderAge = (birth_date: string | undefined) => {
@@ -71,7 +103,6 @@ export default function ProfilePage() {
         <Text variant="h1">Your profile</Text>
         <Badge
           label={user?.name}
-          description={user?.email}
           iconPath={IconsPath.Doctor}
           onClickEdit={openAccountInfoModal}
           EditPhorphorIcon={Gear}
@@ -80,7 +111,7 @@ export default function ProfilePage() {
             "data-cy": "edit-account-info",
           }}
         />
-
+        <Text variant="h1">Subjects</Text>
         <Table
           columns={[
             {
@@ -103,7 +134,7 @@ export default function ProfilePage() {
           ]}
           data={patients}
           header={{
-            title: "Subject List",
+            title: "My contributions",
             onPlusClick: onCreatePatient,
             loading: createPatient.isLoading,
           }}
@@ -125,6 +156,89 @@ export default function ProfilePage() {
           }}
           addButtonProps={{
             "data-cy": "add-patient-button",
+          }}
+        />
+        <Table
+          columns={[
+            {
+              accessor: "name",
+              label: "Name",
+              options: {
+                withOverflow: true,
+              },
+            },
+            {
+              accessor: "birth_date",
+              label: "Age",
+              render: renderAge,
+            },
+            {
+              accessor: "episodes_count",
+              label: "Pain Episodes",
+              render: (value) => value ?? 0,
+            },
+          ]}
+          data={bookmarkPatients}
+          header={{
+            title: "Favorites",
+          }}
+          CallToAction={
+            <CallToAction
+              text1="There are no favorites yet."
+              loading={createPatient.isLoading}
+            />
+          }
+          mountHref={mountPatientHref}
+          isLoading={
+            getBookmarkPatients.isLoading || getBookmarkPatients.isPreviousData
+          }
+          pagination={{
+            pages: getBookmarkPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setBookmarkCurrentPage(page - 1);
+            },
+          }}
+        />
+        <Table
+          columns={[
+            {
+              accessor: "name",
+              label: "Name",
+              options: {
+                withOverflow: true,
+              },
+            },
+            {
+              accessor: "birth_date",
+              label: "Age",
+              render: renderAge,
+            },
+            {
+              accessor: "episodes_count",
+              label: "Pain Episodes",
+              render: (value) => value ?? 0,
+            },
+          ]}
+          data={suggestionPatients}
+          header={{
+            title: "Suggestions",
+          }}
+          CallToAction={
+            <CallToAction
+              text1="There are no suggestions yet."
+              loading={createPatient.isLoading}
+            />
+          }
+          mountHref={mountPatientHref}
+          isLoading={
+            getSuggestionPatients.isLoading ||
+            getSuggestionPatients.isPreviousData
+          }
+          pagination={{
+            pages: getSuggestionPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setSuggestionsCurrentPage(page - 1);
+            },
           }}
         />
       </Container>
