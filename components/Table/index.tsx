@@ -28,6 +28,7 @@ type RenderType = (value: any, item: any) => React.ReactNode;
 
 type ColumProps = {
   accessor: string;
+  queryAccessor?: string;
   label: string;
   render?: RenderType;
   options?: {
@@ -110,6 +111,26 @@ export const Table = ({
     return {};
   };
 
+  const getItemValue = (item: any, accessor: string) => {
+    if (accessor.includes(".")) {
+      const keys = accessor.split(".");
+
+      let value = item;
+
+      for (const key of keys) {
+        if (typeof value === "object") {
+          value = value[key];
+        } else {
+          break;
+        }
+      }
+
+      return value;
+    }
+
+    return item[accessor];
+  };
+
   return (
     <Wrapper>
       {header && (
@@ -128,16 +149,24 @@ export const Table = ({
       <Container>
         <TableStyled>
           <Thead>
-            <tr>
-              {columns.map((column) => (
-                <Th key={column.accessor}>
-                  <ThHeader onClick={onSortClick(column.accessor)}>
-                    <Text color="medium_grey">{column.label}</Text>
-                    <SortCaret {...isSortedBy(column.accessor)} />
-                  </ThHeader>
-                </Th>
-              ))}
-            </tr>
+            {!thereIsNoData && (
+              <tr>
+                {columns.map((column) => (
+                  <Th key={column.accessor}>
+                    <ThHeader
+                      onClick={onSortClick(
+                        column.queryAccessor ?? column.accessor
+                      )}
+                    >
+                      <Text color="medium_grey">{column.label}</Text>
+                      <SortCaret
+                        {...isSortedBy(column.queryAccessor ?? column.accessor)}
+                      />
+                    </ThHeader>
+                  </Th>
+                ))}
+              </tr>
+            )}
           </Thead>
           <tbody>
             {data?.map((item, index) => (
@@ -156,8 +185,11 @@ export const Table = ({
                       >
                         <Text variant="body2Bold" whiteSpace="nowrap">
                           {column.render
-                            ? column.render(item[column.accessor], item)
-                            : item[column.accessor]}
+                            ? column.render(
+                                getItemValue(item, column.accessor),
+                                item
+                              )
+                            : getItemValue(item, column.accessor)}
                         </Text>
                       </ItemContainer>
                     )}

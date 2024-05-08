@@ -19,8 +19,11 @@ import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
-import { useCreatePatient } from "@queries/patient/usePatient";
-import { Gear } from "@phosphor-icons/react";
+import {
+  useAddPatientToBookmark,
+  useCreatePatient,
+} from "@queries/patient/usePatient";
+import { Gear, Star } from "@phosphor-icons/react";
 import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
 
 export default function ProfilePage() {
@@ -54,6 +57,8 @@ export default function ProfilePage() {
     sortBy: "-createdAt",
     ...filters,
   });
+
+  const addToBookmark = useAddPatientToBookmark();
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
@@ -97,6 +102,23 @@ export default function ProfilePage() {
     Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
   };
 
+  const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
+    return (
+      <Star
+        size={20}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          addToBookmark.mutateAsync({
+            body: {
+              patient_id: patient_id,
+            },
+          });
+        }}
+      />
+    );
+  };
+
   return (
     <LoggedLayout>
       <Container data-cy="profile-page">
@@ -131,6 +153,12 @@ export default function ProfilePage() {
               label: "Pain Episodes",
               render: (value) => value ?? 0,
             },
+            {
+              accessor: "_id",
+              queryAccessor: "bookmark",
+              label: "",
+              render: (_id) => <AddToBookMark patient_id={_id} />,
+            },
           ]}
           data={patients}
           header={{
@@ -161,21 +189,31 @@ export default function ProfilePage() {
         <Table
           columns={[
             {
-              accessor: "name",
+              accessor: "patient.name",
               label: "Name",
               options: {
                 withOverflow: true,
               },
             },
             {
-              accessor: "birth_date",
+              accessor: "patient.birth_date",
               label: "Age",
               render: renderAge,
             },
             {
-              accessor: "episodes_count",
+              accessor: "patient.episodes_count",
               label: "Pain Episodes",
               render: (value) => value ?? 0,
+            },
+            {
+              accessor: "patient.name",
+              queryAccessor: "bookmark",
+              label: "",
+              render: () => (
+                <>
+                  <Star size={20} />
+                </>
+              ),
             },
           ]}
           data={bookmarkPatients}
@@ -217,6 +255,12 @@ export default function ProfilePage() {
               accessor: "episodes_count",
               label: "Pain Episodes",
               render: (value) => value ?? 0,
+            },
+            {
+              accessor: "_id",
+              queryAccessor: "bookmark",
+              label: "",
+              render: (_id) => <AddToBookMark patient_id={_id} />,
             },
           ]}
           data={suggestionPatients}

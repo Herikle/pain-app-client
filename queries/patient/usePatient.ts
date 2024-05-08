@@ -121,3 +121,31 @@ export const useDeletePatient = () => {
     },
   });
 };
+
+type AddToBookMarkParams = {
+  body: {
+    patient_id: string;
+  };
+};
+
+const addToBookmark = async ({ body }: AddToBookMarkParams) => {
+  const { data } = await request({
+    service: "patient",
+    url: "/bookmark",
+    method: "POST",
+    data: body,
+  });
+
+  return data as IPatient;
+};
+
+export const useAddPatientToBookmark = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addToBookmark, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.List]);
+    },
+  });
+};

@@ -76,7 +76,7 @@ export const Container = styled.div`
   border-radius: 4px;
   position: relative;
   min-height: 20rem;
-  height: 20rem;
+  min-height: 20rem;
   min-width: 600px;
   display: flex;
   flex-direction: column;
