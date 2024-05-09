@@ -73,6 +73,7 @@ export type IPatient = {
   createdAt: string;
   updatedAt: string;
   type: "human" | "animal";
+  bookmarked?: number;
   location?: string;
   common_name?: string;
   scientific_name?: string;

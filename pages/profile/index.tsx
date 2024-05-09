@@ -22,6 +22,7 @@ import { IPatient } from "types";
 import {
   useAddPatientToBookmark,
   useCreatePatient,
+  useRemovePatientFromBookmark,
 } from "@queries/patient/usePatient";
 import { Gear, Star } from "@phosphor-icons/react";
 import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
@@ -59,6 +60,8 @@ export default function ProfilePage() {
   });
 
   const addToBookmark = useAddPatientToBookmark();
+
+  const removeFromBookMark = useRemovePatientFromBookmark();
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
@@ -119,6 +122,24 @@ export default function ProfilePage() {
     );
   };
 
+  const RemoveFromBookMark = ({ patient_id }: { patient_id: string }) => {
+    return (
+      <Star
+        size={20}
+        weight="fill"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          removeFromBookMark.mutateAsync({
+            body: {
+              patient_id: patient_id,
+            },
+          });
+        }}
+      />
+    );
+  };
+
   return (
     <LoggedLayout>
       <Container data-cy="profile-page">
@@ -154,10 +175,14 @@ export default function ProfilePage() {
               render: (value) => value ?? 0,
             },
             {
-              accessor: "_id",
-              queryAccessor: "bookmark",
+              accessor: "bookmarked",
               label: "",
-              render: (_id) => <AddToBookMark patient_id={_id} />,
+              render: (bookmarked, item: IPatient) =>
+                !!bookmarked ? (
+                  <RemoveFromBookMark patient_id={item._id} />
+                ) : (
+                  <AddToBookMark patient_id={item._id} />
+                ),
             },
           ]}
           data={patients}
@@ -206,14 +231,10 @@ export default function ProfilePage() {
               render: (value) => value ?? 0,
             },
             {
-              accessor: "patient.name",
+              accessor: "patient._id",
               queryAccessor: "bookmark",
               label: "",
-              render: () => (
-                <>
-                  <Star size={20} />
-                </>
-              ),
+              render: (_id: string) => <RemoveFromBookMark patient_id={_id} />,
             },
           ]}
           data={bookmarkPatients}

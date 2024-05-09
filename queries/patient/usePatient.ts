@@ -146,6 +146,36 @@ export const useAddPatientToBookmark = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
       queryClient.invalidateQueries([QueryKeys.Patients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);
+    },
+  });
+};
+
+type RemoveFromBookMarkParams = {
+  body: {
+    patient_id: string;
+  };
+};
+
+const removeFromBookmark = async ({ body }: RemoveFromBookMarkParams) => {
+  const { data } = await request({
+    service: "patient",
+    url: "/bookmark",
+    method: "DELETE",
+    data: body,
+  });
+
+  return data as IPatient;
+};
+
+export const useRemovePatientFromBookmark = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(removeFromBookmark, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);
     },
   });
 };
