@@ -39,7 +39,7 @@ import { TextField } from "@components/TextField";
 export default function EpisodePage() {
   const router = useRouter();
 
-  const { isLogged, isLoading } = useAuth();
+  const { isLogged, isLoading, user } = useAuth();
 
   const { id } = router.query as { id: string };
 
@@ -175,6 +175,13 @@ export default function EpisodePage() {
     }
   }, [isLoading, isLogged, saveGuestEpisode]);
 
+  const isCreator = useMemo(() => {
+    if (!episode) return false;
+    if (!user) return false;
+
+    return episode?.creator_id === user._id;
+  }, [episode, user]);
+
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
       {getEpisodeById.isError ? (
@@ -227,46 +234,50 @@ export default function EpisodePage() {
                 label={episodeState?.name ?? episode?.name}
                 iconPath={IconsPath.Episode}
               />
-              <FlexColumn gap={1.5} align="flex-end">
-                <SyncingIndicator isSyncing={isSyncing} />
-                {isLogged && (
-                  <FlexRow>
-                    <TooltipContent tooltip="Export episode">
-                      <Export
-                        size={24}
-                        color={theme.colors.text_switched}
-                        onClick={openConfirmExportation}
-                        cursor="pointer"
-                        data-cy="export-episode-button"
-                      />
-                    </TooltipContent>
-                    <TooltipContent tooltip="Delete episode">
-                      <Trash
-                        size={24}
-                        color={theme.colors.text_switched}
-                        cursor="pointer"
-                        data-cy="delete-episode-button"
-                        onClick={() => setConfirmDelete(true)}
-                      />
-                    </TooltipContent>
-                  </FlexRow>
-                )}
-              </FlexColumn>
+              {isCreator && (
+                <FlexColumn gap={1.5} align="flex-end">
+                  <SyncingIndicator isSyncing={isSyncing} />
+                  {isLogged && (
+                    <FlexRow>
+                      <TooltipContent tooltip="Export episode">
+                        <Export
+                          size={24}
+                          color={theme.colors.text_switched}
+                          onClick={openConfirmExportation}
+                          cursor="pointer"
+                          data-cy="export-episode-button"
+                        />
+                      </TooltipContent>
+                      <TooltipContent tooltip="Delete episode">
+                        <Trash
+                          size={24}
+                          color={theme.colors.text_switched}
+                          cursor="pointer"
+                          data-cy="delete-episode-button"
+                          onClick={() => setConfirmDelete(true)}
+                        />
+                      </TooltipContent>
+                    </FlexRow>
+                  )}
+                </FlexColumn>
+              )}
             </EpisodeBadgeContainer>
-            {!!episode && (
+            {!!episode && isCreator && (
               <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
             )}
             <TrackContainer>
               <FlexColumn gap={4}>
                 <FlexRow gap={0} justify="space-between">
                   <Text variant="h1">Pain Tracks</Text>
-                  <AddButton
-                    onClick={onCreateTrack}
-                    loading={createTrack.isLoading}
-                    data-cy="add-track-button"
-                  />
+                  {isCreator && (
+                    <AddButton
+                      onClick={onCreateTrack}
+                      loading={createTrack.isLoading}
+                      data-cy="add-track-button"
+                    />
+                  )}
                 </FlexRow>
-                <ListTrack episode_id={id} />
+                <ListTrack episode_id={id} isCreator={isCreator} />
               </FlexColumn>
             </TrackContainer>
           </Container>

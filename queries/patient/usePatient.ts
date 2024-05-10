@@ -5,6 +5,8 @@ import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IPatient } from "types";
 import { useUpdatePatientOnCache } from "./hooks/useUpdatePatientOnCache";
+import { useUpdatePatientsSuggestionOnCache } from "./hooks/useUpdateSuggestionOnCache";
+import { useUpdateBookmarksOnCache } from "@queries/bookmark-patients/hooks/useUpdateBookmarkOnCache";
 
 type CreatePatientsPayload = {
   body: {
@@ -142,8 +144,12 @@ const addToBookmark = async ({ body }: AddToBookMarkParams) => {
 export const useAddPatientToBookmark = () => {
   const queryClient = useQueryClient();
 
+  const { deleteSuggestionFromCache } = useUpdatePatientsSuggestionOnCache();
+
   return useMutation(addToBookmark, {
-    onSuccess: () => {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Patient added to bookmark");
+      deleteSuggestionFromCache(body.patient_id);
       queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
       queryClient.invalidateQueries([QueryKeys.Patients.List]);
       queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);
@@ -171,8 +177,12 @@ const removeFromBookmark = async ({ body }: RemoveFromBookMarkParams) => {
 export const useRemovePatientFromBookmark = () => {
   const queryClient = useQueryClient();
 
+  const { deleteBookmarkFromCache } = useUpdateBookmarksOnCache();
+
   return useMutation(removeFromBookmark, {
-    onSuccess: () => {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Patient removed from bookmark");
+      deleteBookmarkFromCache(body.patient_id);
       queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
       queryClient.invalidateQueries([QueryKeys.Patients.List]);
       queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);

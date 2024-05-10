@@ -33,7 +33,7 @@ export default function Patient() {
 
   const { id } = router.query as { id: string };
 
-  const { isLogged } = useAuth();
+  const { isLogged, user } = useAuth();
 
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -113,6 +113,13 @@ export default function Patient() {
     return patientType;
   };
 
+  const isCreator = useMemo(() => {
+    if (!patient) return false;
+    if (!user) return false;
+
+    return patient.creator_id === user._id;
+  }, [patient, user]);
+
   return (
     <LoggedLayout>
       {getPatientById.isError ? (
@@ -130,21 +137,23 @@ export default function Patient() {
                 patientType === "animal" ? IconsPath.Animal : IconsPath.Patient
               }
             />
-            <FlexColumn gap={1.5}>
-              <SyncingIndicator isSyncing={isSyncing} />
-              <FlexRow onClick={onDelete} data-cy="delete-patient-button">
-                <TooltipContent tooltip="Delete subject">
-                  <Trash
-                    size={24}
-                    color={theme.colors.text_switched}
-                    cursor="pointer"
-                  />
-                </TooltipContent>
-              </FlexRow>
-            </FlexColumn>
+            {isCreator && (
+              <FlexColumn gap={1.5}>
+                <SyncingIndicator isSyncing={isSyncing} />
+                <FlexRow onClick={onDelete} data-cy="delete-patient-button">
+                  <TooltipContent tooltip="Delete subject">
+                    <Trash
+                      size={24}
+                      color={theme.colors.text_switched}
+                      cursor="pointer"
+                    />
+                  </TooltipContent>
+                </FlexRow>
+              </FlexColumn>
+            )}
           </UserBadgeContainer>
           <Wrapper>
-            {patient && (
+            {patient && isCreator && (
               <UpdatePatientForm
                 patient={patient}
                 onIsSyncingChange={setIsSyncing}
@@ -153,9 +162,11 @@ export default function Patient() {
             <Table
               header={{
                 title: "Pain Episodes list",
-                onPlusClick: isLogged
-                  ? createEpisodeHandler
-                  : createEpisodeDirectHandler,
+                onPlusClick: isCreator
+                  ? isLogged
+                    ? createEpisodeHandler
+                    : createEpisodeDirectHandler
+                  : undefined,
               }}
               columns={[
                 {

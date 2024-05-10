@@ -12,7 +12,13 @@ type GetPatientsPayload = {
 };
 
 export type GetBookmarkPatientsResponse = {
-  results: IPatient[];
+  results: {
+    id: string;
+    _id: string;
+    patient: IPatient;
+    patient_id: string;
+    user_id: string;
+  }[];
   meta: Meta;
 };
 

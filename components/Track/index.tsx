@@ -23,6 +23,7 @@ import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
 import { TooltipContent } from "@components/TooltipContent";
 import { SegmentsTitleComponent } from "./components/SegmentsTitleComponent";
+import { useAuth } from "@utils/hooks/useAuth";
 
 type TrackItem = {
   _id: string;
@@ -35,9 +36,10 @@ type TrackItem = {
 
 type TrackProps = {
   track: TrackItem;
+  isCreator?: boolean;
 };
 
-export const Track = ({ track }: TrackProps) => {
+export const Track = ({ track, isCreator }: TrackProps) => {
   const setSegmentModal = useSetSegmentModal();
 
   const setTrackModal = useSetTrackModal();
@@ -84,7 +86,7 @@ export const Track = ({ track }: TrackProps) => {
             {track.name}
           </Text>
           <FlexRow gap={1}>
-            {!cumulativePainMode && (
+            {!cumulativePainMode && isCreator && (
               <>
                 <TooltipContent tooltip="Edit track">
                   <PencilIcon
@@ -138,6 +140,7 @@ export const Track = ({ track }: TrackProps) => {
               track={track}
               onClickSegment={onClickSegment}
               cumulativePainMode={cumulativePainMode}
+              isCreator={isCreator}
               enableAddNewSegment
             />
           )}

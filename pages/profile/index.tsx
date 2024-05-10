@@ -26,6 +26,57 @@ import {
 } from "@queries/patient/usePatient";
 import { Gear, Star } from "@phosphor-icons/react";
 import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
+import { LoadingWrapper } from "@components/LoadingWrapper";
+
+const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
+  const addToBookmark = useAddPatientToBookmark();
+
+  const addToBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    await addToBookmark.mutateAsync({
+      body: {
+        patient_id: patient_id,
+      },
+    });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={addToBookmark.isLoading}
+      />
+      <Star size={20} onClick={addToBookMark} />
+    </StarContainer>
+  );
+};
+
+const RemoveFromBookMark = ({ patient_id }: { patient_id: string }) => {
+  const removeFromBookmark = useRemovePatientFromBookmark();
+
+  const removeFromBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    await removeFromBookmark.mutateAsync({
+      body: {
+        patient_id: patient_id,
+      },
+    });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={removeFromBookmark.isLoading}
+      />
+      <Star size={20} weight="fill" onClick={removeFromBookMark} />
+    </StarContainer>
+  );
+};
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -58,10 +109,6 @@ export default function ProfilePage() {
     sortBy: "-createdAt",
     ...filters,
   });
-
-  const addToBookmark = useAddPatientToBookmark();
-
-  const removeFromBookMark = useRemovePatientFromBookmark();
 
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
@@ -103,41 +150,6 @@ export default function ProfilePage() {
   const onCreatePatient = async () => {
     const created_patient = await createPatient.mutateAsync();
     Router.push(RoutesPath.patient.replace("[id]", created_patient._id));
-  };
-
-  const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
-    return (
-      <Star
-        size={20}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          addToBookmark.mutateAsync({
-            body: {
-              patient_id: patient_id,
-            },
-          });
-        }}
-      />
-    );
-  };
-
-  const RemoveFromBookMark = ({ patient_id }: { patient_id: string }) => {
-    return (
-      <Star
-        size={20}
-        weight="fill"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          removeFromBookMark.mutateAsync({
-            body: {
-              patient_id: patient_id,
-            },
-          });
-        }}
-      />
-    );
   };
 
   return (
@@ -310,6 +322,10 @@ export default function ProfilePage() {
     </LoggedLayout>
   );
 }
+
+const StarContainer = styled.div`
+  position: relative;
+`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;
