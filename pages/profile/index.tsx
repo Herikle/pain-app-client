@@ -27,6 +27,7 @@ import {
 import { Gear, Star } from "@phosphor-icons/react";
 import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import { theme } from "@styles/theme";
 
 const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
   const addToBookmark = useAddPatientToBookmark();
@@ -325,6 +326,12 @@ export default function ProfilePage() {
 
 const StarContainer = styled.div`
   position: relative;
+
+  &:hover {
+    svg {
+      transform: scale(1.2);
+    }
+  }
 `;
 
 const Container = styled(FlexColumn)`
