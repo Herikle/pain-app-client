@@ -192,13 +192,19 @@ export default function Patient() {
                 "data-cy": "add-episode-button",
               }}
               CallToAction={
-                <CallToAction
-                  text1="There are no episodes registered yet."
-                  text2="to create an episode."
-                  onClick={
-                    isLogged ? createEpisodeHandler : createEpisodeDirectHandler
-                  }
-                />
+                isCreator ? (
+                  <CallToAction
+                    text1="There are no episodes registered yet."
+                    text2="to create an episode."
+                    onClick={
+                      isLogged
+                        ? createEpisodeHandler
+                        : createEpisodeDirectHandler
+                    }
+                  />
+                ) : (
+                  <CallToAction text1="There are no episodes registered yet." />
+                )
               }
             />
           </Wrapper>

@@ -41,6 +41,8 @@ export default function EpisodePage() {
 
   const { isLogged, isLoading, user } = useAuth();
 
+  const isNotLogged = !isLogged && !isLoading;
+
   const { id } = router.query as { id: string };
 
   const setSelectedPatient = useSetSelectedPatient();
@@ -170,10 +172,10 @@ export default function EpisodePage() {
   }, [episode, setSelectedPatient, setSelectedEpisode]);
 
   useEffect(() => {
-    if (!isLoading && !isLogged) {
+    if (isNotLogged) {
       saveGuestEpisode();
     }
-  }, [isLoading, isLogged, saveGuestEpisode]);
+  }, [isNotLogged, saveGuestEpisode]);
 
   const isCreator = useMemo(() => {
     if (!episode) return false;
@@ -189,7 +191,7 @@ export default function EpisodePage() {
       ) : (
         <>
           <UnsavedChangesDialog
-            shouldConfirmLeave={!isLogged}
+            shouldConfirmLeave={isNotLogged}
             pathnamesToIgnore={ignorePaths}
           />
           <Container data-cy="episode-page">
@@ -203,7 +205,7 @@ export default function EpisodePage() {
                 }
               />
             )}
-            {!isLogged && (
+            {isNotLogged && (
               <FlexRow>
                 <Question
                   size={16}
@@ -262,14 +264,14 @@ export default function EpisodePage() {
                 </FlexColumn>
               )}
             </EpisodeBadgeContainer>
-            {!!episode && isCreator && (
+            {!!episode && (isCreator || isNotLogged) && (
               <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
             )}
             <TrackContainer>
               <FlexColumn gap={4}>
                 <FlexRow gap={0} justify="space-between">
                   <Text variant="h1">Pain Tracks</Text>
-                  {isCreator && (
+                  {(isCreator || isNotLogged) && (
                     <AddButton
                       onClick={onCreateTrack}
                       loading={createTrack.isLoading}
@@ -277,7 +279,10 @@ export default function EpisodePage() {
                     />
                   )}
                 </FlexRow>
-                <ListTrack episode_id={id} isCreator={isCreator} />
+                <ListTrack
+                  episode_id={id}
+                  isCreator={isCreator || isNotLogged}
+                />
               </FlexColumn>
             </TrackContainer>
           </Container>
