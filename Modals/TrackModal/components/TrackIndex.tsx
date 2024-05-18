@@ -153,14 +153,6 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
             />
           </CustomTabPanel>
         </Content>
-        <FlexRow justify="space-between">
-          <Trash
-            onClick={openConfirmDelete}
-            size={32}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-          />
-        </FlexRow>
         <XContainer>
           <FlexRow>
             <SyncingIndicator isSyncing={updateTrack.isLoading} />
@@ -209,7 +201,6 @@ const XContainer = styled.div`
 const CustomTabPanel = styled(TabPanel)`
   & .MuiBox-root {
     padding-inline: 2rem;
-    padding-block: 3rem;
   }
 `;
 

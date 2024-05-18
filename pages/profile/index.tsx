@@ -252,7 +252,7 @@ export default function ProfilePage() {
           ]}
           data={bookmarkPatients}
           header={{
-            title: "Favorites",
+            title: "Bookmarks",
           }}
           CallToAction={
             <CallToAction

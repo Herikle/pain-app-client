@@ -138,8 +138,7 @@ export default function Patient() {
               }
             />
             {isCreator && (
-              <FlexColumn gap={1.5}>
-                <SyncingIndicator isSyncing={isSyncing} />
+              <FlexRow gap={1}>
                 <FlexRow onClick={onDelete} data-cy="delete-patient-button">
                   <TooltipContent tooltip="Delete subject">
                     <Trash
@@ -149,7 +148,8 @@ export default function Patient() {
                     />
                   </TooltipContent>
                 </FlexRow>
-              </FlexColumn>
+                <SyncingIndicator isSyncing={isSyncing} />
+              </FlexRow>
             )}
           </UserBadgeContainer>
           <Wrapper>
