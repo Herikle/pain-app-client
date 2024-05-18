@@ -101,11 +101,8 @@ const Overlay = styled.div`
 const Video = styled.video`
   position: absolute;
   width: 100%;
-  height: auto;
-  ${media.up.laptop`
-    height: 100%;
-    width: auto;
-  `}
+  height: 100%;
+  object-fit: cover;
 `;
 
 const Container = styled.div`
