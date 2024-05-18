@@ -136,7 +136,7 @@ export default function EpisodePage() {
   };
 
   const getDefaultFileName = () => {
-    const first05PatientName = episode?.patient?.name.slice(0, 5);
+    const first05PatientName = episode?.patient?.name?.slice(0, 5) ?? "Unnamed";
 
     const first10EpisodeName = episode?.name.slice(0, 10);
 

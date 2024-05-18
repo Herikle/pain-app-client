@@ -19,7 +19,7 @@ import { useSetPatientState } from "state/usePatientState";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 
 const newPatientSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string(),
   birth_date: z.date().optional().nullable(),
   about: z.string().optional(),
   common_name: z.string().optional(),
@@ -49,7 +49,7 @@ export const UpdatePatientForm = ({
     useForm<PatientSchema>({
       resolver: zodResolver(newPatientSchema),
       defaultValues: {
-        name: patient.name,
+        name: patient.name ?? "",
         birth_date: getDateFromString(patient.birth_date),
         type: patient.type,
         about: patient.about ?? "",
