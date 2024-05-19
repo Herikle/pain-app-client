@@ -118,7 +118,7 @@ export const Table = ({
       let value = item;
 
       for (const key of keys) {
-        if (typeof value === "object") {
+        if (!!value && typeof value === "object") {
           value = value[key];
         } else {
           break;

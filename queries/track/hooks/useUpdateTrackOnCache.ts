@@ -6,6 +6,7 @@ import { GetTracksListResponse } from "@queries/track/useGetTrack";
 
 type UpdateTrackOnCache = {
   id: string;
+  episode_id: string;
   track: Partial<ITrack>;
 };
 
@@ -21,33 +22,31 @@ export const useUpdateTrackOnCache = () => {
   const queryClient = useQueryClient();
 
   const updateTrackOnCache = async (values: UpdateTrackOnCache) => {
-    const { track } = values;
-
-    const episode_id = track.episode_id;
+    const { track, episode_id, id } = values;
 
     queryClient.setQueriesData(
       [QueryKeys.Track.List, { episode_id }],
       (old: GetTracksListResponse | undefined) => {
         if (!old) return old;
 
-        const track_id = track._id;
+        const track_id = id;
 
         const trackIndex = old.results.findIndex(
           (track: ITrack) => track._id === track_id
         );
-        if (trackIndex >= 0) {
-          const newResults = update(old, {
-            results: {
-              [trackIndex]: {
-                $merge: track,
-              },
-            },
-          });
 
-          return newResults;
+        if (trackIndex < 0) {
+          return old;
         }
 
-        return old;
+        const newResults = update(old, {
+          results: {
+            [trackIndex]: {
+              $merge: track,
+            },
+          },
+        });
+        return newResults;
       }
     );
   };
@@ -71,7 +70,7 @@ export const useUpdateTrackOnCache = () => {
     );
   };
 
-  const remoteTrackOnCache = async (values: RemoveTrack) => {
+  const removeTrackOnCache = async (values: RemoveTrack) => {
     const { track } = values;
 
     const episode_id = track.episode_id;
@@ -99,5 +98,5 @@ export const useUpdateTrackOnCache = () => {
     );
   };
 
-  return { updateTrackOnCache, addTrackOnCache, remoteTrackOnCache };
+  return { updateTrackOnCache, addTrackOnCache, removeTrackOnCache };
 };

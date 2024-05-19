@@ -53,8 +53,9 @@ const TabPanelContainer = styled.div``;
 type TrackItemModal = {
   name: string;
   pain_type: "psychological" | "physical";
-  comment?: string | undefined;
   _id: string;
+  episode_id: string;
+  comment?: string | undefined;
 };
 
 type TrackIndexProps = {
@@ -111,6 +112,9 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
           track_id: track._id,
         },
         body: debouncedTrackDetails,
+        internal: {
+          episode_id: track.episode_id,
+        },
       });
     };
 

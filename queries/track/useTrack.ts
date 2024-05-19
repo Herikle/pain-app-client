@@ -50,6 +50,9 @@ type UpdateTrackPayload = {
     comment?: string;
     pain_type: ITrack["pain_type"];
   };
+  internal: {
+    episode_id: string;
+  };
 };
 
 const updateTrack = async ({ params, body }: UpdateTrackPayload) => {
@@ -70,6 +73,7 @@ export const useUpdateTrack = () => {
       updateTrackOnCache({
         id: variables.params.track_id,
         track: variables.body,
+        episode_id: variables.internal.episode_id,
       });
     },
     onError: (error: AxiosError) => {
@@ -95,10 +99,10 @@ const deleteTrack = async ({ params }: DeleteTrackPayload) => {
 };
 
 export const useDeleteTrack = () => {
-  const { remoteTrackOnCache } = useUpdateTrackOnCache();
+  const { removeTrackOnCache } = useUpdateTrackOnCache();
   return useMutation(deleteTrack, {
     onSuccess: (data) => {
-      remoteTrackOnCache({
+      removeTrackOnCache({
         track: data,
       });
       ToastSuccess("Track deleted successfully");
