@@ -83,7 +83,9 @@ export const Track = ({ track, isCreator }: TrackProps) => {
         <NameAndActions>
           <Text variant="h3">
             {cumulativePainMode && "Cumulative pain for "}
-            {track.name}
+            <Text variant="h3" onClick={onClickTrackEdit} cursor="pointer">
+              {track.name}
+            </Text>
           </Text>
           <FlexRow gap={1}>
             {!cumulativePainMode && isCreator && (

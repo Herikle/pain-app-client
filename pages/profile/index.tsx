@@ -161,6 +161,8 @@ export default function ProfilePage() {
           label={user?.name}
           iconPath={IconsPath.Doctor}
           onClickEdit={openAccountInfoModal}
+          onClickLabel={openAccountInfoModal}
+          onClickBadge={openAccountInfoModal}
           EditPhorphorIcon={Gear}
           editIconAlwaysVisible
           iconProps={{
