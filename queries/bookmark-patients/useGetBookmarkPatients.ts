@@ -11,14 +11,16 @@ type GetPatientsPayload = {
   };
 };
 
+export type BookMarkItem = {
+  id: string;
+  _id: string;
+  patient: IPatient;
+  patient_id: string;
+  user_id: string;
+};
+
 export type GetBookmarkPatientsResponse = {
-  results: {
-    id: string;
-    _id: string;
-    patient: IPatient;
-    patient_id: string;
-    user_id: string;
-  }[];
+  results: BookMarkItem[];
   meta: Meta;
 };
 

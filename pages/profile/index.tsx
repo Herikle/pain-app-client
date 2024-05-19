@@ -25,7 +25,10 @@ import {
   useRemovePatientFromBookmark,
 } from "@queries/patient/usePatient";
 import { Gear, Star } from "@phosphor-icons/react";
-import { useGetBookmarkPatients } from "@queries/bookmark-patients/useGetBookmarkPatients";
+import {
+  BookMarkItem,
+  useGetBookmarkPatients,
+} from "@queries/bookmark-patients/useGetBookmarkPatients";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { theme } from "@styles/theme";
 
@@ -140,6 +143,10 @@ export default function ProfilePage() {
     return RoutesPath.patient.replace("[id]", patient._id);
   };
 
+  const mountPatientHrefByBookmark = (bookmark: BookMarkItem) => {
+    return RoutesPath.patient.replace("[id]", bookmark.patient_id);
+  };
+
   const setChangeAccountInfo = useSetChangeAccountInformationModal();
 
   const openAccountInfoModal = () => {
@@ -227,6 +234,9 @@ export default function ProfilePage() {
           }}
         />
         <Table
+          header={{
+            title: "Bookmarks",
+          }}
           columns={[
             {
               accessor: "patient.name",
@@ -253,16 +263,13 @@ export default function ProfilePage() {
             },
           ]}
           data={bookmarkPatients}
-          header={{
-            title: "Bookmarks",
-          }}
           CallToAction={
             <CallToAction
               text1="There are no favorites yet."
               loading={createPatient.isLoading}
             />
           }
-          mountHref={mountPatientHref}
+          mountHref={mountPatientHrefByBookmark}
           isLoading={
             getBookmarkPatients.isLoading || getBookmarkPatients.isPreviousData
           }

@@ -108,11 +108,14 @@ const deletePatient = async ({ params }: DeletePatientPayload) => {
 export const useDeletePatient = () => {
   const queryClient = useQueryClient();
   const { deletePatientOnCache } = useUpdatePatientOnCache();
+  const { deleteBookMarkFromCacheByPatientId } = useUpdateBookmarksOnCache();
   return useMutation(deletePatient, {
     onSuccess: (_, { params }) => {
       deletePatientOnCache({
         id: params.patient_id,
       });
+
+      deleteBookMarkFromCacheByPatientId(params.patient_id);
 
       queryClient.invalidateQueries(QueryKeys.Patients.ByID);
       queryClient.invalidateQueries(QueryKeys.Patients.List);

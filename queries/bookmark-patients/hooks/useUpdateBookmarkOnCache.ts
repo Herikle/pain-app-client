@@ -32,7 +32,36 @@ export const useUpdateBookmarksOnCache = () => {
     );
   };
 
+  const deleteBookMarkFromCacheByPatientId = async (patient_id: string) => {
+    queryClient.setQueriesData(
+      [QueryKeys.BookmarkPatients.List],
+      (old: GetBookmarkPatientsResponse | undefined) => {
+        if (!old) return old;
+
+        const meta = old.meta;
+
+        const results = old.results;
+
+        const newResults = results.filter(
+          (result) => result.patient_id !== patient_id
+        );
+
+        const newMeta: Meta = {
+          ...meta,
+          total_count: meta.total_count - 1,
+          total_pages: Math.ceil((meta.total_count - 1) / meta.items_per_page),
+        };
+
+        return {
+          results: newResults,
+          meta: newMeta,
+        };
+      }
+    );
+  };
+
   return {
     deleteBookmarkFromCache,
+    deleteBookMarkFromCacheByPatientId,
   };
 };
