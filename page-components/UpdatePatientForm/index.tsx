@@ -96,26 +96,10 @@ export const UpdatePatientForm = ({
     const subscription = watch((value, { name }) => {
       setFormData(value);
 
-      if (name === "common_name") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          commonName: value.common_name,
-        }));
-      }
-
-      if (name === "name") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          name: value.name,
-        }));
-      }
-
-      if (name === "type") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          type: value.type,
-        }));
-      }
+      setPatientState((prev) => ({
+        ...(prev ?? {}),
+        ...value,
+      }));
     });
     return () => {
       subscription.unsubscribe();
@@ -200,7 +184,7 @@ export const UpdatePatientForm = ({
                     }}
                   />
                   <TextField
-                    label="Scientifc Name"
+                    label="Scientific Name"
                     placeholder="Name of the species"
                     disabled
                     noBorder={true}

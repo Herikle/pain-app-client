@@ -8,9 +8,10 @@ import { memoize } from "lodash";
 import { IPatient } from "types";
 
 type PatientState = {
-  name?: string;
   type?: IPatient["type"];
-  commonName?: string;
+  name?: string;
+  common_name?: string;
+  scientific_name?: string;
 };
 
 const recoilPatientState = memoize((patient_id: string) =>

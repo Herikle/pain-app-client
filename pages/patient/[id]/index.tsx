@@ -101,9 +101,11 @@ export default function Patient() {
     }
   };
 
-  const patientType = patientState?.type ?? patient?.type;
-  const patientName = patientState?.name ?? patient?.name;
-  const patientCommonName = patientState?.commonName ?? patient?.common_name;
+  const patientHelper = patientState ?? patient;
+
+  const patientType = patientHelper?.type;
+  const patientName = patientHelper?.name;
+  const patientCommonName = patientHelper?.common_name;
 
   const getPatientSpecie = () => {
     if (patientType === "animal") {
