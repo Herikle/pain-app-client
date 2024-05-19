@@ -60,8 +60,8 @@ export const MobileMenu = ({
             fullWidth
           />
           <MenuLink
-            label={patientSpecie}
-            description={patient?.name ?? "Subject"}
+            label={patientSpecie || "Subject"}
+            description={patient?.name}
             href={patientLinkHref()}
             iconPath={IconsPath.Patient}
             disabled={!pathname.includes(RoutesPath.new_patient)}
