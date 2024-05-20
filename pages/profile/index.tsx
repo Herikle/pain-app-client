@@ -235,7 +235,7 @@ export default function ProfilePage() {
         />
         <Table
           header={{
-            title: "Bookmarks",
+            title: "Favorites",
           }}
           columns={[
             {

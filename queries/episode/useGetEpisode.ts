@@ -81,3 +81,43 @@ export const useGetEpisodeById = (
     }
   );
 };
+
+type GetEpisodesSuggestionPayload = {
+  query: {
+    page: number;
+    limit: number;
+    [key: string]: any;
+  };
+};
+
+export type GetEpisodesSuggestionResponse = {
+  results: IEpisode[];
+  meta: Meta;
+};
+
+const getEpisodesSuggestion = async ({
+  query,
+}: GetEpisodesSuggestionPayload) => {
+  const { data } = await request({
+    method: "GET",
+    service: "episode",
+    url: "/suggestion",
+    query,
+  });
+
+  return data as GetEpisodesSuggestionResponse;
+};
+
+export const useGetEpisodesSugestion = (
+  params: GetEpisodesSuggestionPayload["query"],
+  enabled = true
+) => {
+  return useQuery(
+    [QueryKeys.Episode.SuggestionList, params],
+    () => getEpisodesSuggestion({ query: params }),
+    {
+      enabled,
+      keepPreviousData: true,
+    }
+  );
+};

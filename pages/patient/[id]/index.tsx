@@ -13,11 +13,14 @@ import { useSetSelectedPatient } from "state/useSelectedPatient";
 import { Table } from "@components/Table";
 import { CallToAction } from "@components/CallToAction";
 import { useCreateEpisode } from "@queries/episode/useEpisode";
-import { useGetEpisodesList } from "@queries/episode/useGetEpisode";
+import {
+  useGetEpisodesList,
+  useGetEpisodesSugestion,
+} from "@queries/episode/useGetEpisode";
 import { IEpisode } from "types";
 import { getDateFormatedByLocale } from "@utils/helpers/date";
 import { useSetDeletePatientModal } from "@Modals/DeletePatientModal/hook";
-import { Trash } from "@phosphor-icons/react";
+import { Star, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { media } from "@styles/media-query";
 import { SyncingIndicator } from "@components/SyncingIndicator";
@@ -27,6 +30,69 @@ import { useAuth } from "@utils/hooks/useAuth";
 import { Error404 } from "@page-components/errors/404";
 import { usePatientStateValue } from "state/usePatientState";
 import { useFiltersValue } from "@state/useFilters";
+import { LoadingWrapper } from "@components/LoadingWrapper";
+
+const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
+  // const addToBookmark = useAddPatientToBookmark();
+
+  const addToBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    // await addToBookmark.mutateAsync({
+    //   body: {
+    //     patient_id: patient_id,
+    //   },
+    // });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={false}
+        // loading={addToBookmark.isLoading}
+      />
+      <Star size={20} onClick={addToBookMark} />
+    </StarContainer>
+  );
+};
+
+const RemoveFromBookMark = ({ episode_id }: { episode_id: string }) => {
+  // const removeFromBookmark = useRemovePatientFromBookmark();
+
+  const removeFromBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    // await removeFromBookmark.mutateAsync({
+    //   body: {
+    //     patient_id: patient_id,
+    //   },
+    // });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={false}
+        // loading={removeFromBookmark.isLoading}
+      />
+      <Star size={20} weight="fill" onClick={removeFromBookMark} />
+    </StarContainer>
+  );
+};
+
+const StarContainer = styled.div`
+  position: relative;
+
+  &:hover {
+    svg {
+      transform: scale(1.2);
+    }
+  }
+`;
 
 export default function Patient() {
   const router = useRouter();
@@ -45,10 +111,12 @@ export default function Patient() {
 
   const filters = useFiltersValue();
 
+  const [patientEpisodesPage, setPatientEpisodesPage] = useState(0);
+
   const getPatientEpisodes = useGetEpisodesList(
     {
       patient_id: id,
-      page: 0,
+      page: patientEpisodesPage,
       limit: 5,
       sortBy: "-createdAt",
       ...filters,
@@ -56,14 +124,28 @@ export default function Patient() {
     !!id
   );
 
-  const setEpisodeModal = useSetCreateEpisodeModal();
-
-  const patient = useMemo(() => getPatientById.data, [getPatientById.data]);
-
   const episodes = useMemo(
     () => getPatientEpisodes.data?.results ?? [],
     [getPatientEpisodes.data]
   );
+
+  const [episodeSuggestionPage, setEpisodeSuggestionPage] = useState(0);
+
+  const getEpisodesSuggestions = useGetEpisodesSugestion({
+    page: episodeSuggestionPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
+  const episodesSuggestions = useMemo(
+    () => getEpisodesSuggestions.data?.results ?? [],
+    [getEpisodesSuggestions.data]
+  );
+
+  const setEpisodeModal = useSetCreateEpisodeModal();
+
+  const patient = useMemo(() => getPatientById.data, [getPatientById.data]);
 
   useEffect(() => {
     if (patient) {
@@ -163,7 +245,7 @@ export default function Patient() {
             )}
             <Table
               header={{
-                title: "Pain Episodes list",
+                title: "Episodes list",
                 onPlusClick: isCreator
                   ? isLogged
                     ? createEpisodeHandler
@@ -183,6 +265,12 @@ export default function Patient() {
                 {
                   accessor: "tracks_count",
                   label: "N° of tracks",
+                },
+                {
+                  accessor: "_id",
+                  queryAccessor: "bookmark",
+                  label: "",
+                  render: (_id) => <AddToBookMark episode_id={_id} />,
                 },
               ]}
               mountHref={(episode: IEpisode) =>
@@ -207,6 +295,59 @@ export default function Patient() {
                 ) : (
                   <CallToAction text1="There are no episodes registered yet." />
                 )
+              }
+              pagination={{
+                onChangePage: (page) => setPatientEpisodesPage(page),
+                pages: getPatientEpisodes?.data?.meta?.total_pages ?? 0,
+              }}
+            />
+            <Table
+              header={{
+                title: "Bookmarks",
+              }}
+              columns={[
+                {
+                  accessor: "_id",
+                  queryAccessor: "bookmark",
+                  label: "",
+                  render: (_id) => <RemoveFromBookMark episode_id={_id} />,
+                },
+              ]}
+              data={[]}
+            />
+            <Table
+              header={{
+                title: "Suggestions",
+              }}
+              columns={[
+                {
+                  accessor: "name",
+                  label: "Name",
+                },
+                {
+                  accessor: "createdAt",
+                  label: "Date",
+                  render: getDateFormatedByLocale,
+                },
+                {
+                  accessor: "tracks_count",
+                  label: "N° of tracks",
+                },
+                {
+                  accessor: "_id",
+                  queryAccessor: "bookmark",
+                  label: "",
+                  render: (_id) => <AddToBookMark episode_id={_id} />,
+                },
+              ]}
+              data={episodesSuggestions}
+              isLoading={getEpisodesSuggestions.isLoading}
+              pagination={{
+                onChangePage: (page) => setEpisodeSuggestionPage(page),
+                pages: getEpisodesSuggestions?.data?.meta?.total_pages ?? 0,
+              }}
+              mountHref={(episode: IEpisode) =>
+                RoutesPath.episode.replace("[id]", episode._id)
               }
             />
           </Wrapper>

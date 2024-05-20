@@ -20,6 +20,7 @@ export const QueryKeys = {
   Episode: {
     List: "episode/list",
     ByID: "episode/byId",
+    SuggestionList: "episode/suggestionList",
   },
   Track: {
     List: "track/list",
