@@ -17,6 +17,9 @@ export const QueryKeys = {
   BookmarkPatients: {
     List: "bookmark-patients/list",
   },
+  BookmarkEpisodes: {
+    List: "bookmark-episodes/list",
+  },
   Episode: {
     List: "episode/list",
     ByID: "episode/byId",

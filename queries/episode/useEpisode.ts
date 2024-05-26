@@ -6,6 +6,8 @@ import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IEpisode, ImportEpisodeStructure } from "types";
 import { useUpdateEpisodeOnCache } from "./hooks/useUpdateEpisodeOnCache";
+import { useUpdateEpisodesSuggestionOnCache } from "./hooks/useEpisodeSuggestionOnCache";
+import { useUpdateEpisodeBookmarksOnCache } from "@queries/bookmark-episodes/hooks/useUpdateBookmarkOnCache";
 
 export const getEpisodeService = (): RequestService => {
   return hasToken() ? "episode" : "episode-guest";
@@ -147,6 +149,74 @@ export const useImportEpisode = () => {
       StyledToastError(
         "Error importing episode. Please check the file format."
       );
+    },
+  });
+};
+
+type AddEpisodeToBookMarkParams = {
+  body: {
+    episode_id: string;
+  };
+};
+
+const addEpisodeToBookmark = async ({ body }: AddEpisodeToBookMarkParams) => {
+  const { data } = await request({
+    service: "episode",
+    url: "/bookmark",
+    method: "POST",
+    data: body,
+  });
+
+  return data as IEpisode;
+};
+
+export const useAddEpisodeToBookmark = () => {
+  const queryClient = useQueryClient();
+
+  const { deleteSuggestionFromCache } = useUpdateEpisodesSuggestionOnCache();
+
+  return useMutation(addEpisodeToBookmark, {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Episode added to bookmark");
+      deleteSuggestionFromCache(body.episode_id);
+      queryClient.invalidateQueries([QueryKeys.BookmarkEpisodes.List]);
+      queryClient.invalidateQueries([QueryKeys.Episode.List]);
+      queryClient.invalidateQueries([QueryKeys.Episode.SuggestionList]);
+    },
+  });
+};
+
+type RemoveEpisodeFromBookMarkParams = {
+  body: {
+    episode_id: string;
+  };
+};
+
+const removeEpisodeFromBookmark = async ({
+  body,
+}: RemoveEpisodeFromBookMarkParams) => {
+  const { data } = await request({
+    service: "episode",
+    url: "/bookmark",
+    method: "DELETE",
+    data: body,
+  });
+
+  return data as IEpisode;
+};
+
+export const useRemoveEpisodeFromBookmark = () => {
+  const queryClient = useQueryClient();
+
+  const { deleteBookmarkFromCache } = useUpdateEpisodeBookmarksOnCache();
+
+  return useMutation(removeEpisodeFromBookmark, {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Episode removed from bookmark");
+      deleteBookmarkFromCache(body.episode_id);
+      queryClient.invalidateQueries([QueryKeys.BookmarkEpisodes.List]);
+      queryClient.invalidateQueries([QueryKeys.Episode.List]);
+      queryClient.invalidateQueries([QueryKeys.Episode.SuggestionList]);
     },
   });
 };

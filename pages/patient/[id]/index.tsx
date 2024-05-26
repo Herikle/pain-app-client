@@ -12,7 +12,11 @@ import { UpdatePatientForm } from "@page-components/UpdatePatientForm";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import { Table } from "@components/Table";
 import { CallToAction } from "@components/CallToAction";
-import { useCreateEpisode } from "@queries/episode/useEpisode";
+import {
+  useAddEpisodeToBookmark,
+  useCreateEpisode,
+  useRemoveEpisodeFromBookmark,
+} from "@queries/episode/useEpisode";
 import {
   useGetEpisodesList,
   useGetEpisodesSugestion,
@@ -31,18 +35,22 @@ import { Error404 } from "@page-components/errors/404";
 import { usePatientStateValue } from "state/usePatientState";
 import { useFiltersValue } from "@state/useFilters";
 import { LoadingWrapper } from "@components/LoadingWrapper";
+import {
+  BookMarkEpisodeItem,
+  useGetBookmarkEpisodes,
+} from "@queries/bookmark-episodes/useGetBookmarkPatients";
 
 const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
-  // const addToBookmark = useAddPatientToBookmark();
+  const addToBookmark = useAddEpisodeToBookmark();
 
   const addToBookMark = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    // await addToBookmark.mutateAsync({
-    //   body: {
-    //     patient_id: patient_id,
-    //   },
-    // });
+    await addToBookmark.mutateAsync({
+      body: {
+        episode_id: episode_id,
+      },
+    });
   };
 
   return (
@@ -50,8 +58,7 @@ const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
       <LoadingWrapper
         overContainer
         size={16}
-        loading={false}
-        // loading={addToBookmark.isLoading}
+        loading={addToBookmark.isLoading}
       />
       <Star size={20} onClick={addToBookMark} />
     </StarContainer>
@@ -59,16 +66,16 @@ const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
 };
 
 const RemoveFromBookMark = ({ episode_id }: { episode_id: string }) => {
-  // const removeFromBookmark = useRemovePatientFromBookmark();
+  const removeFromBookmark = useRemoveEpisodeFromBookmark();
 
   const removeFromBookMark = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    // await removeFromBookmark.mutateAsync({
-    //   body: {
-    //     patient_id: patient_id,
-    //   },
-    // });
+    await removeFromBookmark.mutateAsync({
+      body: {
+        episode_id: episode_id,
+      },
+    });
   };
 
   return (
@@ -76,8 +83,7 @@ const RemoveFromBookMark = ({ episode_id }: { episode_id: string }) => {
       <LoadingWrapper
         overContainer
         size={16}
-        loading={false}
-        // loading={removeFromBookmark.isLoading}
+        loading={removeFromBookmark.isLoading}
       />
       <Star size={20} weight="fill" onClick={removeFromBookMark} />
     </StarContainer>
@@ -143,6 +149,20 @@ export default function Patient() {
     [getEpisodesSuggestions.data]
   );
 
+  const [episodesBookmarkPage, setEpisodesBookmarkPage] = useState(0);
+
+  const getEpisodesBookmark = useGetBookmarkEpisodes({
+    page: episodesBookmarkPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
+  const episodesBookmark = useMemo(
+    () => getEpisodesBookmark.data?.results ?? [],
+    [getEpisodesBookmark.data]
+  );
+
   const setEpisodeModal = useSetCreateEpisodeModal();
 
   const patient = useMemo(() => getPatientById.data, [getPatientById.data]);
@@ -195,6 +215,14 @@ export default function Patient() {
     }
 
     return patientType;
+  };
+
+  const mountEpisodeHref = (episode: IEpisode) => {
+    return RoutesPath.episode.replace("[id]", episode._id);
+  };
+
+  const mountEpisodeHrefByBookmark = (bookmark: BookMarkEpisodeItem) => {
+    return RoutesPath.episode.replace("[id]", bookmark.episode_id);
   };
 
   const isCreator = useMemo(() => {
@@ -267,15 +295,18 @@ export default function Patient() {
                   label: "N° of tracks",
                 },
                 {
-                  accessor: "_id",
+                  accessor: "bookmarked",
                   queryAccessor: "bookmark",
                   label: "",
-                  render: (_id) => <AddToBookMark episode_id={_id} />,
+                  render: (bookmarked, item: IEpisode) =>
+                    !!bookmarked ? (
+                      <RemoveFromBookMark episode_id={item._id} />
+                    ) : (
+                      <AddToBookMark episode_id={item._id} />
+                    ),
                 },
               ]}
-              mountHref={(episode: IEpisode) =>
-                RoutesPath.episode.replace("[id]", episode._id)
-              }
+              mountHref={mountEpisodeHref}
               isLoading={getPatientEpisodes.isLoading}
               data={episodes}
               addButtonProps={{
@@ -305,15 +336,36 @@ export default function Patient() {
               header={{
                 title: "Bookmarks",
               }}
+              data={episodesBookmark}
+              isLoading={getEpisodesBookmark.isLoading}
               columns={[
                 {
-                  accessor: "_id",
+                  accessor: "episode.name",
+                  label: "Name",
+                },
+                {
+                  accessor: "episode.createdAt",
+                  label: "Date",
+                  render: getDateFormatedByLocale,
+                },
+                {
+                  accessor: "episode.tracks_count",
+                  label: "N° of tracks",
+                },
+                {
+                  accessor: "episode",
                   queryAccessor: "bookmark",
                   label: "",
-                  render: (_id) => <RemoveFromBookMark episode_id={_id} />,
+                  render: (episode: IEpisode) => (
+                    <RemoveFromBookMark episode_id={episode._id} />
+                  ),
                 },
               ]}
-              data={[]}
+              pagination={{
+                onChangePage: (page) => setEpisodesBookmarkPage(page),
+                pages: getEpisodesBookmark?.data?.meta?.total_pages ?? 0,
+              }}
+              mountHref={mountEpisodeHrefByBookmark}
             />
             <Table
               header={{
@@ -346,9 +398,7 @@ export default function Patient() {
                 onChangePage: (page) => setEpisodeSuggestionPage(page),
                 pages: getEpisodesSuggestions?.data?.meta?.total_pages ?? 0,
               }}
-              mountHref={(episode: IEpisode) =>
-                RoutesPath.episode.replace("[id]", episode._id)
-              }
+              mountHref={mountEpisodeHref}
             />
           </Wrapper>
         </Container>
