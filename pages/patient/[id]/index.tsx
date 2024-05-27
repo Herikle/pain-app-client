@@ -328,7 +328,7 @@ export default function Patient() {
                 )
               }
               pagination={{
-                onChangePage: (page) => setPatientEpisodesPage(page),
+                onChangePage: (page) => setPatientEpisodesPage(page - 1),
                 pages: getPatientEpisodes?.data?.meta?.total_pages ?? 0,
               }}
             />
@@ -362,7 +362,7 @@ export default function Patient() {
                 },
               ]}
               pagination={{
-                onChangePage: (page) => setEpisodesBookmarkPage(page),
+                onChangePage: (page) => setEpisodesBookmarkPage(page - 1),
                 pages: getEpisodesBookmark?.data?.meta?.total_pages ?? 0,
               }}
               mountHref={mountEpisodeHrefByBookmark}
@@ -395,7 +395,7 @@ export default function Patient() {
               data={episodesSuggestions}
               isLoading={getEpisodesSuggestions.isLoading}
               pagination={{
-                onChangePage: (page) => setEpisodeSuggestionPage(page),
+                onChangePage: (page) => setEpisodeSuggestionPage(page - 1),
                 pages: getEpisodesSuggestions?.data?.meta?.total_pages ?? 0,
               }}
               mountHref={mountEpisodeHref}
