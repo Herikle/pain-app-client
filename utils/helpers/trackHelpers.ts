@@ -56,6 +56,8 @@ export const checkIfTrackHasEnoughData = (
     };
 
   const allSegmentsHaveTime = segments.every((segment) => {
+    if (segment.intensities.type === "draw") return true;
+
     const doNotHaveTimeAndIntensities =
       !segmentHaveTime(segment) && !segmentHaveIntensities(segment);
 
@@ -71,6 +73,8 @@ export const checkIfTrackHasEnoughData = (
     };
 
   const allSegmentsHaveIntensities = segments.every((segment) => {
+    if (segment.intensities.type === "draw") return true;
+
     const doNotHaveTimeAndIntensities =
       !segmentHaveTime(segment) && !segmentHaveIntensities(segment);
 

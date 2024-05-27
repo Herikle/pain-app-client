@@ -81,6 +81,19 @@ export const Track = ({ track, isCreator }: TrackProps) => {
     [track]
   );
 
+  const isSomeSegmentDraw = useMemo(() => {
+    if (!segments) return false;
+    return segments.some((segment) => segment.intensities.type === "draw");
+  }, [segments]);
+
+  const getCumulativePainValidToolTip = () => {
+    if (isSomeSegmentDraw) {
+      return "Cumulative pain: This track has segments with drawn intensities. Cumulative pain is not available for these segments.";
+    }
+
+    return "Cumulative pain";
+  };
+
   return (
     <Element name={`track_${track._id}`} data-cy="track-component">
       <Wrapper gap={2}>
@@ -114,7 +127,7 @@ export const Track = ({ track, isCreator }: TrackProps) => {
             )}
 
             {enoughDataCheck.valid ? (
-              <TooltipContent tooltip="Cumulative pain">
+              <TooltipContent tooltip={getCumulativePainValidToolTip()}>
                 <ChartBarIcon
                   size={16}
                   color={cumulativePainMode ? theme.colors.primary : undefined}
