@@ -7,7 +7,7 @@ import { RoutesPath } from "@utils/routes";
 import styled from "styled-components";
 import Router, { useRouter } from "next/router";
 import { useGetPatientById } from "@queries/patient/useGetPatients";
-import { useEffect, useMemo, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { UpdatePatientForm } from "@page-components/UpdatePatientForm";
 import { useSetSelectedPatient } from "state/useSelectedPatient";
 import { Table } from "@components/Table";
@@ -232,6 +232,34 @@ export default function Patient() {
     return patient.creator_id === user._id;
   }, [patient, user]);
 
+  const getSuggestionTdStyle = (item: IEpisode): CSSProperties | null => {
+    const patient = item.patient;
+    if (!patient) return null;
+
+    const itemPatientType = patient.type;
+    if (!itemPatientType) return null;
+
+    if (itemPatientType === patientType) return null;
+
+    return {
+      color: theme.colors.primary,
+    };
+  };
+
+  const renderPatientScientificName = (item: IEpisode) => {
+    const patient = item.patient;
+    if (!patient) return null;
+
+    const itemPatientType = patient.type;
+    if (!itemPatientType) return null;
+
+    if (itemPatientType === patientType) return null;
+
+    if (itemPatientType === "human") return "Human";
+
+    return patient.scientific_name ?? itemPatientType;
+  };
+
   return (
     <LoggedLayout>
       {getPatientById.isError ? (
@@ -342,15 +370,21 @@ export default function Patient() {
                 {
                   accessor: "episode.name",
                   label: "Name",
+                  tdStyle: (item: { episode: IEpisode }) =>
+                    getSuggestionTdStyle(item.episode),
                 },
                 {
                   accessor: "episode.createdAt",
                   label: "Date",
                   render: getDateFormatedByLocale,
+                  tdStyle: (item: { episode: IEpisode }) =>
+                    getSuggestionTdStyle(item.episode),
                 },
                 {
                   accessor: "episode.tracks_count",
                   label: "N° of tracks",
+                  tdStyle: (item: { episode: IEpisode }) =>
+                    getSuggestionTdStyle(item.episode),
                 },
                 {
                   accessor: "episode",
@@ -359,6 +393,16 @@ export default function Patient() {
                   render: (episode: IEpisode) => (
                     <RemoveFromBookMark episode_id={episode._id} />
                   ),
+                  tdStyle: (item: { episode: IEpisode }) =>
+                    getSuggestionTdStyle(item.episode),
+                },
+                {
+                  accessor: "episode",
+                  label: "",
+                  render: (item: IEpisode) => renderPatientScientificName(item),
+                  tdStyle: (item: { episode: IEpisode }) =>
+                    getSuggestionTdStyle(item.episode),
+                  noSort: true,
                 },
               ]}
               pagination={{
@@ -366,6 +410,12 @@ export default function Patient() {
                 pages: getEpisodesBookmark?.data?.meta?.total_pages ?? 0,
               }}
               mountHref={mountEpisodeHrefByBookmark}
+              CallToAction={
+                <CallToAction
+                  text1="There are no bookmarks yet."
+                  loading={false}
+                />
+              }
             />
             <Table
               header={{
@@ -375,21 +425,33 @@ export default function Patient() {
                 {
                   accessor: "name",
                   label: "Name",
+                  tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
                 },
                 {
                   accessor: "createdAt",
                   label: "Date",
                   render: getDateFormatedByLocale,
+                  tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
                 },
                 {
                   accessor: "tracks_count",
                   label: "N° of tracks",
+                  tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
                 },
                 {
                   accessor: "_id",
                   queryAccessor: "bookmark",
                   label: "",
                   render: (_id) => <AddToBookMark episode_id={_id} />,
+                  tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
+                },
+                {
+                  accessor: "_id",
+                  label: "",
+                  render: (_, item: IEpisode) =>
+                    renderPatientScientificName(item),
+                  tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
+                  noSort: true,
                 },
               ]}
               data={episodesSuggestions}
@@ -399,6 +461,12 @@ export default function Patient() {
                 pages: getEpisodesSuggestions?.data?.meta?.total_pages ?? 0,
               }}
               mountHref={mountEpisodeHref}
+              CallToAction={
+                <CallToAction
+                  text1="There are no suggestions yet."
+                  loading={false}
+                />
+              }
             />
           </Wrapper>
         </Container>
