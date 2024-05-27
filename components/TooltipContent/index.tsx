@@ -43,24 +43,26 @@ export const TooltipContent = ({
       data-testid="tooltip-content"
     >
       {children}
-      <Tooltip
-        style={{
-          minWidth: minWidth ? minWidth : "auto",
-          backgroundColor: getBgColor(),
-          zIndex: 1,
-        }}
-        anchorSelect={`[data-tooltip-id="${id}"]`}
-        noArrow={noArrow}
-        place={place}
-      >
-        <Text
-          variant="body2"
-          color={themeProps === "light" ? "font_color" : "pure_white"}
-          data-testid="tooltip-content-text"
+      {tooltip && (
+        <Tooltip
+          style={{
+            minWidth: minWidth ? minWidth : "auto",
+            backgroundColor: getBgColor(),
+            zIndex: 1,
+          }}
+          anchorSelect={`[data-tooltip-id="${id}"]`}
+          noArrow={noArrow}
+          place={place}
         >
-          {tooltip}
-        </Text>
-      </Tooltip>
+          <Text
+            variant="body2"
+            color={themeProps === "light" ? "font_color" : "pure_white"}
+            data-testid="tooltip-content-text"
+          >
+            {tooltip}
+          </Text>
+        </Tooltip>
+      )}
     </Container>
   );
 };
