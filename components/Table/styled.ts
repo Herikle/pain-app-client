@@ -72,7 +72,7 @@ export const TableStyled = styled.table`
 `;
 
 export const Container = styled.div`
-  border: 1px solid ${theme.colors.primary};
+  /* border: 1px solid ${theme.colors.primary}; */
   border-radius: 4px;
   position: relative;
   min-height: 20rem;
