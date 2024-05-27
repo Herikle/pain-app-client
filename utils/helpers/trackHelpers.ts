@@ -39,10 +39,21 @@ type TrackEnoughData = {
   segments?: ISegment[];
 };
 
-export const checkIfTrackHasEnoughData = (track: TrackEnoughData) => {
+type EnoughDataResponse = {
+  valid: boolean;
+  message?: string;
+};
+
+export const checkIfTrackHasEnoughData = (
+  track: TrackEnoughData
+): EnoughDataResponse => {
   const segments = track.segments;
 
-  if (!segments) return false;
+  if (!segments)
+    return {
+      valid: false,
+      message: "Track has no segments.",
+    };
 
   const allSegmentsHaveTime = segments.every((segment) => {
     const doNotHaveTimeAndIntensities =
@@ -53,7 +64,11 @@ export const checkIfTrackHasEnoughData = (track: TrackEnoughData) => {
     return segmentHaveTime(segment);
   });
 
-  if (!allSegmentsHaveTime) return false;
+  if (!allSegmentsHaveTime)
+    return {
+      valid: false,
+      message: "Some segments do not have time.",
+    };
 
   const allSegmentsHaveIntensities = segments.every((segment) => {
     const doNotHaveTimeAndIntensities =
@@ -64,7 +79,11 @@ export const checkIfTrackHasEnoughData = (track: TrackEnoughData) => {
     return segmentHaveIntensities(segment);
   });
 
-  if (!allSegmentsHaveIntensities) return false;
+  if (!allSegmentsHaveIntensities)
+    return {
+      valid: false,
+      message: "Some segments do not have intensities.",
+    };
 
   const someSegmentsHaveTimeAndIntensities = segments.some((segment) => {
     const haveTimeAndIntensities =
@@ -75,7 +94,13 @@ export const checkIfTrackHasEnoughData = (track: TrackEnoughData) => {
     return false;
   });
 
-  if (!someSegmentsHaveTimeAndIntensities) return false;
+  if (!someSegmentsHaveTimeAndIntensities)
+    return {
+      valid: false,
+      message: "Some segments do not have time and intensities.",
+    };
 
-  return true;
+  return {
+    valid: true,
+  };
 };

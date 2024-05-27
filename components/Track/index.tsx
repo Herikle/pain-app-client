@@ -16,14 +16,13 @@ import { ISegment } from "types";
 import { Element } from "react-scroll";
 import { SegmentModalTabs } from "@Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
-import { useState } from "react";
+import { use, useMemo, useState } from "react";
 import { DeleteTracKModal } from "@Modals/DeleteTrackModal";
 import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
 
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
 import { TooltipContent } from "@components/TooltipContent";
 import { SegmentsTitleComponent } from "./components/SegmentsTitleComponent";
-import { useAuth } from "@utils/hooks/useAuth";
 
 type TrackItem = {
   _id: string;
@@ -77,6 +76,11 @@ export const Track = ({ track, isCreator }: TrackProps) => {
 
   const hasSegments = !!segments;
 
+  const enoughDataCheck = useMemo(
+    () => checkIfTrackHasEnoughData(track),
+    [track]
+  );
+
   return (
     <Element name={`track_${track._id}`} data-cy="track-component">
       <Wrapper gap={2}>
@@ -109,7 +113,7 @@ export const Track = ({ track, isCreator }: TrackProps) => {
               </>
             )}
 
-            {checkIfTrackHasEnoughData(track) ? (
+            {enoughDataCheck.valid ? (
               <TooltipContent tooltip="Cumulative pain">
                 <ChartBarIcon
                   size={16}
@@ -119,7 +123,11 @@ export const Track = ({ track, isCreator }: TrackProps) => {
                 />
               </TooltipContent>
             ) : (
-              <TooltipContent tooltip="This track doesn’t have enough time data to calculate the cumulative pain.">
+              <TooltipContent
+                tooltip={`This track doesn’t have enough time data to calculate the cumulative pain. ${
+                  enoughDataCheck.message ?? ""
+                }`}
+              >
                 <ChartBarIcon
                   size={16}
                   color={cumulativePainMode ? theme.colors.primary : undefined}
