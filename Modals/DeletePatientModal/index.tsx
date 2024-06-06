@@ -41,14 +41,6 @@ const Child = ({ onClose, patient_id, patient }: DeletePatientModalProps) => {
       description="Once you delete this patient, all episodes will be deleted too."
       confirmText="Yes, delete it"
       loading={deletePatient.isLoading}
-      writeConfirmation={{
-        label: (
-          <>
-            Type the <strong>first name</strong> of the patient to confirm
-          </>
-        ),
-        testText: patient.name.split(" ")[0],
-      }}
     />
   );
 };

@@ -16,7 +16,7 @@ import { ISegment } from "types";
 import { Element } from "react-scroll";
 import { SegmentModalTabs } from "@Modals/SegmentModal";
 import { ListSegments } from "./components/ListSegments";
-import { useState } from "react";
+import { use, useMemo, useState } from "react";
 import { DeleteTracKModal } from "@Modals/DeleteTrackModal";
 import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
 
@@ -35,9 +35,10 @@ type TrackItem = {
 
 type TrackProps = {
   track: TrackItem;
+  isCreator?: boolean;
 };
 
-export const Track = ({ track }: TrackProps) => {
+export const Track = ({ track, isCreator }: TrackProps) => {
   const setSegmentModal = useSetSegmentModal();
 
   const setTrackModal = useSetTrackModal();
@@ -75,16 +76,36 @@ export const Track = ({ track }: TrackProps) => {
 
   const hasSegments = !!segments;
 
+  const enoughDataCheck = useMemo(
+    () => checkIfTrackHasEnoughData(track),
+    [track]
+  );
+
+  const isSomeSegmentDraw = useMemo(() => {
+    if (!segments) return false;
+    return segments.some((segment) => segment.intensities.type === "draw");
+  }, [segments]);
+
+  const getCumulativePainValidToolTip = () => {
+    if (isSomeSegmentDraw) {
+      return "Cumulative pain: This track has segments with drawn intensities. Cumulative pain is not available for these segments.";
+    }
+
+    return "Cumulative pain";
+  };
+
   return (
     <Element name={`track_${track._id}`} data-cy="track-component">
       <Wrapper gap={2}>
         <NameAndActions>
           <Text variant="h3">
             {cumulativePainMode && "Cumulative pain for "}
-            {track.name}
+            <Text variant="h3" onClick={onClickTrackEdit} cursor="pointer">
+              {track.name}
+            </Text>
           </Text>
           <FlexRow gap={1}>
-            {!cumulativePainMode && (
+            {!cumulativePainMode && isCreator && (
               <>
                 <TooltipContent tooltip="Edit track">
                   <PencilIcon
@@ -105,8 +126,8 @@ export const Track = ({ track }: TrackProps) => {
               </>
             )}
 
-            {checkIfTrackHasEnoughData(track) ? (
-              <TooltipContent tooltip="Cumulative pain">
+            {enoughDataCheck.valid ? (
+              <TooltipContent tooltip={getCumulativePainValidToolTip()}>
                 <ChartBarIcon
                   size={16}
                   color={cumulativePainMode ? theme.colors.primary : undefined}
@@ -115,7 +136,11 @@ export const Track = ({ track }: TrackProps) => {
                 />
               </TooltipContent>
             ) : (
-              <TooltipContent tooltip="This track doesn’t have enough time data to calculate the cumulative pain.">
+              <TooltipContent
+                tooltip={`This track doesn’t have enough time data to calculate the cumulative pain. ${
+                  enoughDataCheck.message ?? ""
+                }`}
+              >
                 <ChartBarIcon
                   size={16}
                   color={cumulativePainMode ? theme.colors.primary : undefined}
@@ -138,6 +163,7 @@ export const Track = ({ track }: TrackProps) => {
               track={track}
               onClickSegment={onClickSegment}
               cumulativePainMode={cumulativePainMode}
+              isCreator={isCreator}
               enableAddNewSegment
             />
           )}

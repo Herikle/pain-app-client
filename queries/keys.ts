@@ -11,11 +11,19 @@ export const QueryKeys = {
   Patients: {
     List: "patients/list",
     ByID: "patients/byId",
+    SuggestionList: "patients/suggestionList",
     GetScientificName: "patients/getScientificName",
+  },
+  BookmarkPatients: {
+    List: "bookmark-patients/list",
+  },
+  BookmarkEpisodes: {
+    List: "bookmark-episodes/list",
   },
   Episode: {
     List: "episode/list",
     ByID: "episode/byId",
+    SuggestionList: "episode/suggestionList",
   },
   Track: {
     List: "track/list",

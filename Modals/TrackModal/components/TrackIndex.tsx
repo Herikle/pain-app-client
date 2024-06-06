@@ -53,8 +53,9 @@ const TabPanelContainer = styled.div``;
 type TrackItemModal = {
   name: string;
   pain_type: "psychological" | "physical";
-  comment?: string | undefined;
   _id: string;
+  episode_id: string;
+  comment?: string | undefined;
 };
 
 type TrackIndexProps = {
@@ -111,6 +112,9 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
           track_id: track._id,
         },
         body: debouncedTrackDetails,
+        internal: {
+          episode_id: track.episode_id,
+        },
       });
     };
 
@@ -153,14 +157,6 @@ export const TrackIndex = ({ track, onClose }: TrackIndexProps) => {
             />
           </CustomTabPanel>
         </Content>
-        <FlexRow justify="space-between">
-          <Trash
-            onClick={openConfirmDelete}
-            size={32}
-            color={theme.colors.text_switched}
-            cursor="pointer"
-          />
-        </FlexRow>
         <XContainer>
           <FlexRow>
             <SyncingIndicator isSyncing={updateTrack.isLoading} />
@@ -209,7 +205,6 @@ const XContainer = styled.div`
 const CustomTabPanel = styled(TabPanel)`
   & .MuiBox-root {
     padding-inline: 2rem;
-    padding-block: 3rem;
   }
 `;
 

@@ -5,6 +5,8 @@ import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IPatient } from "types";
 import { useUpdatePatientOnCache } from "./hooks/useUpdatePatientOnCache";
+import { useUpdatePatientsSuggestionOnCache } from "./hooks/useUpdateSuggestionOnCache";
+import { useUpdateBookmarksOnCache } from "@queries/bookmark-patients/hooks/useUpdateBookmarkOnCache";
 
 type CreatePatientsPayload = {
   body: {
@@ -106,11 +108,14 @@ const deletePatient = async ({ params }: DeletePatientPayload) => {
 export const useDeletePatient = () => {
   const queryClient = useQueryClient();
   const { deletePatientOnCache } = useUpdatePatientOnCache();
+  const { deleteBookMarkFromCacheByPatientId } = useUpdateBookmarksOnCache();
   return useMutation(deletePatient, {
     onSuccess: (_, { params }) => {
       deletePatientOnCache({
         id: params.patient_id,
       });
+
+      deleteBookMarkFromCacheByPatientId(params.patient_id);
 
       queryClient.invalidateQueries(QueryKeys.Patients.ByID);
       queryClient.invalidateQueries(QueryKeys.Patients.List);
@@ -118,6 +123,72 @@ export const useDeletePatient = () => {
     },
     onError: (error: AxiosError) => {
       ToastError(error);
+    },
+  });
+};
+
+type AddToBookMarkParams = {
+  body: {
+    patient_id: string;
+  };
+};
+
+const addToBookmark = async ({ body }: AddToBookMarkParams) => {
+  const { data } = await request({
+    service: "patient",
+    url: "/bookmark",
+    method: "POST",
+    data: body,
+  });
+
+  return data as IPatient;
+};
+
+export const useAddPatientToBookmark = () => {
+  const queryClient = useQueryClient();
+
+  const { deleteSuggestionFromCache } = useUpdatePatientsSuggestionOnCache();
+
+  return useMutation(addToBookmark, {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Patient added to bookmark");
+      deleteSuggestionFromCache(body.patient_id);
+      queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);
+    },
+  });
+};
+
+type RemoveFromBookMarkParams = {
+  body: {
+    patient_id: string;
+  };
+};
+
+const removeFromBookmark = async ({ body }: RemoveFromBookMarkParams) => {
+  const { data } = await request({
+    service: "patient",
+    url: "/bookmark",
+    method: "DELETE",
+    data: body,
+  });
+
+  return data as IPatient;
+};
+
+export const useRemovePatientFromBookmark = () => {
+  const queryClient = useQueryClient();
+
+  const { deleteBookmarkFromCache } = useUpdateBookmarksOnCache();
+
+  return useMutation(removeFromBookmark, {
+    onSuccess: (_, { body }) => {
+      ToastSuccess("Patient removed from bookmark");
+      deleteBookmarkFromCache(body.patient_id);
+      queryClient.invalidateQueries([QueryKeys.BookmarkPatients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.List]);
+      queryClient.invalidateQueries([QueryKeys.Patients.SuggestionList]);
     },
   });
 };

@@ -19,7 +19,7 @@ import { useSetPatientState } from "state/usePatientState";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 
 const newPatientSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string(),
   birth_date: z.date().optional().nullable(),
   about: z.string().optional(),
   common_name: z.string().optional(),
@@ -49,7 +49,7 @@ export const UpdatePatientForm = ({
     useForm<PatientSchema>({
       resolver: zodResolver(newPatientSchema),
       defaultValues: {
-        name: patient.name,
+        name: patient.name ?? "",
         birth_date: getDateFromString(patient.birth_date),
         type: patient.type,
         about: patient.about ?? "",
@@ -96,26 +96,10 @@ export const UpdatePatientForm = ({
     const subscription = watch((value, { name }) => {
       setFormData(value);
 
-      if (name === "common_name") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          commonName: value.common_name,
-        }));
-      }
-
-      if (name === "name") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          name: value.name,
-        }));
-      }
-
-      if (name === "type") {
-        setPatientState((state) => ({
-          ...(state ?? {}),
-          type: value.type,
-        }));
-      }
+      setPatientState((prev) => ({
+        ...(prev ?? {}),
+        ...value,
+      }));
     });
     return () => {
       subscription.unsubscribe();
@@ -200,7 +184,7 @@ export const UpdatePatientForm = ({
                     }}
                   />
                   <TextField
-                    label="Scientifc Name"
+                    label="Scientific Name"
                     placeholder="Name of the species"
                     disabled
                     noBorder={true}

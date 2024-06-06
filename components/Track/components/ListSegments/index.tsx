@@ -20,6 +20,7 @@ type ListSegmentsProps = {
   track: TrackItemListSegments;
   cumulativePainMode?: boolean;
   enableAddNewSegment?: boolean;
+  isCreator?: boolean;
 };
 
 export const ListSegments = ({
@@ -27,6 +28,7 @@ export const ListSegments = ({
   track,
   cumulativePainMode = false,
   enableAddNewSegment = false,
+  isCreator,
 }: ListSegmentsProps) => {
   const segmentsListRef = useRef<HTMLDivElement>(null);
 
@@ -61,13 +63,15 @@ export const ListSegments = ({
             segment={segment}
             hasDraw
             readOnly
-            onClick={(tab) => onClickSegment(segment, tab)}
+            onClick={
+              isCreator ? (tab) => onClickSegment(segment, tab) : undefined
+            }
             showFooterDetails
             cumulativePainMode={cumulativePainMode}
           />
         ))}
       </SegmentsContainer>
-      {enableAddNewSegment && (
+      {enableAddNewSegment && isCreator && (
         <AddContainer>
           <AddButton
             onClick={onClickAddNewSegment}

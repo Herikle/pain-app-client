@@ -26,13 +26,18 @@ import { TablePagination } from "./components/TablePaginator";
 
 type RenderType = (value: any, item: any) => React.ReactNode;
 
+type TdStyleFunction = (item: any) => React.CSSProperties | null;
+
 type ColumProps = {
   accessor: string;
+  queryAccessor?: string;
   label: string;
   render?: RenderType;
   options?: {
     withOverflow?: boolean;
   };
+  tdStyle?: TdStyleFunction | React.CSSProperties | null;
+  noSort?: boolean;
 };
 
 type Props = {
@@ -110,11 +115,41 @@ export const Table = ({
     return {};
   };
 
+  const getItemValue = (item: any, accessor: string) => {
+    if (accessor.includes(".")) {
+      const keys = accessor.split(".");
+
+      let value = item;
+
+      for (const key of keys) {
+        if (!!value && typeof value === "object") {
+          value = value[key];
+        } else {
+          break;
+        }
+      }
+
+      return value;
+    }
+
+    return item[accessor];
+  };
+
+  const getStyle = (column: ColumProps, item: any) => {
+    if (!column.tdStyle) return undefined;
+
+    if (typeof column.tdStyle === "function") {
+      return column.tdStyle(item) ?? undefined;
+    }
+
+    return column.tdStyle;
+  };
+
   return (
     <Wrapper>
       {header && (
         <Header>
-          <Text variant="h1">{header.title}</Text>
+          <Text variant="h2">{header.title}</Text>
           {showHeader && (
             <AddButton
               onClick={header.onPlusClick}
@@ -128,16 +163,28 @@ export const Table = ({
       <Container>
         <TableStyled>
           <Thead>
-            <tr>
-              {columns.map((column) => (
-                <Th key={column.accessor}>
-                  <ThHeader onClick={onSortClick(column.accessor)}>
-                    <Text color="medium_grey">{column.label}</Text>
-                    <SortCaret {...isSortedBy(column.accessor)} />
-                  </ThHeader>
-                </Th>
-              ))}
-            </tr>
+            {!thereIsNoData && (
+              <tr>
+                {columns.map((column) => (
+                  <Th key={column.accessor}>
+                    <ThHeader
+                      onClick={onSortClick(
+                        column.queryAccessor ?? column.accessor
+                      )}
+                    >
+                      <Text color="medium_grey">{column.label}</Text>
+                      {!column.noSort && (
+                        <SortCaret
+                          {...isSortedBy(
+                            column.queryAccessor ?? column.accessor
+                          )}
+                        />
+                      )}
+                    </ThHeader>
+                  </Th>
+                ))}
+              </tr>
+            )}
           </Thead>
           <tbody>
             {data?.map((item, index) => (
@@ -148,16 +195,26 @@ export const Table = ({
                 data-testid="table-row"
               >
                 {columns.map((column) => (
-                  <Td key={column.accessor}>
+                  <Td
+                    key={column.queryAccessor ?? column.accessor}
+                    style={getStyle(column, item)}
+                  >
                     {renderRowItem(
                       item,
                       <ItemContainer
                         $withOverflow={column?.options?.withOverflow}
                       >
-                        <Text variant="body2Bold" whiteSpace="nowrap">
+                        <Text
+                          variant="body2Bold"
+                          whiteSpace="nowrap"
+                          customColor="inherit"
+                        >
                           {column.render
-                            ? column.render(item[column.accessor], item)
-                            : item[column.accessor]}
+                            ? column.render(
+                                getItemValue(item, column.accessor),
+                                item
+                              )
+                            : getItemValue(item, column.accessor)}
                         </Text>
                       </ItemContainer>
                     )}

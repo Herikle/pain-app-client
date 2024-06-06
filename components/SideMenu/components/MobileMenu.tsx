@@ -8,6 +8,7 @@ import { MenuTypeProps } from "..";
 import { media } from "@styles/media-query";
 import { usePatientStateValue } from "state/usePatientState";
 import { useEpisodeStateValue } from "state/useEpisodeState";
+import { useMemo } from "react";
 
 export const MobileMenu = ({
   isLogged,
@@ -26,6 +27,26 @@ export const MobileMenu = ({
 
   const episodeState = useEpisodeStateValue(selectedEpisode?._id ?? "");
 
+  const patient = useMemo(
+    () => patientState ?? selectedPatient,
+    [patientState, selectedPatient]
+  );
+
+  const patientSpecie = useMemo(() => {
+    if (!patient) return "";
+
+    if (patient.type === "animal") {
+      const scientificName = patient.scientific_name;
+      if (scientificName) return capitalize(scientificName);
+    }
+
+    const type = patient.type;
+
+    if (!type) return "Human";
+
+    return capitalize(type);
+  }, [patient]);
+
   return (
     <Container>
       {isLogged ? (
@@ -39,8 +60,8 @@ export const MobileMenu = ({
             fullWidth
           />
           <MenuLink
-            label="Subject"
-            description={patientState?.name ?? selectedPatient?.name}
+            label={patientSpecie || "Subject"}
+            description={patient?.name}
             href={patientLinkHref()}
             iconPath={IconsPath.Patient}
             disabled={!pathname.includes(RoutesPath.new_patient)}

@@ -75,14 +75,10 @@ describe("test track actions", () => {
           cy.visit(`episode/${episode._id}`);
           cy.getByCy("delete-track-button").wait(1000).click();
           cy.getByCy("delete-track-modal").should("exist");
-          cy.getByCy("delete-track-modal-name")
-            .invoke("text")
-            .then((text) => {
-              cy.getByCy("confirm-action-input").type(text);
-              cy.getByCy("confirm-action-button").click();
 
-              cy.getByCy("track-component").should("not.exist");
-            });
+          cy.getByCy("confirm-action-button").click();
+
+          cy.getByCy("track-component").should("not.exist");
         }
       );
     });

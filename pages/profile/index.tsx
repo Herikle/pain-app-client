@@ -5,7 +5,10 @@ import { Text } from "@components/Text";
 import { FlexColumn } from "@design-components/Flex";
 import { LoggedLayout } from "@layouts/LoggedLayout";
 import Router from "next/router";
-import { useGetPatients } from "@queries/patient/useGetPatients";
+import {
+  useGetPatients,
+  useGetPatientsSugestion,
+} from "@queries/patient/useGetPatients";
 import { media } from "@styles/media-query";
 import { getAgeByBirthDate } from "@utils/helpers/date";
 import { useAuth } from "@utils/hooks/useAuth";
@@ -16,8 +19,68 @@ import { useMemo, useState } from "react";
 import { useFiltersValue } from "state/useFilters";
 import styled from "styled-components";
 import { IPatient } from "types";
-import { useCreatePatient } from "@queries/patient/usePatient";
-import { Gear } from "@phosphor-icons/react";
+import {
+  useAddPatientToBookmark,
+  useCreatePatient,
+  useRemovePatientFromBookmark,
+} from "@queries/patient/usePatient";
+import { Gear, Star } from "@phosphor-icons/react";
+import {
+  BookMarkItem,
+  useGetBookmarkPatients,
+} from "@queries/bookmark-patients/useGetBookmarkPatients";
+import { LoadingWrapper } from "@components/LoadingWrapper";
+import { theme } from "@styles/theme";
+
+const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
+  const addToBookmark = useAddPatientToBookmark();
+
+  const addToBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    await addToBookmark.mutateAsync({
+      body: {
+        patient_id: patient_id,
+      },
+    });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={addToBookmark.isLoading}
+      />
+      <Star size={20} onClick={addToBookMark} />
+    </StarContainer>
+  );
+};
+
+const RemoveFromBookMark = ({ patient_id }: { patient_id: string }) => {
+  const removeFromBookmark = useRemovePatientFromBookmark();
+
+  const removeFromBookMark = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    await removeFromBookmark.mutateAsync({
+      body: {
+        patient_id: patient_id,
+      },
+    });
+  };
+
+  return (
+    <StarContainer>
+      <LoadingWrapper
+        overContainer
+        size={16}
+        loading={removeFromBookmark.isLoading}
+      />
+      <Star size={20} weight="fill" onClick={removeFromBookMark} />
+    </StarContainer>
+  );
+};
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -33,9 +96,37 @@ export default function ProfilePage() {
     ...filters,
   });
 
+  const [bookmarkCurrentPage, setBookmarkCurrentPage] = useState(0);
+
+  const getBookmarkPatients = useGetBookmarkPatients({
+    page: bookmarkCurrentPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
+  const [suggestionsCurrentPage, setSuggestionsCurrentPage] = useState(0);
+
+  const getSuggestionPatients = useGetPatientsSugestion({
+    page: suggestionsCurrentPage,
+    limit: 5,
+    sortBy: "-createdAt",
+    ...filters,
+  });
+
   const patients = useMemo(
     () => getPatients.data?.results ?? [],
     [getPatients.data]
+  );
+
+  const bookmarkPatients = useMemo(
+    () => getBookmarkPatients.data?.results ?? [],
+    [getBookmarkPatients.data]
+  );
+
+  const suggestionPatients = useMemo(
+    () => getSuggestionPatients.data?.results ?? [],
+    [getSuggestionPatients.data]
   );
 
   const renderAge = (birth_date: string | undefined) => {
@@ -50,6 +141,10 @@ export default function ProfilePage() {
 
   const mountPatientHref = (patient: IPatient) => {
     return RoutesPath.patient.replace("[id]", patient._id);
+  };
+
+  const mountPatientHrefByBookmark = (bookmark: BookMarkItem) => {
+    return RoutesPath.patient.replace("[id]", bookmark.patient_id);
   };
 
   const setChangeAccountInfo = useSetChangeAccountInformationModal();
@@ -71,16 +166,17 @@ export default function ProfilePage() {
         <Text variant="h1">Your profile</Text>
         <Badge
           label={user?.name}
-          description={user?.email}
           iconPath={IconsPath.Doctor}
           onClickEdit={openAccountInfoModal}
+          onClickLabel={openAccountInfoModal}
+          onClickBadge={openAccountInfoModal}
           EditPhorphorIcon={Gear}
           editIconAlwaysVisible
           iconProps={{
             "data-cy": "edit-account-info",
           }}
         />
-
+        <Text variant="h1">Subjects</Text>
         <Table
           columns={[
             {
@@ -100,10 +196,20 @@ export default function ProfilePage() {
               label: "Pain Episodes",
               render: (value) => value ?? 0,
             },
+            {
+              accessor: "bookmarked",
+              label: "",
+              render: (bookmarked, item: IPatient) =>
+                !!bookmarked ? (
+                  <RemoveFromBookMark patient_id={item._id} />
+                ) : (
+                  <AddToBookMark patient_id={item._id} />
+                ),
+            },
           ]}
           data={patients}
           header={{
-            title: "Subject List",
+            title: "My contributions",
             onPlusClick: onCreatePatient,
             loading: createPatient.isLoading,
           }}
@@ -127,10 +233,115 @@ export default function ProfilePage() {
             "data-cy": "add-patient-button",
           }}
         />
+        <Table
+          header={{
+            title: "Favorites",
+          }}
+          columns={[
+            {
+              accessor: "patient.name",
+              label: "Name",
+              options: {
+                withOverflow: true,
+              },
+            },
+            {
+              accessor: "patient.birth_date",
+              label: "Age",
+              render: renderAge,
+            },
+            {
+              accessor: "patient.episodes_count",
+              label: "Pain Episodes",
+              render: (value) => value ?? 0,
+            },
+            {
+              accessor: "patient._id",
+              queryAccessor: "bookmark",
+              label: "",
+              render: (_id: string) => <RemoveFromBookMark patient_id={_id} />,
+            },
+          ]}
+          data={bookmarkPatients}
+          CallToAction={
+            <CallToAction
+              text1="There are no favorites yet."
+              loading={createPatient.isLoading}
+            />
+          }
+          mountHref={mountPatientHrefByBookmark}
+          isLoading={
+            getBookmarkPatients.isLoading || getBookmarkPatients.isPreviousData
+          }
+          pagination={{
+            pages: getBookmarkPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setBookmarkCurrentPage(page - 1);
+            },
+          }}
+        />
+        <Table
+          columns={[
+            {
+              accessor: "name",
+              label: "Name",
+              options: {
+                withOverflow: true,
+              },
+            },
+            {
+              accessor: "birth_date",
+              label: "Age",
+              render: renderAge,
+            },
+            {
+              accessor: "episodes_count",
+              label: "Pain Episodes",
+              render: (value) => value ?? 0,
+            },
+            {
+              accessor: "_id",
+              queryAccessor: "bookmark",
+              label: "",
+              render: (_id) => <AddToBookMark patient_id={_id} />,
+            },
+          ]}
+          data={suggestionPatients}
+          header={{
+            title: "Suggestions",
+          }}
+          CallToAction={
+            <CallToAction
+              text1="There are no suggestions yet."
+              loading={createPatient.isLoading}
+            />
+          }
+          mountHref={mountPatientHref}
+          isLoading={
+            getSuggestionPatients.isLoading ||
+            getSuggestionPatients.isPreviousData
+          }
+          pagination={{
+            pages: getSuggestionPatients?.data?.meta?.total_pages ?? 0,
+            onChangePage: (page) => {
+              setSuggestionsCurrentPage(page - 1);
+            },
+          }}
+        />
       </Container>
     </LoggedLayout>
   );
 }
+
+const StarContainer = styled.div`
+  position: relative;
+
+  &:hover {
+    svg {
+      transform: scale(1.2);
+    }
+  }
+`;
 
 const Container = styled(FlexColumn)`
   align-items: flex-start;

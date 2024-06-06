@@ -7,6 +7,7 @@ type TrackItemModal = {
   name: string;
   _id: string;
   pain_type: "psychological" | "physical";
+  episode_id: string;
   comment?: string;
 };
 

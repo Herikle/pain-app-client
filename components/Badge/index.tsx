@@ -4,7 +4,8 @@ import { Icon, PencilSimpleLine } from "@phosphor-icons/react";
 import { media } from "@styles/media-query";
 import { theme } from "@styles/theme";
 import Image from "next/image";
-import styled from "styled-components";
+import { CSSProperties } from "react";
+import styled, { css } from "styled-components";
 
 type Props = {
   iconPath: string;
@@ -14,6 +15,8 @@ type Props = {
   descriptionWeight?: string;
   EditPhorphorIcon?: Icon;
   onClickEdit?: () => void;
+  onClickLabel?: () => void;
+  onClickBadge?: () => void;
   editIconAlwaysVisible?: boolean;
   "data-cy"?: string;
   iconProps?: {
@@ -32,10 +35,15 @@ export const Badge = ({
   EditPhorphorIcon,
   "data-cy": dataCy,
   iconProps,
+  onClickLabel,
+  onClickBadge,
 }: Props) => {
   return (
     <Container data-testid="badge-container" data-cy={dataCy}>
-      <ImageBox>
+      <ImageBox
+        onClick={onClickBadge}
+        $cursor={!!onClickBadge ? "pointer" : undefined}
+      >
         <Image
           src={iconPath}
           alt="UserIcon"
@@ -46,7 +54,12 @@ export const Badge = ({
       </ImageBox>
       <DescriptionContainer gap={1}>
         <FlexRow gap={1} justify="flex-start">
-          <Text variant="h1" color="font_color">
+          <Text
+            variant="h1"
+            color="font_color"
+            onClick={onClickLabel}
+            cursor={!!onClickLabel ? "pointer" : undefined}
+          >
             {label}
           </Text>
           {!!onClickEdit && (
@@ -110,13 +123,23 @@ const EditCircleIcon = styled.div<EditCircleProps>`
 
 const DescriptionContainer = styled(FlexColumn)``;
 
-const ImageBox = styled.div`
+type ImageBoxProps = {
+  $cursor?: CSSProperties["cursor"];
+};
+
+const ImageBox = styled.div<ImageBoxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: ${theme.colors.cta};
   border-radius: 10px;
   padding: 0.5rem;
+
+  ${({ $cursor }) =>
+    $cursor &&
+    css`
+      cursor: ${$cursor};
+    `}
 `;
 
 const Container = styled(FlexRow)`

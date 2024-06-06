@@ -77,3 +77,43 @@ export const useGetPatientById = (
     }
   );
 };
+
+type GetPatientsSuggestionPayload = {
+  query: {
+    page: number;
+    limit: number;
+    [key: string]: any;
+  };
+};
+
+export type GetPatientsSuggestionResponse = {
+  results: IPatient[];
+  meta: Meta;
+};
+
+const getPatientsSuggestion = async ({
+  query,
+}: GetPatientsSuggestionPayload) => {
+  const { data } = await request({
+    method: "GET",
+    service: "patient",
+    url: "/suggestion",
+    query,
+  });
+
+  return data as GetPatientsSuggestionResponse;
+};
+
+export const useGetPatientsSugestion = (
+  params: GetPatientsPayload["query"],
+  enabled = true
+) => {
+  return useQuery(
+    [QueryKeys.Patients.SuggestionList, params],
+    () => getPatientsSuggestion({ query: params }),
+    {
+      enabled,
+      keepPreviousData: true,
+    }
+  );
+};

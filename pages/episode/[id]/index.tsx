@@ -11,7 +11,10 @@ import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
-import { useSetSelectedPatient } from "state/useSelectedPatient";
+import {
+  useSelectedPatient,
+  useSetSelectedPatient,
+} from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
@@ -39,11 +42,13 @@ import { TextField } from "@components/TextField";
 export default function EpisodePage() {
   const router = useRouter();
 
-  const { isLogged, isLoading } = useAuth();
+  const { isLogged, isLoading, user } = useAuth();
+
+  const isNotLogged = !isLogged && !isLoading;
 
   const { id } = router.query as { id: string };
 
-  const setSelectedPatient = useSetSelectedPatient();
+  const [selectedPatient, setSelectedPatient] = useSelectedPatient();
 
   const setSelectedEpisode = useSetSelectedEpisode();
 
@@ -134,7 +139,7 @@ export default function EpisodePage() {
   };
 
   const getDefaultFileName = () => {
-    const first05PatientName = episode?.patient?.name.slice(0, 5);
+    const first05PatientName = episode?.patient?.name?.slice(0, 5) ?? "Unnamed";
 
     const first10EpisodeName = episode?.name.slice(0, 10);
 
@@ -163,17 +168,27 @@ export default function EpisodePage() {
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
+        const patientCreatorId = episode.patient.creator_id;
+        if (patientCreatorId !== user?._id) return;
+
         setSelectedPatient(episode.patient);
       }
       setSelectedEpisode(episode);
     }
-  }, [episode, setSelectedPatient, setSelectedEpisode]);
+  }, [episode, setSelectedPatient, setSelectedEpisode, user]);
 
   useEffect(() => {
-    if (!isLoading && !isLogged) {
+    if (isNotLogged) {
       saveGuestEpisode();
     }
-  }, [isLoading, isLogged, saveGuestEpisode]);
+  }, [isNotLogged, saveGuestEpisode]);
+
+  const isCreator = useMemo(() => {
+    if (!episode) return false;
+    if (!user) return false;
+
+    return episode?.creator_id === user._id;
+  }, [episode, user]);
 
   return (
     <LoggedLayout allowGuest={!getEpisodeById.isError}>
@@ -182,21 +197,25 @@ export default function EpisodePage() {
       ) : (
         <>
           <UnsavedChangesDialog
-            shouldConfirmLeave={!isLogged}
+            shouldConfirmLeave={isNotLogged}
             pathnamesToIgnore={ignorePaths}
           />
           <Container data-cy="episode-page">
             {!!episode?.patient_id && (
               <BackButton
-                href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
+                href={RoutesPath.patient.replace(
+                  "[id]",
+                  selectedPatient?._id ?? "#"
+                )}
                 text={
                   <>
-                    Return to <strong>{episode?.patient?.name}</strong> profile
+                    Return to <strong>{selectedPatient?.name ?? "?"}</strong>{" "}
+                    profile
                   </>
                 }
               />
             )}
-            {!isLogged && (
+            {isNotLogged && (
               <FlexRow>
                 <Question
                   size={16}
@@ -227,46 +246,53 @@ export default function EpisodePage() {
                 label={episodeState?.name ?? episode?.name}
                 iconPath={IconsPath.Episode}
               />
-              <FlexColumn gap={1.5} align="flex-end">
-                <SyncingIndicator isSyncing={isSyncing} />
-                {isLogged && (
-                  <FlexRow>
-                    <TooltipContent tooltip="Export episode">
-                      <Export
-                        size={24}
-                        color={theme.colors.text_switched}
-                        onClick={openConfirmExportation}
-                        cursor="pointer"
-                        data-cy="export-episode-button"
-                      />
-                    </TooltipContent>
-                    <TooltipContent tooltip="Delete episode">
-                      <Trash
-                        size={24}
-                        color={theme.colors.text_switched}
-                        cursor="pointer"
-                        data-cy="delete-episode-button"
-                        onClick={() => setConfirmDelete(true)}
-                      />
-                    </TooltipContent>
-                  </FlexRow>
-                )}
-              </FlexColumn>
+              {isCreator && (
+                <FlexColumn gap={1.5} align="flex-end">
+                  <SyncingIndicator isSyncing={isSyncing} />
+                  {isLogged && (
+                    <FlexRow>
+                      <TooltipContent tooltip="Export episode">
+                        <Export
+                          size={24}
+                          color={theme.colors.text_switched}
+                          onClick={openConfirmExportation}
+                          cursor="pointer"
+                          data-cy="export-episode-button"
+                        />
+                      </TooltipContent>
+                      <TooltipContent tooltip="Delete episode">
+                        <Trash
+                          size={24}
+                          color={theme.colors.text_switched}
+                          cursor="pointer"
+                          data-cy="delete-episode-button"
+                          onClick={() => setConfirmDelete(true)}
+                        />
+                      </TooltipContent>
+                    </FlexRow>
+                  )}
+                </FlexColumn>
+              )}
             </EpisodeBadgeContainer>
-            {!!episode && (
+            {!!episode && (isCreator || isNotLogged) && (
               <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
             )}
             <TrackContainer>
               <FlexColumn gap={4}>
                 <FlexRow gap={0} justify="space-between">
                   <Text variant="h1">Pain Tracks</Text>
-                  <AddButton
-                    onClick={onCreateTrack}
-                    loading={createTrack.isLoading}
-                    data-cy="add-track-button"
-                  />
+                  {(isCreator || isNotLogged) && (
+                    <AddButton
+                      onClick={onCreateTrack}
+                      loading={createTrack.isLoading}
+                      data-cy="add-track-button"
+                    />
+                  )}
                 </FlexRow>
-                <ListTrack episode_id={id} />
+                <ListTrack
+                  episode_id={id}
+                  isCreator={isCreator || isNotLogged}
+                />
               </FlexColumn>
             </TrackContainer>
           </Container>

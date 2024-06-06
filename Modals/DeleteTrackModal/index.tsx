@@ -36,15 +36,6 @@ export const DeleteTracKModal = ({ track, onClose }: DeleteTrackModalProps) => {
       title="Are you sure you want to delete this track?"
       description="All segments will be lost. This action cannot be undone."
       confirmText="Yes, delete it"
-      writeConfirmation={{
-        label: (
-          <>
-            To delete this track, type the track name{" "}
-            <strong data-cy="delete-track-modal-name">{track.name}</strong>
-          </>
-        ),
-        testText: track.name,
-      }}
       onConfirm={onDelete}
       loading={deleteTrack.isLoading}
     />

@@ -10,6 +10,7 @@ import { RoutesPath } from "@utils/routes";
 import { MenuTypeProps } from "..";
 import { usePatientStateValue } from "state/usePatientState";
 import { useEpisodeStateValue } from "state/useEpisodeState";
+import { useMemo } from "react";
 
 export const DesktopMenu = ({
   isLogged,
@@ -28,6 +29,26 @@ export const DesktopMenu = ({
   const patientState = usePatientStateValue(selectedPatient?._id ?? "");
 
   const episodeState = useEpisodeStateValue(selectedEpisode?._id ?? "");
+
+  const patient = useMemo(
+    () => patientState ?? selectedPatient,
+    [patientState, selectedPatient]
+  );
+
+  const patientSpecie = useMemo(() => {
+    if (!patient) return "";
+
+    if (patient.type === "animal") {
+      const scientificName = patient.scientific_name;
+      if (scientificName) return capitalize(scientificName);
+    }
+
+    const type = patient.type;
+
+    if (!type) return "Human";
+
+    return capitalize(type);
+  }, [patient]);
 
   return (
     <Container>
@@ -51,8 +72,8 @@ export const DesktopMenu = ({
               fullWidth
             />
             <MenuLink
-              label="Subject"
-              description={patientState?.name ?? selectedPatient?.name}
+              label={patientSpecie || "Subject"}
+              description={patient?.name}
               href={patientLinkHref()}
               iconPath={IconsPath.Patient}
               disabled={!pathname.includes(RoutesPath.new_patient)}

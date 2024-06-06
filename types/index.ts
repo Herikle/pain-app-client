@@ -67,12 +67,13 @@ export type IPrompt = {
 
 export type IPatient = {
   _id: string;
-  name: string;
+  name: string | undefined;
   birth_date: string;
   creator_id: string;
   createdAt: string;
   updatedAt: string;
   type: "human" | "animal";
+  bookmarked?: number;
   location?: string;
   common_name?: string;
   scientific_name?: string;

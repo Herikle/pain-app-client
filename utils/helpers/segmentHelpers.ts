@@ -1,4 +1,9 @@
-import { ISegment, ISegmentTimeUnit, ISegmentValues } from "types";
+import {
+  ISegment,
+  ISegmentIntensities,
+  ISegmentTimeUnit,
+  ISegmentValues,
+} from "types";
 
 export const getTimeUnitAbbreviation = (timeUnit?: ISegmentTimeUnit) => {
   if (!timeUnit) return "";
@@ -77,6 +82,7 @@ type SegmentsCumulativeTime = {
   end?: number;
   time_unit: ISegmentTimeUnit;
   intensities: {
+    type: ISegmentIntensities["type"];
     values?: ISegmentValues;
   };
 };
@@ -123,7 +129,7 @@ export const calculateCumulativeTime = (
       min: segment.start,
       max: segment.end,
     };
-    if (segment.intensities.values) {
+    if (segment.intensities.type === "values" && segment.intensities.values) {
       const segmentDuration = getCumulativeValue(
         segment.intensities.values,
         "excruciating",

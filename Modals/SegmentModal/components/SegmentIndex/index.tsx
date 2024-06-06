@@ -30,6 +30,7 @@ import { media } from "@styles/media-query";
 import { useSetJustificationModal } from "@Modals/JustificationModal/hooks";
 import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
 import { SyncingIndicator } from "@components/SyncingIndicator";
+import { TooltipContent } from "@components/TooltipContent";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -268,17 +269,17 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
               />
             </CustomTabPanel>
           </BodyContent>
-          <ButtonsFooter>
-            <Trash
-              onClick={() => setConfirmDeleteSegment(true)}
-              size={32}
-              color={theme.colors.text_switched}
-              cursor="pointer"
-            />
-          </ButtonsFooter>
         </Content>
         <XContainer>
           <FlexRow>
+            <TooltipContent tooltip="Delete Segment">
+              <Trash
+                onClick={() => setConfirmDeleteSegment(true)}
+                size={24}
+                color={theme.colors.text_switched}
+                cursor="pointer"
+              />
+            </TooltipContent>
             <SyncingIndicator
               isSyncing={
                 isSyncingSegmentPageForm ||
@@ -313,13 +314,6 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
     </>
   );
 };
-
-const ButtonsFooter = styled(FlexRow)`
-  justify-content: space-between;
-  ${media.up.tablet`
-    padding-inline: 2rem;
-  `}
-`;
 
 const XContainer = styled.div`
   position: absolute;
@@ -359,7 +353,6 @@ const Content = styled.div`
 const CustomTabPanel = styled(TabPanel)`
   & .MuiBox-root {
     padding-inline: 2rem;
-    padding-block: 3rem;
   }
 `;
 
@@ -370,7 +363,8 @@ const Container = styled(FlexColumn)`
   height: 80vh;
   max-width: 80vw;
   position: relative;
-  padding: 2rem;
+  padding: 1rem;
+  padding-bottom: 0;
   ${media.up.laptopL`
     height: 95vh;
   `}
