@@ -11,7 +11,10 @@ import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
-import { useSetSelectedPatient } from "state/useSelectedPatient";
+import {
+  useSelectedPatient,
+  useSetSelectedPatient,
+} from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
@@ -45,7 +48,7 @@ export default function EpisodePage() {
 
   const { id } = router.query as { id: string };
 
-  const setSelectedPatient = useSetSelectedPatient();
+  const [selectedPatient, setSelectedPatient] = useSelectedPatient();
 
   const setSelectedEpisode = useSetSelectedEpisode();
 
@@ -165,11 +168,14 @@ export default function EpisodePage() {
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
+        const patientCreatorId = episode.patient.creator_id;
+        if (patientCreatorId !== user?._id) return;
+
         setSelectedPatient(episode.patient);
       }
       setSelectedEpisode(episode);
     }
-  }, [episode, setSelectedPatient, setSelectedEpisode]);
+  }, [episode, setSelectedPatient, setSelectedEpisode, user]);
 
   useEffect(() => {
     if (isNotLogged) {
@@ -197,10 +203,14 @@ export default function EpisodePage() {
           <Container data-cy="episode-page">
             {!!episode?.patient_id && (
               <BackButton
-                href={RoutesPath.patient.replace("[id]", episode?.patient_id)}
+                href={RoutesPath.patient.replace(
+                  "[id]",
+                  selectedPatient?._id ?? "#"
+                )}
                 text={
                   <>
-                    Return to <strong>{episode?.patient?.name}</strong> profile
+                    Return to <strong>{selectedPatient?.name ?? "?"}</strong>{" "}
+                    profile
                   </>
                 }
               />
