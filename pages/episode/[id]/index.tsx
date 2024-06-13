@@ -9,7 +9,7 @@ import { useGetEpisodeById } from "@queries/episode/useGetEpisode";
 import { useCreateTrack } from "@queries/track/useTrack";
 import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
 import {
   useSelectedPatient,
@@ -24,7 +24,7 @@ import { media } from "@styles/media-query";
 import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { IconsPath } from "@utils/icons";
 import { Badge } from "@components/Badge";
-import { Export, Question, Trash } from "@phosphor-icons/react";
+import { ChatCircle, Export, Question, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import {
   useDeleteEpisode,
@@ -38,6 +38,8 @@ import { TooltipContent } from "@components/TooltipContent";
 import { Error404 } from "@page-components/errors/404";
 import { useEpisodeStateValue } from "state/useEpisodeState";
 import { TextField } from "@components/TextField";
+import { FloatingFrame } from "@components/FloatingFrame";
+import { Discussion } from "@components/Discussion";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -67,6 +69,10 @@ export default function EpisodePage() {
   const [confirmExportEpisode, setConfirmExportEpisode] = useState(false);
 
   const [fileNameExported, setFileNameExported] = useState("");
+
+  const [discussionOpen, setDiscussionOpen] = useState(false);
+
+  const commentIconRef = useRef<HTMLDivElement>(null);
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -242,10 +248,31 @@ export default function EpisodePage() {
               </FlexRow>
             )}
             <EpisodeBadgeContainer justify="space-between">
-              <Badge
-                label={episodeState?.name ?? episode?.name}
-                iconPath={IconsPath.Episode}
-              />
+              <FlexRow>
+                <Badge
+                  label={episodeState?.name ?? episode?.name}
+                  iconPath={IconsPath.Episode}
+                />
+                {isLogged && !!id && (
+                  <>
+                    <div ref={commentIconRef}>
+                      <ChatCircle
+                        size={16}
+                        cursor="pointer"
+                        onClick={() => {
+                          setDiscussionOpen(!discussionOpen);
+                        }}
+                      />
+                    </div>
+                    <FloatingFrame
+                      anchor={commentIconRef.current}
+                      open={discussionOpen}
+                    >
+                      <Discussion episode_id={id} />
+                    </FloatingFrame>
+                  </>
+                )}
+              </FlexRow>
               {isCreator && (
                 <FlexColumn gap={1.5} align="flex-end">
                   <SyncingIndicator isSyncing={isSyncing} />
