@@ -12,7 +12,8 @@ type GetDiscussionCommentsPayload = {
   query: {
     page: number;
     limit: number;
-    episode_id: string;
+    episode_id: string | null;
+    patient_id: string | null;
     [key: string]: any;
   };
 };
@@ -20,28 +21,14 @@ type GetDiscussionCommentsPayload = {
 const getDiscussionComments = async ({
   query,
 }: GetDiscussionCommentsPayload) => {
-  return new Promise<GetDiscussionCommentsResponse>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        results: [],
-        meta: {
-          current_count: 0,
-          current_page: 1,
-          total_count: 0,
-          items_per_page: 10,
-          total_pages: 1,
-        },
-      });
-    }, 1000);
+  const { data } = await request({
+    method: "GET",
+    service: "discussion",
+    url: "/",
+    query,
   });
-  // const { data } = await request({
-  //   method: "GET",
-  //   service: "bookmark-patients",
-  //   url: "/",
-  //   query,
-  // });
 
-  // return data as GetDiscussionCommentsResponse;
+  return data as GetDiscussionCommentsResponse;
 };
 
 export const useGetDiscussionComments = (

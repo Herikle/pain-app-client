@@ -1,5 +1,6 @@
+import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 type CreateDiscussionPayload = {
   text: string;
@@ -12,11 +13,18 @@ const createDiscussion = async (payload: CreateDiscussionPayload) => {
     service: "discussion",
     url: "",
     method: "POST",
+    data: payload,
   });
 
   return data;
 };
 
 export const useCreateDiscussion = () => {
-  return useMutation(createDiscussion);
+  const queryClient = useQueryClient();
+
+  return useMutation(createDiscussion, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.Discussion.List]);
+    },
+  });
 };
