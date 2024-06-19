@@ -40,6 +40,7 @@ import { useEpisodeStateValue } from "state/useEpisodeState";
 import { TextField } from "@components/TextField";
 import { FloatingFrame } from "@components/FloatingFrame";
 import { Discussion } from "@components/Discussion";
+import { useSetDiscussionModal } from "@Modals/DiscussionModal/hook";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -70,9 +71,7 @@ export default function EpisodePage() {
 
   const [fileNameExported, setFileNameExported] = useState("");
 
-  const [discussionOpen, setDiscussionOpen] = useState(false);
-
-  const commentIconRef = useRef<HTMLDivElement>(null);
+  const setDiscussionModal = useSetDiscussionModal();
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -171,6 +170,12 @@ export default function EpisodePage() {
     return [RoutesPath.login, RoutesPath.register];
   }, [isLogged]);
 
+  const openEpisodeDiscussion = () => {
+    setDiscussionModal({
+      episode_id: id,
+    });
+  };
+
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
@@ -254,23 +259,11 @@ export default function EpisodePage() {
                   iconPath={IconsPath.Episode}
                 />
                 {isLogged && !!id && (
-                  <>
-                    <div ref={commentIconRef}>
-                      <ChatCircle
-                        size={16}
-                        cursor="pointer"
-                        onClick={() => {
-                          setDiscussionOpen(!discussionOpen);
-                        }}
-                      />
-                    </div>
-                    <FloatingFrame
-                      anchor={commentIconRef.current}
-                      open={discussionOpen}
-                    >
-                      <Discussion episode_id={id} />
-                    </FloatingFrame>
-                  </>
+                  <ChatCircle
+                    size={16}
+                    cursor="pointer"
+                    onClick={openEpisodeDiscussion}
+                  />
                 )}
               </FlexRow>
               {isCreator && (

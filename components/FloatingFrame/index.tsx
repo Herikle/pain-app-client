@@ -19,13 +19,7 @@ export const FloatingFrame = ({
       console.log("scroll");
     };
 
-    if (open) {
-      document.addEventListener("scroll", onScroll);
-    }
-
-    return () => {
-      document.removeEventListener("scroll", onScroll);
-    };
+    window.onscroll = onScroll;
   }, [open]);
 
   if (!anchor) return null;

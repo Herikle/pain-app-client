@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { NewDiscussionCta } from "./NewDiscussionCta";
 import { TextArea } from "@components/TextArea";
 import { FlexColumn } from "@design-components/Flex";
+import { useCreateDiscussion } from "@queries/discussion/useDiscussion";
 
 type DiscussionProps = {
   episode_id: string;
@@ -22,6 +23,8 @@ export const Discussion = ({ episode_id }: DiscussionProps) => {
     page: 1,
   });
 
+  const createComments = useCreateDiscussion();
+
   const comments = useMemo(
     () => getComments.data?.results || [],
     [getComments.data]
@@ -30,7 +33,7 @@ export const Discussion = ({ episode_id }: DiscussionProps) => {
   const isEmpty = comments.length === 0 && getComments.isFetched;
 
   return (
-    <FlexColumn justify="center">
+    <FlexColumn justify="center" align="center" height="100%">
       <CommentDiscussionList comments={comments} />
       {isEmpty && !ctaRead && (
         <NewDiscussionCta onCreateDiscussionClick={onCreateDiscussionClick} />
@@ -38,7 +41,7 @@ export const Discussion = ({ episode_id }: DiscussionProps) => {
       {!isEmpty ||
         (isEmpty && ctaRead && (
           <>
-            <TextArea />
+            <TextArea minRows={5} />
           </>
         ))}
     </FlexColumn>

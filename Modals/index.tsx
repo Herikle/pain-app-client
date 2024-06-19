@@ -4,6 +4,7 @@ import { ChangedPromptWarningModal } from "./ChangedPromptWarningModal";
 import { CreateEpisodeModal } from "./CreateEpisodeModal";
 import { DeletePatientModal } from "./DeletePatientModal";
 import { DeletePromptModal } from "./DeletePromptModal";
+import { DiscussionModalWrapper } from "./DiscussionModal";
 import { JustificationModalWrapper } from "./JustificationModal";
 import { PromptOptionsModal } from "./PromptOptionsModal";
 import { SegmentModal } from "./SegmentModal";
@@ -26,6 +27,7 @@ export const Modals = () => {
       <ChangeAccountInformationModal />
       <JustificationModalWrapper />
       <CreateEpisodeModal />
+      <DiscussionModalWrapper />
     </>
   );
 };
