@@ -171,8 +171,10 @@ export default function EpisodePage() {
   }, [isLogged]);
 
   const openEpisodeDiscussion = () => {
+    if (!episode) return;
+
     setDiscussionModal({
-      episode_id: id,
+      episode,
     });
   };
 

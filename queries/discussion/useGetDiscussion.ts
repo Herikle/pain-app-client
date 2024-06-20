@@ -1,10 +1,11 @@
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { useQuery } from "react-query";
-import { IPatient, Meta } from "types";
+import { Meta } from "types";
+import { DiscussionById, DiscussionFromList } from "types/discussion";
 
 export type GetDiscussionCommentsResponse = {
-  results: { _id: string }[];
+  results: DiscussionFromList[];
   meta: Meta;
 };
 
@@ -14,6 +15,8 @@ type GetDiscussionCommentsPayload = {
     limit: number;
     episode_id: string | null;
     patient_id: string | null;
+    parent_id: string | null;
+    sortBy?: string;
     [key: string]: any;
   };
 };
@@ -41,6 +44,26 @@ export const useGetDiscussionComments = (
     {
       enabled,
       keepPreviousData: true,
+    }
+  );
+};
+
+const getDiscussionById = async (discussion_id: string | null) => {
+  const { data } = await request({
+    method: "GET",
+    service: "discussion",
+    url: `/${discussion_id}`,
+  });
+
+  return data as DiscussionById;
+};
+
+export const useGetDiscussionById = (discussion_id: string | null) => {
+  return useQuery(
+    [QueryKeys.Discussion.ByID, discussion_id],
+    () => getDiscussionById(discussion_id),
+    {
+      enabled: !!discussion_id,
     }
   );
 };

@@ -4,8 +4,10 @@ import { useMutation, useQueryClient } from "react-query";
 
 type CreateDiscussionPayload = {
   text: string;
+  title?: string;
   episode_id?: string;
   patient_id?: string;
+  parent_id?: string;
 };
 
 const createDiscussion = async (payload: CreateDiscussionPayload) => {
