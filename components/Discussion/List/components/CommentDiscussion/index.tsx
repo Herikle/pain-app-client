@@ -14,6 +14,7 @@ type CommentDiscussion = {
     name: string;
   };
   createdAt: string;
+  replies_count: number;
   title: string;
   text: string;
 };
@@ -47,7 +48,7 @@ export const CommentDiscussion = ({ comment }: Props) => {
       <FlexRow>
         <CounterContainer>
           <Chat />
-          <Text variant="caption">0</Text>
+          <Text variant="caption">{comment.replies_count}</Text>
         </CounterContainer>
       </FlexRow>
     </Container>

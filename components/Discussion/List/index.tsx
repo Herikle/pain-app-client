@@ -19,7 +19,7 @@ export const CommentDiscussionList = () => {
 
   const getComments = useGetDiscussionComments({
     episode_id: episode._id,
-    patient_id: null,
+    patient_id: episode.patient_id,
     limit: 100,
     page: 0,
     parent_id: null,
@@ -49,7 +49,7 @@ export const CommentDiscussionList = () => {
         </FlexRow>
       </FlexColumn>
       {isEmpty ? (
-        <FlexColumn justify="center" align="center" height="100%">
+        <FlexColumn justify="center" align="center" mt={5}>
           <NewDiscussionCta
             onCreateDiscussionClick={() => {
               setPage({

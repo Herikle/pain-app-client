@@ -52,13 +52,14 @@ export const DiscussionThread = () => {
       episode_id: episode._id,
       text: text,
       parent_id: discussion_id,
+      patient_id: episode.patient_id,
     });
 
     setText("");
   };
 
   return (
-    <FlexColumn>
+    <FlexColumn height="100%">
       <BackButton
         text="Return to discussion list"
         onClick={() => setPage({ path: "list" })}
@@ -79,7 +80,7 @@ export const DiscussionThread = () => {
                 <FlexRow>
                   <CounterContainer>
                     <Chat />
-                    <Text variant="caption">0</Text>
+                    <Text variant="caption">{comment.replies_count}</Text>
                   </CounterContainer>
                 </FlexRow>
               </Container>
@@ -122,7 +123,11 @@ export const DiscussionThread = () => {
             )}
           </AddCommentContainer>
           {!!discussionId && (
-            <ListReplies episode_id={episode._id} parent_id={discussionId} />
+            <ListReplies
+              episode_id={episode._id}
+              parent_id={discussionId}
+              patient_id={episode.patient_id}
+            />
           )}
         </LoadingWrapper>
       </ThreadBody>

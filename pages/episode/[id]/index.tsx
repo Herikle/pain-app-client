@@ -173,8 +173,16 @@ export default function EpisodePage() {
   const openEpisodeDiscussion = () => {
     if (!episode) return;
 
+    const patient_id = episode.patient_id;
+
+    if (!patient_id) return;
+
     setDiscussionModal({
-      episode,
+      episode: {
+        _id: episode._id,
+        name: episode.name,
+        patient_id,
+      },
     });
   };
 
@@ -260,19 +268,22 @@ export default function EpisodePage() {
                   label={episodeState?.name ?? episode?.name}
                   iconPath={IconsPath.Episode}
                 />
-                {isLogged && !!id && (
-                  <ChatCircle
-                    size={16}
-                    cursor="pointer"
-                    onClick={openEpisodeDiscussion}
-                  />
-                )}
               </FlexRow>
               {isCreator && (
                 <FlexColumn gap={1.5} align="flex-end">
                   <SyncingIndicator isSyncing={isSyncing} />
                   {isLogged && (
                     <FlexRow>
+                      {isLogged && !!id && !!episode?.patient_id && (
+                        <TooltipContent tooltip="Discussions">
+                          <ChatCircle
+                            size={24}
+                            color={theme.colors.text_switched}
+                            cursor="pointer"
+                            onClick={openEpisodeDiscussion}
+                          />
+                        </TooltipContent>
+                      )}
                       <TooltipContent tooltip="Export episode">
                         <Export
                           size={24}

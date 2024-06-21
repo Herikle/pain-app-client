@@ -12,7 +12,7 @@ import { CreateDiscussion } from "./Create";
 import { DiscussionThread } from "./DiscussionThread";
 
 type DiscussionProps = {
-  episode: { name: string; _id: string };
+  episode: { name: string; _id: string; patient_id: string };
 };
 
 const DiscussionNavigationPages: {

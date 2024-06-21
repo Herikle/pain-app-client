@@ -32,6 +32,7 @@ export const IconsPath = {
   Web: "/icons/web.svg",
   Linkedin: "/icons/linkedin.svg",
   Mail: "/icons/mail.svg",
+  DrinkCoffee: "/icons/drink-coffee.svg",
 };
 
 export const ImagesPath = {

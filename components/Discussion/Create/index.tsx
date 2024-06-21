@@ -30,6 +30,7 @@ export const CreateDiscussion = () => {
       episode_id: episode._id,
       text: form.text,
       title: form.title,
+      patient_id: episode.patient_id,
     });
 
     setPage({

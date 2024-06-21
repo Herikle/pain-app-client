@@ -18,6 +18,7 @@ type DiscussionNavigation = {
   episode: {
     _id: string;
     name: string;
+    patient_id: string;
   };
 };
 
@@ -26,6 +27,7 @@ const DiscussionNavigationContext = createContext<DiscussionNavigation>({
   episode: {
     _id: "",
     name: "",
+    patient_id: "",
   },
   setPage: () => {},
 });
@@ -38,6 +40,7 @@ type DiscussionPageProviderProps = {
   episode: {
     _id: string;
     name: string;
+    patient_id: string;
   };
 };
 

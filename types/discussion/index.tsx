@@ -10,6 +10,7 @@ export type DiscussionFromList = {
     _id: string;
   };
   _id: string;
+  replies_count: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -26,6 +27,7 @@ export type DiscussionById = {
     _id: string;
   };
   _id: string;
+  replies_count: number;
   createdAt: string;
   updatedAt: string;
 };
