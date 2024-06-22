@@ -15,8 +15,8 @@ export type DiscussionPages =
 type DiscussionNavigation = {
   page: DiscussionPages;
   setPage: (page: DiscussionPages) => void;
-  episode: {
-    _id: string;
+  discussion_path: {
+    episode_id: string | null;
     name: string;
     patient_id: string;
   };
@@ -24,8 +24,8 @@ type DiscussionNavigation = {
 
 const DiscussionNavigationContext = createContext<DiscussionNavigation>({
   page: { path: "list" },
-  episode: {
-    _id: "",
+  discussion_path: {
+    episode_id: "",
     name: "",
     patient_id: "",
   },
@@ -37,8 +37,8 @@ export const useDiscussionNavigation = () =>
 
 type DiscussionPageProviderProps = {
   children: React.ReactNode;
-  episode: {
-    _id: string;
+  discussion_path: {
+    episode_id: string | null;
     name: string;
     patient_id: string;
   };
@@ -46,7 +46,7 @@ type DiscussionPageProviderProps = {
 
 export const DiscussionNavigationProvider = ({
   children,
-  episode,
+  discussion_path,
 }: DiscussionPageProviderProps) => {
   const [page, setPage] = useState<DiscussionPages>({ path: "list" });
 
@@ -55,7 +55,7 @@ export const DiscussionNavigationProvider = ({
       value={{
         page,
         setPage,
-        episode,
+        discussion_path,
       }}
     >
       {children}

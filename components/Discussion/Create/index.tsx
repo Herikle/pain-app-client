@@ -15,7 +15,7 @@ const discussionSchema = z.object({
 type DiscussionForm = z.infer<typeof discussionSchema>;
 
 export const CreateDiscussion = () => {
-  const { episode, setPage } = useDiscussionNavigation();
+  const { discussion_path, setPage } = useDiscussionNavigation();
 
   const { register, handleSubmit, formState, reset } = useForm<DiscussionForm>({
     resolver: zodResolver(discussionSchema),
@@ -27,10 +27,10 @@ export const CreateDiscussion = () => {
 
   const createDiscussion = async (form: DiscussionForm) => {
     await createCommentMutation.mutateAsync({
-      episode_id: episode._id,
+      episode_id: discussion_path.episode_id,
       text: form.text,
       title: form.title,
-      patient_id: episode.patient_id,
+      patient_id: discussion_path.patient_id,
     });
 
     setPage({

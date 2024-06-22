@@ -10,7 +10,7 @@ import { IconsPath } from "@utils/icons";
 import Image from "next/image";
 
 type Props = {
-  episode_id: string;
+  episode_id: string | null;
   patient_id: string;
   parent_id: string;
 };

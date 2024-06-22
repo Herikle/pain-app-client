@@ -15,11 +15,11 @@ type CommentDiscussionList = {
 };
 
 export const CommentDiscussionList = () => {
-  const { episode, setPage } = useDiscussionNavigation();
+  const { discussion_path, setPage } = useDiscussionNavigation();
 
   const getComments = useGetDiscussionComments({
-    episode_id: episode._id,
-    patient_id: episode.patient_id,
+    episode_id: discussion_path.episode_id,
+    patient_id: discussion_path.patient_id,
     limit: 100,
     page: 0,
     parent_id: null,
@@ -36,7 +36,7 @@ export const CommentDiscussionList = () => {
   return (
     <FlexColumn height="100%" gap={4}>
       <FlexColumn gap={2}>
-        <Text variant="h2">{episode.name}</Text>
+        <Text variant="h2">{discussion_path.name}</Text>
         <FlexRow
           justify="flex-start"
           onClick={() => setPage({ path: "create" })}

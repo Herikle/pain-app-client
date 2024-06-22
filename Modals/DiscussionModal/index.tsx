@@ -10,18 +10,18 @@ import { Discussion } from "@components/Discussion";
 
 export type DiscussionModalProps = {
   onClose: () => void;
-  episode: {
-    _id: string;
+  discussion_path: {
+    episode_id: string | null;
     name: string;
     patient_id: string;
   };
 };
 
-const Child = ({ onClose, episode }: DiscussionModalProps) => {
+const Child = ({ onClose, discussion_path }: DiscussionModalProps) => {
   return (
     <Modal onClose={onClose} hasCloseButton fullScreenOnMobile>
       <Container>
-        <Discussion episode={episode} />
+        <Discussion discussion_path={discussion_path} />
       </Container>
     </Modal>
   );

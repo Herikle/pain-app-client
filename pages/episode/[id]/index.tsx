@@ -178,8 +178,8 @@ export default function EpisodePage() {
     if (!patient_id) return;
 
     setDiscussionModal({
-      episode: {
-        _id: episode._id,
+      discussion_path: {
+        episode_id: episode._id,
         name: episode.name,
         patient_id,
       },

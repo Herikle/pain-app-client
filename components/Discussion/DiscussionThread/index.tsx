@@ -19,7 +19,7 @@ import { ListReplies } from "./components/ListReplies";
 import { media } from "@styles/media-query";
 
 export const DiscussionThread = () => {
-  const { page, setPage, episode } = useDiscussionNavigation();
+  const { page, setPage, discussion_path } = useDiscussionNavigation();
 
   const [text, setText] = useState("");
 
@@ -49,10 +49,10 @@ export const DiscussionThread = () => {
     if (!discussion_id) return;
 
     await createCommentMutation.mutateAsync({
-      episode_id: episode._id,
+      episode_id: discussion_path.episode_id,
       text: text,
       parent_id: discussion_id,
-      patient_id: episode.patient_id,
+      patient_id: discussion_path.patient_id,
     });
 
     setText("");
@@ -124,9 +124,9 @@ export const DiscussionThread = () => {
           </AddCommentContainer>
           {!!discussionId && (
             <ListReplies
-              episode_id={episode._id}
+              episode_id={discussion_path.episode_id}
               parent_id={discussionId}
-              patient_id={episode.patient_id}
+              patient_id={discussion_path.patient_id}
             />
           )}
         </LoadingWrapper>

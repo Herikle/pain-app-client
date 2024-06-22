@@ -6,7 +6,7 @@ type CreateDiscussionPayload = {
   text: string;
   patient_id: string;
   title?: string;
-  episode_id?: string;
+  episode_id?: string | null;
   parent_id?: string;
 };
 

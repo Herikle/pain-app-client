@@ -12,7 +12,11 @@ import { CreateDiscussion } from "./Create";
 import { DiscussionThread } from "./DiscussionThread";
 
 type DiscussionProps = {
-  episode: { name: string; _id: string; patient_id: string };
+  discussion_path: {
+    episode_id: string | null;
+    name: string;
+    patient_id: string;
+  };
 };
 
 const DiscussionNavigationPages: {
@@ -38,9 +42,9 @@ const DiscussionChild = () => {
   );
 };
 
-export const Discussion = ({ episode }: DiscussionProps) => {
+export const Discussion = ({ discussion_path }: DiscussionProps) => {
   return (
-    <DiscussionNavigationProvider episode={episode}>
+    <DiscussionNavigationProvider discussion_path={discussion_path}>
       <DiscussionChild />
     </DiscussionNavigationProvider>
   );
