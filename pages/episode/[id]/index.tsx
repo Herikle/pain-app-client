@@ -9,22 +9,18 @@ import { useGetEpisodeById } from "@queries/episode/useGetEpisode";
 import { useCreateTrack } from "@queries/track/useTrack";
 import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
-import {
-  useSelectedPatient,
-  useSetSelectedPatient,
-} from "state/useSelectedPatient";
+import { useSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useAuth } from "@utils/hooks/useAuth";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";
-import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { IconsPath } from "@utils/icons";
 import { Badge } from "@components/Badge";
-import { ChatCircle, Export, Question, Trash } from "@phosphor-icons/react";
+import { Export, Question, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import {
   useDeleteEpisode,
@@ -38,9 +34,7 @@ import { TooltipContent } from "@components/TooltipContent";
 import { Error404 } from "@page-components/errors/404";
 import { useEpisodeStateValue } from "state/useEpisodeState";
 import { TextField } from "@components/TextField";
-import { FloatingFrame } from "@components/FloatingFrame";
-import { Discussion } from "@components/Discussion";
-import { useSetDiscussionModal } from "@Modals/DiscussionModal/hook";
+import { DiscussionOpener } from "@components/DiscussionOpener";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -70,8 +64,6 @@ export default function EpisodePage() {
   const [confirmExportEpisode, setConfirmExportEpisode] = useState(false);
 
   const [fileNameExported, setFileNameExported] = useState("");
-
-  const setDiscussionModal = useSetDiscussionModal();
 
   const getEpisodeById = useGetEpisodeById({ episode_id: id }, !!id);
 
@@ -170,22 +162,6 @@ export default function EpisodePage() {
     return [RoutesPath.login, RoutesPath.register];
   }, [isLogged]);
 
-  const openEpisodeDiscussion = () => {
-    if (!episode) return;
-
-    const patient_id = episode.patient_id;
-
-    if (!patient_id) return;
-
-    setDiscussionModal({
-      discussion_path: {
-        episode_id: episode._id,
-        name: episode.name,
-        patient_id,
-      },
-    });
-  };
-
   useEffect(() => {
     if (episode) {
       if (episode.patient) {
@@ -275,14 +251,13 @@ export default function EpisodePage() {
                   {isLogged && (
                     <FlexRow>
                       {isLogged && !!id && !!episode?.patient_id && (
-                        <TooltipContent tooltip="Discussions">
-                          <ChatCircle
-                            size={24}
-                            color={theme.colors.text_switched}
-                            cursor="pointer"
-                            onClick={openEpisodeDiscussion}
-                          />
-                        </TooltipContent>
+                        <DiscussionOpener
+                          name={episode.name}
+                          patient_id={episode.patient_id}
+                          episode_id={id}
+                          segment_id={null}
+                          track_id={null}
+                        />
                       )}
                       <TooltipContent tooltip="Export episode">
                         <Export
@@ -324,6 +299,7 @@ export default function EpisodePage() {
                 </FlexRow>
                 <ListTrack
                   episode_id={id}
+                  patient_id={episode?.patient_id}
                   isCreator={isCreator || isNotLogged}
                 />
               </FlexColumn>

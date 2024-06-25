@@ -20,6 +20,8 @@ export const CommentDiscussionList = () => {
   const getComments = useGetDiscussionComments({
     episode_id: discussion_path.episode_id,
     patient_id: discussion_path.patient_id,
+    track_id: discussion_path.track_id,
+    segment_id: discussion_path.segment_id,
     limit: 100,
     page: 0,
     parent_id: null,

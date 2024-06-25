@@ -5,8 +5,10 @@ import { useMutation, useQueryClient } from "react-query";
 type CreateDiscussionPayload = {
   text: string;
   patient_id: string;
+  episode_id: string | null;
+  track_id: string | null;
+  segment_id: string | null;
   title?: string;
-  episode_id?: string | null;
   parent_id?: string;
 };
 

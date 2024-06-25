@@ -11,9 +11,11 @@ import { Discussion } from "@components/Discussion";
 export type DiscussionModalProps = {
   onClose: () => void;
   discussion_path: {
-    episode_id: string | null;
-    name: string;
     patient_id: string;
+    name: string;
+    episode_id: string | null;
+    track_id: string | null;
+    segment_id: string | null;
   };
 };
 

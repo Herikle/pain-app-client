@@ -6,22 +6,30 @@ import { Reply } from "../Reply";
 import DrinkCoffeSvg from "public/assets/drink-coffe.svg";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { Text } from "@components/Text";
-import { IconsPath } from "@utils/icons";
-import Image from "next/image";
 
 type Props = {
-  episode_id: string | null;
   patient_id: string;
+  episode_id: string | null;
+  track_id: string | null;
+  segment_id: string | null;
   parent_id: string;
 };
 
-export const ListReplies = ({ episode_id, parent_id, patient_id }: Props) => {
+export const ListReplies = ({
+  episode_id,
+  parent_id,
+  patient_id,
+  track_id,
+  segment_id,
+}: Props) => {
   const getReplies = useGetDiscussionComments({
     episode_id,
     parent_id,
     page: 0,
     limit: 100,
     patient_id: patient_id,
+    track_id,
+    segment_id,
     sortBy: "-createdAt",
   });
 

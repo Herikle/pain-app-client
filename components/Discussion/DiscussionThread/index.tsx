@@ -53,6 +53,8 @@ export const DiscussionThread = () => {
       text: text,
       parent_id: discussion_id,
       patient_id: discussion_path.patient_id,
+      segment_id: discussion_path.segment_id,
+      track_id: discussion_path.track_id,
     });
 
     setText("");
@@ -127,6 +129,8 @@ export const DiscussionThread = () => {
               episode_id={discussion_path.episode_id}
               parent_id={discussionId}
               patient_id={discussion_path.patient_id}
+              segment_id={discussion_path.segment_id}
+              track_id={discussion_path.track_id}
             />
           )}
         </LoadingWrapper>

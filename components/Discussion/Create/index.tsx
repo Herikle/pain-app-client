@@ -27,10 +27,12 @@ export const CreateDiscussion = () => {
 
   const createDiscussion = async (form: DiscussionForm) => {
     await createCommentMutation.mutateAsync({
-      episode_id: discussion_path.episode_id,
-      text: form.text,
       title: form.title,
+      text: form.text,
       patient_id: discussion_path.patient_id,
+      episode_id: discussion_path.episode_id,
+      track_id: discussion_path.track_id,
+      segment_id: discussion_path.segment_id,
     });
 
     setPage({

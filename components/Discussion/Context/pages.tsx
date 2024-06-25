@@ -16,18 +16,22 @@ type DiscussionNavigation = {
   page: DiscussionPages;
   setPage: (page: DiscussionPages) => void;
   discussion_path: {
-    episode_id: string | null;
     name: string;
     patient_id: string;
+    episode_id: string | null;
+    track_id: string | null;
+    segment_id: string | null;
   };
 };
 
 const DiscussionNavigationContext = createContext<DiscussionNavigation>({
   page: { path: "list" },
   discussion_path: {
-    episode_id: "",
     name: "",
     patient_id: "",
+    episode_id: "",
+    track_id: "",
+    segment_id: "",
   },
   setPage: () => {},
 });
@@ -38,9 +42,11 @@ export const useDiscussionNavigation = () =>
 type DiscussionPageProviderProps = {
   children: React.ReactNode;
   discussion_path: {
-    episode_id: string | null;
     name: string;
     patient_id: string;
+    episode_id: string | null;
+    track_id: string | null;
+    segment_id: string | null;
   };
 };
 

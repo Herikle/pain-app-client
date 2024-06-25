@@ -39,7 +39,7 @@ import {
   BookMarkEpisodeItem,
   useGetBookmarkEpisodes,
 } from "@queries/bookmark-episodes/useGetBookmarkPatients";
-import { useSetDiscussionModal } from "@Modals/DiscussionModal/hook";
+import { DiscussionOpener } from "@components/DiscussionOpener";
 
 const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
   const addToBookmark = useAddEpisodeToBookmark();
@@ -261,20 +261,6 @@ export default function Patient() {
     return patient.scientific_name ?? itemPatientType;
   };
 
-  const setDiscussionModal = useSetDiscussionModal();
-
-  const openPatientDiscussion = () => {
-    if (!patient) return;
-
-    setDiscussionModal({
-      discussion_path: {
-        episode_id: null,
-        name: patient.name ?? "",
-        patient_id: patient._id,
-      },
-    });
-  };
-
   return (
     <LoggedLayout>
       {getPatientById.isError ? (
@@ -295,14 +281,13 @@ export default function Patient() {
             {isCreator && (
               <FlexRow gap={1}>
                 {isLogged && !!id && (
-                  <TooltipContent tooltip="Discussions">
-                    <ChatCircle
-                      size={24}
-                      color={theme.colors.text_switched}
-                      cursor="pointer"
-                      onClick={openPatientDiscussion}
-                    />
-                  </TooltipContent>
+                  <DiscussionOpener
+                    name={patientName ?? ""}
+                    patient_id={id}
+                    episode_id={null}
+                    track_id={null}
+                    segment_id={null}
+                  />
                 )}
                 <FlexRow onClick={onDelete} data-cy="delete-patient-button">
                   <TooltipContent tooltip="Delete subject">

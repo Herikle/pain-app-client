@@ -5,10 +5,15 @@ import { useMemo } from "react";
 
 type ListTrackProps = {
   episode_id: string;
+  patient_id: string | undefined;
   isCreator?: boolean;
 };
 
-export const ListTrack = ({ episode_id, isCreator }: ListTrackProps) => {
+export const ListTrack = ({
+  episode_id,
+  patient_id,
+  isCreator,
+}: ListTrackProps) => {
   const getTracks = useGetTracksList({ episode_id, limit: 100, page: 0 });
 
   const tracks = useMemo(() => getTracks.data?.results, [getTracks.data]);
@@ -16,7 +21,11 @@ export const ListTrack = ({ episode_id, isCreator }: ListTrackProps) => {
   return (
     <LoadingWrapper loading={getTracks.isLoading}>
       {tracks?.map((track) => (
-        <Track key={track._id} track={track} isCreator={isCreator} />
+        <Track
+          key={track._id}
+          track={{ ...track, patient_id }}
+          isCreator={isCreator}
+        />
       ))}
     </LoadingWrapper>
   );

@@ -13,8 +13,10 @@ type GetDiscussionCommentsPayload = {
   query: {
     page: number;
     limit: number;
+    patient_id: string;
     episode_id: string | null;
-    patient_id: string | null;
+    track_id: string | null;
+    segment_id: string | null;
     parent_id: string | null;
     sortBy?: string;
     [key: string]: any;
