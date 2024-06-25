@@ -13,7 +13,7 @@ import { DiscussionThread } from "./DiscussionThread";
 
 type DiscussionProps = {
   discussion_path: {
-    name: string;
+    breadcrumb: string[];
     patient_id: string;
     episode_id: string | null;
     track_id: string | null;

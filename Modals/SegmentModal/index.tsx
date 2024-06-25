@@ -19,6 +19,15 @@ export type SegmentModalChildProps = {
   onClose: () => void;
   segment: ISegment;
   episode_id: string;
+  episode: {
+    name: string;
+  };
+  track: {
+    name: string;
+  };
+  patient?: {
+    name: string;
+  };
   patient_id?: string;
   tab?: SegmentModalTabs;
 };
@@ -28,6 +37,9 @@ const Child = ({
   segment,
   episode_id,
   patient_id,
+  episode,
+  track,
+  patient,
   tab = "segment",
 }: SegmentModalChildProps) => {
   return (
@@ -42,7 +54,10 @@ const Child = ({
         tab={tab}
         segment={segment}
         episode_id={episode_id}
+        track={track}
         patient_id={patient_id}
+        episode={episode}
+        patient={patient}
         onClose={onClose}
       />
     </Modal>

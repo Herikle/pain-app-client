@@ -51,10 +51,10 @@ export const CreateDiscussion = () => {
             label="Title*"
             {...register("title")}
             error={errors.title?.message}
+            autoFocus
           />
           <TextArea
             minRows={5}
-            autoFocus
             label="Text*"
             {...register("text")}
             error={errors.text?.message}

@@ -8,7 +8,7 @@ type DiscussionOpenerProps = {
   episode_id: string | null;
   track_id: string | null;
   segment_id: string | null;
-  name: string;
+  breadcrumb: string[];
   size?: number;
 };
 
@@ -17,7 +17,7 @@ export const DiscussionOpener = ({
   episode_id,
   segment_id,
   track_id,
-  name,
+  breadcrumb,
   size = 24,
 }: DiscussionOpenerProps) => {
   const setDiscussionModal = useSetDiscussionModal();
@@ -28,7 +28,7 @@ export const DiscussionOpener = ({
         episode_id,
         segment_id,
         track_id,
-        name: name,
+        breadcrumb: breadcrumb,
         patient_id,
       },
     });

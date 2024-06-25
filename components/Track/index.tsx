@@ -31,6 +31,12 @@ type TrackItem = {
   pain_type: "psychological" | "physical";
   episode_id: string;
   patient_id: string | undefined;
+  episode: {
+    name: string;
+  };
+  patient?: {
+    name: string;
+  };
   segments?: ISegment[];
   comment?: string;
 };
@@ -66,6 +72,9 @@ export const Track = ({ track, isCreator }: TrackProps) => {
       episode_id: track.episode_id,
       tab,
       patient_id: track.patient_id,
+      patient: track.patient,
+      episode: track.episode,
+      track,
     });
   };
 
@@ -110,9 +119,13 @@ export const Track = ({ track, isCreator }: TrackProps) => {
           <FlexRow gap={1}>
             {!cumulativePainMode && isCreator && (
               <>
-                {track.patient_id && (
+                {track.patient_id && track.patient && (
                   <DiscussionOpener
-                    name={track.name}
+                    breadcrumb={[
+                      track.patient.name,
+                      track.episode.name,
+                      track.name,
+                    ]}
                     patient_id={track.patient_id}
                     episode_id={track.episode_id}
                     track_id={track._id}

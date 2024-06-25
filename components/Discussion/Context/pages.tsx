@@ -16,7 +16,7 @@ type DiscussionNavigation = {
   page: DiscussionPages;
   setPage: (page: DiscussionPages) => void;
   discussion_path: {
-    name: string;
+    breadcrumb: string[];
     patient_id: string;
     episode_id: string | null;
     track_id: string | null;
@@ -27,7 +27,7 @@ type DiscussionNavigation = {
 const DiscussionNavigationContext = createContext<DiscussionNavigation>({
   page: { path: "list" },
   discussion_path: {
-    name: "",
+    breadcrumb: [],
     patient_id: "",
     episode_id: "",
     track_id: "",
@@ -42,7 +42,7 @@ export const useDiscussionNavigation = () =>
 type DiscussionPageProviderProps = {
   children: React.ReactNode;
   discussion_path: {
-    name: string;
+    breadcrumb: string[];
     patient_id: string;
     episode_id: string | null;
     track_id: string | null;

@@ -252,7 +252,10 @@ export default function EpisodePage() {
                     <FlexRow>
                       {isLogged && !!id && !!episode?.patient_id && (
                         <DiscussionOpener
-                          name={episode.name}
+                          breadcrumb={[
+                            episode.patient?.name ?? "",
+                            episode.name,
+                          ]}
                           patient_id={episode.patient_id}
                           episode_id={id}
                           segment_id={null}
@@ -299,6 +302,16 @@ export default function EpisodePage() {
                 </FlexRow>
                 <ListTrack
                   episode_id={id}
+                  patient={
+                    episode?.patient
+                      ? {
+                          name: episode?.patient?.name ?? "",
+                        }
+                      : undefined
+                  }
+                  episode={{
+                    name: episode?.name ?? "",
+                  }}
                   patient_id={episode?.patient_id}
                   isCreator={isCreator || isNotLogged}
                 />

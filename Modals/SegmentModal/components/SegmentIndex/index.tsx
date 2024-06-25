@@ -81,16 +81,28 @@ const tabs_index: { [key in SegmentModalTabs]: number } = {
 
 type Props = {
   segment: ISegment;
-  patient_id?: string;
   episode_id: string;
   onClose: () => void;
   tab: SegmentModalTabs;
+  episode: {
+    name: string;
+  };
+  track: {
+    name: string;
+  };
+  patient?: {
+    name: string;
+  };
+  patient_id?: string;
 };
 
 export const SegmentIndex = ({
   segment,
   patient_id,
   episode_id,
+  episode,
+  track,
+  patient,
   onClose,
   tab,
 }: Props) => {
@@ -282,7 +294,12 @@ export const SegmentIndex = ({
           <FlexRow>
             {!!patient_id && (
               <DiscussionOpener
-                name={segment.name ?? ""}
+                breadcrumb={[
+                  patient?.name ?? "",
+                  episode.name,
+                  track.name ?? "",
+                  segment.name ?? "",
+                ]}
                 patient_id={patient_id}
                 episode_id={episode_id}
                 track_id={segment.track_id}

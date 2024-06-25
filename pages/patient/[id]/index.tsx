@@ -282,7 +282,7 @@ export default function Patient() {
               <FlexRow gap={1}>
                 {isLogged && !!id && (
                   <DiscussionOpener
-                    name={patientName ?? ""}
+                    breadcrumb={[patientName ?? ""]}
                     patient_id={id}
                     episode_id={null}
                     track_id={null}

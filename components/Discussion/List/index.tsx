@@ -9,6 +9,7 @@ import { Text } from "@components/Text";
 import styled from "styled-components";
 import { theme } from "@styles/theme";
 import { media } from "@styles/media-query";
+import { BreadCrumbs } from "../components/Breadcrumbs";
 
 type CommentDiscussionList = {
   _id: string;
@@ -38,7 +39,7 @@ export const CommentDiscussionList = () => {
   return (
     <FlexColumn height="100%" gap={4}>
       <FlexColumn gap={2}>
-        <Text variant="h2">{discussion_path.name}</Text>
+        <BreadCrumbs path={discussion_path.breadcrumb} />
         <FlexRow
           justify="flex-start"
           onClick={() => setPage({ path: "create" })}

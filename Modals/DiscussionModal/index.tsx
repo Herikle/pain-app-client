@@ -12,7 +12,7 @@ export type DiscussionModalProps = {
   onClose: () => void;
   discussion_path: {
     patient_id: string;
-    name: string;
+    breadcrumb: string[];
     episode_id: string | null;
     track_id: string | null;
     segment_id: string | null;
