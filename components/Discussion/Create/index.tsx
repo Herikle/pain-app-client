@@ -6,10 +6,12 @@ import { TextField } from "@components/TextField";
 import { useForm, z, zodResolver } from "utils/helpers/form-validation";
 import { useDiscussionNavigation } from "../Context/pages";
 import { Text } from "@components/Text";
+import { RichText, RichTextEditorJson } from "@components/RichText";
+import { Controller } from "react-hook-form";
 
 const discussionSchema = z.object({
-  text: z.string().min(1, "Text is required"),
   title: z.string().min(1, "Title is required"),
+  text: z.custom<RichTextEditorJson>(),
 });
 
 type DiscussionForm = z.infer<typeof discussionSchema>;
@@ -17,29 +19,31 @@ type DiscussionForm = z.infer<typeof discussionSchema>;
 export const CreateDiscussion = () => {
   const { discussion_path, setPage } = useDiscussionNavigation();
 
-  const { register, handleSubmit, formState, reset } = useForm<DiscussionForm>({
-    resolver: zodResolver(discussionSchema),
-  });
+  const { register, handleSubmit, formState, reset, control } =
+    useForm<DiscussionForm>({
+      resolver: zodResolver(discussionSchema),
+    });
 
   const { errors } = formState;
 
   const createCommentMutation = useCreateDiscussion();
 
   const createDiscussion = async (form: DiscussionForm) => {
-    await createCommentMutation.mutateAsync({
-      title: form.title,
-      text: form.text,
-      patient_id: discussion_path.patient_id,
-      episode_id: discussion_path.episode_id,
-      track_id: discussion_path.track_id,
-      segment_id: discussion_path.segment_id,
-    });
+    alert("RichText still in progress...");
+    // await createCommentMutation.mutateAsync({
+    //   title: form.title,
+    //   text: form.text,
+    //   patient_id: discussion_path.patient_id,
+    //   episode_id: discussion_path.episode_id,
+    //   track_id: discussion_path.track_id,
+    //   segment_id: discussion_path.segment_id,
+    // });
 
-    setPage({
-      path: "list",
-    });
+    // setPage({
+    //   path: "list",
+    // });
 
-    reset();
+    // reset();
   };
 
   return (
@@ -53,12 +57,18 @@ export const CreateDiscussion = () => {
             error={errors.title?.message}
             autoFocus
           />
-          <TextArea
-            minRows={5}
-            label="Text*"
-            {...register("text")}
-            error={errors.text?.message}
+          <Controller
+            control={control}
+            name="text"
+            render={({ field }) => (
+              <RichText
+                onChange={(editorState) => {
+                  field.onChange(editorState.toJSON());
+                }}
+              />
+            )}
           />
+
           <FlexRow justify="flex-end">
             <Button
               variant="text"

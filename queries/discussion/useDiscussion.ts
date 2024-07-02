@@ -1,9 +1,10 @@
+import { RichTextEditorJson } from "@components/RichText";
 import { QueryKeys } from "@queries/keys";
 import { request } from "@queries/request";
 import { useMutation, useQueryClient } from "react-query";
 
 type CreateDiscussionPayload = {
-  text: string;
+  text: RichTextEditorJson;
   patient_id: string;
   episode_id: string | null;
   track_id: string | null;

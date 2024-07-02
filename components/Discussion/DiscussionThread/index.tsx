@@ -44,20 +44,18 @@ export const DiscussionThread = () => {
   const createCommentMutation = useCreateDiscussion();
 
   const createDiscussion = async () => {
-    const discussion_id = discussionId;
-
-    if (!discussion_id) return;
-
-    await createCommentMutation.mutateAsync({
-      episode_id: discussion_path.episode_id,
-      text: text,
-      parent_id: discussion_id,
-      patient_id: discussion_path.patient_id,
-      segment_id: discussion_path.segment_id,
-      track_id: discussion_path.track_id,
-    });
-
-    setText("");
+    //TODO-SOS
+    // const discussion_id = discussionId;
+    // if (!discussion_id) return;
+    // await createCommentMutation.mutateAsync({
+    //   episode_id: discussion_path.episode_id,
+    //   text: text,
+    //   parent_id: discussion_id,
+    //   patient_id: discussion_path.patient_id,
+    //   segment_id: discussion_path.segment_id,
+    //   track_id: discussion_path.track_id,
+    // });
+    // setText("");
   };
 
   return (
