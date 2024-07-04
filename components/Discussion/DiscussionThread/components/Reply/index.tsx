@@ -1,4 +1,5 @@
 import { useDiscussionNavigation } from "@components/Discussion/Context/pages";
+import { RichText, RichTextEditorJson } from "@components/RichText";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Chat } from "@phosphor-icons/react";
@@ -15,7 +16,7 @@ type ReplyItem = {
   };
   createdAt: string;
   title: string;
-  text: string;
+  text: RichTextEditorJson;
 };
 
 type Props = {
@@ -32,7 +33,7 @@ export const Reply = ({ reply }: Props) => {
         </Text>
       </FlexRow>
       <Text variant="h3">{reply.title}</Text>
-      <Text variant="body2">{reply.text}</Text>
+      <RichText initialValue={reply.text} readOnly />
     </Container>
   );
 };

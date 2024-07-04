@@ -1,4 +1,5 @@
 import { useDiscussionNavigation } from "@components/Discussion/Context/pages";
+import { RichText, RichTextEditorJson } from "@components/RichText";
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { Chat } from "@phosphor-icons/react";
@@ -16,7 +17,7 @@ type CommentDiscussion = {
   createdAt: string;
   replies_count: number;
   title: string;
-  text: string;
+  text: RichTextEditorJson;
 };
 
 type Props = {
@@ -44,7 +45,11 @@ export const CommentDiscussion = ({ comment }: Props) => {
         </Text>
       </FlexRow>
       <Text variant="h3">{comment.title}</Text>
-      <Text variant="body2">{textElipsis(comment.text, 256)}</Text>
+      <RichText
+        initialValue={comment.text}
+        onlyText
+        options={{ textElipsis: 256 }}
+      />
       <FlexRow>
         <CounterContainer>
           <Chat />

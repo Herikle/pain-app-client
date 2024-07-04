@@ -1,4 +1,3 @@
-import { TextArea } from "@components/TextArea";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
 import { useCreateDiscussion } from "@queries/discussion/useDiscussion";
 import { Button } from "@components/Button";
@@ -29,21 +28,20 @@ export const CreateDiscussion = () => {
   const createCommentMutation = useCreateDiscussion();
 
   const createDiscussion = async (form: DiscussionForm) => {
-    alert("RichText still in progress...");
-    // await createCommentMutation.mutateAsync({
-    //   title: form.title,
-    //   text: form.text,
-    //   patient_id: discussion_path.patient_id,
-    //   episode_id: discussion_path.episode_id,
-    //   track_id: discussion_path.track_id,
-    //   segment_id: discussion_path.segment_id,
-    // });
+    await createCommentMutation.mutateAsync({
+      title: form.title,
+      text: form.text,
+      patient_id: discussion_path.patient_id,
+      episode_id: discussion_path.episode_id,
+      track_id: discussion_path.track_id,
+      segment_id: discussion_path.segment_id,
+    });
 
-    // setPage({
-    //   path: "list",
-    // });
+    setPage({
+      path: "list",
+    });
 
-    // reset();
+    reset();
   };
 
   return (

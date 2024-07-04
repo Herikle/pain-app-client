@@ -17,17 +17,14 @@ import { TextArea } from "@components/TextArea";
 import { Button } from "@components/Button";
 import { ListReplies } from "./components/ListReplies";
 import { media } from "@styles/media-query";
+import { RichText, RichTextEditorJson } from "@components/RichText";
 
 export const DiscussionThread = () => {
   const { page, setPage, discussion_path } = useDiscussionNavigation();
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState<RichTextEditorJson | undefined>(undefined);
 
   const [hasFocus, setHasFocus] = useState(false);
-
-  const hasValue = text.length > 0;
-
-  const isActive = hasValue || hasFocus;
 
   const discussionId = useMemo(() => {
     if (page.path === "discussion") {
@@ -44,18 +41,18 @@ export const DiscussionThread = () => {
   const createCommentMutation = useCreateDiscussion();
 
   const createDiscussion = async () => {
-    //TODO-SOS
-    // const discussion_id = discussionId;
-    // if (!discussion_id) return;
-    // await createCommentMutation.mutateAsync({
-    //   episode_id: discussion_path.episode_id,
-    //   text: text,
-    //   parent_id: discussion_id,
-    //   patient_id: discussion_path.patient_id,
-    //   segment_id: discussion_path.segment_id,
-    //   track_id: discussion_path.track_id,
-    // });
-    // setText("");
+    const discussion_id = discussionId;
+    if (!discussion_id) return;
+    if (!text) return;
+    await createCommentMutation.mutateAsync({
+      episode_id: discussion_path.episode_id,
+      text: text,
+      parent_id: discussion_id,
+      patient_id: discussion_path.patient_id,
+      segment_id: discussion_path.segment_id,
+      track_id: discussion_path.track_id,
+    });
+    setText(undefined);
   };
 
   return (
@@ -76,7 +73,9 @@ export const DiscussionThread = () => {
                   </Text>
                 </FlexRow>
                 <Text variant="h3">{comment.title}</Text>
-                <Text variant="body2">{comment.text}</Text>
+                <FlexColumn mt={1.5} mb={1.5}>
+                  <RichText initialValue={comment.text} readOnly />
+                </FlexColumn>
                 <FlexRow>
                   <CounterContainer>
                     <Chat />
@@ -88,7 +87,7 @@ export const DiscussionThread = () => {
           )}
 
           <AddCommentContainer align="flex-end">
-            <TextArea
+            {/* <TextArea
               fullWidth
               placeholder="Add a comment"
               onFocus={() => setHasFocus(true)}
@@ -96,31 +95,38 @@ export const DiscussionThread = () => {
               minRows={isActive ? 4 : 1}
               value={text}
               onChange={(e) => setText(e.target.value)}
+            /> */}
+
+            <RichText
+              onChange={(editorState) => {
+                setText(editorState.toJSON());
+              }}
             />
-            {isActive && (
-              <FlexRow>
-                <Button
-                  variant="text"
-                  textColor="pure_black"
-                  color="pure_white"
-                  onClick={() => {
-                    setText("");
-                    setHasFocus(false);
-                  }}
-                  disabled={createCommentMutation.isLoading}
-                  type="button"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  loading={createCommentMutation.isLoading}
-                  onClick={createDiscussion}
-                >
-                  Comment
-                </Button>
-              </FlexRow>
-            )}
+
+            {/* {isActive && ( */}
+            <FlexRow>
+              <Button
+                variant="text"
+                textColor="pure_black"
+                color="pure_white"
+                onClick={() => {
+                  setText(undefined);
+                  setHasFocus(false);
+                }}
+                disabled={createCommentMutation.isLoading}
+                type="button"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                loading={createCommentMutation.isLoading}
+                onClick={createDiscussion}
+              >
+                Comment
+              </Button>
+            </FlexRow>
+            {/* )} */}
           </AddCommentContainer>
           {!!discussionId && (
             <ListReplies
@@ -138,7 +144,7 @@ export const DiscussionThread = () => {
 };
 
 const AddCommentContainer = styled(FlexColumn)`
-  min-height: 8.5rem;
+  /* min-height: 8.5rem; */
 `;
 
 const CounterContainer = styled(FlexRow)`
@@ -148,11 +154,11 @@ const CounterContainer = styled(FlexRow)`
 `;
 
 const ThreadBody = styled(FlexColumn)`
-  height: calc(100% - 125px);
+  height: 100%;
   overflow-y: auto;
 
   ${media.up.laptopL`
-    height: calc(100% - 200px);
+    height: calc(100% - 100px);
   `}
 `;
 
