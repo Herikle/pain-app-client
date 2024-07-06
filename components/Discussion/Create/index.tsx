@@ -63,6 +63,7 @@ export const CreateDiscussion = () => {
                 onChange={(editorState) => {
                   field.onChange(editorState.toJSON());
                 }}
+                placeholder="Text"
               />
             )}
           />
