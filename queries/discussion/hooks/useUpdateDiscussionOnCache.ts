@@ -5,7 +5,7 @@ import { IEpisode } from "types";
 import update from "immutability-helper";
 import { RichTextEditorJson } from "@components/RichText";
 import { GetDiscussionCommentsResponse } from "../useGetDiscussion";
-import { DiscussionFromList } from "types/discussion";
+import { DiscussionById, DiscussionFromList } from "types/discussion";
 
 type DeleteEpisodeOnCache = {
   id: string;
@@ -96,6 +96,18 @@ export const useUpdateDiscussionOnCache = () => {
         }
 
         return old;
+      }
+    );
+
+    queryClient.setQueriesData(
+      [QueryKeys.Discussion.ByID, id],
+      (old: DiscussionById) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          ...discussion,
+        };
       }
     );
   };
