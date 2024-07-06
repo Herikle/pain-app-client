@@ -13,6 +13,7 @@ type Props = {
   track_id: string | null;
   segment_id: string | null;
   parent_id: string;
+  container?: Element | null;
 };
 
 export const ListReplies = ({
@@ -21,6 +22,7 @@ export const ListReplies = ({
   patient_id,
   track_id,
   segment_id,
+  container,
 }: Props) => {
   const getReplies = useGetDiscussionComments({
     episode_id,
@@ -60,7 +62,9 @@ export const ListReplies = ({
         ) : (
           <DiscussionsContainer gap={1}>
             {replies.map((reply) => {
-              return <Reply key={reply._id} reply={reply} />;
+              return (
+                <Reply key={reply._id} reply={reply} container={container} />
+              );
             })}
           </DiscussionsContainer>
         )}

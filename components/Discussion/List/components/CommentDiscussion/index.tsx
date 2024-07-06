@@ -17,7 +17,7 @@ type CommentDiscussion = {
   createdAt: string;
   replies_count: number;
   title: string;
-  text: RichTextEditorJson;
+  text: RichTextEditorJson | null;
 };
 
 type Props = {
@@ -45,11 +45,13 @@ export const CommentDiscussion = ({ comment }: Props) => {
         </Text>
       </FlexRow>
       <Text variant="h3">{comment.title}</Text>
-      <RichText
-        initialValue={comment.text}
-        onlyText
-        options={{ textElipsis: 256 }}
-      />
+      {comment.text && (
+        <RichText
+          initialValue={comment.text}
+          onlyText
+          options={{ textElipsis: 256 }}
+        />
+      )}
       <FlexRow>
         <CounterContainer>
           <Chat />

@@ -9,7 +9,7 @@ import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
 import { formatDistanceToNow } from "date-fns";
 import { transparentize } from "polished";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { BackButton } from "@components/BackButton";
 import { useCreateDiscussion } from "@queries/discussion/useDiscussion";
@@ -24,7 +24,7 @@ export const DiscussionThread = () => {
 
   const [text, setText] = useState<RichTextEditorJson | undefined>(undefined);
 
-  const [hasFocus, setHasFocus] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const discussionId = useMemo(() => {
     if (page.path === "discussion") {
@@ -56,7 +56,7 @@ export const DiscussionThread = () => {
   };
 
   return (
-    <FlexColumn height="100%">
+    <FlexColumn height="100%" ref={containerRef}>
       <BackButton
         text="Return to discussion list"
         onClick={() => setPage({ path: "list" })}
@@ -74,12 +74,16 @@ export const DiscussionThread = () => {
                 </FlexRow>
                 <Text variant="h3">{comment.title}</Text>
                 <FlexColumn mt={1.5} mb={1.5}>
-                  <RichText initialValue={comment.text} readOnly />
+                  {comment.text && (
+                    <RichText initialValue={comment.text} readOnly />
+                  )}
                 </FlexColumn>
                 <FlexRow>
                   <CounterContainer>
-                    <Chat />
-                    <Text variant="caption">{comment.replies_count}</Text>
+                    <Chat size={20} />
+                    <Text variant="caption" fontWeight="700">
+                      {comment.replies_count}
+                    </Text>
                   </CounterContainer>
                 </FlexRow>
               </Container>
@@ -98,6 +102,7 @@ export const DiscussionThread = () => {
               options={{
                 clearOnSubmit: true,
               }}
+              buttonText="Comment"
             />
           </AddCommentContainer>
           {!!discussionId && (
@@ -107,6 +112,7 @@ export const DiscussionThread = () => {
               patient_id={discussion_path.patient_id}
               segment_id={discussion_path.segment_id}
               track_id={discussion_path.track_id}
+              container={containerRef.current}
             />
           )}
         </LoadingWrapper>

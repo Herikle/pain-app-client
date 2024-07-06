@@ -54,9 +54,13 @@ type RichTextProps = {
     clearOnSubmit?: boolean;
   };
   placeholder?: string;
+  defaultEnabled?: boolean;
   mode?: "default" | "prepare";
   onSubmit?: () => void;
+  onCancel?: () => void;
   loading?: boolean;
+  autoFocus?: boolean;
+  buttonText?: string;
 };
 
 export const RichText = ({
@@ -67,11 +71,15 @@ export const RichText = ({
   readOnly,
   options,
   placeholder,
+  defaultEnabled = false,
   mode = "default",
   onSubmit,
+  onCancel,
   loading,
+  autoFocus,
+  buttonText,
 }: RichTextProps) => {
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(defaultEnabled);
 
   const isOnPrepareMode = useMemo(() => mode === "prepare", [mode]);
 
@@ -104,6 +112,7 @@ export const RichText = ({
   const runDisable = () => {
     if (!isOnPrepareMode) return;
 
+    onCancel && onCancel();
     setIsEnabled(false);
   };
 
@@ -144,7 +153,7 @@ export const RichText = ({
             </div>
           </div>
           <HistoryPlugin />
-          <AutoFocusPlugin />
+          {autoFocus && <AutoFocusPlugin />}
           {readOnly && <UpdateEditableStatePlugin />}
           {!disabled && !!onChange && <OnChangePlugin onChange={onChange} />}
           <ClearEditorPlugin />
@@ -154,6 +163,7 @@ export const RichText = ({
               onSubmit={handleSubmit}
               options={{ clearOnSubmit: options?.clearOnSubmit }}
               loading={loading}
+              buttonText={buttonText}
             />
           )}
         </Container>
@@ -218,7 +228,7 @@ const Container = styled.div<ContainerProps>`
       : css`
           & .editor-input {
             min-height: ${$hasActionButtons
-              ? "75px"
+              ? "50px"
               : $readOnly
               ? "unset"
               : "100px"};

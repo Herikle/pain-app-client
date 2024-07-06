@@ -14,6 +14,7 @@ import styled from "styled-components";
 type ActionsButtonProps = {
   onCancel: () => void;
   onSubmit: () => void;
+  buttonText?: string;
   options?: {
     clearOnSubmit?: boolean;
   };
@@ -23,6 +24,7 @@ type ActionsButtonProps = {
 export const ActionsButtonPlugin = ({
   onCancel,
   onSubmit,
+  buttonText,
   options,
   loading,
 }: ActionsButtonProps) => {
@@ -40,10 +42,10 @@ export const ActionsButtonPlugin = ({
     (event) => {
       const { ctrlKey, key } = event;
 
-      if (ctrlKey && key === "Enter") {
-        handleSubmit();
-        return true;
-      }
+      // if (ctrlKey && key === "Enter") {
+      //   handleSubmit();
+      //   return true;
+      // }
 
       if (key === "Escape") {
         onCancel();
@@ -82,7 +84,7 @@ export const ActionsButtonPlugin = ({
         Cancel
       </Button>
       <Button variant="contained" loading={loading} onClick={handleSubmit}>
-        Comment
+        {buttonText || "Submit"}
       </Button>
     </ButtonsFooter>
   );
