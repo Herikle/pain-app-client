@@ -87,46 +87,18 @@ export const DiscussionThread = () => {
           )}
 
           <AddCommentContainer align="flex-end">
-            {/* <TextArea
-              fullWidth
-              placeholder="Add a comment"
-              onFocus={() => setHasFocus(true)}
-              onBlur={() => setHasFocus(false)}
-              minRows={isActive ? 4 : 1}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            /> */}
-
             <RichText
               onChange={(editorState) => {
                 setText(editorState.toJSON());
               }}
+              placeholder="Add a comment"
+              mode="prepare"
+              onSubmit={createDiscussion}
+              loading={createCommentMutation.isLoading}
+              options={{
+                clearOnSubmit: true,
+              }}
             />
-
-            {/* {isActive && ( */}
-            <FlexRow>
-              <Button
-                variant="text"
-                textColor="pure_black"
-                color="pure_white"
-                onClick={() => {
-                  setText(undefined);
-                  setHasFocus(false);
-                }}
-                disabled={createCommentMutation.isLoading}
-                type="button"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                loading={createCommentMutation.isLoading}
-                onClick={createDiscussion}
-              >
-                Comment
-              </Button>
-            </FlexRow>
-            {/* )} */}
           </AddCommentContainer>
           {!!discussionId && (
             <ListReplies

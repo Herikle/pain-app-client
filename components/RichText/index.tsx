@@ -18,9 +18,16 @@ import {
 import { RestoreStatePlugin } from "./plugins/RestoreStatePlugin";
 import { OnlyTextPlugin } from "./plugins/OnlyTextPlugin";
 import { UpdateEditableStatePlugin } from "./plugins/UpdateEditableStatePlugin";
+import { useMemo, useState } from "react";
+import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
+import { ActionsButtonPlugin } from "./plugins/ActionsButtonPlugin";
 
-function Placeholder() {
-  return <PlaceholderDiv>Text</PlaceholderDiv>;
+type PlaceholderProps = {
+  placeholder: string | undefined;
+};
+
+function Placeholder({ placeholder }: PlaceholderProps) {
+  return <PlaceholderDiv>{placeholder}</PlaceholderDiv>;
 }
 
 const editorConfig = {
@@ -44,7 +51,12 @@ type RichTextProps = {
   readOnly?: boolean;
   options?: {
     textElipsis?: number;
+    clearOnSubmit?: boolean;
   };
+  placeholder?: string;
+  mode?: "default" | "prepare";
+  onSubmit?: () => void;
+  loading?: boolean;
 };
 
 export const RichText = ({
@@ -54,17 +66,79 @@ export const RichText = ({
   onlyText,
   readOnly,
   options,
+  placeholder,
+  mode = "default",
+  onSubmit,
+  loading,
 }: RichTextProps) => {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const isOnPrepareMode = useMemo(() => mode === "prepare", [mode]);
+
+  const isCompacted = useMemo(() => {
+    if (!isOnPrepareMode) return false;
+
+    return !isEnabled;
+  }, [isOnPrepareMode, isEnabled]);
+
+  const showToolbar = useMemo(() => {
+    if (readOnly) return false;
+
+    if (isCompacted) return false;
+
+    return true;
+  }, [isCompacted, readOnly]);
+
+  const showActionButtons = useMemo(() => {
+    if (!isOnPrepareMode) return false;
+
+    return isEnabled;
+  }, [isOnPrepareMode, isEnabled]);
+
+  const runEnable = () => {
+    if (!isOnPrepareMode) return;
+
+    setIsEnabled(true);
+  };
+
+  const runDisable = () => {
+    if (!isOnPrepareMode) return;
+
+    setIsEnabled(false);
+  };
+
+  const handleSubmit = () => {
+    if (onSubmit) {
+      onSubmit();
+    }
+
+    if (options?.clearOnSubmit) {
+      if (!isOnPrepareMode) return;
+
+      runDisable();
+    }
+  };
+
   return (
     <LexicalComposer initialConfig={editorConfig}>
       {!onlyText && (
-        <Container className="rich" $readOnly={readOnly}>
+        <Container
+          className="rich"
+          $readOnly={readOnly}
+          $singleLine={isCompacted}
+          $hasActionButtons={showActionButtons}
+        >
           <div className="editor-container">
-            {!readOnly && <ToolbarPlugin />}
+            {showToolbar && <ToolbarPlugin />}
             <div className="editor-inner">
               <RichTextPlugin
-                contentEditable={<ContentEditable className="editor-input" />}
-                placeholder={<Placeholder />}
+                contentEditable={
+                  <ContentEditable
+                    className="editor-input"
+                    onClick={runEnable}
+                  />
+                }
+                placeholder={<Placeholder placeholder={placeholder} />}
                 ErrorBoundary={LexicalErrorBoundary}
               />
             </div>
@@ -73,8 +147,18 @@ export const RichText = ({
           <AutoFocusPlugin />
           {readOnly && <UpdateEditableStatePlugin />}
           {!disabled && !!onChange && <OnChangePlugin onChange={onChange} />}
+          <ClearEditorPlugin />
+          {showActionButtons && (
+            <ActionsButtonPlugin
+              onCancel={runDisable}
+              onSubmit={handleSubmit}
+              options={{ clearOnSubmit: options?.clearOnSubmit }}
+              loading={loading}
+            />
+          )}
         </Container>
       )}
+
       {initialValue && <RestoreStatePlugin initialValue={initialValue} />}
       {onlyText && <OnlyTextPlugin elipsis={options?.textElipsis} />}
     </LexicalComposer>
@@ -95,7 +179,9 @@ const PlaceholderDiv = styled.div`
 `;
 
 type ContainerProps = {
-  $readOnly?: boolean;
+  $readOnly: boolean | undefined;
+  $singleLine: boolean | undefined;
+  $hasActionButtons: boolean | undefined;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -120,5 +206,22 @@ const Container = styled.div<ContainerProps>`
           border: 1px solid ${theme.colors.secondary_font};
           padding-top: 0.5rem;
           padding-inline: 0.5rem;
+        `}
+
+  ${({ $singleLine, $hasActionButtons, $readOnly }) =>
+    $singleLine
+      ? css`
+          padding-block: 0;
+          & .editor-input {
+          }
+        `
+      : css`
+          & .editor-input {
+            min-height: ${$hasActionButtons
+              ? "75px"
+              : $readOnly
+              ? "unset"
+              : "100px"};
+          }
         `}
 `;
