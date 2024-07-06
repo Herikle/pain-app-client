@@ -3,7 +3,12 @@ import { useDiscussionNavigation } from "../Context/pages";
 
 import { Text } from "@components/Text";
 import { FlexColumn, FlexRow } from "@design-components/Flex";
-import { Chat } from "@phosphor-icons/react";
+import {
+  Chat,
+  DotsThree,
+  PencilSimple,
+  TrashSimple,
+} from "@phosphor-icons/react";
 import { useGetDiscussionById } from "@queries/discussion/useGetDiscussion";
 import { theme } from "@styles/theme";
 import { textElipsis } from "@utils/helpers/string";
@@ -18,13 +23,20 @@ import { Button } from "@components/Button";
 import { ListReplies } from "./components/ListReplies";
 import { media } from "@styles/media-query";
 import { RichText, RichTextEditorJson } from "@components/RichText";
+import { useAuth } from "@utils/hooks/useAuth";
+import { useDiscussionText } from "../hooks/useDiscussionText";
+import { FloatingMenu } from "@components/FloatingMenu";
 
 export const DiscussionThread = () => {
   const { page, setPage, discussion_path } = useDiscussionNavigation();
 
   const [text, setText] = useState<RichTextEditorJson | undefined>(undefined);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+
+  const [openDots, setOpenDots] = useState(false);
+
+  const dotsRef = useRef<HTMLDivElement | null>(null);
 
   const discussionId = useMemo(() => {
     if (page.path === "discussion") {
@@ -37,6 +49,25 @@ export const DiscussionThread = () => {
   const getComment = useGetDiscussionById(discussionId);
 
   const comment = useMemo(() => getComment.data, [getComment.data]);
+
+  const {
+    isOnEdit,
+    onSave,
+    render,
+    resetingRich,
+    readyToDelete,
+    readyToEdit,
+    closeEdit,
+    updateTextContent,
+    updateIsLoading,
+    textContent,
+    isDeleted,
+    isNotDeleted,
+  } = useDiscussionText({
+    discussion: comment,
+  });
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const createCommentMutation = useCreateDiscussion();
 
@@ -66,16 +97,54 @@ export const DiscussionThread = () => {
           {!!comment && (
             <>
               <Container align="flex-start" gap={0.5}>
-                <FlexRow>
-                  <Text variant="caption">
-                    <strong>{comment.user.name}</strong> •{" "}
-                    {formatDistanceToNow(new Date(comment.createdAt))}
-                  </Text>
-                </FlexRow>
+                {isNotDeleted ? (
+                  <FlexRow>
+                    <Text variant="caption">
+                      <strong>{comment.user.name}</strong> •{" "}
+                      {formatDistanceToNow(new Date(comment.createdAt))}
+                      {comment.edited && (
+                        <>
+                          {" "}
+                          • {"(Edited)"}{" "}
+                          {formatDistanceToNow(new Date(comment.updatedAt))}.
+                        </>
+                      )}
+                    </Text>
+                  </FlexRow>
+                ) : (
+                  <FlexRow>
+                    <Text variant="caption">
+                      <strong>Discussion deleted by user</strong> •{" "}
+                      {formatDistanceToNow(new Date(comment.createdAt))}
+                    </Text>
+                  </FlexRow>
+                )}
                 <Text variant="h3">{comment.title}</Text>
-                <FlexColumn mt={1.5} mb={1.5}>
-                  {comment.text && (
-                    <RichText initialValue={comment.text} readOnly />
+                <FlexColumn
+                  mt={1.5}
+                  mb={1.5}
+                  width="100%
+                "
+                >
+                  {textContent && (
+                    <>
+                      {resetingRich ? (
+                        <FakeRich />
+                      ) : (
+                        <RichText
+                          initialValue={textContent}
+                          onChange={updateTextContent}
+                          readOnly={!isOnEdit}
+                          mode={isOnEdit ? "prepare" : undefined}
+                          onCancel={closeEdit}
+                          onSubmit={onSave}
+                          defaultEnabled={isOnEdit}
+                          autoFocus={isOnEdit}
+                          loading={updateIsLoading}
+                          buttonText="Save"
+                        />
+                      )}
+                    </>
                   )}
                 </FlexColumn>
                 <FlexRow>
@@ -85,28 +154,72 @@ export const DiscussionThread = () => {
                       {comment.replies_count}
                     </Text>
                   </CounterContainer>
+                  {isNotDeleted && user?._id && comment.user._id && (
+                    <>
+                      <CounterContainer
+                        ref={dotsRef}
+                        onClick={() => setOpenDots(true)}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <DotsThree size={20} />
+                      </CounterContainer>
+                      <FloatingMenu
+                        anchorEl={dotsRef.current}
+                        container={containerRef.current}
+                        open={openDots}
+                        options={[
+                          {
+                            id: "delete",
+                            label: (
+                              <FlexRow justify="flex-start">
+                                <TrashSimple size={18} />
+                                <Text variant="body2">Delete</Text>
+                              </FlexRow>
+                            ),
+                            onClick: readyToDelete,
+                          },
+                          {
+                            id: "edit",
+                            label: (
+                              <FlexRow justify="flex-start">
+                                <PencilSimple size={18} />
+                                <Text variant="body2">Edit</Text>
+                              </FlexRow>
+                            ),
+                            onClick: readyToEdit,
+                          },
+                        ]}
+                        onClose={() => setOpenDots(false)}
+                      />
+                    </>
+                  )}
                 </FlexRow>
               </Container>
             </>
           )}
 
-          <AddCommentContainer align="flex-end">
-            <RichText
-              onChange={(editorState) => {
-                setText(editorState.toJSON());
-              }}
-              placeholder="Add a comment"
-              mode="prepare"
-              onSubmit={createDiscussion}
-              loading={createCommentMutation.isLoading}
-              options={{
-                clearOnSubmit: true,
-              }}
-              buttonText="Comment"
-            />
-          </AddCommentContainer>
+          {isNotDeleted && (
+            <AddCommentContainer align="flex-end">
+              <RichText
+                onChange={(editorState) => {
+                  setText(editorState.toJSON());
+                }}
+                placeholder="Add a comment"
+                mode="prepare"
+                onSubmit={createDiscussion}
+                loading={createCommentMutation.isLoading}
+                options={{
+                  clearOnSubmit: true,
+                }}
+                buttonText="Comment"
+              />
+            </AddCommentContainer>
+          )}
           {!!discussionId && (
             <ListReplies
+              parentIsDeleted={isDeleted}
               episode_id={discussion_path.episode_id}
               parent_id={discussionId}
               patient_id={discussion_path.patient_id}
@@ -117,9 +230,18 @@ export const DiscussionThread = () => {
           )}
         </LoadingWrapper>
       </ThreadBody>
+      {render}
     </FlexColumn>
   );
 };
+
+const FakeRich = styled.div`
+  width: 100%;
+  height: 100px;
+
+  border-radius: 8px;
+  background-color: ${theme.colors.pastel};
+`;
 
 const AddCommentContainer = styled(FlexColumn)`
   /* min-height: 8.5rem; */

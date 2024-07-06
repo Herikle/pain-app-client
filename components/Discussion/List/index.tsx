@@ -73,7 +73,7 @@ export const CommentDiscussionList = () => {
                     <Separator
                       style={{
                         width: "90%",
-                        margin: "auto",
+                        marginInline: "auto",
                       }}
                     />
                   )}

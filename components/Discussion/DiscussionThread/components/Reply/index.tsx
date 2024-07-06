@@ -1,4 +1,5 @@
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
+import { useDiscussionText } from "@components/Discussion/hooks/useDiscussionText";
 import { FloatingMenu } from "@components/FloatingMenu";
 import { RichText, RichTextEditorJson } from "@components/RichText";
 import { Text } from "@components/Text";
@@ -48,74 +49,23 @@ export const Reply = ({ reply, container }: Props) => {
 
   const [openDots, setOpenDots] = useState(false);
 
-  const [isOnEdit, setIsOnEdit] = useState(false);
-
-  const [isOnDelete, setIsOnDelete] = useState(false);
-
-  const [resetingRich, setResetingRich] = useState(false);
-
-  const [textContent, setTextContent] = useState<RichTextEditorJson | null>(
-    reply.text
-  );
-
   const dotsRef = useRef<HTMLDivElement | null>(null);
 
-  const updateComment = useUpdateDiscussion();
-
-  const deleteComment = useDeleteDiscussion();
-
-  const readyToEdit = () => {
-    setResetingRich(true);
-    setTimeout(() => {
-      setIsOnEdit(true);
-      setResetingRich(false);
-    }, 100);
-  };
-
-  const onSave = async () => {
-    if (!textContent) return;
-
-    await updateComment.mutateAsync({
-      params: {
-        discussion_id: reply._id,
-      },
-      body: {
-        text: textContent,
-      },
-      helper: {
-        patient_id: reply.patient_id,
-        episode_id: reply.episode_id,
-        track_id: reply.track_id,
-        segment_id: reply.segment_id,
-        parent_id: reply.parent_id,
-      },
-    });
-
-    setIsOnEdit(false);
-  };
-
-  const onDelete = async () => {
-    await deleteComment.mutateAsync({
-      params: {
-        discussion_id: reply._id,
-      },
-      helper: {
-        patient_id: reply.patient_id,
-        episode_id: reply.episode_id,
-        track_id: reply.track_id,
-        segment_id: reply.segment_id,
-        parent_id: reply.parent_id,
-      },
-    });
-
-    setTextContent(null);
-
-    setIsOnDelete(false);
-  };
-
-  const isDeleted = !!reply.deletedAt;
-
-  const isNotDeleted = !isDeleted;
+  const {
+    isNotDeleted,
+    isOnEdit,
+    onSave,
+    render,
+    resetingRich,
+    readyToDelete,
+    readyToEdit,
+    closeEdit,
+    updateTextContent,
+    updateIsLoading,
+    textContent,
+  } = useDiscussionText({
+    discussion: reply,
+  });
 
   return (
     <Container align="flex-start" gap={0.5}>
@@ -148,14 +98,14 @@ export const Reply = ({ reply, container }: Props) => {
           ) : (
             <RichText
               initialValue={textContent}
-              onChange={(state) => setTextContent(state.toJSON())}
+              onChange={updateTextContent}
               readOnly={!isOnEdit}
               mode={isOnEdit ? "prepare" : undefined}
-              onCancel={() => setIsOnEdit(false)}
+              onCancel={closeEdit}
               onSubmit={onSave}
               defaultEnabled={isOnEdit}
               autoFocus={isOnEdit}
-              loading={updateComment.isLoading}
+              loading={updateIsLoading}
               buttonText="Save"
             />
           )}
@@ -188,7 +138,7 @@ export const Reply = ({ reply, container }: Props) => {
                       <Text variant="body2">Delete</Text>
                     </FlexRow>
                   ),
-                  onClick: () => setIsOnDelete(true),
+                  onClick: readyToDelete,
                 },
                 {
                   id: "edit",
@@ -206,17 +156,7 @@ export const Reply = ({ reply, container }: Props) => {
           </>
         )}
       </ActionFooter>
-      {isOnDelete && (
-        <ConfirmActionModal
-          title="Delete Comment"
-          description="Are you sure you want to delete this comment?"
-          onClose={() => setIsOnDelete(false)}
-          onConfirm={onDelete}
-          loading={deleteComment.isLoading}
-          confirmText="Delete"
-          cancelText="Cancel"
-        />
-      )}
+      {render}
     </Container>
   );
 };

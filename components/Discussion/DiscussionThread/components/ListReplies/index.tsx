@@ -13,6 +13,7 @@ type Props = {
   track_id: string | null;
   segment_id: string | null;
   parent_id: string;
+  parentIsDeleted: boolean;
   container?: Element | null;
 };
 
@@ -23,6 +24,7 @@ export const ListReplies = ({
   track_id,
   segment_id,
   container,
+  parentIsDeleted,
 }: Props) => {
   const getReplies = useGetDiscussionComments({
     episode_id,
@@ -45,8 +47,8 @@ export const ListReplies = ({
   return (
     <FlexColumn>
       <LoadingWrapper loading={getReplies.isLoading}>
-        {isEmpty ? (
-          <EmptyDiscussionContainer justify="center">
+        {isEmpty && !parentIsDeleted ? (
+          <EmptyDiscussionContainer justify="center" mt={2}>
             <DrinkCoffeSvg />
             <FlexColumn gap={1}>
               <Text variant="h3" color="pure_black">
