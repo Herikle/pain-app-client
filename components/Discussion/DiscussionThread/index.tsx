@@ -26,6 +26,7 @@ import { RichText, RichTextEditorJson } from "@components/RichText";
 import { useAuth } from "@utils/hooks/useAuth";
 import { useDiscussionText } from "../hooks/useDiscussionText";
 import { FloatingMenu } from "@components/FloatingMenu";
+import { DiscussionHeader } from "../components/Breadcrumbs/DiscussionHeader";
 
 export const DiscussionThread = () => {
   const { page, setPage, discussion_path } = useDiscussionNavigation();
@@ -97,28 +98,10 @@ export const DiscussionThread = () => {
           {!!comment && (
             <>
               <Container align="flex-start" gap={0.5}>
-                {isNotDeleted ? (
-                  <FlexRow>
-                    <Text variant="caption">
-                      <strong>{comment.user.name}</strong> •{" "}
-                      {formatDistanceToNow(new Date(comment.createdAt))}
-                      {comment.edited && (
-                        <>
-                          {" "}
-                          • {"(Edited)"}{" "}
-                          {formatDistanceToNow(new Date(comment.updatedAt))}.
-                        </>
-                      )}
-                    </Text>
-                  </FlexRow>
-                ) : (
-                  <FlexRow>
-                    <Text variant="caption">
-                      <strong>Discussion deleted by user</strong> •{" "}
-                      {formatDistanceToNow(new Date(comment.createdAt))}
-                    </Text>
-                  </FlexRow>
-                )}
+                <DiscussionHeader
+                  isNotDeleted={isNotDeleted}
+                  comment={comment}
+                />
                 <Text variant="h3">{comment.title}</Text>
                 <FlexColumn
                   mt={1.5}

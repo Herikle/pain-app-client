@@ -1,4 +1,5 @@
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
+import { DiscussionHeader } from "@components/Discussion/components/Breadcrumbs/DiscussionHeader";
 import { useDiscussionText } from "@components/Discussion/hooks/useDiscussionText";
 import { FloatingMenu } from "@components/FloatingMenu";
 import { RichText, RichTextEditorJson } from "@components/RichText";
@@ -69,27 +70,7 @@ export const Reply = ({ reply, container }: Props) => {
 
   return (
     <Container align="flex-start" gap={0.5}>
-      {isNotDeleted ? (
-        <FlexRow>
-          <Text variant="caption">
-            <strong>{reply.user.name}</strong> •{" "}
-            {formatDistanceToNow(new Date(reply.createdAt))}
-            {reply.edited && (
-              <>
-                {" "}
-                • {"(Edited)"} {formatDistanceToNow(new Date(reply.updatedAt))}.
-              </>
-            )}
-          </Text>
-        </FlexRow>
-      ) : (
-        <FlexRow>
-          <Text variant="caption">
-            <strong>Comment deleted by user</strong> •{" "}
-            {formatDistanceToNow(new Date(reply.createdAt))}
-          </Text>
-        </FlexRow>
-      )}
+      <DiscussionHeader isNotDeleted={isNotDeleted} comment={reply} />
       <Text variant="h3">{reply.title}</Text>
       {textContent && (
         <>
