@@ -73,6 +73,7 @@ export type IPatient = {
   createdAt: string;
   updatedAt: string;
   type: "human" | "animal";
+  discussions_count?: number;
   bookmarked?: number;
   location?: string;
   common_name?: string;
@@ -213,6 +214,7 @@ export type IEpisode = {
   name: string;
   createdAt: string;
   updatedAt: string;
+  discussions_count?: number;
   tracks_count?: number;
   location?: string;
   diagnosis?: string;

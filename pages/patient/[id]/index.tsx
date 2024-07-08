@@ -40,6 +40,7 @@ import {
   useGetBookmarkEpisodes,
 } from "@queries/bookmark-episodes/useGetBookmarkPatients";
 import { DiscussionOpener } from "@components/DiscussionOpener";
+import { DiscussionCounter } from "@components/DiscussionCounter";
 
 const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
   const addToBookmark = useAddEpisodeToBookmark();
@@ -343,6 +344,12 @@ export default function Patient() {
                       <AddToBookMark episode_id={item._id} />
                     ),
                 },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
+                },
               ]}
               mountHref={mountEpisodeHref}
               isLoading={getPatientEpisodes.isLoading}
@@ -414,6 +421,12 @@ export default function Patient() {
                     getSuggestionTdStyle(item.episode),
                   noSort: true,
                 },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
+                },
               ]}
               pagination={{
                 onChangePage: (page) => setEpisodesBookmarkPage(page - 1),
@@ -462,6 +475,12 @@ export default function Patient() {
                     renderPatientScientificName(item),
                   tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
                   noSort: true,
+                },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
                 },
               ]}
               data={episodesSuggestions}
