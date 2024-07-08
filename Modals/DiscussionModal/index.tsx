@@ -7,6 +7,7 @@ import { RoutesPath } from "@utils/routes";
 import { ConfirmActionModal } from "../ConfirmActionModal";
 import { Modal } from "@Modals/Modal";
 import { Discussion } from "@components/Discussion";
+import { media } from "@styles/media-query";
 
 export type DiscussionModalProps = {
   onClose: () => void;
@@ -30,8 +31,13 @@ const Child = ({ onClose, discussion_path }: DiscussionModalProps) => {
 };
 
 const Container = styled.div`
-  width: 800px;
-  height: 600px;
+  width: 1000px;
+  height: 800px;
+
+  ${media.up.tablet`
+    width: 100%;
+    height: 100%;  
+  `}
 `;
 
 export const DiscussionModalWrapper = () => {

@@ -15,6 +15,8 @@ type Props = {
   parent_id: string;
   parentIsDeleted: boolean;
   container?: Element | null;
+  compactSpacing?: boolean;
+  noCta?: boolean;
 };
 
 export const ListReplies = ({
@@ -25,6 +27,8 @@ export const ListReplies = ({
   segment_id,
   container,
   parentIsDeleted,
+  compactSpacing,
+  noCta,
 }: Props) => {
   const getReplies = useGetDiscussionComments({
     episode_id,
@@ -45,9 +49,9 @@ export const ListReplies = ({
   const isEmpty = replies.length === 0 && getReplies.isFetched;
 
   return (
-    <FlexColumn>
+    <FlexColumn gap={compactSpacing ? 0 : undefined}>
       <LoadingWrapper loading={getReplies.isLoading}>
-        {isEmpty && !parentIsDeleted ? (
+        {!noCta && isEmpty && !parentIsDeleted ? (
           <EmptyDiscussionContainer justify="center" mt={2}>
             <DrinkCoffeSvg />
             <FlexColumn gap={1}>
@@ -65,7 +69,12 @@ export const ListReplies = ({
           <DiscussionsContainer gap={1}>
             {replies.map((reply) => {
               return (
-                <Reply key={reply._id} reply={reply} container={container} />
+                <Reply
+                  key={reply._id}
+                  reply={reply}
+                  container={container}
+                  compactSpacing={compactSpacing}
+                />
               );
             })}
           </DiscussionsContainer>

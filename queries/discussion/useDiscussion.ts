@@ -29,9 +29,26 @@ const createDiscussion = async (payload: CreateDiscussionPayload) => {
 export const useCreateDiscussion = () => {
   const queryClient = useQueryClient();
 
+  const { addRepliesCountToDiscussion } = useUpdateDiscussionOnCache();
+
   return useMutation(createDiscussion, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.Discussion.List]);
+    onSuccess: (_, variables) => {
+      addRepliesCountToDiscussion(variables.parent_id);
+      queryClient.invalidateQueries(
+        [
+          QueryKeys.Discussion.List,
+          {
+            patient_id: variables.patient_id,
+            episode_id: variables.episode_id,
+            track_id: variables.track_id,
+            segment_id: variables.segment_id,
+            parent_id: variables.parent_id,
+          },
+        ],
+        {
+          exact: false,
+        }
+      );
     },
   });
 };

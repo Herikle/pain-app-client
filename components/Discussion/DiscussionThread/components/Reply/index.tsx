@@ -19,7 +19,9 @@ import { theme } from "@styles/theme";
 import { useAuth } from "@utils/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import { useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { ReplyAction } from "./components/ReplyAction";
+import { ListReplies } from "../ListReplies";
 
 type ReplyItem = {
   _id: string;
@@ -38,17 +40,21 @@ type ReplyItem = {
   track_id: string | null;
   segment_id: string | null;
   parent_id: string | null;
+  replies_count: number;
 };
 
 type Props = {
   reply: ReplyItem;
+  compactSpacing?: boolean;
   container?: Element | null;
 };
 
-export const Reply = ({ reply, container }: Props) => {
+export const Reply = ({ reply, compactSpacing, container }: Props) => {
   const { user } = useAuth();
 
   const [openDots, setOpenDots] = useState(false);
+
+  const [onReply, setOnReply] = useState(false);
 
   const dotsRef = useRef<HTMLDivElement | null>(null);
 
@@ -69,7 +75,7 @@ export const Reply = ({ reply, container }: Props) => {
   });
 
   return (
-    <Container align="flex-start" gap={0.5}>
+    <Container align="flex-start" gap={0.5} $compactSpacing={compactSpacing}>
       <DiscussionHeader isNotDeleted={isNotDeleted} comment={reply} />
       <Text variant="h3">{reply.title}</Text>
       {textContent && (
@@ -94,7 +100,7 @@ export const Reply = ({ reply, container }: Props) => {
       )}
       <ActionFooter gap={1}>
         {isNotDeleted && (
-          <FooterItem gap={0.25}>
+          <FooterItem gap={0.25} onClick={() => setOnReply(true)}>
             <Chat size={20} />
             <Text variant="caption" fontWeight="700">
               Reply
@@ -138,6 +144,37 @@ export const Reply = ({ reply, container }: Props) => {
         )}
       </ActionFooter>
       {render}
+      {onReply && (
+        <ReplyAction
+          parent_id={reply._id}
+          patient_id={reply.patient_id}
+          episode_id={reply.episode_id}
+          track_id={reply.track_id}
+          segment_id={reply.segment_id}
+          onCancel={() => setOnReply(false)}
+        />
+      )}
+      {reply.replies_count > 0 && (
+        <FlexColumn
+          mt={0.5}
+          width="100%"
+          style={{
+            paddingLeft: "1rem",
+          }}
+        >
+          <ListReplies
+            noCta
+            compactSpacing
+            parent_id={reply._id}
+            episode_id={reply.episode_id}
+            patient_id={reply.patient_id}
+            track_id={reply.track_id}
+            segment_id={reply.segment_id}
+            parentIsDeleted={!isNotDeleted}
+            container={container}
+          />
+        </FlexColumn>
+      )}
     </Container>
   );
 };
@@ -163,8 +200,18 @@ const FooterItem = styled(FlexRow)`
 
 const ActionFooter = styled(FlexRow)``;
 
-const Container = styled(FlexColumn)`
+type ContainerProps = {
+  $compactSpacing?: boolean;
+};
+
+const Container = styled(FlexColumn)<ContainerProps>`
   padding: 1rem;
   transition: background-color 0.2s;
   border-radius: 4px;
+
+  ${({ $compactSpacing }) =>
+    $compactSpacing &&
+    css`
+      padding-block: 0;
+    `}
 `;

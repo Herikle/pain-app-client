@@ -20,6 +20,7 @@ import {
   TextStrikethrough,
   TextUnderline,
 } from "@phosphor-icons/react";
+import { media } from "@styles/media-query";
 import { theme } from "@styles/theme";
 import {
   $getSelection,
@@ -140,102 +141,123 @@ export default function ToolbarPlugin() {
   }, [editor, $updateToolbar]);
 
   return (
-    <FlexRow gap={0} justify="flex-start">
-      <TollbarButton
-        disabled={!canUndo}
-        onClick={() => {
-          editor.dispatchCommand(UNDO_COMMAND, undefined);
-        }}
-        aria-label="Undo"
-      >
-        <ArrowCounterClockwise size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        disabled={!canRedo}
-        onClick={() => {
-          editor.dispatchCommand(REDO_COMMAND, undefined);
-        }}
-        aria-label="Redo"
-      >
-        <ArrowClockwise size={ICON_SIZE} />
-      </TollbarButton>
+    <ToolbarContainer>
+      <FlexRow gap={0} justify="flex-start">
+        <TollbarButton
+          disabled={!canUndo}
+          onClick={() => {
+            editor.dispatchCommand(UNDO_COMMAND, undefined);
+          }}
+          aria-label="Undo"
+        >
+          <ArrowCounterClockwise size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          disabled={!canRedo}
+          onClick={() => {
+            editor.dispatchCommand(REDO_COMMAND, undefined);
+          }}
+          aria-label="Redo"
+        >
+          <ArrowClockwise size={ICON_SIZE} />
+        </TollbarButton>
+      </FlexRow>
       <Divider />
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-        }}
-        active={isBold}
-        aria-label="Format Bold"
-      >
-        <TextB size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-        }}
-        active={isItalic}
-        aria-label="Format Italics"
-      >
-        <TextItalic size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
-        }}
-        active={isUnderline}
-        aria-label="Format Underline"
-      >
-        <TextUnderline size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-        }}
-        active={isStrikethrough}
-        aria-label="Format Strikethrough"
-      >
-        <TextStrikethrough size={ICON_SIZE} />
-      </TollbarButton>
+      <FlexRow gap={0} justify="flex-start">
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+          }}
+          active={isBold}
+          aria-label="Format Bold"
+        >
+          <TextB size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+          }}
+          active={isItalic}
+          aria-label="Format Italics"
+        >
+          <TextItalic size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+          }}
+          active={isUnderline}
+          aria-label="Format Underline"
+        >
+          <TextUnderline size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+          }}
+          active={isStrikethrough}
+          aria-label="Format Strikethrough"
+        >
+          <TextStrikethrough size={ICON_SIZE} />
+        </TollbarButton>
+      </FlexRow>
       <Divider />
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-        }}
-        aria-label="Left Align"
-      >
-        <TextAlignLeft size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-        }}
-        aria-label="Center Align"
-      >
-        <TextAlignCenter size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-        }}
-        aria-label="Right Align"
-      >
-        <TextAlignRight size={ICON_SIZE} />
-      </TollbarButton>
-      <TollbarButton
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-        }}
-        aria-label="Justify Align"
-      >
-        <TextAlignJustify size={ICON_SIZE} />
-      </TollbarButton>{" "}
-    </FlexRow>
+      <FlexRow gap={0} justify="flex-start">
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+          }}
+          aria-label="Left Align"
+        >
+          <TextAlignLeft size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+          }}
+          aria-label="Center Align"
+        >
+          <TextAlignCenter size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+          }}
+          aria-label="Right Align"
+        >
+          <TextAlignRight size={ICON_SIZE} />
+        </TollbarButton>
+        <TollbarButton
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
+          }}
+          aria-label="Justify Align"
+        >
+          <TextAlignJustify size={ICON_SIZE} />
+        </TollbarButton>{" "}
+      </FlexRow>
+    </ToolbarContainer>
   );
 }
+
+const ToolbarContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  ${media.up.mobileL`
+    flex-direction: column; 
+    align-items: flex-start;   
+  `}
+`;
 
 const Divider = styled.div`
   width: 1px;
   height: 24px;
   background-color: #d8d8d8;
   margin: 0 8px;
+  ${media.up.mobileL`
+    height:1px;
+    width: 100%;    
+  `}
 `;

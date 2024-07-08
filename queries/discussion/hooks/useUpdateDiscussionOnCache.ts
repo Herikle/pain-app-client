@@ -112,5 +112,38 @@ export const useUpdateDiscussionOnCache = () => {
     );
   };
 
-  return { updateDiscussionText };
+  const addRepliesCountToDiscussion = async (id: string | null | undefined) => {
+    if (!id) return;
+
+    queryClient.setQueriesData(
+      [QueryKeys.Discussion.List],
+      (old: GetDiscussionCommentsResponse) => {
+        if (!old) return old;
+
+        const discussionIndex = old.results.findIndex(
+          (discussion) => discussion._id === id
+        );
+
+        if (discussionIndex > -1) {
+          const currentCount = old.results[discussionIndex].replies_count ?? 0;
+
+          const newResults = update(old, {
+            results: {
+              [discussionIndex]: {
+                replies_count: {
+                  $set: currentCount + 1,
+                },
+              },
+            },
+          });
+
+          return newResults;
+        }
+
+        return old;
+      }
+    );
+  };
+
+  return { updateDiscussionText, addRepliesCountToDiscussion };
 };
