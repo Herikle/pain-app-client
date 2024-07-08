@@ -24,7 +24,7 @@ import {
 import { IEpisode } from "types";
 import { getDateFormatedByLocale } from "@utils/helpers/date";
 import { useSetDeletePatientModal } from "@Modals/DeletePatientModal/hook";
-import { Star, Trash } from "@phosphor-icons/react";
+import { ChatCircle, Star, Trash } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
 import { media } from "@styles/media-query";
 import { SyncingIndicator } from "@components/SyncingIndicator";
@@ -39,6 +39,8 @@ import {
   BookMarkEpisodeItem,
   useGetBookmarkEpisodes,
 } from "@queries/bookmark-episodes/useGetBookmarkPatients";
+import { DiscussionOpener } from "@components/DiscussionOpener";
+import { DiscussionCounter } from "@components/DiscussionCounter";
 
 const AddToBookMark = ({ episode_id }: { episode_id: string }) => {
   const addToBookmark = useAddEpisodeToBookmark();
@@ -279,6 +281,15 @@ export default function Patient() {
             />
             {isCreator && (
               <FlexRow gap={1}>
+                {isLogged && !!id && (
+                  <DiscussionOpener
+                    breadcrumb={[patientName ?? ""]}
+                    patient_id={id}
+                    episode_id={null}
+                    track_id={null}
+                    segment_id={null}
+                  />
+                )}
                 <FlexRow onClick={onDelete} data-cy="delete-patient-button">
                   <TooltipContent tooltip="Delete subject">
                     <Trash
@@ -332,6 +343,12 @@ export default function Patient() {
                     ) : (
                       <AddToBookMark episode_id={item._id} />
                     ),
+                },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
                 },
               ]}
               mountHref={mountEpisodeHref}
@@ -404,6 +421,12 @@ export default function Patient() {
                     getSuggestionTdStyle(item.episode),
                   noSort: true,
                 },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
+                },
               ]}
               pagination={{
                 onChangePage: (page) => setEpisodesBookmarkPage(page - 1),
@@ -452,6 +475,12 @@ export default function Patient() {
                     renderPatientScientificName(item),
                   tdStyle: (item: IEpisode) => getSuggestionTdStyle(item),
                   noSort: true,
+                },
+                {
+                  accessor: "discussions_count",
+                  label: "",
+                  noSort: true,
+                  render: (count) => <DiscussionCounter count={count} />,
                 },
               ]}
               data={episodesSuggestions}

@@ -31,6 +31,7 @@ import { useSetJustificationModal } from "@Modals/JustificationModal/hooks";
 import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 import { TooltipContent } from "@components/TooltipContent";
+import { DiscussionOpener } from "@components/DiscussionOpener";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -83,9 +84,28 @@ type Props = {
   episode_id: string;
   onClose: () => void;
   tab: SegmentModalTabs;
+  episode: {
+    name: string;
+  };
+  track: {
+    name: string;
+  };
+  patient?: {
+    name: string;
+  };
+  patient_id?: string;
 };
 
-export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
+export const SegmentIndex = ({
+  segment,
+  patient_id,
+  episode_id,
+  episode,
+  track,
+  patient,
+  onClose,
+  tab,
+}: Props) => {
   const [value, setValue] = useState(tabs_index[tab]);
 
   const [confirmDeleteSegment, setConfirmDeleteSegment] = useState(false);
@@ -272,6 +292,20 @@ export const SegmentIndex = ({ segment, episode_id, onClose, tab }: Props) => {
         </Content>
         <XContainer>
           <FlexRow>
+            {!!patient_id && (
+              <DiscussionOpener
+                breadcrumb={[
+                  patient?.name ?? "",
+                  episode.name,
+                  track.name ?? "",
+                  segment.name ?? "",
+                ]}
+                patient_id={patient_id}
+                episode_id={episode_id}
+                track_id={segment.track_id}
+                segment_id={segment._id}
+              />
+            )}
             <TooltipContent tooltip="Delete Segment">
               <Trash
                 onClick={() => setConfirmDeleteSegment(true)}

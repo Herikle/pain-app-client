@@ -23,13 +23,21 @@ import { calculateCumulativeTime } from "@utils/helpers/segmentHelpers";
 import { checkIfTrackHasEnoughData } from "@utils/helpers/trackHelpers";
 import { TooltipContent } from "@components/TooltipContent";
 import { SegmentsTitleComponent } from "./components/SegmentsTitleComponent";
+import { DiscussionOpener } from "@components/DiscussionOpener";
 
 type TrackItem = {
   _id: string;
   name: string;
   pain_type: "psychological" | "physical";
-  segments?: ISegment[];
   episode_id: string;
+  patient_id: string | undefined;
+  episode: {
+    name: string;
+  };
+  patient?: {
+    name: string;
+  };
+  segments?: ISegment[];
   comment?: string;
 };
 
@@ -63,6 +71,10 @@ export const Track = ({ track, isCreator }: TrackProps) => {
       segment,
       episode_id: track.episode_id,
       tab,
+      patient_id: track.patient_id,
+      patient: track.patient,
+      episode: track.episode,
+      track,
     });
   };
 
@@ -107,6 +119,20 @@ export const Track = ({ track, isCreator }: TrackProps) => {
           <FlexRow gap={1}>
             {!cumulativePainMode && isCreator && (
               <>
+                {track.patient_id && track.patient && (
+                  <DiscussionOpener
+                    breadcrumb={[
+                      track.patient.name,
+                      track.episode.name,
+                      track.name,
+                    ]}
+                    patient_id={track.patient_id}
+                    episode_id={track.episode_id}
+                    track_id={track._id}
+                    segment_id={null}
+                    size={16}
+                  />
+                )}
                 <TooltipContent tooltip="Edit track">
                   <PencilIcon
                     size={16}

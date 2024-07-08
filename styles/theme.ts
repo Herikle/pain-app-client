@@ -1,3 +1,4 @@
+import { transparentize } from "polished";
 import { css } from "styled-components";
 
 const LightThemeColors = {
@@ -41,6 +42,11 @@ export const theme = {
   colors: LightThemeColors,
   pain_level_colors: PainLevelColors,
   hover_state: LightThemeHover,
+  box_shadow: {
+    lite: `0px 0px 2px ${transparentize(0.8, LightThemeColors.pure_black)}`,
+    medium: `3px 3px 12px ${transparentize(0.8, LightThemeColors.pure_black)}`,
+    dark: `3px 3px 20px ${transparentize(0.8, LightThemeColors.pure_black)}`,
+  },
 };
 
 export const LightScrollBar = css`

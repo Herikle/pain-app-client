@@ -84,7 +84,7 @@ export const Button = ({
       disabled={disabled || loading}
       data-cy={dataCy}
     >
-      {loading ? (
+      {loading && (
         <LoadingWrapper data-testid="button-container-loading">
           <Oval
             height="20"
@@ -92,11 +92,16 @@ export const Button = ({
             secondaryColor={theme.colors.secondary_color}
           />
         </LoadingWrapper>
-      ) : (
-        <Text color={getTextColors()} variant={textVariant}>
-          {children}
-        </Text>
       )}
+      <Text
+        color={getTextColors()}
+        variant={textVariant}
+        style={{
+          opacity: loading ? 0 : 1,
+        }}
+      >
+        {children}
+      </Text>
     </ButtonContainer>
   );
 };

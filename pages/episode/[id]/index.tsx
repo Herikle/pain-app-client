@@ -11,17 +11,13 @@ import { RoutesPath } from "@utils/routes";
 import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetSelectedEpisode } from "state/useSelectedEpisode";
-import {
-  useSelectedPatient,
-  useSetSelectedPatient,
-} from "state/useSelectedPatient";
+import { useSelectedPatient } from "state/useSelectedPatient";
 import styled from "styled-components";
 import { scroller } from "react-scroll";
 import { ConfirmActionModal } from "@Modals/ConfirmActionModal";
 import { useAuth } from "@utils/hooks/useAuth";
 import { storeGuestEpisodeId } from "@utils/localStorage/guestEpisode";
 import { media } from "@styles/media-query";
-import { MOBILE_MENU_HEIGHT } from "@components/SideMenu/components/MobileMenu";
 import { IconsPath } from "@utils/icons";
 import { Badge } from "@components/Badge";
 import { Export, Question, Trash } from "@phosphor-icons/react";
@@ -38,6 +34,7 @@ import { TooltipContent } from "@components/TooltipContent";
 import { Error404 } from "@page-components/errors/404";
 import { useEpisodeStateValue } from "state/useEpisodeState";
 import { TextField } from "@components/TextField";
+import { DiscussionOpener } from "@components/DiscussionOpener";
 
 export default function EpisodePage() {
   const router = useRouter();
@@ -242,15 +239,29 @@ export default function EpisodePage() {
               </FlexRow>
             )}
             <EpisodeBadgeContainer justify="space-between">
-              <Badge
-                label={episodeState?.name ?? episode?.name}
-                iconPath={IconsPath.Episode}
-              />
+              <FlexRow>
+                <Badge
+                  label={episodeState?.name ?? episode?.name}
+                  iconPath={IconsPath.Episode}
+                />
+              </FlexRow>
               {isCreator && (
                 <FlexColumn gap={1.5} align="flex-end">
                   <SyncingIndicator isSyncing={isSyncing} />
                   {isLogged && (
                     <FlexRow>
+                      {isLogged && !!id && !!episode?.patient_id && (
+                        <DiscussionOpener
+                          breadcrumb={[
+                            episode.patient?.name ?? "",
+                            episode.name,
+                          ]}
+                          patient_id={episode.patient_id}
+                          episode_id={id}
+                          segment_id={null}
+                          track_id={null}
+                        />
+                      )}
                       <TooltipContent tooltip="Export episode">
                         <Export
                           size={24}
@@ -291,6 +302,17 @@ export default function EpisodePage() {
                 </FlexRow>
                 <ListTrack
                   episode_id={id}
+                  patient={
+                    episode?.patient
+                      ? {
+                          name: episode?.patient?.name ?? "",
+                        }
+                      : undefined
+                  }
+                  episode={{
+                    name: episode?.name ?? "",
+                  }}
+                  patient_id={episode?.patient_id}
                   isCreator={isCreator || isNotLogged}
                 />
               </FlexColumn>

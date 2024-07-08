@@ -31,6 +31,7 @@ import {
 } from "@queries/bookmark-patients/useGetBookmarkPatients";
 import { LoadingWrapper } from "@components/LoadingWrapper";
 import { theme } from "@styles/theme";
+import { DiscussionCounter } from "@components/DiscussionCounter";
 
 const AddToBookMark = ({ patient_id }: { patient_id: string }) => {
   const addToBookmark = useAddPatientToBookmark();
@@ -206,6 +207,12 @@ export default function ProfilePage() {
                   <AddToBookMark patient_id={item._id} />
                 ),
             },
+            {
+              accessor: "discussions_count",
+              label: "",
+              noSort: true,
+              render: (count) => <DiscussionCounter count={count} />,
+            },
           ]}
           data={patients}
           header={{
@@ -261,6 +268,11 @@ export default function ProfilePage() {
               label: "",
               render: (_id: string) => <RemoveFromBookMark patient_id={_id} />,
             },
+            {
+              accessor: "discussions_count",
+              label: "",
+              render: (count) => <DiscussionCounter count={count} />,
+            },
           ]}
           data={bookmarkPatients}
           CallToAction={
@@ -281,6 +293,7 @@ export default function ProfilePage() {
           }}
         />
         <Table
+          data={suggestionPatients}
           columns={[
             {
               accessor: "name",
@@ -305,8 +318,12 @@ export default function ProfilePage() {
               label: "",
               render: (_id) => <AddToBookMark patient_id={_id} />,
             },
+            {
+              accessor: "discussions_count",
+              label: "",
+              render: (count) => <DiscussionCounter count={count} />,
+            },
           ]}
-          data={suggestionPatients}
           header={{
             title: "Suggestions",
           }}

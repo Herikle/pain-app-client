@@ -14,6 +14,10 @@ export const QueryKeys = {
     SuggestionList: "patients/suggestionList",
     GetScientificName: "patients/getScientificName",
   },
+  Discussion: {
+    List: "discussion/list",
+    ByID: "discussion/byId",
+  },
   BookmarkPatients: {
     List: "bookmark-patients/list",
   },
