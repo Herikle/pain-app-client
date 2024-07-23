@@ -279,29 +279,31 @@ export default function Patient() {
                 patientType === "animal" ? IconsPath.Animal : IconsPath.Patient
               }
             />
-            {isCreator && (
-              <FlexRow gap={1}>
-                {isLogged && !!id && (
-                  <DiscussionOpener
-                    breadcrumb={[patientName ?? ""]}
-                    patient_id={id}
-                    episode_id={null}
-                    track_id={null}
-                    segment_id={null}
-                  />
-                )}
-                <FlexRow onClick={onDelete} data-cy="delete-patient-button">
-                  <TooltipContent tooltip="Delete subject">
-                    <Trash
-                      size={24}
-                      color={theme.colors.text_switched}
-                      cursor="pointer"
-                    />
-                  </TooltipContent>
-                </FlexRow>
-                <SyncingIndicator isSyncing={isSyncing} />
-              </FlexRow>
-            )}
+            <FlexRow gap={1}>
+              {isLogged && !!id && (
+                <DiscussionOpener
+                  breadcrumb={[patientName ?? ""]}
+                  patient_id={id}
+                  episode_id={null}
+                  track_id={null}
+                  segment_id={null}
+                />
+              )}
+              {isCreator && (
+                <>
+                  <FlexRow onClick={onDelete} data-cy="delete-patient-button">
+                    <TooltipContent tooltip="Delete subject">
+                      <Trash
+                        size={24}
+                        color={theme.colors.text_switched}
+                        cursor="pointer"
+                      />
+                    </TooltipContent>
+                  </FlexRow>
+                  <SyncingIndicator isSyncing={isSyncing} />
+                </>
+              )}
+            </FlexRow>
           </UserBadgeContainer>
           <Wrapper>
             {patient && isCreator && (

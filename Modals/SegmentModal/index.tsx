@@ -21,6 +21,7 @@ export type SegmentModalChildProps = {
   episode_id: string;
   episode: {
     name: string;
+    creator_id: string | undefined;
   };
   track: {
     name: string;
