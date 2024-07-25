@@ -280,6 +280,7 @@ export const SegmentIndex = ({
                 intensities={intensitiesPageForm}
                 onChange={onChangeIntensitiesPageForm}
                 onValidChange={setIntensitiesPageFormIsValid}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
@@ -287,18 +288,21 @@ export const SegmentIndex = ({
                 qualityValues={qualityPageForm}
                 onChange={onChangeQualityPageForm}
                 onValidChange={setQualityPageFormIsValid}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
               <InterventionPage
                 interventions={interventionPageForm}
                 onChange={onChangeInterventionPageForm}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
               <SymptomsPage
                 symptoms={symptomPageForm}
                 onChange={onChangeSymptomPageForm}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
           </BodyContent>
