@@ -46,7 +46,12 @@ export const SymptomCard = ({
   };
 
   return (
-    <Container onClick={onClick} justify="space-between" $isActive={isActive}>
+    <Container
+      onClick={onClick}
+      justify="space-between"
+      $isActive={isActive}
+      $hasOnClick={!!onClick}
+    >
       <DetailsContainer align="flex-start">
         <NameContainer>
           <Text
@@ -64,12 +69,16 @@ export const SymptomCard = ({
         </Text>
       </DetailsContainer>
       <IconsContainer>
-        <IconContainer onClick={onEdit}>
-          <Pencil size={ICON_SIZE} color={theme.colors.primary} />
-        </IconContainer>
-        <IconContainer onClick={onDelete}>
-          <Trash size={ICON_SIZE} color={theme.colors.red_danger} />
-        </IconContainer>
+        {!!onClickEdit && (
+          <IconContainer onClick={onEdit}>
+            <Pencil size={ICON_SIZE} color={theme.colors.primary} />
+          </IconContainer>
+        )}
+        {!!onClickDelete && (
+          <IconContainer onClick={onDelete}>
+            <Trash size={ICON_SIZE} color={theme.colors.red_danger} />
+          </IconContainer>
+        )}
       </IconsContainer>
     </Container>
   );
@@ -111,15 +120,15 @@ const DetailsContainer = styled(FlexColumn)``;
 
 type ContainerProps = {
   $isActive?: boolean;
+  $hasOnClick: boolean;
 };
 
 const Container = styled(FlexRow)<ContainerProps>`
   padding: 1rem;
-  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   border-radius: 2px;
 
-  ${({ $isActive }) =>
+  ${({ $isActive, $hasOnClick }) =>
     $isActive
       ? css`
           background-color: ${theme.colors.primary};
@@ -130,13 +139,19 @@ const Container = styled(FlexRow)<ContainerProps>`
             }
           `}
         `
-      : css`
+      : $hasOnClick &&
+        css`
           &:hover {
             background-color: ${theme.colors.hover_state};
           }
         `}
 
-  &:hover ${IconsContainer} {
-    opacity: 1;
-  }
+  ${({ $hasOnClick }) =>
+    $hasOnClick &&
+    css`
+      cursor: pointer;
+      &:hover ${IconsContainer} {
+        opacity: 1;
+      }
+    `}
 `;

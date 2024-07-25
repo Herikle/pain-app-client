@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { LightScrollBar, theme } from "@styles/theme";
 import { Text } from "@components/Text";
 import { IntensitiesPage } from "../IntensitiesPage";
@@ -32,6 +32,7 @@ import { remove_id, remove_idFromArrayOfObjects } from "@utils/helpers/object";
 import { SyncingIndicator } from "@components/SyncingIndicator";
 import { TooltipContent } from "@components/TooltipContent";
 import { DiscussionOpener } from "@components/DiscussionOpener";
+import { useAuth } from "@utils/hooks/useAuth";
 
 const TabSx = {
   "&.MuiTab-root": {
@@ -85,6 +86,7 @@ type Props = {
   onClose: () => void;
   tab: SegmentModalTabs;
   episode: {
+    creator_id: string | undefined;
     name: string;
   };
   track: {
@@ -181,6 +183,16 @@ export const SegmentIndex = ({
     closeSegmentModal();
   };
 
+  const { isLogged, isLoading, user } = useAuth();
+
+  const isCreator = useMemo(() => {
+    if (!user) return false;
+
+    if (!episode?.creator_id) return false;
+
+    return episode.creator_id === user._id;
+  }, [episode, user]);
+
   const getColor = (index: number) => {
     if (index === value) {
       return "font_color";
@@ -259,6 +271,7 @@ export const SegmentIndex = ({
                 segmentPageForm={segmentPageForm}
                 onChange={onChangeSsegmentPageForm}
                 onValidChange={setSegmentPageFormIsValid}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
@@ -267,6 +280,7 @@ export const SegmentIndex = ({
                 intensities={intensitiesPageForm}
                 onChange={onChangeIntensitiesPageForm}
                 onValidChange={setIntensitiesPageFormIsValid}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
@@ -274,18 +288,21 @@ export const SegmentIndex = ({
                 qualityValues={qualityPageForm}
                 onChange={onChangeQualityPageForm}
                 onValidChange={setQualityPageFormIsValid}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
               <InterventionPage
                 interventions={interventionPageForm}
                 onChange={onChangeInterventionPageForm}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
               <SymptomsPage
                 symptoms={symptomPageForm}
                 onChange={onChangeSymptomPageForm}
+                isCreator={isCreator}
               />
             </CustomTabPanel>
           </BodyContent>
@@ -306,23 +323,27 @@ export const SegmentIndex = ({
                 segment_id={segment._id}
               />
             )}
-            <TooltipContent tooltip="Delete Segment">
-              <Trash
-                onClick={() => setConfirmDeleteSegment(true)}
-                size={24}
-                color={theme.colors.text_switched}
-                cursor="pointer"
-              />
-            </TooltipContent>
-            <SyncingIndicator
-              isSyncing={
-                isSyncingSegmentPageForm ||
-                isSyncingIntensitiesPageForm ||
-                isSyncingQualityPageForm ||
-                isSyncingInterventionPageForm ||
-                isSyncingSymptomPageForm
-              }
-            />
+            {isCreator && (
+              <>
+                <TooltipContent tooltip="Delete Segment">
+                  <Trash
+                    onClick={() => setConfirmDeleteSegment(true)}
+                    size={24}
+                    color={theme.colors.text_switched}
+                    cursor="pointer"
+                  />
+                </TooltipContent>
+                <SyncingIndicator
+                  isSyncing={
+                    isSyncingSegmentPageForm ||
+                    isSyncingIntensitiesPageForm ||
+                    isSyncingQualityPageForm ||
+                    isSyncingInterventionPageForm ||
+                    isSyncingSymptomPageForm
+                  }
+                />
+              </>
+            )}
             <X
               size={24}
               color={theme.colors.font_color}

@@ -9,14 +9,18 @@ import { ISegmentJustification } from "types";
 
 type JustificationProps = {
   justification: ISegmentJustification;
+  isCreator?: boolean;
 };
 
-export const Justification = ({ justification }: JustificationProps) => {
+export const Justification = ({
+  justification,
+  isCreator,
+}: JustificationProps) => {
   const setJustificationModal = useSetJustificationModal();
-
   const onClick = () => {
     setJustificationModal({
       justification,
+      isCreator: isCreator,
     });
   };
 

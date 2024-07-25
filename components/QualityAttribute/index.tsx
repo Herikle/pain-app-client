@@ -13,27 +13,28 @@ type QualityAttributeProps = {
   isSelected?: boolean;
   isNotSelected?: boolean;
   iconSize?: number;
-  onClick: (value: any) => void;
+  onClick?: (value: any) => void;
 };
 
 export const QualityAttribute = ({
   iconPath,
   label,
   description,
-  onClick,
   isSelected = false,
   isNotSelected = false,
   iconSize = 32,
   value,
+  onClick,
 }: QualityAttributeProps) => {
   const handleClick = () => {
-    onClick(value);
+    onClick?.(value);
   };
 
   return (
     <Container
       $isSelected={isSelected}
       $isNotSelected={isNotSelected}
+      $hasOnClick={!!onClick}
       onClick={handleClick}
       data-testid="quality-attribute-container"
     >
@@ -59,6 +60,7 @@ export const QualityAttribute = ({
 type Props = {
   $isSelected: boolean;
   $isNotSelected: boolean;
+  $hasOnClick: boolean;
 };
 
 const Container = styled.label<Props>`
@@ -68,12 +70,12 @@ const Container = styled.label<Props>`
   gap: 0.5rem;
   padding: 0.5rem;
   width: fit-content;
-  cursor: pointer;
+
   transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
 
   width: 100%;
 
-  ${({ $isSelected }) =>
+  ${({ $isSelected, $hasOnClick }) =>
     $isSelected &&
     css`
       background-color: ${theme.colors.hover_state};
@@ -86,8 +88,13 @@ const Container = styled.label<Props>`
     `}
 
 
-    &:hover {
-    background-color: ${theme.colors.hover_state};
-    opacity: 1;
-  }
+  ${({ $hasOnClick }) =>
+    $hasOnClick &&
+    css`
+      cursor: pointer;
+      &:hover {
+        background-color: ${theme.colors.hover_state};
+        opacity: 1;
+      }
+    `}
 `;

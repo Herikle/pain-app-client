@@ -15,14 +15,16 @@ import { CommonSegmentModalProps } from "../..";
 import update from "immutability-helper";
 import { media } from "@styles/media-query";
 import { LightScrollBar } from "@styles/theme";
+import { CreatorFilter } from "../components/CreatorFilter";
 
 const fakeDate = new Date().toISOString();
 
 type Props = {
   symptoms: ISymptom[];
+  isCreator: boolean;
 } & Omit<CommonSegmentModalProps<ISymptom[]>, "onValidChange">;
 
-export const SymptomsPage = ({ symptoms, onChange }: Props) => {
+export const SymptomsPage = ({ symptoms, onChange, isCreator }: Props) => {
   const [selected, setSelected] = useState<ISymptom | null>(null);
 
   const [toDelete, setToDelete] = useState<ISymptom | null>(null);
@@ -105,74 +107,115 @@ export const SymptomsPage = ({ symptoms, onChange }: Props) => {
   };
 
   return (
-    <>
-      <Container data-cy="symptoms-page">
-        <ListSymptom>
-          <AddTitle justify="space-between">
-            <FlexRow>
-              <Image
-                src={IconsPath.Symptom}
-                width={32}
-                height={32}
-                alt="Symptom Icon"
+    <CreatorFilter
+      isCreator={isCreator}
+      readOnly={
+        <Container data-cy="symptoms-page">
+          <ListSymptom>
+            <AddTitle justify="space-between">
+              <FlexRow>
+                <Image
+                  src={IconsPath.Symptom}
+                  width={32}
+                  height={32}
+                  alt="Symptom Icon"
+                />
+                <Text variant="body2Bold">Symptom</Text>
+              </FlexRow>
+            </AddTitle>
+            <FlexColumn mt={1}>
+              {symptoms.map((symptom) => (
+                <SymptomCard
+                  key={symptom._id}
+                  onClick={() => changeSelected(symptom)}
+                  isActive={selected?._id === symptom._id}
+                  symptom={symptom}
+                />
+              ))}
+            </FlexColumn>
+          </ListSymptom>
+          <Observation>
+            {!!selected && (
+              <FlexColumn>
+                <Text variant="body1Bold">{`Observation about '${selected.name}'`}</Text>
+                <Text variant="body2">{observation || "-"}</Text>
+              </FlexColumn>
+            )}
+          </Observation>
+        </Container>
+      }
+    >
+      <>
+        <Container data-cy="symptoms-page">
+          <ListSymptom>
+            <AddTitle justify="space-between">
+              <FlexRow>
+                <Image
+                  src={IconsPath.Symptom}
+                  width={32}
+                  height={32}
+                  alt="Symptom Icon"
+                />
+                <Text variant="body2Bold">Symptom</Text>
+              </FlexRow>
+              <AddButton onClick={openAddModal} />
+            </AddTitle>
+            <FlexColumn mt={1}>
+              {symptoms.map((symptom) => (
+                <SymptomCard
+                  key={symptom._id}
+                  onClick={() => changeSelected(symptom)}
+                  onClickDelete={() => setToDelete(symptom)}
+                  isActive={selected?._id === symptom._id}
+                  onClickEdit={() => setToEdit(symptom)}
+                  symptom={symptom}
+                />
+              ))}
+            </FlexColumn>
+          </ListSymptom>
+          <Observation>
+            {!!selected && (
+              <TextArea
+                label={`Observation about '${selected.name}'`}
+                minRows={15}
+                maxRows={15}
+                onChange={(e) => setObservation(e.target.value)}
+                value={observation}
+                onBlur={onBlurObservation}
               />
-              <Text variant="body2Bold">Symptom</Text>
-            </FlexRow>
-            <AddButton onClick={openAddModal} />
-          </AddTitle>
-          <FlexColumn mt={1}>
-            {symptoms.map((symptom) => (
-              <SymptomCard
-                key={symptom._id}
-                onClick={() => changeSelected(symptom)}
-                onClickDelete={() => setToDelete(symptom)}
-                isActive={selected?._id === symptom._id}
-                onClickEdit={() => setToEdit(symptom)}
-                symptom={symptom}
-              />
-            ))}
-          </FlexColumn>
-        </ListSymptom>
-        <Observation>
-          {!!selected && (
-            <TextArea
-              label={`Observation about '${selected.name}'`}
-              minRows={15}
-              maxRows={15}
-              onChange={(e) => setObservation(e.target.value)}
-              value={observation}
-              onBlur={onBlurObservation}
+            )}
+          </Observation>
+          <SymptomModal
+            open={addSymptomModalOpen}
+            onClose={closeAddModal}
+            onAdd={onAddSymptom}
+          />
+          {!!toEdit && (
+            <SymptomModal
+              open={!!toEdit}
+              onClose={() => setToEdit(null)}
+              onAdd={edit}
+              defaultValues={{
+                ...toEdit,
+                datetime: toEdit.datetime
+                  ? new Date(toEdit.datetime)
+                  : undefined,
+              }}
             />
           )}
-        </Observation>
-        <SymptomModal
-          open={addSymptomModalOpen}
-          onClose={closeAddModal}
-          onAdd={onAddSymptom}
-        />
-        {!!toEdit && (
-          <SymptomModal
-            open={!!toEdit}
-            onClose={() => setToEdit(null)}
-            onAdd={edit}
-            defaultValues={{
-              ...toEdit,
-              datetime: toEdit.datetime ? new Date(toEdit.datetime) : undefined,
+        </Container>
+        {toDelete && (
+          <ConfirmActionModal
+            description={`Are you sure you want to delete '${toDelete.name}'?`}
+            onClose={() => setToDelete(null)}
+            onConfirm={() => {
+              deleteById(toDelete._id);
+              setToDelete(null);
             }}
           />
         )}
-      </Container>
-      {toDelete && (
-        <ConfirmActionModal
-          description={`Are you sure you want to delete '${toDelete.name}'?`}
-          onClose={() => setToDelete(null)}
-          onConfirm={() => {
-            deleteById(toDelete._id);
-            setToDelete(null);
-          }}
-        />
-      )}
-    </>
+      </>
+    </CreatorFilter>
   );
 };
 

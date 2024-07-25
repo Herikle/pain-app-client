@@ -245,45 +245,44 @@ export default function EpisodePage() {
                   iconPath={IconsPath.Episode}
                 />
               </FlexRow>
-              {isCreator && (
-                <FlexColumn gap={1.5} align="flex-end">
-                  <SyncingIndicator isSyncing={isSyncing} />
-                  {isLogged && (
-                    <FlexRow>
-                      {isLogged && !!id && !!episode?.patient_id && (
-                        <DiscussionOpener
-                          breadcrumb={[
-                            episode.patient?.name ?? "",
-                            episode.name,
-                          ]}
-                          patient_id={episode.patient_id}
-                          episode_id={id}
-                          segment_id={null}
-                          track_id={null}
-                        />
-                      )}
-                      <TooltipContent tooltip="Export episode">
-                        <Export
-                          size={24}
-                          color={theme.colors.text_switched}
-                          onClick={openConfirmExportation}
-                          cursor="pointer"
-                          data-cy="export-episode-button"
-                        />
-                      </TooltipContent>
-                      <TooltipContent tooltip="Delete episode">
-                        <Trash
-                          size={24}
-                          color={theme.colors.text_switched}
-                          cursor="pointer"
-                          data-cy="delete-episode-button"
-                          onClick={() => setConfirmDelete(true)}
-                        />
-                      </TooltipContent>
-                    </FlexRow>
-                  )}
-                </FlexColumn>
-              )}
+              <FlexColumn gap={1.5} align="flex-end">
+                <SyncingIndicator isSyncing={isSyncing} />
+                {isLogged && (
+                  <FlexRow>
+                    {!!id && !!episode?.patient_id && (
+                      <DiscussionOpener
+                        breadcrumb={[episode.patient?.name ?? "", episode.name]}
+                        patient_id={episode.patient_id}
+                        episode_id={id}
+                        segment_id={null}
+                        track_id={null}
+                      />
+                    )}
+                    {isCreator && (
+                      <>
+                        <TooltipContent tooltip="Export episode">
+                          <Export
+                            size={24}
+                            color={theme.colors.text_switched}
+                            onClick={openConfirmExportation}
+                            cursor="pointer"
+                            data-cy="export-episode-button"
+                          />
+                        </TooltipContent>
+                        <TooltipContent tooltip="Delete episode">
+                          <Trash
+                            size={24}
+                            color={theme.colors.text_switched}
+                            cursor="pointer"
+                            data-cy="delete-episode-button"
+                            onClick={() => setConfirmDelete(true)}
+                          />
+                        </TooltipContent>
+                      </>
+                    )}
+                  </FlexRow>
+                )}
+              </FlexColumn>
             </EpisodeBadgeContainer>
             {!!episode && (isCreator || isNotLogged) && (
               <EpisodeForm episode={episode} onIsSyncingChange={setIsSyncing} />
@@ -300,21 +299,24 @@ export default function EpisodePage() {
                     />
                   )}
                 </FlexRow>
-                <ListTrack
-                  episode_id={id}
-                  patient={
-                    episode?.patient
-                      ? {
-                          name: episode?.patient?.name ?? "",
-                        }
-                      : undefined
-                  }
-                  episode={{
-                    name: episode?.name ?? "",
-                  }}
-                  patient_id={episode?.patient_id}
-                  isCreator={isCreator || isNotLogged}
-                />
+                {episode && (
+                  <ListTrack
+                    episode_id={id}
+                    patient={
+                      episode?.patient
+                        ? {
+                            name: episode?.patient?.name ?? "",
+                          }
+                        : undefined
+                    }
+                    episode={{
+                      name: episode.name,
+                      creator_id: episode.creator_id,
+                    }}
+                    patient_id={episode?.patient_id}
+                    isCreator={isCreator || isNotLogged}
+                  />
+                )}
               </FlexColumn>
             </TrackContainer>
           </Container>

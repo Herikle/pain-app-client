@@ -24,6 +24,7 @@ import { SyncingIndicator } from "@components/SyncingIndicator";
 import _ from "lodash";
 import { TooltipContent } from "@components/TooltipContent";
 import { PAIN_DEFITIONS } from "@components/Track/const";
+import { CreatorFilter } from "@Modals/SegmentModal/components/components/CreatorFilter";
 
 export const Evidences = [
   {
@@ -121,11 +122,13 @@ type JustificationFormValues = z.infer<typeof justificationSchema>;
 
 export type JustificationModalProps = {
   justification: ISegmentJustification;
+  isCreator?: boolean;
   onClose: () => void;
 };
 
 const JustificationModal = ({
   justification,
+  isCreator,
   onClose,
 }: JustificationModalProps) => {
   const updateJustification = useUpdateSegmentJustification();
@@ -255,138 +258,263 @@ const JustificationModal = ({
         fullScreenOnMobile
         height="fit-content"
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Container>
-            <SyncContainer>
-              <SyncingIndicator isSyncing={updateJustification.isLoading} />
-            </SyncContainer>
-            <FlexColumn gap={2} height="100%">
-              <BackButton
-                text="Return to intensities menu"
-                onClick={beforeClose}
-              />
-              <Text variant="h1">Evidence to justify probabilities</Text>
-              <BodyContent gap={1}>
-                <Grid container spacing={2} margin="0">
-                  <Grid
-                    xl={10}
-                    lg={10}
-                    md={10}
-                    sm={12}
-                    xs={12}
-                    padding="0"
-                    paddingBlock="0.5rem"
-                    paddingRight={isMobile ? undefined : "1rem"}
-                  >
-                    <TextField fullWidth label="Title" {...register("title")} />
-                  </Grid>
-                  <Grid
-                    xl={2}
-                    lg={2}
-                    md={2}
-                    sm={12}
-                    xs={12}
-                    padding="0"
-                    paddingBlock="0.5rem"
-                  >
-                    <Select
-                      label="Type of evidence"
-                      options={Evidences}
-                      {...register("type_of_evidence")}
-                      getLabel={(option) => option.label}
-                      getValue={(option) => option.value}
-                      id="type_of_evidence"
-                    />
-                  </Grid>
-                  <Grid xs={12} padding="0" paddingBlock="0.5rem">
-                    <TextArea
-                      label="Description"
-                      {...register("description")}
-                      minRows={5}
-                    />
-                  </Grid>
-                  <Grid xs={12} padding="0" paddingBlock="0.5rem">
-                    <TextArea
-                      label="Sources"
-                      {...register("sources")}
-                      minRows={5}
-                    />
-                  </Grid>
-                </Grid>
-                <FlexColumn>
-                  <Text variant="body1Bold">
-                    How does this information support each level of pain
-                    intensity? Hover over the the intensities to see their
-                    definition
-                  </Text>
-                </FlexColumn>
-                <PainLevelsSwitch>
-                  {painLevels.map((painLevel) => (
-                    <PainLevelRow
-                      key={painLevel.value}
-                      align="center"
-                      justify="flex-start"
-                      gap={1}
+        <CreatorFilter
+          isCreator={!!isCreator}
+          readOnly={
+            <Container>
+              <FlexColumn gap={2} height="100%">
+                <BackButton
+                  text="Return to intensities menu"
+                  onClick={beforeClose}
+                />
+                <Text variant="h1">Evidence to justify probabilities</Text>
+                <BodyContent gap={1}>
+                  <Grid container spacing={2} margin="0">
+                    <Grid
+                      xl={10}
+                      lg={10}
+                      md={10}
+                      sm={12}
+                      xs={12}
+                      padding="0"
+                      paddingBlock="0.5rem"
+                      paddingRight={isMobile ? undefined : "1rem"}
                     >
-                      <TooltipContent
-                        tooltip={PAIN_DEFITIONS[painLevel.value]}
-                        bgColor={theme.pain_level_colors[painLevel.value]}
+                      <Text variant="body2">{watch("title")}</Text>
+                    </Grid>
+                    <Grid
+                      xl={2}
+                      lg={2}
+                      md={2}
+                      sm={12}
+                      xs={12}
+                      padding="0"
+                      paddingBlock="0.5rem"
+                    >
+                      <Text variant="body2">{watch("type_of_evidence")}</Text>
+                    </Grid>
+                    <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                      <Text variant="body2">{watch("description")}</Text>
+                    </Grid>
+                    <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                      <Text variant="body2">{watch("sources")}</Text>
+                    </Grid>
+                  </Grid>
+                  <FlexColumn>
+                    <Text variant="body1Bold">
+                      How does this information support each level of pain
+                      intensity? Hover over the the intensities to see their
+                      definition
+                    </Text>
+                  </FlexColumn>
+                  <PainLevelsSwitch>
+                    {painLevels.map((painLevel) => (
+                      <PainLevelRow
+                        key={painLevel.value}
+                        align="center"
+                        justify="flex-start"
+                        gap={1}
                       >
-                        <Text
-                          variant="h3"
-                          customColor={theme.pain_level_colors[painLevel.value]}
-                          minWidth="110px"
+                        <TooltipContent
+                          tooltip={PAIN_DEFITIONS[painLevel.value]}
+                          bgColor={theme.pain_level_colors[painLevel.value]}
                         >
-                          {painLevel.label}
-                        </Text>
-                      </TooltipContent>
-                      <TextField
-                        inputSize="small"
-                        noPadding
-                        type="range"
-                        min={0}
-                        max={4}
-                        step={1}
-                        fullWidth
-                        id={`ranking.${painLevel.value}`}
-                        {...register(`ranking.${painLevel.value}` as any, {
-                          valueAsNumber: true,
-                        })}
-                        style={{
-                          marginTop: "5px",
-                        }}
-                      />
-                      <TooltipContent
-                        tooltip={
-                          levelsResultExplanation[
-                            watch(`ranking.${painLevel.value}` as any)
-                          ]
-                        }
-                        place="top-start"
-                      >
-                        <Text variant="h3" whiteSpace="nowrap" minWidth="120px">
-                          {
-                            levelsResult[
+                          <Text
+                            variant="h3"
+                            customColor={
+                              theme.pain_level_colors[painLevel.value]
+                            }
+                            minWidth="110px"
+                          >
+                            {painLevel.label}
+                          </Text>
+                        </TooltipContent>
+                        <TextField
+                          inputSize="small"
+                          noPadding
+                          disabled
+                          type="range"
+                          min={0}
+                          max={4}
+                          step={1}
+                          fullWidth
+                          id={`ranking.${painLevel.value}`}
+                          value={watch(`ranking.${painLevel.value}` as any)}
+                          style={{
+                            marginTop: "5px",
+                          }}
+                        />
+                        <TooltipContent
+                          tooltip={
+                            levelsResultExplanation[
                               watch(`ranking.${painLevel.value}` as any)
                             ]
                           }
-                        </Text>
-                      </TooltipContent>
-                    </PainLevelRow>
-                  ))}
-                </PainLevelsSwitch>
-              </BodyContent>
-              <ButtonsFooter>
-                <Trash
-                  onClick={() => setDeleteModal(true)}
-                  size={32}
-                  color={theme.colors.text_switched}
-                  cursor="pointer"
+                          place="top-start"
+                        >
+                          <Text
+                            variant="h3"
+                            whiteSpace="nowrap"
+                            minWidth="120px"
+                          >
+                            {
+                              levelsResult[
+                                watch(`ranking.${painLevel.value}` as any)
+                              ]
+                            }
+                          </Text>
+                        </TooltipContent>
+                      </PainLevelRow>
+                    ))}
+                  </PainLevelsSwitch>
+                </BodyContent>
+              </FlexColumn>
+            </Container>
+          }
+        >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Container>
+              <SyncContainer>
+                <SyncingIndicator isSyncing={updateJustification.isLoading} />
+              </SyncContainer>
+              <FlexColumn gap={2} height="100%">
+                <BackButton
+                  text="Return to intensities menu"
+                  onClick={beforeClose}
                 />
-              </ButtonsFooter>
-            </FlexColumn>
-          </Container>
-        </form>
+                <Text variant="h1">Evidence to justify probabilities</Text>
+                <BodyContent gap={1}>
+                  <Grid container spacing={2} margin="0">
+                    <Grid
+                      xl={10}
+                      lg={10}
+                      md={10}
+                      sm={12}
+                      xs={12}
+                      padding="0"
+                      paddingBlock="0.5rem"
+                      paddingRight={isMobile ? undefined : "1rem"}
+                    >
+                      <TextField
+                        fullWidth
+                        label="Title"
+                        {...register("title")}
+                      />
+                    </Grid>
+                    <Grid
+                      xl={2}
+                      lg={2}
+                      md={2}
+                      sm={12}
+                      xs={12}
+                      padding="0"
+                      paddingBlock="0.5rem"
+                    >
+                      <Select
+                        label="Type of evidence"
+                        options={Evidences}
+                        {...register("type_of_evidence")}
+                        getLabel={(option) => option.label}
+                        getValue={(option) => option.value}
+                        id="type_of_evidence"
+                      />
+                    </Grid>
+                    <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                      <TextArea
+                        label="Description"
+                        {...register("description")}
+                        minRows={5}
+                      />
+                    </Grid>
+                    <Grid xs={12} padding="0" paddingBlock="0.5rem">
+                      <TextArea
+                        label="Sources"
+                        {...register("sources")}
+                        minRows={5}
+                      />
+                    </Grid>
+                  </Grid>
+                  <FlexColumn>
+                    <Text variant="body1Bold">
+                      How does this information support each level of pain
+                      intensity? Hover over the the intensities to see their
+                      definition
+                    </Text>
+                  </FlexColumn>
+                  <PainLevelsSwitch>
+                    {painLevels.map((painLevel) => (
+                      <PainLevelRow
+                        key={painLevel.value}
+                        align="center"
+                        justify="flex-start"
+                        gap={1}
+                      >
+                        <TooltipContent
+                          tooltip={PAIN_DEFITIONS[painLevel.value]}
+                          bgColor={theme.pain_level_colors[painLevel.value]}
+                        >
+                          <Text
+                            variant="h3"
+                            customColor={
+                              theme.pain_level_colors[painLevel.value]
+                            }
+                            minWidth="110px"
+                          >
+                            {painLevel.label}
+                          </Text>
+                        </TooltipContent>
+                        <TextField
+                          inputSize="small"
+                          noPadding
+                          type="range"
+                          min={0}
+                          max={4}
+                          step={1}
+                          fullWidth
+                          id={`ranking.${painLevel.value}`}
+                          {...register(`ranking.${painLevel.value}` as any, {
+                            valueAsNumber: true,
+                          })}
+                          style={{
+                            marginTop: "5px",
+                          }}
+                        />
+                        <TooltipContent
+                          tooltip={
+                            levelsResultExplanation[
+                              watch(`ranking.${painLevel.value}` as any)
+                            ]
+                          }
+                          place="top-start"
+                        >
+                          <Text
+                            variant="h3"
+                            whiteSpace="nowrap"
+                            minWidth="120px"
+                          >
+                            {
+                              levelsResult[
+                                watch(`ranking.${painLevel.value}` as any)
+                              ]
+                            }
+                          </Text>
+                        </TooltipContent>
+                      </PainLevelRow>
+                    ))}
+                  </PainLevelsSwitch>
+                </BodyContent>
+                <ButtonsFooter>
+                  <Trash
+                    onClick={() => setDeleteModal(true)}
+                    size={32}
+                    color={theme.colors.text_switched}
+                    cursor="pointer"
+                  />
+                </ButtonsFooter>
+              </FlexColumn>
+            </Container>
+          </form>
+        </CreatorFilter>
       </Modal>
       {deleteModal && (
         <ConfirmActionModal

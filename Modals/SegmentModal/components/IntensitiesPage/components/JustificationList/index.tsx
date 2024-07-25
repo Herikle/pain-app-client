@@ -8,9 +8,10 @@ import { useCreateSegmentJustification } from "@queries/segment-justification/us
 
 type Props = {
   segment_id: string;
+  isCreator?: boolean;
 };
 
-export const JustificationList = ({ segment_id }: Props) => {
+export const JustificationList = ({ segment_id, isCreator }: Props) => {
   const getJustifications = useGetSegmentJustificationList({ segment_id });
 
   const createJustification = useCreateSegmentJustification();
@@ -32,16 +33,19 @@ export const JustificationList = ({ segment_id }: Props) => {
     <FlexColumn width="100%" align="flex-start">
       <FlexRow justify="space-between" width="100%">
         <Text variant="h3">Evidence to justify probabilities</Text>
-        <AddButton
-          onClick={addJustification}
-          loading={createJustification.isLoading}
-        />
+        {isCreator && (
+          <AddButton
+            onClick={addJustification}
+            loading={createJustification.isLoading}
+          />
+        )}
       </FlexRow>
       <FlexColumn mt={1.5} gap={1.5} width="100%">
         {justifications.map((justification) => (
           <Justification
             key={justification._id}
             justification={justification}
+            isCreator={isCreator}
           />
         ))}
       </FlexColumn>

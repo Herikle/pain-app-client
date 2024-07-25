@@ -17,6 +17,7 @@ import { DrawObject } from "@components/Paint";
 import { media } from "@styles/media-query";
 import { JustificationList } from "./components/JustificationList";
 import { SegmentsTitleComponent } from "@components/Track/components/SegmentsTitleComponent";
+import { CreatorFilter } from "../components/CreatorFilter";
 
 const IntensitiesPageSchema = z.object({
   type: z.enum(["draw", "values"]),
@@ -29,12 +30,14 @@ export type IntensitiesPageForm = z.infer<typeof IntensitiesPageSchema>;
 type Props = {
   intensities: IntensitiesPageForm;
   segment: ISegment;
+  isCreator: boolean;
 } & CommonSegmentModalProps<IntensitiesPageForm>;
 
 export const IntensitiesPage = ({
   intensities,
   segment,
   onChange,
+  isCreator,
   onValidChange,
 }: Props) => {
   const { register, getValues, formState, watch, setValue } =
@@ -90,51 +93,85 @@ export const IntensitiesPage = ({
 
   return (
     <form>
-      <Container data-cy="intensities-page">
-        <FlexColumn>
-          <FlexRow gap={6} pl={3}>
-            <Radio label="Draw" value="draw" {...register("type")} />
-            <Radio label="Percentage" value="values" {...register("type")} />
-          </FlexRow>
-          <FlexColumn width="100%">
-            <DrawAndJustificationContainer>
-              <FlexRow gap={0}>
-                <SegmentsTitleComponent removeExtraSpace />
-                <Segment
-                  segment={{
-                    ...segment,
-                    intensities: {
-                      ...intensities,
-                      type: watch("type"),
-                    },
-                  }}
-                  hasDraw
-                  backgroundColor={theme.colors.pastel}
-                  onChangeValues={onUpdateSegmentValues}
-                  onChangeDraw={onUpdateSegmentDraw}
-                  isSolitary
-                  hideSegmentName
-                />
-              </FlexRow>
-            </DrawAndJustificationContainer>
-            {watch("type") === "draw" ? (
-              <Text maxWidth="300px">
-                Tip: try to measure your pain drawing a line with the mouse
-                between the indicators.
-              </Text>
-            ) : (
-              <>
-                {segmentErrors?.map((error) => (
-                  <Text variant="body2" key={error} color="dark_red_danger">
-                    {error}
-                  </Text>
-                ))}
-              </>
-            )}
+      <CreatorFilter
+        isCreator={isCreator}
+        readOnly={
+          <Container data-cy="intensities-page">
+            <FlexColumn>
+              <FlexColumn width="100%">
+                <DrawAndJustificationContainer>
+                  <FlexRow gap={0}>
+                    <SegmentsTitleComponent removeExtraSpace />
+                    <Segment
+                      segment={{
+                        ...segment,
+                        intensities: {
+                          ...intensities,
+                          type: watch("type"),
+                        },
+                      }}
+                      hasDraw
+                      backgroundColor={theme.colors.pastel}
+                      onChangeValues={onUpdateSegmentValues}
+                      onChangeDraw={onUpdateSegmentDraw}
+                      isSolitary
+                      hideSegmentName
+                      readOnly
+                    />
+                  </FlexRow>
+                </DrawAndJustificationContainer>
+              </FlexColumn>
+            </FlexColumn>
+            <JustificationList segment_id={segment._id} isCreator={isCreator} />
+          </Container>
+        }
+      >
+        <Container data-cy="intensities-page">
+          <FlexColumn>
+            <FlexRow gap={6} pl={3}>
+              <Radio label="Draw" value="draw" {...register("type")} />
+              <Radio label="Percentage" value="values" {...register("type")} />
+            </FlexRow>
+            <FlexColumn width="100%">
+              <DrawAndJustificationContainer>
+                <FlexRow gap={0}>
+                  <SegmentsTitleComponent removeExtraSpace />
+                  <Segment
+                    segment={{
+                      ...segment,
+                      intensities: {
+                        ...intensities,
+                        type: watch("type"),
+                      },
+                    }}
+                    hasDraw
+                    backgroundColor={theme.colors.pastel}
+                    onChangeValues={onUpdateSegmentValues}
+                    onChangeDraw={onUpdateSegmentDraw}
+                    isSolitary
+                    hideSegmentName
+                  />
+                </FlexRow>
+              </DrawAndJustificationContainer>
+              {watch("type") === "draw" ? (
+                <Text maxWidth="300px">
+                  Tip: try to measure your pain drawing a line with the mouse
+                  between the indicators.
+                </Text>
+              ) : (
+                <>
+                  {segmentErrors?.map((error) => (
+                    <Text variant="body2" key={error} color="dark_red_danger">
+                      {error}
+                    </Text>
+                  ))}
+                </>
+              )}
+            </FlexColumn>
           </FlexColumn>
-        </FlexColumn>
-        <JustificationList segment_id={segment._id} />
-      </Container>
+          <JustificationList segment_id={segment._id} isCreator={isCreator} />
+        </Container>
+      </CreatorFilter>
     </form>
   );
 };

@@ -63,9 +63,7 @@ export const ListSegments = ({
             segment={segment}
             hasDraw
             readOnly
-            onClick={
-              isCreator ? (tab) => onClickSegment(segment, tab) : undefined
-            }
+            onClick={(tab) => onClickSegment(segment, tab)}
             showFooterDetails
             cumulativePainMode={cumulativePainMode}
           />

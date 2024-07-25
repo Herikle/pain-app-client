@@ -32,6 +32,7 @@ type TrackItem = {
   episode_id: string;
   patient_id: string | undefined;
   episode: {
+    creator_id: string | undefined;
     name: string;
   };
   patient?: {
