@@ -1,17 +1,11 @@
 import { Doses } from "@Modals/SegmentModal/components/InterventionPage/const";
 import {
-  IEpisode,
-  IIntervetion,
   IJustificationType,
   IQualityDepth,
   IQualityTexture,
-  ISegment,
   ISegmentEstimativeType,
-  ISegmentIntensities,
   ISegmentPainType,
-  ISegmentQuality,
   ISegmentTimeUnit,
-  ISymptom,
   ITrackPainType,
   ImportEpisodeStructure,
 } from "types";

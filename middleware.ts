@@ -1,7 +1,16 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const redirect_paths = ["/hens", "/broilers", "/broilers/stunning"];
+const redirect_paths = [
+  "/hens",
+  "/broilers",
+  "/broilers/stunning",
+  "/salmon",
+  "/minerva",
+  "/sows",
+  "/eggfootprint",
+  "chickenmeatfootprint",
+];
 
 export function middleware(req: NextRequest) {
   const request_path = req.nextUrl.pathname;
