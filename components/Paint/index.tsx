@@ -1,7 +1,6 @@
 import { FlexColumn } from "@design-components/Flex";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import PencilIcon from "public/icons/pencil.svg";
 import update from "immutability-helper";
 import { Eraser } from "@phosphor-icons/react";
 import { theme } from "@styles/theme";
@@ -94,7 +93,7 @@ export const Paint = ({
         for (const point of object.points) {
           ctxRef.current?.lineTo(
             object.position.x + point[0],
-            object.position.y + point[1]
+            object.position.y + point[1],
           );
           ctxRef.current?.stroke();
           // await sleep(1);
@@ -185,7 +184,7 @@ export const Paint = ({
         0,
         0,
         ctxRef.current.canvas.width,
-        ctxRef.current.canvas.height
+        ctxRef.current.canvas.height,
       );
     }
   };
@@ -195,6 +194,8 @@ export const Paint = ({
     updateObjects([]);
   };
 
+  const pencilCursor = "/icons/pencil.svg";
+
   return (
     <Container
       style={{
@@ -203,7 +204,7 @@ export const Paint = ({
     >
       <CanvasContainer
         style={{
-          cursor: readOnly ? "default" : `url(${PencilIcon.src}) 5 22, auto`,
+          cursor: readOnly ? "default" : `url(${pencilCursor}) 5 22, auto`,
         }}
       >
         <Canvas
